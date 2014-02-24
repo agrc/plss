@@ -1,0 +1,3 @@
+//>>built
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/json","dojo/has","esri/kernel","esri/config","esri/request","esri/layers/ServiceGeneratedFeatureCollection"],function(b,f,c,g,h,a,d,e){return b([e],{declaredClass:"esri.layers.GeoRSSLayer",serviceUrl:location.protocol+"//utility.arcgis.com/sharing/rss",constructor:function(){if(a.defaults.geoRSSService)this.serviceUrl=a.defaults.geoRSSService;this._createLayer()},parse:function(){return this._io=d({url:this.serviceUrl,content:{url:this.url,refresh:this.loaded?
+!0:void 0,outSR:this._outSR?c.toJson(this._outSR.toJson()):void 0},callbackParamName:"callback"})},_initLayer:function(a){this.inherited(arguments);if(!this.loaded)this.loaded=!0,this.onLoad(this)}})});

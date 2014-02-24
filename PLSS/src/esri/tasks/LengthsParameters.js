@@ -1,0 +1,3 @@
+//>>built
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/json","dojo/has","esri/kernel"],function(d,f,e,c){return d(null,{declaredClass:"esri.tasks.LengthsParameters",polylines:null,lengthUnit:null,geodesic:null,calculationType:null,toJson:function(){var b=e.map(this.polylines,function(a){return a.toJson()}),a={};a.polylines=c.toJson(b);b=this.polylines[0].spatialReference;a.sr=b.wkid?b.wkid:c.toJson(b.toJson());if(this.lengthUnit)a.lengthUnit=this.lengthUnit;if(this.geodesic)a.geodesic=
+this.geodesic;if(this.calculationType)a.calculationType=this.calculationType;return a}})});

@@ -1,0 +1,2 @@
+//>>built
+define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel"],function(b){return b(null,{declaredClass:"esri.dijit.BasemapLayer",constructor:function(a){a=a||{};!a.url&&!a.type&&console.error("esri.dijit.BasemapLayer: unable to find the 'url' or 'type' property in parameters");this.url=a.url;this.type=a.type;this.isReference=!0===a.isReference?!0:!1;this.displayLevels=a.displayLevels;this.visibleLayers=a.visibleLayers;this.bandIds=a.bandIds;this.opacity=a.opacity}})});

@@ -1,0 +1,3 @@
+//>>built
+define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel","esri/renderers/Renderer"],function(f,h,i,j,g){return f(g,{declaredClass:"esri.renderer.TemporalRenderer",constructor:function(a,c,d,b){this.observationRenderer=a;this.latestObservationRenderer=c;this.trackRenderer=d;this.observationAger=b},getSymbol:function(a){var c=a.getLayer(),d=0===c._getKind(a)?this.observationRenderer:this.latestObservationRenderer||this.observationRenderer,b=d&&d.getSymbol(a),e=this.observationAger;c.timeInfo&&
+c._map.timeExtent&&d===this.observationRenderer&&e&&b&&(b=e.getAgedSymbol(b,a));return b}})});

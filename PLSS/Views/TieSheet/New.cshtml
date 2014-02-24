@@ -1,0 +1,394 @@
+﻿@model dynamic
+
+<div>
+    <div class="navbar navbar-inverse navbar-fixed-top" >
+        <div class="navbar-header" >
+            <a class="navbar-brand" style="max-width: 100%;" href="@Url.RouteUrl("", new {Action="index", Controller="home"})">PLSS Corner Management
+                <small>- Submit Section Corner Data</small></a>
+        </div>
+    </div>
+    
+    @using (Html.BeginForm("new", "tiesheet", FormMethod.Post, new {id = "cornerForm", enctype = "multipart/form-data"}))
+    {
+        <div class="container" style="padding-top: 60px">
+            <div class="row">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+                    <div class="alert alert-warning">
+                        This monument record information will be reviewed by the county surveyor under stewardship of this corner to satisfy the requirements of state code 17-23-17-7a.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">Submitted By</label>
+                    <p class="form-control-static">@Model.user.UserName</p>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">Surveryor License</label>
+                    <p class="form-control-static">@Model.user.SurveryorLicenseNumber</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label for="collectionDate" class="control-label">Collection Date</label>
+                    <input type="date" class="form-control" data-required="true" name="collectionDate" placeholder="Collection Date">
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="blmpointid" class="control-label">BLM Point Number</label>
+                    <input type="text" class="form-control" data-required="true" name="blmpointid" placeholder="UT2060090N0070E0_200400" value="@Model.blmid">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label for="county" class="control-label">County</label>
+                    <select data-required="true" class="form-control" name="county">
+                        <option>Beaver</option>
+                        <option>Box Elder</option>
+                        <option>Cache</option>
+                        <option>Carbon</option>
+                        <option>Daggett</option>
+                        <option>Davis</option>
+                        <option>Duchesne</option>
+                        <option>Emery</option>
+                        <option>Garfield</option>
+                        <option>Grand</option>
+                        <option>Iron</option>
+                        <option>Juab</option>
+                        <option>Kane</option>
+                        <option>Millard</option>
+                        <option>Morgan</option>
+                        <option>Piute</option>
+                        <option>Rich</option>
+                        <option>Salt Lake</option>
+                        <option>San Juan</option>
+                        <option>Sanpete</option>
+                        <option>Sevier</option>
+                        <option>Summit</option>
+                        <option>Tooele</option>
+                        <option>Uintah</option>
+                        <option>Utah</option>
+                        <option>Wasatch</option>
+                        <option>Washington</option>
+                        <option>Wayne</option>
+                        <option>Weber</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="accuracy" class="control-label">Accuracy</label>
+                    <select class="form-control" name="accuracy" data-required="true">
+                        <option>Survey Grade (+/-) 0.03m</option>
+                        <option>Mapping Grade (+/-) 3m</option>
+                        <option>Recreational Grade (+/-) 30m</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <div id="trsNode"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label for="sectionCorner" class="control-label">Section Corner</label>
+                    <select class="form-control" data-required="true" name="sectionCorner">
+                        <option>NW</option>
+                        <option>N 1/4</option>
+                        <option>NE</option>
+                        <option>E 1/4</option>
+                        <option>SE</option>
+                        <option>S 1/4</option>
+                        <option>SW</option>
+                        <option>W 1/4</option>
+                        <option>Center</option>
+                        <option>1/16</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="monumentStatus" class="control-label">Monument Status</label>
+                    <select class="form-control" data-required="true" name="monumentStatus">
+                        <option>Existing</option>
+                        <option>Obliterated</option>
+                        <option>Lost</option>
+                        <option>Original (Previously unmonumented Section Subdivision)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="control-label">Geographic Coordinates</label>
+                </div>
+                <div class="col-sm-12">
+                    <select class="form-control" data-required="true" id="geographic" name="Coordinate.CoordinateSystem">
+                        <option>WGS84 Geographic</option>
+                        <option>NAD27 Geographic</option>
+                        <option>NAD83 Geographic</option>
+                    </select>
+                </div>
+            </div>
+            <div id="geographicNode"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="control-label">Grid Coordinates</label>
+                    <select class="form-control" data-required="true" name="Grid.CoordinateSystem" id="grid">
+                        <option>NAD83 State Plane</option>
+                        <option>NAD83 UTM Zone 12N</option>
+                        <option>NAD83 UTM Zone 11N</option>
+                        <option>NAD27 State Plane</option>
+                    </select>
+                </div>
+            </div>
+            <div id="gridNode"></div>
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label for="description" class="control-label">Monument Description</label>
+                    <textarea rows="5" class="form-control" data-required="true" name="description" placeholder="Location information, terrain, general findings, monument condition, etc. Please limit your text to 500 characters."></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label for="notes" class="control-label">Monument Notes</label>
+                    <textarea rows="5" class="form-control" data-required="true" name="notes" placeholder="Notes about the momument" ></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="alert alert-info">
+                        Photos will look best if they have the standard 4:3 ratio.
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="alert alert-warning">
+                        Cumulative upload size needs to be less than 10 megabytes.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-lg-3 form-group">
+                    <label for="sketch" class="control-label">Map View Photo or Sketch</label>
+                    <input type="file" name="sketch"/>
+                </div>
+                <div class="col-sm-6 col-lg-3 form-group">
+                    <label for="thumb" class="control-label">Monument Area Photo</label>
+                    <input type="file" name="thumb"/>
+                </div>
+                <div class="col-sm-6 col-lg-3 form-group">
+                    <label for="thumb2" class="control-label">Monument Close-up Photo</label>
+                    <input type="file" name="thumb2"/>
+                </div>
+                <div class="col-sm-6 col-lg-3 form-group">
+                    <div id="uploaderNode"></div>
+                </div>
+            </div>
+            <div class="row">
+                @Html.Raw(Model.SurveyorSeal)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-12 hidden" id="messageNode">
+                <div class="alert alert-danger text-center">
+                    Please scroll up and fix the errors highlighted in red.
+                </div>
+           </div>
+            <div class="col-xs-12 col-sm-offset-4 col-sm-7">
+                <button type="submit" name="submitType" value="preview" class="btn btn-lg btn-default">Preview</button>
+                <button type="submit" name="submitType" value="save" class="btn btn-lg btn-success">Submit</button>
+            </div>
+        </div>
+    }
+</div>
+@*<script src="../src/populatr/populatr.min.js"></script>*@
+<script data-dojo-config="isDebug: 1, tlmSiblingOfDojo: 1" src='http://js.arcgis.com/3.7/'> </script>
+<script>
+    var projectUrl = '/plss/src/';
+
+    require({
+            packages: [{
+                    name: 'agrc',
+                    location: projectUrl + 'agrc'
+                }, {
+                    name: 'ijit',
+                    location: projectUrl + 'ijit'
+                }]
+        }, [
+            'dojo/text!/plss/templates/Geo_NAD83.html',
+            'dojo/text!/plss/templates/Geo_WGS84_NAD27.html',
+            'dojo/text!/plss/templates/Grid_NAD83StatePlane.html',
+            'dojo/text!/plss/templates/Grid_NAD27StatePLane.html',
+            'dojo/text!/plss/templates/Grid_Utm.html',
+            
+            'agrc/widgets/locate/TrsSearch2',
+            
+            'ijit/widgets/upload/MultiFileUploader',
+            
+            'dojo/_base/lang',
+            'dojo/_base/event',
+            
+            'dojo/dom-construct',
+            'dojo/dom-class',
+            
+            'dojo/dom',
+            'dojo/on',
+            'dojo/html',
+            'dojo/query',
+            
+            'dojo/domReady!'
+        ], function(
+            nad83,
+            wgs84,
+            nad83tatePlane,
+            nad27StatePlane,
+            utm,
+            
+            Trs,
+            
+            Uploader,
+            
+            lang,
+            events,
+
+            domConstruct,
+            domClass,
+            
+            dom,
+            on,
+            html,
+            query
+        ) {
+            var trs = new Trs({
+                apiKey: '@Model.apikey',
+                requireSection: true,
+                formName: 'township'
+            }, 'trsNode');
+
+            var uploader = new Uploader({
+                max: 10,
+                labelText: 'Extra Pages',
+                moreLabel: 'Add Another Page'
+            }, 'uploaderNode');
+
+            uploader.startup();
+            trs.startup();
+
+            var geoNode = dom.byId('geographicNode'),
+                gridNode = dom.byId('gridNode');
+
+            html.set(geoNode, wgs84);
+            html.set(gridNode, nad83tatePlane);
+
+            var swapTemplateForGeographic = function(evt) {
+                console.log('swapTemplateForGeographic');
+
+                var value = evt.target.value;
+                switch (value) {
+                case 'WGS84 Geographic':
+                case 'NAD27 Geographic':
+                    html.set(geographicNode, wgs84);
+                    break;
+                case 'NAD83 Geographic':
+                    html.set(geographicNode, nad83);
+                    break;
+                }
+            };
+
+            var swapTemplateForGrid = function(evt) {
+                console.log('swapTemplateForGrid');
+
+                var value = evt.target.value;
+                switch (value) {
+                case 'NAD83 State Plane':
+                    html.set(gridNode, nad83tatePlane);
+                case 'NAD83 UTM Zone 12N':
+                case 'NAD83 UTM Zone 11N':
+                    html.set(gridNode, utm);
+                    break;
+                case 'NAD27 State Plane':
+                    html.set(gridNode, nad27StatePlane);
+                    break;
+                }
+            };
+
+            var form = dom.byId('cornerForm');
+
+            var validateAll = function (evt) {
+                console.log('validateAll');
+                
+                var valid = true;
+                var formNodes = query('[data-required="true"]', form);
+                
+                //reset validation
+                formNodes.forEach(function (node) {
+                    domClass.remove(node.parentElement, 'has-error');
+                    domClass.remove(node.parentElement, 'has-success');
+                });
+
+                //validate input
+                formNodes.forEach(function (node) {
+                    if (!node.value || lang.trim(node.value) === "") {
+                        domClass.add(node.parentElement, 'has-error');
+                        valid = false;
+                    } else {
+                        domClass.add(node.parentElement, 'has-success');
+                    }
+                });
+                
+                if (!valid) {
+                    events.stop(evt);
+                }
+
+                var add = valid ? 'hidden' : 'show',
+                    remove = valid ? 'show' : 'hidden';
+                
+                domClass.replace(dom.byId('messageNode'), add, remove);
+
+
+                return valid;
+            };
+            var validate = function (evt) {
+                console.log('validate');
+
+                var node = evt.target;
+                
+                domClass.remove(node.parentElement, 'has-error');
+                domClass.remove(node.parentElement, 'has-success');
+                
+                if (!node.value || lang.trim(node.value) === "") {
+                    domClass.add(node.parentElement, 'has-error');
+                } else {
+                    domClass.add(node.parentElement, 'has-success');
+                }
+            };
+
+            on(dom.byId('geographic'), 'change', swapTemplateForGeographic);
+            on(dom.byId('grid'), 'change', swapTemplateForGrid);
+            on(form, 'submit', validateAll);
+            on(form, 'input:change', validate);
+            on(form, 'select:change', validate);
+            on(form, 'textarea:change', validate);
+            
+//            Populatr.init(true, {
+//                '#cornerForm': {             // CSS selector to select the form
+//                    'county': 'Davis',     // 'Input name': 'Input value'
+//                    'collectionDate': '2014-01-14',
+//                    'blmpointid': 'UT260160S0120E0_640340',
+//                    'accuracy': 'Recreational Grade (+/-) 30m',
+//                    'sectionCorner': 'N 1/4',
+//                    'monumentStatus': 'Lost',
+//                    'description': 'Coordinates were determined by GPS RTK survey method with base receiver at Beaver County GPS Control Point “Laho.” Coordinate data obtained by single side shot method with no adjustment.  Two measurements made to this corner, each with a different initialization, and then averaged.  No other adjustment.',
+//                    'notes': 'Base location derived using OPUS solution, Point location using Trimble RTK observed control point.  Found 1983 BLM aluminum cap in line with N-S fence on south side of County Road',
+//                    'Coordinate.NorthingDegrees': 111,
+//                    'Coordinate.NorthingMinutes': 11,
+//                    'Coordinate.NorthingSeconds': 51.23532,
+//                    'Coordinate.EastingDegrees': -41,
+//                    'Coordinate.EastingMinutes': 10,
+//                    'Coordinate.EastingSeconds': 11.23532,
+//                    'Coordinate.ElipsoidHeight': 50.5,
+//                    'Grid.HorizontalUnits': 'International Feet',
+//                    'Grid.Adjustment': 'NGS 2011',
+//                    'Grid.Northing': 414290,
+//                    'Grid.Easting': 4755566,
+//                    'Grid.Elevation': 100
+//                }
+//            });
+        });
+</script>

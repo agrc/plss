@@ -1,0 +1,18 @@
+[submodule "plss/src/agrc"]
+	path = plss/src/agrc
+	url = https://github.com/agrc/agrc.widgets
+[submodule "plss/src/ijit"]
+	path = plss/src/ijit
+	url = https://github.com/agrc/agrc.ijit
+[submodule "plss/src/dojo"]
+	path = plss/src/dojo
+	url = https://github.com/dojo/dojo
+[submodule "plss/src/dijit"]
+	path = plss/src/dijit
+	url = https://github.com/dojo/dijit
+[submodule "plss/src/dojox"]
+	path = plss/src/dojox
+	url = https://github.com/dojo/dojox
+[submodule "plss/src/util"]
+	path = plss/src/util
+	url = https://github.com/dojo/util

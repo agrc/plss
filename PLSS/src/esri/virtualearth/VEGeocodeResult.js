@@ -1,0 +1,3 @@
+//>>built
+define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel","esri/geometry/Point","esri/geometry/Extent","esri/virtualearth/VEAddress"],function(a,b,f,g,c,d,e){return a(null,{declaredClass:"esri.virtualearth.VEGeocodeResult",constructor:function(a){b.mixin(this,{address:null,bestView:null,calculationMethod:null,confidence:null,displayName:null,entityType:null,location:null,matchCodes:null},a);if(this.address)this.address=new e(this.address);if(this.bestView)this.bestView=new d(this.bestView);
+if(this.locationArray)this.calculationMethod=this.locationArray[0].calculationMethod,this.location=new c(this.locationArray[0])}})});
