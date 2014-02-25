@@ -10,6 +10,20 @@ namespace PLSS.Models
     {
         private readonly CornerViewModel _corner;
         private readonly TownshipParts _trsparts;
+        private Guid _userId;
+        private string _blmPointId;
+        private DateTime _date;
+        private string _accuracy;
+        private string _section;
+        private string _county;
+        private string _meridian;
+        private string _status;
+        private string _description;
+        private string _notes;
+
+        public Corner()
+        {
+        }
 
         public Corner(CornerViewModel corner)
         {
@@ -40,7 +54,11 @@ namespace PLSS.Models
         /// </value>
         public Guid UserId
         {
-            get { return _corner.User.UserId; }
+            set { _userId = value; }
+            get
+            {
+                return _corner == null ? _userId : _corner.User.UserId;
+            }
         }
 
         /// <summary>
@@ -77,17 +95,20 @@ namespace PLSS.Models
 
         public string BlmPointId
         {
-            get { return _corner.BlmPointId; }
+            get { return _corner == null ? _blmPointId : _corner.BlmPointId; }
+            set { _blmPointId = value; }
         }
 
         public DateTime CollectionDate
         {
-            get { return _corner.CollectionDate; }
+            get { return _corner == null ? _date : _corner.CollectionDate; }
+            set { _date = value; }
         }
 
         public string Accuracy
         {
-            get { return _corner.Accuracy; }
+            get { return _corner == null ? _accuracy : _corner.Accuracy; }
+            set { _accuracy = value; }
         }
 
         /// <summary>
@@ -100,28 +121,37 @@ namespace PLSS.Models
 
         public string SectionCorner
         {
-            get { return _corner.SectionCorner; }
+            get { return _corner == null ? _section : _corner.SectionCorner; }
+            set { _section = value; }
         }
 
         public string County
         {
-            get { return _corner.County; }
+            get { return _corner == null ? _county : _corner.County; }
+            set { _county = value; }
         }
 
         public string BaseMeridian
         {
-            get { return _trsparts.Meridian; }
+            get { return _corner == null ? _meridian : _trsparts.Meridian; }
+            set { _meridian = value; }
         }
 
         public string MonumentStatus
         {
-            get { return _corner.MonumentStatus; }
+            get { return _corner == null ? _status : _corner.MonumentStatus; }
+            set { _status = value; }
         }
 
         public string Description
         {
             get
             {
+                if (_corner == null)
+                {
+                    return _description;
+                }
+
                 if (_corner.Description.Length > 500)
                 {
                     return _corner.Description.Substring(0, 500);
@@ -129,12 +159,18 @@ namespace PLSS.Models
 
                 return _corner.Description;
             }
+            set { _description = value; }
         }
 
         public string Notes
         {
             get
             {
+                if (_corner == null)
+                {
+                    return _notes;
+                }
+
                 if (_corner.Notes.Length > 500)
                 {
                     return _corner.Notes.Substring(0, 500);
@@ -142,6 +178,7 @@ namespace PLSS.Models
 
                 return _corner.Notes;
             }
+            set { _notes = value; }
         }
 
         public static string InsertString
@@ -152,7 +189,6 @@ namespace PLSS.Models
                     "insert into Corners(CornerId, UserId, FormInfoId, BlmPointId, CollectionDate, " +
                     "Accuracy, Township, SectionCorner, County, BaseMeridian, MonumentStatus, " +
                     "Description, Notes, Photos_PhotoId, Grid_GridId, Coordinate_CoordinateId) " +
-
                     "values (@cornerid, @userid, @forminfoid, @blmpointid, @collectiondate, " +
                     "@accuracy, @township, @sectioncorner, @county, @basemeridian, @monumentstatus, " +
                     "@description, @notes, @photoid, @gridid, @coordinateid)";

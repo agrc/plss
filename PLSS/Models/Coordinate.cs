@@ -5,6 +5,11 @@ namespace PLSS.Models
 {
     public class Coordinate
     {
+        public Coordinate()
+        {
+            
+        }
+
         public Coordinate(CoordinateViewModel view)
         {
             CoordinateId = Guid.NewGuid();

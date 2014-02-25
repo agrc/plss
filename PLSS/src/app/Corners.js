@@ -18,8 +18,9 @@ define([
     'esri/tasks/query',
     'esri/tasks/QueryTask',
     'esri/geometry/Extent',
-    'esri/symbols/SimpleMarkerSymbol'
+    'esri/symbols/SimpleMarkerSymbol',
 
+    'app/main'
 ], function(
     template,
 
@@ -40,10 +41,14 @@ define([
     Query,
     QueryTask,
     Extent,
-    SimpleMarkerSymbol
+    SimpleMarkerSymbol,
+
+    settings
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
+
         templateString: template,
+
         baseClass: 'corners',
 
         _graphic: null,
@@ -52,9 +57,10 @@ define([
 
         // map - agrc.widgets.map
         map: null,
-        
+
         // linkTemplate - string 
-        //      the template of the link with lang.replace {id} substitutions for the corner value
+        //      the template of the link with lang.replace {id} 
+        //       substitutions for the corner value
         linkTemplate: null,
 
         postCreate: function() {
@@ -63,14 +69,14 @@ define([
             //
             console.log('app.Corners::postCreate', arguments);
 
-            this.queryTask = new QueryTask(AGRC.urls.points + '/4');
+            this.queryTask = new QueryTask(settings.urls.points + '/4');
             this.queryParams = new Query();
             this.queryParams.outFields = ['POINTID'];
             this.queryParams.returnGeometry = true;
 
             this.setupConnections();
         },
-        setupConnections: function () {
+        setupConnections: function() {
             // summary:
             //      after creation
             //
@@ -101,13 +107,14 @@ define([
             console.log('app.Corners::_zoom', arguments);
 
             this.queryParams.searchText = cornerId;
-            this.queryParams.where = "POINTID='" + cornerId + "'";
+            this.queryParams.where = 'POINTID=\'' + cornerId + '\'';
 
             if (this.inflight) {
                 return;
             }
 
-            this.inflight = this.queryTask.execute(this.queryParams, lang.hitch(this, '_success'));
+            this.inflight = this.queryTask.execute(this.queryParams,
+                lang.hitch(this, '_success'));
         },
         _success: function(featureSet) {
             // summary:
@@ -143,13 +150,15 @@ define([
             console.log('app.Corners::_updateLinkLocation', arguments);
 
             var value = this.corner.value;
-            
+
             if (!value) {
                 domAttr.remove(this.showLink, 'href');
                 return;
             }
-            
-            domAttr.set(this.showLink, 'href', lang.replace(this.linkTemplate, { id: value }));
+
+            domAttr.set(this.showLink, 'href', lang.replace(this.linkTemplate, {
+                id: value
+            }));
         }
     });
 });

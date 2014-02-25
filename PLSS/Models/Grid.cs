@@ -5,6 +5,11 @@ namespace PLSS.Models
 {
     public class Grid
     {
+        public Grid()
+        {
+            
+        }
+
         public Grid(GridViewModel view)
         {
             GridId = Guid.NewGuid();

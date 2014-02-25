@@ -187,6 +187,7 @@
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\ConfigController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TieSheetController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\CommandModel\TownshipParts.cs" />
     <Compile Include="Models\Grid.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\ViewModel\AssetsViewModel.cs" />
     <Compile Include="Models\ViewModel\ProfileUserViewModel.cs" />
     <Compile Include="Models\ViewModel\RegistrationViewModel.cs" />
     <Compile Include="Models\TieSheetPdfModel.cs" />
@@ -235,8 +237,82 @@
     <Compile Include="Services\Pdf\PdfExtensions.cs" />
     <Compile Include="Services\Pdf\PdfServiceBase.cs" />
     <Compile Include="Services\Pdf\PlssPdfService.cs" />
+    <Content Include="dist\agrc\resources\images\agrc_map_logo_small.png" />
+    <Content Include="dist\agrc\resources\images\background_v-1.png" />
+    <Content Include="dist\agrc\resources\images\BaseMapSelectorSprite.png" />
+    <Content Include="dist\app\resources\App.css" />
+    <Content Include="dist\esri\dijit\images\ajax-loader-blue.gif" />
+    <Content Include="dist\esri\dijit\images\ajax-loader.gif" />
+    <Content Include="dist\esri\dijit\images\arcgisGeocoder.png" />
+    <Content Include="dist\esri\dijit\images\attribute_inspector_sprite.png" />
+    <Content Include="dist\esri\dijit\images\button-active.png" />
+    <Content Include="dist\esri\dijit\images\button-hover.png" />
+    <Content Include="dist\esri\dijit\images\claro.infowindow.png" />
+    <Content Include="dist\esri\dijit\images\close.gif" />
+    <Content Include="dist\esri\dijit\images\Directions\loading-32.gif" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTBearLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTBearRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTDepart.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTDoorPassage.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTElevator.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTEndOfFerry.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTEscalator.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTFerry.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkCenter.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayChange.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayExit.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayMerge.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTPedestrianRamp.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRampLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRampRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRoundabout.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTSharpLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTSharpRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStairs.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStop.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStopDestination.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStopOrigin.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStraight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTripItem.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeftLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeftRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRightLeft.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRightRight.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTUnknown.png" />
+    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTUTurn.png" />
+    <Content Include="dist\esri\dijit\images\Directions\print.png" />
+    <Content Include="dist\esri\dijit\images\Directions\remove-destination.png" />
+    <Content Include="dist\esri\dijit\images\Directions\reverse.png" />
+    <Content Include="dist\esri\dijit\images\edit.png" />
+    <Content Include="dist\esri\dijit\images\HistogramTimeSlider\circle_slider.png" />
+    <Content Include="dist\esri\dijit\images\leftlongarrow.png" />
+    <Content Include="dist\esri\dijit\images\loading.gif" />
+    <Content Include="dist\esri\dijit\images\Measure_Area16.png" />
+    <Content Include="dist\esri\dijit\images\Measure_Distance16.png" />
+    <Content Include="dist\esri\dijit\images\Measure_Point16.png" />
+    <Content Include="dist\esri\dijit\images\MosaicRule_Query.png" />
+    <Content Include="dist\esri\dijit\images\MosaicRule_Threedots.png" />
+    <Content Include="dist\esri\dijit\images\nihilo.infowindow.png" />
+    <Content Include="dist\esri\dijit\images\overview.png" />
+    <Content Include="dist\esri\dijit\images\pointerbottom.png" />
+    <Content Include="dist\esri\dijit\images\pointertop.png" />
+    <Content Include="dist\esri\dijit\images\popup.png" />
+    <Content Include="dist\esri\dijit\images\remove-24x24.png" />
+    <Content Include="dist\esri\dijit\images\rightlongarrow.png" />
+    <Content Include="dist\esri\dijit\images\simpleGeocoder.png" />
+    <Content Include="dist\esri\dijit\images\soria.infowindow.png" />
+    <Content Include="dist\esri\dijit\images\spinner.gif" />
+    <Content Include="dist\esri\dijit\images\squarearrow.png" />
+    <Content Include="dist\esri\dijit\images\time_slider_sprite.png" />
+    <Content Include="dist\esri\dijit\images\tundra.infowindow.png" />
+    <Content Include="dist\esri\dijit\images\whiter.png" />
+    <Content Include="dist\esri\dijit\images\whitex.png" />
     <Content Include="src\app\AuthStatus.js" />
-    <Content Include="src\app\resources\existingPlssWebsitesByCounty.js" />
+    <Content Include="src\app\data\existingPlssWebsitesByCounty.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Pdf\StateOfUtah-Header.jpg" />
@@ -260,6 +336,14 @@
       <DependentUpon>connections.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="src\app\Tiesheet.js" />
+    <Content Include="dist\app\Tiesheet.js" />
+    <Content Include="dist\app\App.js" />
+    <Content Include="src\plss\templates\Geo_NAD83.html" />
+    <Content Include="src\plss\templates\Geo_WGS84_NAD27.html" />
+    <Content Include="src\plss\templates\Grid_NAD27StatePlane.html" />
+    <Content Include="src\plss\templates\Grid_NAD83StatePlane.html" />
+    <Content Include="src\plss\templates\Grid_Utm.html" />
     <Content Include="Web.sample.csx" />
     <Content Include="connections.sample.config" />
     <None Include="Migrations\Migrate.bat" />
@@ -270,7 +354,6 @@
     <Content Include="src\app\resources\agrc_logo.jpg" />
     <Content Include="src\app\resources\App.css" />
     <Content Include="src\app\resources\push_pin.png" />
-    <Content Include="src\app\run.js" />
     <Content Include="src\app\templates\App.html" />
     <Content Include="src\app\templates\AuthStatus.html" />
     <Content Include="src\app\templates\CornerInformation.html" />
@@ -301,6 +384,7 @@
     </None>
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <Content Include="src\app\package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -330,21 +414,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TieSheet\Existing.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Geo_NAD83.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Geo_WGS84_NAD27.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_NAD27StatePlane.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_Utm.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_NAD83StatePlane.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\MarkdownMail\MarkdownMail\MarkdownMail.csproj">

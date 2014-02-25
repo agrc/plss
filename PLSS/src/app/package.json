@@ -1,8 +1,8 @@
 {
-    "name": "app",
+    "name": "PLSS",
     "version": "0.1",
     "main": "main",
-    "description": "AGRC Boilerplate",
-    "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
+    "description": "PLSS",
+    "homepage": "https://github.com/agrc/PLSS",
     "dojoBuild": "app.profile.js"
 }

@@ -16,6 +16,11 @@ namespace PLSS.Models
         private readonly ImageService _imageService;
         private readonly BasicPdfService _pdfService;
 
+        public Photo()
+        {
+            
+        }
+
         public Photo(CornerViewModel model)
         {
             _imageService = new ImageService();

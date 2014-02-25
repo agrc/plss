@@ -26,7 +26,7 @@ define([
 
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/locate/ZoomToCoords',
-    'agrc/widgets/locate/TrsSearch',
+    'agrc/widgets/locate/TRSsearch',
 
     'ijit/widgets/layout/SideBarToggler',
 
@@ -41,7 +41,7 @@ define([
     'app/Corners',
     'app/CornerInformation',
     'app/AuthStatus',
-
+    'app/main',
 
     'dojo/NodeList-html',
     'dijit/layout/BorderContainer',
@@ -88,14 +88,17 @@ define([
 
     CornerZoom,
     CornerInformation,
-    AuthStatus
+    AuthStatus,
+    settings
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      The main widget for the app
 
         widgetsInTemplate: true,
+
         templateString: template,
+
         baseClass: 'app',
 
         // map: agrc.widgets.map.Basemap
@@ -106,16 +109,65 @@ define([
             //      first function to fire after page loads
             console.info('app.App::constructor', arguments);
 
-            AGRC.app = this;
+            //AGRC.app = this;
 
             this.inherited(arguments);
         },
         postCreate: function() {
             // summary:
-            //      Fires when
+            //      Executes while dom is detached
             console.log('app.App::postCreate', arguments);
 
             this.setupConnections();
+            this.getUrls();
+
+            this._childWidgets = [];
+
+            this.map = new BaseMap(this.mapDiv, {
+                defaultBaseMap: 'Topo',
+                useDefaultBaseMap: false
+            });
+
+            this._childWidgets.push(new BaseMapSelector({
+                map: this.map,
+                id: 'claro',
+                defaultThemeLabel: 'Topo',
+                position: 'TR'
+            }));
+
+            this._childWidgets.push(new TrsSearch({
+                map: this.map,
+                apiKey: settings.apiKey
+            }, this.trsNode));
+
+            this._childWidgets.push(new MagicZoom({
+                map: this.map,
+                mapServiceURL: settings.urls.vector,
+                searchLayerIndex: 3,
+                searchField: 'Name',
+                placeHolder: 'place name...',
+                maxResultsToDisplay: 10,
+                'class': 'first'
+            }, this.placesNode));
+
+            this._childWidgets.push(new ZoomToCoords({
+                map: this.map
+            }, this.coordNode));
+
+            this._childWidgets.push(new CornerZoom({
+                map: this.map,
+                linkTemplate: settings.urls.tieSheets + '{id}.pdf'
+            }, this.cornerNode));
+
+            this._childWidgets.push(new AuthStatus({},
+                this.authStatusNode));
+
+            this._childWidgets.push(new CornerInformation({
+                app: this
+            }, this.toasterNode));
+
+            this.initMap();
+            this.initIdentify();
 
             this.inherited(arguments);
         },
@@ -125,11 +177,8 @@ define([
             // evt
             console.log('app.App::setupConnections', arguments);
 
-            on(this.loginForm, 'submit', lang.hitch(this, 'login'));
-            on(this.resetNode, 'click', lang.hitch(this, 'reset'));
-            on(this.registerForm, 'submit', lang.hitch(this, 'register'));
-            on(this.registerForm, 'input:change', lang.hitch(this.updateValidation));
-            on(this.loginForm, 'input:change', lang.hitch(this.updateValidation));
+            on(this.registerForm, 'input:change', lang.hitch(this, 'updateValidation'));
+            on(this.loginForm, 'input:change', lang.hitch(this, 'updateValidation'));
             this.subscribe('app.logout', lang.hitch(this, 'logout'));
         },
         startup: function() {
@@ -141,72 +190,22 @@ define([
             // the correct size
             this.inherited(arguments);
 
-            var places, coords, trs, corner, authStatus;
-
-            this.initMap();
-            this.getUrls();
-            this.initIdentify();
-
-            trs = new TrsSearch({
-                map: this.map,
-                apiKey: window.AGRC.apiKey,
-            }, this.trsNode);
-            trs.startup();
-
-            places = new MagicZoom({
-                map: this.map,
-                mapServiceURL: AGRC.urls.vector,
-                searchLayerIndex: 3,
-                searchField: 'Name',
-                placeHolder: 'place name...',
-                maxResultsToDisplay: 10,
-                'class': 'first'
-            }, this.placesNode);
-            places.startup();
-
-            coords = new ZoomToCoords({
-                map: this.map
-            }, this.coordNode);
-            coords.startup();
-
-            corner = new CornerZoom({
-                map: this.map,
-                linkTemplate: AGRC.urls.tieSheets + '{id}.pdf'
-            }, this.cornerNode);
-            corner.startup();
-
-            authStatus = new AuthStatus({}, this.authStatusNode);
-            authStatus.startup();
-
             this.authorize();
 
-            this.inherited(arguments);
+            array.forEach(this._childWidgets, function(w){
+                w.startup();
+            });
         },
         initMap: function() {
             // summary:
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            this.map = new BaseMap(this.mapDiv, {
-                defaultBaseMap: 'Topo',
-                useDefaultBaseMap: false
-            });
-
-            var selector;
-
-            selector = new BaseMapSelector({
-                map: this.map,
-                id: 'claro',
-                defaultThemeLabel: 'Topo',
-                position: 'TR'
-            });
-            selector.startup();
-
-            this.plssLayer = new TiledLayer(AGRC.urls.plss);
+            this.plssLayer = new TiledLayer(settings.urls.plss);
             this.map.addLayer(this.plssLayer);
             this.map.addLoaderToLayer(this.plssLayer);
 
-            this.pointsLayer = new DynamicLayer(AGRC.urls.points);
+            this.pointsLayer = new DynamicLayer(settings.urls.points);
             this.map.addLayer(this.pointsLayer);
             this.map.addLoaderToLayer(this.pointsLayer);
         },
@@ -216,14 +215,7 @@ define([
             //
             console.log('app::initIdentify', arguments);
 
-            this.identifyTask = new IdentifyTask(AGRC.urls.points);
-
-            var cornerIdentify;
-
-            cornerIdentify = new CornerInformation({
-                app: this
-            }, this.toasterNode);
-            cornerIdentify.startup();
+            this.identifyTask = new IdentifyTask(settings.urls.points);
 
             this.identifyParams = new IdentifyParameters();
             this.identifyParams.tolerance = 3;
@@ -248,16 +240,18 @@ define([
             this.map.showLoader();
 
             this._graphic = new Graphic(evt.mapPoint,
-                new PictureMarkerSymbol(AGRC.urls.pin, 30, 23).setOffset(13, 6));
+                new PictureMarkerSymbol(settings.urls.pin, 30, 23).setOffset(13, 6));
 
             this.map.graphics.add(this._graphic);
 
             this.identifyParams.geometry = evt.mapPoint;
             this.identifyParams.mapExtent = this.map.extent;
             this.identifyTask.execute(this.identifyParams, lang.hitch(this,
-                function (result) {
+                function(result) {
                     this.map.hideLoader();
-                    this.emit('identify-success', {results: result});
+                    this.emit('identify-success', {
+                        results: result
+                    });
                 }
             ), lang.hitch(this, function() {
                 this.map.hideLoader();
@@ -275,7 +269,7 @@ define([
                 valid = true;
             //validate input
 
-            nodes.forEach(function (node) {
+            nodes.forEach(function(node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
@@ -286,7 +280,7 @@ define([
                 return;
             }
 
-            var def = xhr(window.AGRC.urls.authenticate, {
+            var def = xhr(settings.urls.authenticate, {
                 data: JSON.stringify({
                     username: this.loginEmail.value,
                     password: this.loginPassword.value
@@ -297,7 +291,7 @@ define([
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             domAttr.set(this.loginNode, 'disabled', true);
             domClass.add(this.loginNode, 'disabled');
 
@@ -306,13 +300,12 @@ define([
                 topic.publish('app.authorize', {
                     token: args.result.token
                 });
-            }),lang.hitch(this, function(args) {
-                    console.log('app::login::errorCallback', arguments);
+            }), lang.hitch(this, function(args) {
+                console.log('app::login::errorCallback', arguments);
 
-                    var problems = args.response.data;
-                    this.displayIssues(problems);
-                })
-            );
+                var problems = args.response.data;
+                this.displayIssues(problems);
+            }));
 
             def.always(lang.hitch(this, function() {
                 domAttr.remove(this.loginNode, 'disabled');
@@ -325,7 +318,7 @@ define([
             // evt
             console.log('app::updateLogout', arguments);
 
-            xhr(window.AGRC.urls.leave, {
+            xhr(settings.urls.leave, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -339,8 +332,8 @@ define([
         },
         reset: function() {
             console.log('app::reset');
-            
-            var def = xhr(window.AGRC.urls.reset, {
+
+            var def = xhr(settings.urls.reset, {
                 data: JSON.stringify({
                     username: this.loginEmail.value
                 }),
@@ -354,14 +347,14 @@ define([
             domAttr.set(this.resetNode, 'disabled', true);
             domClass.add(this.resetNode, 'disabled');
             domAttr.set(this.loginPassword, 'value', '');
-            
-            def.then(lang.hitch(this, function () {
+
+            def.then(lang.hitch(this, function() {
                 alert('your new password is in your email');
             }, function() {
                 alert('there was a problem resetting your pasword');
             }));
 
-            def.always(lang.hitch(this, function () {
+            def.always(lang.hitch(this, function() {
                 domAttr.remove(this.resetNode, 'disabled');
                 domClass.remove(this.resetNode, 'disabled');
             }));
@@ -371,7 +364,7 @@ define([
             //      handles the login click event
             console.log('app::authorize', arguments);
 
-            xhr(window.AGRC.urls.authorize, {
+            xhr(settings.urls.authorize, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -403,18 +396,18 @@ define([
                 valid = true;
             //validate input
 
-            formNodes.forEach(function (node) {
+            formNodes.forEach(function(node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
                 }
             });
-            
+
             if (!valid) {
                 return;
             }
 
-            var def = xhr(window.AGRC.urls.register, {
+            var def = xhr(settings.urls.register, {
                 data: JSON.stringify({
                     email: this.registerEmail.value,
                     password: this.registerPassword.value,
@@ -433,19 +426,21 @@ define([
             domAttr.set(this.registerButtonNode, 'disabled', true);
             domClass.add(this.registerButtonNode, 'disabled');
 
+            var widget = this;
             def.then(
                 function(args) {
                     $('#registerModal').modal('hide');
+
                     topic.publish('app.authorize', {
                         token: args.result.token
                     });
                 },
-                lang.hitch(this, function(args) {
+                function(args) {
                     console.log('app::register::errorCallback', arguments);
 
                     var problems = args.response.data;
-                    this.displayIssues(problems);
-                })
+                    widget.displayIssues(problems);
+                }
             );
 
             def.always(lang.hitch(this, function() {
@@ -473,10 +468,10 @@ define([
                 domClass.add(node.parentNode, 'has-error');
             }
         },
-        displayIssues: function (issues) {
+        displayIssues: function(issues) {
             console.log('app::displayIssues');
 
-            array.forEach(issues, function (issue) {
+            array.forEach(issues, function(issue) {
                 var node = dom.byId(issue.key),
                     parent = node.parentNode;
 
@@ -490,16 +485,16 @@ define([
 
             query('.help-block', form).html();
 
-            nodes.forEach(function (node) {
+            nodes.forEach(function(node) {
                 domClass.remove(node.parentNode, 'has-error');
                 domClass.remove(node.parentNode, 'has-success');
             });
 
             return nodes;
         },
-        getUrls: function () {
+        getUrls: function() {
             console.log('app::getUrls');
-            
+
             xhr('/plss/config', {
                 handleAs: 'json',
                 method: 'GET',
@@ -508,7 +503,7 @@ define([
                     'Content-Type': 'application/json'
                 }
             }).then(function(urls) {
-                lang.mixin(window.AGRC.urls, urls);
+                lang.mixin(settings.urls, urls);
             });
         }
     });
