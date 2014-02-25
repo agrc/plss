@@ -235,13 +235,11 @@
     <Compile Include="Services\Pdf\PdfExtensions.cs" />
     <Compile Include="Services\Pdf\PdfServiceBase.cs" />
     <Compile Include="Services\Pdf\PlssPdfService.cs" />
-    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="src\app\AuthStatus.js" />
     <Content Include="src\app\resources\existingPlssWebsitesByCounty.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Pdf\StateOfUtah-Header.jpg" />
-    <Content Include="Assets\Pdf\StateOfUtah-Header.png" />
     <Content Include="Global.asax" />
     <Content Include="Migrations\Rollback.bat" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.pdf" />
@@ -262,6 +260,8 @@
       <DependentUpon>connections.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="Web.sample.csx" />
+    <Content Include="connections.sample.config" />
     <None Include="Migrations\Migrate.bat" />
     <Content Include="src\app\App.js" />
     <Content Include="src\app\CornerInformation.js" />
@@ -312,7 +312,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
@@ -385,7 +384,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_BuildAction="Build" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="Build" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />
