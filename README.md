@@ -1,5 +1,4 @@
 # PLSS
-====
 
 ## Public Lands Survey System
 
