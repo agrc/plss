@@ -20,7 +20,7 @@ define([
 
     'mustache/mustache',
 
-    'app/resources/existingPlssWebsitesByCounty',
+    './resources/existingPlssWebsitesByCounty',
 
 
     'dojo/NodeList-dom'

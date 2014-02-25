@@ -1,4 +1,4 @@
-define([
+require([
     'dojo/text!app/templates/App.html',
 
     'dojo/_base/declare',
@@ -15,6 +15,7 @@ define([
     'dojo/request',
     'dojo/topic',
     'dojo/query',
+    'dojo/parser',
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -26,7 +27,7 @@ define([
 
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/locate/ZoomToCoords',
-    'agrc/widgets/locate/TrsSearch',
+    'agrc/widgets/locate/TRSsearch',
 
     'ijit/widgets/layout/SideBarToggler',
 
@@ -43,6 +44,7 @@ define([
     'app/AuthStatus',
 
 
+    'app/main',
     'dojo/NodeList-html',
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
@@ -63,6 +65,7 @@ define([
     xhr,
     topic,
     query,
+    parser,
 
     _WidgetBase,
     _TemplatedMixin,
@@ -90,7 +93,7 @@ define([
     CornerInformation,
     AuthStatus
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    declare('app/App',[_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      The main widget for the app
 
@@ -255,9 +258,11 @@ define([
             this.identifyParams.geometry = evt.mapPoint;
             this.identifyParams.mapExtent = this.map.extent;
             this.identifyTask.execute(this.identifyParams, lang.hitch(this,
-                function (result) {
+                function(result) {
                     this.map.hideLoader();
-                    this.emit('identify-success', {results: result});
+                    this.emit('identify-success', {
+                        results: result
+                    });
                 }
             ), lang.hitch(this, function() {
                 this.map.hideLoader();
@@ -275,7 +280,7 @@ define([
                 valid = true;
             //validate input
 
-            nodes.forEach(function (node) {
+            nodes.forEach(function(node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
@@ -297,7 +302,7 @@ define([
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             domAttr.set(this.loginNode, 'disabled', true);
             domClass.add(this.loginNode, 'disabled');
 
@@ -306,13 +311,12 @@ define([
                 topic.publish('app.authorize', {
                     token: args.result.token
                 });
-            }),lang.hitch(this, function(args) {
-                    console.log('app::login::errorCallback', arguments);
+            }), lang.hitch(this, function(args) {
+                console.log('app::login::errorCallback', arguments);
 
-                    var problems = args.response.data;
-                    this.displayIssues(problems);
-                })
-            );
+                var problems = args.response.data;
+                this.displayIssues(problems);
+            }));
 
             def.always(lang.hitch(this, function() {
                 domAttr.remove(this.loginNode, 'disabled');
@@ -339,7 +343,7 @@ define([
         },
         reset: function() {
             console.log('app::reset');
-            
+
             var def = xhr(window.AGRC.urls.reset, {
                 data: JSON.stringify({
                     username: this.loginEmail.value
@@ -354,14 +358,14 @@ define([
             domAttr.set(this.resetNode, 'disabled', true);
             domClass.add(this.resetNode, 'disabled');
             domAttr.set(this.loginPassword, 'value', '');
-            
-            def.then(lang.hitch(this, function () {
+
+            def.then(lang.hitch(this, function() {
                 alert('your new password is in your email');
             }, function() {
                 alert('there was a problem resetting your pasword');
             }));
 
-            def.always(lang.hitch(this, function () {
+            def.always(lang.hitch(this, function() {
                 domAttr.remove(this.resetNode, 'disabled');
                 domClass.remove(this.resetNode, 'disabled');
             }));
@@ -403,13 +407,13 @@ define([
                 valid = true;
             //validate input
 
-            formNodes.forEach(function (node) {
+            formNodes.forEach(function(node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
                 }
             });
-            
+
             if (!valid) {
                 return;
             }
@@ -473,10 +477,10 @@ define([
                 domClass.add(node.parentNode, 'has-error');
             }
         },
-        displayIssues: function (issues) {
+        displayIssues: function(issues) {
             console.log('app::displayIssues');
 
-            array.forEach(issues, function (issue) {
+            array.forEach(issues, function(issue) {
                 var node = dom.byId(issue.key),
                     parent = node.parentNode;
 
@@ -490,16 +494,16 @@ define([
 
             query('.help-block', form).html();
 
-            nodes.forEach(function (node) {
+            nodes.forEach(function(node) {
                 domClass.remove(node.parentNode, 'has-error');
                 domClass.remove(node.parentNode, 'has-success');
             });
 
             return nodes;
         },
-        getUrls: function () {
+        getUrls: function() {
             console.log('app::getUrls');
-            
+
             xhr('/plss/config', {
                 handleAs: 'json',
                 method: 'GET',
@@ -512,4 +516,5 @@ define([
             });
         }
     });
+    parser.parse();
 });

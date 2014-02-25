@@ -235,6 +235,8 @@
     <Compile Include="Services\Pdf\PdfExtensions.cs" />
     <Compile Include="Services\Pdf\PdfServiceBase.cs" />
     <Compile Include="Services\Pdf\PlssPdfService.cs" />
+    <Content Include="profiles\app.profile.js" />
+    <Content Include="profiles\esri_modules_3.6.txt" />
     <Content Include="src\app\AuthStatus.js" />
     <Content Include="src\app\resources\existingPlssWebsitesByCounty.js" />
   </ItemGroup>
@@ -260,6 +262,12 @@
       <DependentUpon>connections.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="src\app\run_tiesheet.js" />
+    <Content Include="src\plss\templates\Geo_NAD83.html" />
+    <Content Include="src\plss\templates\Geo_WGS84_NAD27.html" />
+    <Content Include="src\plss\templates\Grid_NAD27StatePlane.html" />
+    <Content Include="src\plss\templates\Grid_NAD83StatePlane.html" />
+    <Content Include="src\plss\templates\Grid_Utm.html" />
     <Content Include="Web.sample.csx" />
     <Content Include="connections.sample.config" />
     <None Include="Migrations\Migrate.bat" />
@@ -301,6 +309,7 @@
     </None>
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <Content Include="src\app\package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -330,21 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TieSheet\Existing.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Geo_NAD83.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Geo_WGS84_NAD27.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_NAD27StatePlane.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_Utm.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\Grid_NAD83StatePlane.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\MarkdownMail\MarkdownMail\MarkdownMail.csproj">
@@ -384,7 +378,7 @@
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="Build" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_BuildAction="Build" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />

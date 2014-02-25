@@ -3,12 +3,10 @@ require({
 });
 
 define([
-    'dojo/parser',
-
     'jquery/jquery',
     'bootstrap/js/bootstrap',
     'app/App'
-], function(parser) {
+], function() {
     window.AGRC = {
         // app: app.App
         //      global reference to App
@@ -40,7 +38,4 @@ define([
             settings: './secure/settings'
         }
     };
-
-    // lights...camera...action!
-    parser.parse();
 });
