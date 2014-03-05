@@ -50,13 +50,15 @@ require([
             it('builds the right query string', function() {
                 testWidget._zoom('UT260090N0070E0_200400');
 
-                expect(testWidget.queryParams.where).toEqual("POINTID='UT260090N0070E0_200400'");
+                expect(testWidget.queryParams.where)
+                .toEqual('POINTID=\'UT260090N0070E0_200400\'');
             });
 
             it('builds the right url', function() {
                 testWidget._zoom('UT260090N0070E0_200400');
 
-                expect(testWidget.queryTask.url).toEqual('http://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer/4');
+                expect(testWidget.queryTask.url)
+                .toEqual('http://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer/4');
             });
 
             it('shows progress somehow', function() {

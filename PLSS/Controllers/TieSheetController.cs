@@ -71,10 +71,12 @@ namespace PLSS.Controllers
 
                 viewModel.user = user;
                 viewModel.blmid = blmid;
-                
+
                 if (user.SurveyorSeal != null && user.SurveyorSeal.Length > 0)
                 {
-                    viewModel.SurveyorSeal = string.Format("<div class=\"col-xs-offset-4\"><img src=\"data:image/png;base64,{0}\" /></div>", Convert.ToBase64String(user.SurveyorSeal));
+                    viewModel.SurveyorSeal =
+                        string.Format("<div class=\"col-xs-offset-4\"><img src=\"data:image/png;base64,{0}\" /></div>",
+                                      Convert.ToBase64String(user.SurveyorSeal));
                 }
                 else
                 {
@@ -89,7 +91,19 @@ namespace PLSS.Controllers
 #endif
 #if DEBUG
                 viewModel.apikey = Config.Global.Get<string>("devKey");
+                viewModel.Scripts = new[]
+                    {
+                        "<script data-dojo-config='isDebug: 1, deps:[\"app/runTiesheet\"]' src='/plss/src/dojo/dojo.js'></script>",
+                        "<script src='/plss/src/populatr/populatr.min.js'></script>"
+                    };
 #endif
+
+#if !DEBUG
+            viewModel.Scripts = new[]{
+                "<script data-dojo-config='async: 1, deps: [\"app/runTiesheet\"]' src='/plss/dist/app/Tiesheet.js'></script>"
+            };
+#endif
+
                 return View("New", viewModel);
             }
             catch (SqlException ex)
@@ -121,10 +135,10 @@ namespace PLSS.Controllers
                 TempData["error"] = ModelState.ToErrors();
 
                 return RedirectToRoute("", new
-                {
-                    Controller = "Home",
-                    Action = "Index"
-                });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
             }
 
             #endregion
@@ -148,10 +162,10 @@ namespace PLSS.Controllers
                     TempData["error"] = "You must log in to submit a corner";
 
                     return RedirectToRoute("", new
-                    {
-                        Controller = "Home",
-                        Action = "Index"
-                    });
+                        {
+                            Controller = "Home",
+                            Action = "Index"
+                        });
                 }
 
                 cornerViewModel.User = user;
@@ -186,8 +200,8 @@ namespace PLSS.Controllers
                 pdf.FlattenFormFields();
 #endif
                 var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
-                       Config.Global.Get<string>("FtpPassword"),
-                       Config.Global.Get<string>("FtpUrl")); 
+                                                Config.Global.Get<string>("FtpPassword"),
+                                                Config.Global.Get<string>("FtpUrl"));
 
                 var ftpStatusCode = FtpStatusCode.Undefined;
                 string actualPath = null;
@@ -195,7 +209,7 @@ namespace PLSS.Controllers
                 {
                     ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), formInfo.Path, out actualPath);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", cornerViewModel), ex);
 
@@ -261,7 +275,7 @@ namespace PLSS.Controllers
             }
 
             return File(pdf.GetPDFAsByteArray(),
-                         MediaTypeNames.Application.Pdf,
+                        MediaTypeNames.Application.Pdf,
                         string.Format("{0}-preview.pdf", model.BlmPointId));
         }
 
@@ -292,10 +306,10 @@ namespace PLSS.Controllers
                     TempData["error"] = "You must log in to submit a corner";
 
                     return RedirectToRoute("", new
-                    {
-                        Controller = "Home",
-                        Action = "Index"
-                    });
+                        {
+                            Controller = "Home",
+                            Action = "Index"
+                        });
                 }
 
                 cornerViewModel.User = user;
@@ -314,25 +328,25 @@ namespace PLSS.Controllers
                             MediaTypeNames.Application.Pdf,
                             string.Format("{0}-preview.pdf", model.BlmPointId));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.LogException(LogLevel.Fatal, string.Format("problem previewing pdf for {0}", cornerViewModel), ex);
 
                 TempData["error"] = string.Format("There was a problem generating your preview. {0}", ex.Message);
 
                 return RedirectToRoute("", new
-                {
-                    Controller = "Home",
-                    Action = "Index"
-                });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
             }
             finally
             {
-                if(pdf != null)
+                if (pdf != null)
                 {
                     pdf.Dispose();
                 }
-     
+
                 connection.Close();
                 connection.Dispose();
             }
@@ -390,9 +404,9 @@ namespace PLSS.Controllers
                 if (!string.IsNullOrEmpty(exitingViewModel.BlmPointId))
                 {
                     return RedirectToAction("Existing", new
-                    {
-                        blmid = exitingViewModel.BlmPointId
-                    });
+                        {
+                            blmid = exitingViewModel.BlmPointId
+                        });
                 }
 
                 return RedirectToRoute("", new
@@ -456,8 +470,8 @@ namespace PLSS.Controllers
                                     exitingViewModel.BlmPointId).Replace(@"\", "/") + ".pdf";
 
             var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
-                   Config.Global.Get<string>("FtpPassword"),
-                   Config.Global.Get<string>("FtpUrl")); 
+                                            Config.Global.Get<string>("FtpPassword"),
+                                            Config.Global.Get<string>("FtpUrl"));
             FtpStatusCode ftpStatusCode;
             string actualPath;
 
@@ -465,18 +479,19 @@ namespace PLSS.Controllers
             {
                 ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), path, out actualPath);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", exitingViewModel) , ex);
+                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", exitingViewModel), ex);
 
                 //show error and redirect to page
-                TempData["error"] = string.Format("There was a problem uploading your document. Please try again. {0}", ex.Message);
+                TempData["error"] = string.Format("There was a problem uploading your document. Please try again. {0}",
+                                                  ex.Message);
 
                 return RedirectToRoute("", new
-                {
-                    Controller = "Home",
-                    Action = "Index"
-                });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
             }
 
             if (ftpStatusCode != FtpStatusCode.ClosingData)
@@ -484,19 +499,20 @@ namespace PLSS.Controllers
                 TempData["error"] = "There was a problem uploading your document. Please try again.";
 
                 return RedirectToRoute("", new
-                {
-                    Controller = "Home",
-                    Action = "Index"
-                });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
             }
 
             CommandExecutor.ExecuteCommand(new UserSubmittedEmailCommand(
-                                                  new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
-                                                                                             new[] { user.UserName },
-                                                                                             user.Name,
-                                                                                             exitingViewModel.BlmPointId,
-                                                                                             DateTime.Now.ToShortDateString(),
-                                                                                             actualPath)));
+                                               new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
+                                                                                          new[] {user.UserName},
+                                                                                          user.Name,
+                                                                                          exitingViewModel.BlmPointId,
+                                                                                          DateTime.Now.ToShortDateString
+                                                                                              (),
+                                                                                          actualPath)));
 
 #if RELEASE
                 var apikey = Config.Global.Get<string>("prodKey");
@@ -505,7 +521,7 @@ namespace PLSS.Controllers
                 var apikey = Config.Global.Get<string>("stageKey");
 #endif
 #if DEBUG
-                var apikey = Config.Global.Get<string>("devKey");
+            var apikey = Config.Global.Get<string>("devKey");
 #endif
 
             //find what county the point is in
@@ -533,10 +549,10 @@ namespace PLSS.Controllers
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
                     return RedirectToRoute("", new
-                    {
-                        Controller = "Home",
-                        Action = "Index"
-                    });
+                        {
+                            Controller = "Home",
+                            Action = "Index"
+                        });
                 }
 
                 var xcoord = searchApiResult.attributes["xcoord"];
@@ -562,39 +578,39 @@ namespace PLSS.Controllers
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
                     return RedirectToRoute("", new
-                    {
-                        Controller = "Home",
-                        Action = "Index"
-                    });
+                        {
+                            Controller = "Home",
+                            Action = "Index"
+                        });
                 }
 
                 countyName = countResult.attributes["name"].ToUpper();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", exitingViewModel), ex);
 
                 TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
                 return RedirectToRoute("", new
-                {
-                    Controller = "Home",
-                    Action = "Index"
-                });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
             }
 
             //get the county contact for that submission
             CountyContact contact;
-            using(connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString))
             {
                 await connection.OpenAsync();
 
                 contact = connection.Query<CountyContact>(
-                        "Select FullName, Email from Lookup_CountyContacts where County = @countyName",
-                        new
-                            {
-                                countyName
-                            }).SingleOrDefault();
+                    "Select FullName, Email from Lookup_CountyContacts where County = @countyName",
+                    new
+                        {
+                            countyName
+                        }).SingleOrDefault();
 
                 if (contact == null)
                 {
@@ -613,23 +629,23 @@ namespace PLSS.Controllers
             //send county contact an email with link to pdf or attachment
             var file = new FileInfo(actualPath);
             CommandExecutor.ExecuteCommand(new NotifyCountyEmailCommand(
-                                                   new NotifyCountyEmailCommand.MailTemplate(new[]{contact.Email},
-                                                                                              App.AdminEmails,
-                                                                                              contact.FullName,
-                                                                                              user.Name,
-                                                                                              exitingViewModel.BlmPointId,
-                                                                                              countyName,
-                                                                                              pdfBytes,
-                                                                                              file.Name)));
+                                               new NotifyCountyEmailCommand.MailTemplate(new[] {contact.Email},
+                                                                                         App.AdminEmails,
+                                                                                         contact.FullName,
+                                                                                         user.Name,
+                                                                                         exitingViewModel.BlmPointId,
+                                                                                         countyName,
+                                                                                         pdfBytes,
+                                                                                         file.Name)));
 
 
             TempData["message"] = "Monument saved successfully.";
 
             return RedirectToRoute("", new
-            {
-                Controller = "Home",
-                Action = "Index"
-            });
+                {
+                    Controller = "Home",
+                    Action = "Index"
+                });
         }
     }
 }

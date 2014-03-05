@@ -197,6 +197,8 @@
         </div>
     }
 </div>
-@*<script src="../src/populatr/populatr.min.js"></script>*@
-<script data-dojo-config="isDebug: 1,parseOnLoad: 0" src="/plss/src/dojo/dojo.js"> </script>
-<script src='~/src/app/Tiesheet.js'> </script>
+<!-- JAVASCRIPT -->
+@foreach (var script in Model.Scripts)
+{
+    @Html.Raw(script)
+}

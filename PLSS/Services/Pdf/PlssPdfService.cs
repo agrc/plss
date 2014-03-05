@@ -175,5 +175,95 @@ namespace PLSS.Services.Pdf
 
             return template;
         }
+
+        public PDFDocument RebuildPdfFrom(string path, Photo photo, User user, Corner corner, Grid grid, Coordinate cord)
+        {
+            var template = GetPdfForm(path);
+
+            var canvas = template.Pages[0].Canvas;
+
+            if (File.Exists(HeaderImagePath))
+            {
+                var header = Image.FromFile(HeaderImagePath);
+                canvas.DrawImage(header, 36, 0, 528, 71);
+            }
+
+            if (photo.Sketch != null)
+            {
+                var msSketch = new MemoryStream(photo.Sketch);
+                var sketch = Image.FromStream(msSketch);
+                canvas.DrawImage(sketch, 217, 115, 359, 272);
+            }
+
+            if (photo.Thumb != null)
+            {
+                var msThumb = new MemoryStream(photo.Thumb);
+                var thumb = Image.FromStream(msThumb);
+                canvas.DrawImage(thumb, 217, 399, 179, 134);
+            }
+
+            if (photo.Thumb2 != null)
+            {
+                var msThumb2 = new MemoryStream(photo.Thumb2);
+                var thumb2 = Image.FromStream(msThumb2);
+                canvas.DrawImage(thumb2, 397, 399, 179, 134);
+            }
+
+            if (photo.ExtraPages != null)
+            {
+                var stream = new MemoryStream(photo.ExtraPages);
+                var doc = new PDFDocument(stream);
+
+                foreach (PDFPage page in doc.Pages)
+                {
+                    template.AddPage(page);
+                }
+            }
+
+            if (user.SurveyorSeal != null)
+            {
+                var sealStream = new MemoryStream(user.SurveyorSeal);
+                var image = Image.FromStream(sealStream);
+
+                canvas.DrawImage(image, 431, 648, 143, 113);
+            }
+
+            template.WriteToPdfTextField("BLMPointName", corner.BlmPointId);
+            template.WriteToPdfTextField("Date", corner.CollectionDate.ToShortDateString());
+            template.WriteToPdfTextField("CornerOfSection", corner.SectionCorner);
+            template.WriteToPdfTextField("Township", corner.Township);
+            template.WriteToPdfTextField("BaseMeridian", corner.BaseMeridian);
+            template.WriteToPdfTextField("State", "Utah");
+            template.WriteToPdfTextField("County", corner.County);
+            template.WriteToPdfTextField("Datum", grid.Datum);
+            template.WriteToPdfTextField("Notes", corner.Accuracy);
+            template.WriteToPdfTextField("Description", corner.Description);
+            template.WriteToPdfTextField("Status", corner.MonumentStatus);
+            template.WriteToPdfTextField("LicenseNumber", user.SurveryorLicenseNumber);
+            template.WriteToPdfTextField("ContactName", user.Name);
+
+            template.WriteToPdfTextField("CoordinateSystem", grid.Datum);
+            template.WriteToPdfTextField("Zone", grid.Zone);
+            template.WriteToPdfTextField("Northing", grid.Northing.ToString());
+            template.WriteToPdfTextField("Easting", grid.Easting.ToString());
+            template.WriteToPdfTextField("OrthoHeight", grid.Elevation.ToString());
+            template.WriteToPdfTextField("NGSAdjustment", grid.Adjustment);
+            template.WriteToPdfTextField("VerticalUnits", "meters");
+            template.WriteToPdfTextField("HorizontalUnits", "meters");
+            template.WriteToPdfTextField("VerticalDatum", "NAVD88");
+
+            template.WriteToPdfTextField("Latitude", string.Format("{0}°{1}'{2}\" {3}", cord.NorthingDegrees,
+                                     cord.NorthingMinutes,
+                                     cord.NorthingSeconds,
+                                     cord.Northing));
+            template.WriteToPdfTextField("Longitude", string.Format("{0}°{1}'{2}\" {3}", cord.EastingDegrees,
+                                      cord.EastingMinutes,
+                                      cord.EastingSeconds,
+                                      cord.Easting));
+            template.WriteToPdfTextField("EllipsoidHeight", cord.ElipsoidHeight.ToString());
+            template.WriteToPdfTextField("NGSAdjustment", cord.Adjustment);
+
+            return template;
+        }
     }
 }

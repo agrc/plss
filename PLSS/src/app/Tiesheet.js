@@ -9,6 +9,8 @@ require([
 
     'ijit/widgets/upload/MultiFileUploader',
 
+    'app/main',
+
     'dojo/_base/lang',
     'dojo/_base/event',
 
@@ -22,7 +24,6 @@ require([
     'dojo/parser',
 
 
-    'app/main',
     'dojo/domReady!'
 ], function(
     nad83,
@@ -34,6 +35,8 @@ require([
     Trs,
 
     Uploader,
+
+    settings,
 
     lang,
     events,
@@ -48,7 +51,7 @@ require([
     parser
 ) {
     var trs = new Trs({
-        apiKey: window.AGRC.apiKey,
+        apiKey: settings.apiKey,
         requireSection: true,
         formName: 'township'
     }, 'trsNode');
@@ -73,13 +76,15 @@ require([
 
         var value = evt.target.value;
         switch (value) {
-            case 'WGS84 Geographic':
-            case 'NAD27 Geographic':
-                html.set(geoNode, wgs84);
-                break;
-            case 'NAD83 Geographic':
-                html.set(geoNode, nad83);
-                break;
+        case 'WGS84 Geographic':
+            html.set(geoNode, wgs84);
+            break;
+        case 'NAD27 Geographic':
+            html.set(geoNode, wgs84);
+            break;
+        case 'NAD83 Geographic':
+            html.set(geoNode, nad83);
+            break;
         }
     };
 
@@ -88,16 +93,18 @@ require([
 
         var value = evt.target.value;
         switch (value) {
-            case 'NAD83 State Plane':
-                html.set(gridNode, nad83tatePlane);
-                break;
-            case 'NAD83 UTM Zone 12N':
-            case 'NAD83 UTM Zone 11N':
-                html.set(gridNode, utm);
-                break;
-            case 'NAD27 State Plane':
-                html.set(gridNode, nad27StatePlane);
-                break;
+        case 'NAD83 State Plane':
+            html.set(gridNode, nad83tatePlane);
+            break;
+        case 'NAD83 UTM Zone 12N':
+            html.set(gridNode, utm);
+            break;
+        case 'NAD83 UTM Zone 11N':
+            html.set(gridNode, utm);
+            break;
+        case 'NAD27 State Plane':
+            html.set(gridNode, nad27StatePlane);
+            break;
         }
     };
 
@@ -117,7 +124,7 @@ require([
 
         //validate input
         formNodes.forEach(function(node) {
-            if (!node.value || lang.trim(node.value) === "") {
+            if (!node.value || lang.trim(node.value) === '') {
                 domClass.add(node.parentElement, 'has-error');
                 valid = false;
             } else {
@@ -168,8 +175,15 @@ require([
     //                    'accuracy': 'Recreational Grade (+/-) 30m',
     //                    'sectionCorner': 'N 1/4',
     //                    'monumentStatus': 'Lost',
-    //                    'description': 'Coordinates were determined by GPS RTK survey method with base receiver at Beaver County GPS Control Point “Laho.” Coordinate data obtained by single side shot method with no adjustment.  Two measurements made to this corner, each with a different initialization, and then averaged.  No other adjustment.',
-    //                    'notes': 'Base location derived using OPUS solution, Point location using Trimble RTK observed control point.  Found 1983 BLM aluminum cap in line with N-S fence on south side of County Road',
+    //                    'description': 'Coordinates were determined by GPS RTK'+
+    //                                  ' survey method with base receiver at Beaver County GPS Control Point “Laho.”'+
+    //                                  ' Coordinate data obtained by single side shot method with no adjustment.  '+
+    //                                  'Two measurements made to this corner, each with a '+
+    //                                  'different initialization, and then averaged.  ' +
+    //                                  'No other adjustment.',
+    //                    'notes': 'Base location derived using OPUS solution, Point location using '+
+    //                              'Trimble RTK observed control point.  '+
+    //                              'Found 1983 BLM aluminum cap in line with N-S fence on south side of County Road',
     //                    'Coordinate.NorthingDegrees': 111,
     //                    'Coordinate.NorthingMinutes': 11,
     //                    'Coordinate.NorthingSeconds': 51.23532,

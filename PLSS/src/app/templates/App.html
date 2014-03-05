@@ -63,7 +63,7 @@
     <div class="modal fade" id="loginModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form data-dojo-attach-point="loginForm">
+                <form data-dojo-attach-point="loginForm" data-dojo-attach-event="submit:login">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h4 class="modal-title">Login</h4>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-dojo-attach-point="resetNode" class="btn btn-default">Reset</button>
+                        <button type="button" data-dojo-attach-point="resetNode" data-dojo-attach-event="click:reset" class="btn btn-default">Reset</button>
                         <a href="#registerModal" class="btn btn-warning" data-toggle="modal" data-dismiss="modal">Register</a>
                         <button type="submit" data-dojo-attach-point="loginNode" class="btn btn-success">Sign in</button>
                     </div>
@@ -96,7 +96,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Register</h4>
                 </div>
-                <form data-dojo-attach-point="registerForm">
+                <form data-dojo-attach-point="registerForm" data-dojo-attach-event="submit: register">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="registerEmail">Email address</label>

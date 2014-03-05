@@ -4,6 +4,18 @@
     </h3>
     {{/item}}
     {{#item}}
+    <div class="row" id="moreThanOneRow">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-3">
+            <h4>Multiple Corners</h4>
+        </div>
+        <div class="col-xs-12 col-sm-5">
+            <select class="form-control" id="blmIdNumbers">
+                {{#options}}
+                <option>{{.}}</option>
+                {{/options}}
+            </select>
+        </div>
+    </div>
     <div class='row'>
         <div class='col-xs-6 col-sm-3 col-md-3'>
             <h4>Tie Sheet Document</h4>
@@ -38,18 +50,6 @@
         <div class='col-xs-6 col-sm-3 col-md-3'>
             <h4>Location</h4>
             <p class='text-muted'>{{LAT_NAD83}}<br/>{{LONG_NAD83}}</p>
-        </div>
-    </div>
-    <div class="row" id="moreThanOneRow">
-        <div class="col-xs-12 col-sm-offset-2 col-sm-3">
-            <h4>Multiple Corners</h4>
-        </div>
-        <div class="col-xs-12 col-sm-5">
-            <select class="form-control" id="blmIdNumbers">
-                {{#options}}
-                <option>{{.}}</option>
-                {{/options}}
-            </select></div>
         </div>
     </div>
     {{/item}}

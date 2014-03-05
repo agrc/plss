@@ -5,7 +5,9 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/_base/fx',
 
+    'dojo/dom-style',
     'dojo/dom-class',
     'dojo/dom-attr',
     'dojo/dom-construct',
@@ -18,9 +20,13 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
 
+    'esri/graphic',
+    'esri/symbols/SimpleMarkerSymbol',
+
     'mustache/mustache',
 
-    './resources/existingPlssWebsitesByCounty',
+    'app/data/existingPlssWebsitesByCounty',
+    'app/main',
 
 
     'dojo/NodeList-dom'
@@ -31,7 +37,9 @@ define([
     declare,
     lang,
     array,
+    fx,
 
+    domStyle,
     domClass,
     domAttr,
     domConstruct,
@@ -44,9 +52,13 @@ define([
     _WidgetBase,
     _TemplatedMixin,
 
+    Graphic,
+    SimpleMarkerSymbol,
+
     mustache,
 
-    plssWebSites
+    plssWebSites,
+    settings
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -133,13 +145,15 @@ define([
 
             this.content.innerHTML = this.identifyTemplate(model);
 
+            this.highlightPoint(feature.geometry);
+
             this.displayAuthorizedContent(feature.attributes['Corner Point Identifier']);
             this.setupMultipleConnection();
         },
         showTiesheetMessage: function() {
             // summary:
             //      mustache templating function
-            // 
+            //
             console.log('app.CornerInformation::showTiesheetMessage', arguments);
 
             return function(text, render) {
@@ -152,15 +166,17 @@ define([
                 var url = plssWebSites[county];
 
                 if (url) {
-                    return mustache.render('<span class="glyphicon glyphicon-share"></span> <a href="{{& url}}" target="_blank">County Managed.</a>', {
-                        url: url
-                    });
+                    return mustache.render('<span class="glyphicon glyphicon-share"></span>' +
+                        ' <a href="{{& url}}" target="_blank">County Managed.</a>', {
+                            url: url
+                        });
                 }
 
-                return mustache.render('<span class="glyphicon glyphicon-picture"></span> <a href="{{& url}}{{& pdf}}" target="_blank">View tie sheet.</a>', {
-                    url: AGRC.urls.tieSheets,
-                    pdf: render(text)
-                });
+                return mustache.render('<span class="glyphicon glyphicon-picture"></span>' +
+                    ' <a href="{{& url}}{{& pdf}}" target="_blank">View tie sheet.</a>', {
+                        url: settings.urls.tieSheets,
+                        pdf: render(text)
+                    });
             };
         },
         changeTemplate: function(evt) {
@@ -169,6 +185,16 @@ define([
             // evt
             console.log('app.CornerInformation::changeTemplate', arguments);
 
+            var node = this.domNode;
+            fx.fadeOut({
+                node: this.domNode,
+                onEnd: function() {
+                    fx.fadeIn({
+                        node: node
+                    }).play();
+                }
+            }).play();
+
             var value = evt.target.value;
 
             return this.showTemplate(null, value);
@@ -176,11 +202,11 @@ define([
         hydrateListsFromMultipleResults: function(results) {
             // summary:
             //      hydrates an array of blmid's for a select
-            //      and an associative array of blmids to the features 
+            //      and an associative array of blmids to the features
             // results
             console.log('app.CornerInformation::hydrateListsFromMultipleResults', arguments);
 
-            if (results && results.length > 1) {
+            if (results.length > 1) {
                 this.multipleResults = {};
 
                 this.options = [];
@@ -197,7 +223,7 @@ define([
         setupMultipleConnection: function() {
             // summary:
             //      setup
-            // 
+            //
             console.log('app.CornerInormation::setupMultipleConnection', arguments);
 
             if (this.multipleResults) {
@@ -209,7 +235,7 @@ define([
         displayAuthorizedContent: function(blmId) {
             // summary:
             //      shows buttons or hides them
-            //      and shows 
+            //      and shows
             console.log('app.CornerInformation::displayAuthorizedContent', arguments);
 
             if (!this.token) {
@@ -217,14 +243,37 @@ define([
             } else {
                 domClass.replace(this.authorizedContent, 'show', 'hide');
             }
-            
-            domAttr.set(this.existingSubmit, 'href', AGRC.urls.existing + '?blmid=' + blmId);
-            domAttr.set(this.newSubmit, 'href', AGRC.urls.tiesheet + '?blmid=' + blmId);
+
+            domAttr.set(this.existingSubmit, 'href', settings.urls.existing + '?blmid=' + blmId);
+            domAttr.set(this.newSubmit, 'href', settings.urls.tiesheet + '?blmid=' + blmId);
+        },
+        highlightPoint: function(geometry) {
+            // summary:
+            //      zooms the map and highlights the point
+            // geometry
+            console.log('app.CornerInformation::highlightPoint', arguments);
+
+            this.app.map.zoomToGeometry(geometry);
+
+            if (this._graphic) {
+                this.app.map.graphics.remove(this._graphic);
+            }
+
+            var corner = geometry,
+                symbol = new SimpleMarkerSymbol();
+
+            this._graphic = new Graphic(corner, symbol);
+
+            this.app.map.graphics.add(this._graphic);
         },
         close: function() {
             console.log('app.CornerInformation::close', arguments);
 
             domClass.add(this.domNode.parentNode, 'closed');
+
+            if (this._graphic) {
+                this.app.map.graphics.remove(this._graphic);
+            }
         }
     });
 });

@@ -1,4 +1,4 @@
-require([
+define([
     'dojo/text!app/templates/App.html',
 
     'dojo/_base/declare',
@@ -15,7 +15,6 @@ require([
     'dojo/request',
     'dojo/topic',
     'dojo/query',
-    'dojo/parser',
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -42,9 +41,8 @@ require([
     'app/Corners',
     'app/CornerInformation',
     'app/AuthStatus',
-
-
     'app/main',
+
     'dojo/NodeList-html',
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
@@ -65,7 +63,6 @@ require([
     xhr,
     topic,
     query,
-    parser,
 
     _WidgetBase,
     _TemplatedMixin,
@@ -91,14 +88,17 @@ require([
 
     CornerZoom,
     CornerInformation,
-    AuthStatus
+    AuthStatus,
+    settings
 ) {
-    declare('app/App',[_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      The main widget for the app
 
         widgetsInTemplate: true,
+
         templateString: template,
+
         baseClass: 'app',
 
         // map: agrc.widgets.map.Basemap
@@ -109,16 +109,65 @@ require([
             //      first function to fire after page loads
             console.info('app.App::constructor', arguments);
 
-            AGRC.app = this;
+            //AGRC.app = this;
 
             this.inherited(arguments);
         },
         postCreate: function() {
             // summary:
-            //      Fires when
+            //      Executes while dom is detached
             console.log('app.App::postCreate', arguments);
 
             this.setupConnections();
+            this.getUrls();
+
+            this._childWidgets = [];
+
+            this.map = new BaseMap(this.mapDiv, {
+                defaultBaseMap: 'Topo',
+                useDefaultBaseMap: false
+            });
+
+            this._childWidgets.push(new BaseMapSelector({
+                map: this.map,
+                id: 'claro',
+                defaultThemeLabel: 'Topo',
+                position: 'TR'
+            }));
+
+            this._childWidgets.push(new TrsSearch({
+                map: this.map,
+                apiKey: settings.apiKey
+            }, this.trsNode));
+
+            this._childWidgets.push(new MagicZoom({
+                map: this.map,
+                mapServiceURL: settings.urls.vector,
+                searchLayerIndex: 3,
+                searchField: 'Name',
+                placeHolder: 'place name...',
+                maxResultsToDisplay: 10,
+                'class': 'first'
+            }, this.placesNode));
+
+            this._childWidgets.push(new ZoomToCoords({
+                map: this.map
+            }, this.coordNode));
+
+            this._childWidgets.push(new CornerZoom({
+                map: this.map,
+                linkTemplate: settings.urls.tieSheets + '{id}.pdf'
+            }, this.cornerNode));
+
+            this._childWidgets.push(new AuthStatus({},
+                this.authStatusNode));
+
+            this._childWidgets.push(new CornerInformation({
+                app: this
+            }, this.toasterNode));
+
+            this.initMap();
+            this.initIdentify();
 
             this.inherited(arguments);
         },
@@ -128,11 +177,8 @@ require([
             // evt
             console.log('app.App::setupConnections', arguments);
 
-            on(this.loginForm, 'submit', lang.hitch(this, 'login'));
-            on(this.resetNode, 'click', lang.hitch(this, 'reset'));
-            on(this.registerForm, 'submit', lang.hitch(this, 'register'));
-            on(this.registerForm, 'input:change', lang.hitch(this.updateValidation));
-            on(this.loginForm, 'input:change', lang.hitch(this.updateValidation));
+            on(this.registerForm, 'input:change', lang.hitch(this, 'updateValidation'));
+            on(this.loginForm, 'input:change', lang.hitch(this, 'updateValidation'));
             this.subscribe('app.logout', lang.hitch(this, 'logout'));
         },
         startup: function() {
@@ -144,72 +190,22 @@ require([
             // the correct size
             this.inherited(arguments);
 
-            var places, coords, trs, corner, authStatus;
-
-            this.initMap();
-            this.getUrls();
-            this.initIdentify();
-
-            trs = new TrsSearch({
-                map: this.map,
-                apiKey: window.AGRC.apiKey,
-            }, this.trsNode);
-            trs.startup();
-
-            places = new MagicZoom({
-                map: this.map,
-                mapServiceURL: AGRC.urls.vector,
-                searchLayerIndex: 3,
-                searchField: 'Name',
-                placeHolder: 'place name...',
-                maxResultsToDisplay: 10,
-                'class': 'first'
-            }, this.placesNode);
-            places.startup();
-
-            coords = new ZoomToCoords({
-                map: this.map
-            }, this.coordNode);
-            coords.startup();
-
-            corner = new CornerZoom({
-                map: this.map,
-                linkTemplate: AGRC.urls.tieSheets + '{id}.pdf'
-            }, this.cornerNode);
-            corner.startup();
-
-            authStatus = new AuthStatus({}, this.authStatusNode);
-            authStatus.startup();
-
             this.authorize();
 
-            this.inherited(arguments);
+            array.forEach(this._childWidgets, function(w){
+                w.startup();
+            });
         },
         initMap: function() {
             // summary:
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            this.map = new BaseMap(this.mapDiv, {
-                defaultBaseMap: 'Topo',
-                useDefaultBaseMap: false
-            });
-
-            var selector;
-
-            selector = new BaseMapSelector({
-                map: this.map,
-                id: 'claro',
-                defaultThemeLabel: 'Topo',
-                position: 'TR'
-            });
-            selector.startup();
-
-            this.plssLayer = new TiledLayer(AGRC.urls.plss);
+            this.plssLayer = new TiledLayer(settings.urls.plss);
             this.map.addLayer(this.plssLayer);
             this.map.addLoaderToLayer(this.plssLayer);
 
-            this.pointsLayer = new DynamicLayer(AGRC.urls.points);
+            this.pointsLayer = new DynamicLayer(settings.urls.points);
             this.map.addLayer(this.pointsLayer);
             this.map.addLoaderToLayer(this.pointsLayer);
         },
@@ -219,14 +215,7 @@ require([
             //
             console.log('app::initIdentify', arguments);
 
-            this.identifyTask = new IdentifyTask(AGRC.urls.points);
-
-            var cornerIdentify;
-
-            cornerIdentify = new CornerInformation({
-                app: this
-            }, this.toasterNode);
-            cornerIdentify.startup();
+            this.identifyTask = new IdentifyTask(settings.urls.points);
 
             this.identifyParams = new IdentifyParameters();
             this.identifyParams.tolerance = 3;
@@ -251,7 +240,7 @@ require([
             this.map.showLoader();
 
             this._graphic = new Graphic(evt.mapPoint,
-                new PictureMarkerSymbol(AGRC.urls.pin, 30, 23).setOffset(13, 6));
+                new PictureMarkerSymbol(settings.urls.pin, 30, 23).setOffset(13, 6));
 
             this.map.graphics.add(this._graphic);
 
@@ -291,7 +280,7 @@ require([
                 return;
             }
 
-            var def = xhr(window.AGRC.urls.authenticate, {
+            var def = xhr(settings.urls.authenticate, {
                 data: JSON.stringify({
                     username: this.loginEmail.value,
                     password: this.loginPassword.value
@@ -329,7 +318,7 @@ require([
             // evt
             console.log('app::updateLogout', arguments);
 
-            xhr(window.AGRC.urls.leave, {
+            xhr(settings.urls.leave, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -344,7 +333,7 @@ require([
         reset: function() {
             console.log('app::reset');
 
-            var def = xhr(window.AGRC.urls.reset, {
+            var def = xhr(settings.urls.reset, {
                 data: JSON.stringify({
                     username: this.loginEmail.value
                 }),
@@ -375,7 +364,7 @@ require([
             //      handles the login click event
             console.log('app::authorize', arguments);
 
-            xhr(window.AGRC.urls.authorize, {
+            xhr(settings.urls.authorize, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -418,7 +407,7 @@ require([
                 return;
             }
 
-            var def = xhr(window.AGRC.urls.register, {
+            var def = xhr(settings.urls.register, {
                 data: JSON.stringify({
                     email: this.registerEmail.value,
                     password: this.registerPassword.value,
@@ -437,19 +426,21 @@ require([
             domAttr.set(this.registerButtonNode, 'disabled', true);
             domClass.add(this.registerButtonNode, 'disabled');
 
+            var widget = this;
             def.then(
                 function(args) {
                     $('#registerModal').modal('hide');
+
                     topic.publish('app.authorize', {
                         token: args.result.token
                     });
                 },
-                lang.hitch(this, function(args) {
+                function(args) {
                     console.log('app::register::errorCallback', arguments);
 
                     var problems = args.response.data;
-                    this.displayIssues(problems);
-                })
+                    widget.displayIssues(problems);
+                }
             );
 
             def.always(lang.hitch(this, function() {
@@ -512,9 +503,8 @@ require([
                     'Content-Type': 'application/json'
                 }
             }).then(function(urls) {
-                lang.mixin(window.AGRC.urls, urls);
+                lang.mixin(settings.urls, urls);
             });
         }
     });
-    parser.parse();
 });

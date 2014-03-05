@@ -2,6 +2,7 @@
     "folders": [{
         "path": ".",
         "folder_exclude_patterns": [
+            "dist",
             "dist/agrc",
             "dist/app",
             "dist/ijit",

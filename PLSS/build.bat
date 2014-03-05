@@ -1,5 +1,5 @@
 SET BASEDIR=%CD%
-SET PROFILE=%BASEDIR%\profiles\app.profile.js
+SET PROFILE=%BASEDIR%\profiles\build.profile.js
 SET DISTDIR=%BASEDIR%\dist
 SET DISTDIR=%DISTDIR:\=/%
 SET SRCDIR=%BASEDIR%\src
@@ -9,7 +9,7 @@ cd %BASEDIR%\src\util\buildscripts
 rmdir /s /q %DISTDIR%
 mkdir %DISTDIR%
 
-start /WAIT build --profile %PROFILE% --releaseDir %DISTDIR%
+start /WAIT build --require %SRCDIR%\app\runApp.js --profile %PROFILE% --releaseDir %DISTDIR%
 
 cd %DISTDIR%
 

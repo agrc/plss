@@ -1,10 +1,16 @@
 ﻿@using PLSS.Extensions
+@model PLSS.Models.ViewModel.AssetsViewModel
 
-<link rel='stylesheet' href='~/src/app/resources/App.css'>
+@foreach (var style in Model.Css)
+{
+    @Html.Raw(style)
+}
 @Html.ErrorBox(TempData)
 
-<div data-dojo-type='app/App'></div>
+<div id="app"></div>
 
 <!-- JAVASCRIPT -->
-<script data-dojo-config="isDebug: 1,parseOnLoad: 0" src="plss/src/dojo/dojo.js"> </script>  
-<script src='~/src/app/App.js'> </script>
+@foreach (var script in Model.Scripts)
+{
+    @Html.Raw(script)
+}
