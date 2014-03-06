@@ -30,6 +30,9 @@ var profile = {
             boot: true
         }
     },
+    userConfig: {
+        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss']
+    },
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader,
         // so we don’t need them in the build
