@@ -88,8 +88,12 @@ define([
             //
             console.log('app.CornerInformation::setupConnections', arguments);
 
+            var defaultState = this;
             this.own(
-                on(this.app, 'identify-success', lang.hitch(this, 'showTemplate'))
+                on(this.app, 'identify-success', function(args){
+                    defaultState.multipleResults = null;
+                    defaultState.showTemplate(args);
+                })
             );
 
             topic.subscribe('app.authorize', lang.hitch(this, function(args) {

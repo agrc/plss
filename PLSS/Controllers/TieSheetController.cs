@@ -93,14 +93,14 @@ namespace PLSS.Controllers
                 viewModel.apikey = Config.Global.Get<string>("devKey");
                 viewModel.Scripts = new[]
                     {
-                        "<script data-dojo-config='isDebug: 1, deps:[\"app/runTiesheet\"]' src='/plss/src/dojo/dojo.js'></script>",
-                        "<script src='/plss/src/populatr/populatr.min.js'></script>"
+                        string.Format("<script data-dojo-config='isDebug: 1, deps:[\"app/runTiesheet\"]' src='{0}'></script>", Url.Content("~/src/dojo/dojo.js")),
+                        string.Format("<script src='{0}'></script>", Url.Content("~/src/populatr/populatr.min.js"))
                     };
 #endif
 
 #if !DEBUG
             viewModel.Scripts = new[]{
-                "<script data-dojo-config='async: 1, deps: [\"app/runTiesheet\"]' src='/plss/dist/app/Tiesheet.js'></script>"
+                string.Format("<script data-dojo-config='async: 1, deps: [\"app/runTiesheet\"]' src='{0}'></script>", Url.Content("~/dist/app/Tiesheet.js"))
             };
 #endif
 

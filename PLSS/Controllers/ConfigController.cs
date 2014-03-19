@@ -21,7 +21,6 @@ namespace PLSS.Controllers
                     authenticate = Url.Route("hello", new {}),
                     leave = Url.Route("bye", new {}),
                     settings = Url.Route("settings", new {})
-
                 });
 
             response.Headers.CacheControl = new CacheControlHeaderValue
