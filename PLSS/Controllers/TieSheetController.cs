@@ -274,9 +274,11 @@ namespace PLSS.Controllers
                 connection.Dispose();
             }
 
-            return File(pdf.GetPDFAsByteArray(),
-                        MediaTypeNames.Application.Pdf,
-                        string.Format("{0}-preview.pdf", model.BlmPointId));
+            return RedirectToRoute("", new
+            {
+                Controller = "Home",
+                Action = "Index"
+            });
         }
 
         [Route("tiesheet/preview"), HttpPost]
@@ -472,16 +474,17 @@ namespace PLSS.Controllers
             var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
                                             Config.Global.Get<string>("FtpPassword"),
                                             Config.Global.Get<string>("FtpUrl"));
-            FtpStatusCode ftpStatusCode;
+            var ftpStatusCode = FtpStatusCode.Undefined;
             string actualPath;
 
+            Log.Info("Uploading PDF");
             try
             {
                 ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), path, out actualPath);
             }
             catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", exitingViewModel), ex);
+                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf {1} for {0}", exitingViewModel, ftpStatusCode), ex);
 
                 //show error and redirect to page
                 TempData["error"] = string.Format("There was a problem uploading your document. Please try again. {0}",
@@ -493,6 +496,7 @@ namespace PLSS.Controllers
                         Action = "Index"
                     });
             }
+            Log.Info("Checking upload status");
 
             if (ftpStatusCode != FtpStatusCode.ClosingData)
             {
@@ -505,6 +509,8 @@ namespace PLSS.Controllers
                     });
             }
 
+            Log.Info("Sending admin notification email");
+
             CommandExecutor.ExecuteCommand(new UserSubmittedEmailCommand(
                                                new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
                                                                                           new[] {user.UserName},
@@ -516,14 +522,17 @@ namespace PLSS.Controllers
 
 #if RELEASE
                 var apikey = Config.Global.Get<string>("prodKey");
+                const string referrer = "http://mapserv.utah.gov/plss";
 #endif
 #if STAGE
                 var apikey = Config.Global.Get<string>("stageKey");
+                const string referrer = "http://test.mapserv.utah.gov/plss";
 #endif
 #if DEBUG
             var apikey = Config.Global.Get<string>("devKey");
+            const string referrer = "http://localhost";
 #endif
-
+            Log.Info("Getting county from api with referrer {0} and api key {1}",referrer, apikey);
             //find what county the point is in
             string countyName;
             try
@@ -536,15 +545,41 @@ namespace PLSS.Controllers
                 request.AddParameter("predicate", string.Format("pointid = '{0}'", exitingViewModel.BlmPointId));
                 request.AddParameter("apiKey", apikey);
 
-                request.AddHeader("Referer", "http://mapserv.utah.gov/plss");
-
+                request.AddHeader("Referer", referrer);
+               
                 var response = client.Execute<SearchApiContainer>(request);
+
+                if (response.Data == null)
+                {
+                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.ErrorMessage));
+
+                    TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
+
+                    return RedirectToRoute("", new
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
+                }
+
+                if (response.Data.result == null)
+                {
+                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.Content));
+
+                    TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
+
+                    return RedirectToRoute("", new
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
+                }
 
                 var searchApiResult = response.Data.result.FirstOrDefault();
 
                 if (searchApiResult == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice {0}", client.BuildUri(request)));
+                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.Content));
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -567,13 +602,40 @@ namespace PLSS.Controllers
                 request.AddParameter("spatialReference", "4326");
                 request.AddParameter("apiKey", apikey);
 
-                request.AddHeader("Referer", "http://mapserv.utah.gov/plss");
+                request.AddHeader("Referer", referrer);
 
                 var county = client.Execute<SearchApiContainer>(request);
+
+                if (county.Data == null)
+                {
+                    Log.Warn(string.Format("problem querying webservice forcounty {0}. {1}", client.BuildUri(request), county.ErrorMessage));
+
+                    TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
+
+                    return RedirectToRoute("", new
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
+                }
+
+                if (county.Data.result == null)
+                {
+                    Log.Warn(string.Format("problem querying webservice for county {0}. {1}", client.BuildUri(request), county.Content));
+
+                    TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
+
+                    return RedirectToRoute("", new
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
+                }
+
                 var countResult = county.Data.result.FirstOrDefault();
                 if (countResult == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice {0}", client.BuildUri(request)));
+                    Log.Warn(string.Format("problem querying webservice for county {0}", client.BuildUri(request)));
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
