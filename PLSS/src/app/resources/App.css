@@ -80,7 +80,8 @@ body, html {
 
 .close {
     position: absolute;
-    right: 8px
+    right: 8px;
+    z-index: 50
 }
 
 .unavailable { background-color: #fa0 }
