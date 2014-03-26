@@ -463,8 +463,11 @@ namespace PLSS.Controllers
                 connection.Dispose();
             }
 
-            var pdf = new PDFDocument(exitingViewModel.MonumentForm.InputStream);
-            var pdfBytes = pdf.GetPDFAsByteArray();
+            byte[] pdfBytes;
+            using (var binaryReader = new BinaryReader(exitingViewModel.MonumentForm.InputStream))
+            {
+                pdfBytes = binaryReader.ReadBytes(exitingViewModel.MonumentForm.ContentLength);
+            }
 
             var path = Path.Combine("UserCommittedTieSheets",
                                     user.Name,
@@ -480,7 +483,7 @@ namespace PLSS.Controllers
             Log.Info("Uploading PDF");
             try
             {
-                ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), path, out actualPath);
+                ftpStatusCode = ftpService.Upload(pdfBytes, path, out actualPath);
             }
             catch (Exception ex)
             {
