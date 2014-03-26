@@ -16,7 +16,10 @@ define([
     //apiKey: 'AGRC-B5D62BD2151902',
 
     //test.mapserv
-    apiKey: 'AGRC-FFCDAD6B933051',
+    //apiKey: 'AGRC-FFCDAD6B933051', 
+
+    //prod.mapserv
+    apiKey: 'AGRC-94703F79341773',
 
     urls: {
         vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
