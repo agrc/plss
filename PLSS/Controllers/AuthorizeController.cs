@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using CommandPattern;
 using NLog;
+using PLSS.Attributes;
 using PLSS.Commands;
 using PLSS.Commands.Queries;
 using PLSS.Models;
@@ -19,7 +20,7 @@ namespace PLSS.Controllers
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        [Route("authorize", Name = "auth"), Authorize, HttpGet]
+        [Route("authorize", Name = "auth"), NonChallengeAuthorize, HttpGet]
         public async Task<HttpResponseMessage> Get()
         {
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString);
