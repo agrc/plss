@@ -546,6 +546,7 @@ namespace PLSS.Controllers
                 request.AddUrlSegment("layer", "SGID10.CADASTRE.PLSSPoint_AGRC");
                 request.AddUrlSegment("returnValues", "xcoord, ycoord");
                 request.AddParameter("predicate", string.Format("pointid = '{0}'", exitingViewModel.BlmPointId));
+                request.AddParameter("attributeStyle", "lower");
                 request.AddParameter("apiKey", apikey);
 
                 request.AddHeader("Referer", referrer);
@@ -599,6 +600,7 @@ namespace PLSS.Controllers
                 request = new RestRequest("search/{layer}/{returnValues}");
                 request.AddUrlSegment("layer", "SGID10.BOUNDARIES.Counties");
                 request.AddUrlSegment("returnValues", "NAME");
+                request.AddParameter("attributeStyle", "lower");
 
                 request.AddParameter("geometry", string.Format("point:[{0},{1}]", xcoord, ycoord));
 
