@@ -4,25 +4,25 @@ namespace PLSS.Models.ViewModel
 {
     public class GridViewModel
     {
-        private float _northing;
-        private float _easting;
-        private float _elevation;
+        private double _northing;
+        private double _easting;
+        private double _elevation;
 
         public string Zone { get; set; }
 
-        public float Northing
+        public double Northing
         {
             get { return HandleUnit(_northing); }
             set { _northing = value; }
         }
 
-        public float Easting
+        public double Easting
         {
             get { return HandleUnit(_easting); }
             set { _easting = value; }
         }
 
-        public float Elevation
+        public double Elevation
         {
             get { return HandleUnit(_elevation); } 
             set { _elevation = value; }
@@ -62,7 +62,7 @@ namespace PLSS.Models.ViewModel
             }
         }
 
-        private float HandleUnit(float value)
+        private double HandleUnit(double value)
         {
             if (HorizontalUnits == "US Survey Feet")
             {

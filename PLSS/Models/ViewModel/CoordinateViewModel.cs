@@ -4,17 +4,17 @@ namespace PLSS.Models.ViewModel
 {
     public class CoordinateViewModel
     {
-        private float _elipsoidHeight;
+        private double _elipsoidHeight;
         
         public string Northing { get; set; }
-        public float NorthingDegrees { get; set; }
-        public float NorthingMinutes { get; set; }
-        public float NorthingSeconds { get; set; }
+        public double NorthingDegrees { get; set; }
+        public double NorthingMinutes { get; set; }
+        public double NorthingSeconds { get; set; }
         public string Easting { get; set; }
-        public float EastingDegrees { get; set; }
-        public float EastingMinutes { get; set; }
-        public float EastingSeconds { get; set; }
-        public float ElipsoidHeight
+        public double EastingDegrees { get; set; }
+        public double EastingMinutes { get; set; }
+        public double EastingSeconds { get; set; }
+        public double ElipsoidHeight
         {
             get { return HandleUnit(_elipsoidHeight); }
             set { _elipsoidHeight = value; }
@@ -53,7 +53,7 @@ namespace PLSS.Models.ViewModel
         /// </value>
         public string CoordinateSystem { get; set; }
 
-        private float HandleUnit(float value)
+        private double HandleUnit(double value)
         {
             if (VerticalUnits == "US Survey Feet")
             {

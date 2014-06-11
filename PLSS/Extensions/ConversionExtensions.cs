@@ -2,17 +2,17 @@
 {
     public static class ConversionExtensions
     {
-        public static float ConvertMetersToFeet(this float meters)
+        public static double ConvertMetersToFeet(this double meters)
         {
             return meters * 3.280833333f;
         }
 
-        public static float FeetToMeters(this float feet)
+        public static double FeetToMeters(this double feet)
         {
             return feet / 3.280833333f;
         }
 
-        public static float InternationalFeetToMeters(this float feet)
+        public static double InternationalFeetToMeters(this double feet)
         {
             return feet * 0.3048f;
         }       

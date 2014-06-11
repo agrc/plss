@@ -24,8 +24,8 @@ namespace PLSS.Models
 
         public Guid GridId { get; private set; }
         public string Zone { get; private set; }
-        public float Northing { get; private set; }
-        public float Easting { get; private set; }
+        public double Northing { get; private set; }
+        public double Easting { get; private set; }
         public double Elevation { get; private set; }
         public string Adjustment { get; private set; }
         public string Datum { get; private set; }
