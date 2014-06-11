@@ -30,9 +30,9 @@ namespace PLSS.Models
             SurveyorName = model.User.Name;
 
             Zone = model.Grid.Zone;
-            Northing = model.Grid.Northing.ToString();
-            Easting = model.Grid.Easting.ToString();
-            Elevation = model.Grid.Elevation.ToString();
+            Northing = model.Grid.Northing.ToString("0.000");
+            Easting = model.Grid.Easting.ToString("0.000");
+            Elevation = model.Grid.Elevation.ToString("0.000");
             CoordinateAdjustment = model.Grid.Adjustment;
             CoordinateSystem = model.Grid.CoordinateSystem;
             Datum = model.Grid.Datum;
@@ -45,7 +45,7 @@ namespace PLSS.Models
                                       model.Coordinate.EastingMinutes,
                                       model.Coordinate.EastingSeconds,
                                       model.Coordinate.Easting);
-            ElipsoidHeight = model.Coordinate.ElipsoidHeight.ToString();
+            ElipsoidHeight = model.Coordinate.ElipsoidHeight.ToString("0.000");
             GridAdjustment = model.Coordinate.Adjustment;
 
             var sketch = ConvertToImage(model.Sketch);

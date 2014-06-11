@@ -244,9 +244,9 @@ namespace PLSS.Services.Pdf
 
             template.WriteToPdfTextField("CoordinateSystem", grid.Datum);
             template.WriteToPdfTextField("Zone", grid.Zone);
-            template.WriteToPdfTextField("Northing", grid.Northing.ToString());
-            template.WriteToPdfTextField("Easting", grid.Easting.ToString());
-            template.WriteToPdfTextField("OrthoHeight", grid.Elevation.ToString());
+            template.WriteToPdfTextField("Northing", grid.Northing.ToString("0.000"));
+            template.WriteToPdfTextField("Easting", grid.Easting.ToString("0.000"));
+            template.WriteToPdfTextField("OrthoHeight", grid.Elevation.ToString("0.000"));
             template.WriteToPdfTextField("NGSAdjustment", grid.Adjustment);
             template.WriteToPdfTextField("VerticalUnits", "meters");
             template.WriteToPdfTextField("HorizontalUnits", "meters");
@@ -260,7 +260,7 @@ namespace PLSS.Services.Pdf
                                       cord.EastingMinutes,
                                       cord.EastingSeconds,
                                       cord.Easting));
-            template.WriteToPdfTextField("EllipsoidHeight", cord.ElipsoidHeight.ToString());
+            template.WriteToPdfTextField("EllipsoidHeight", cord.ElipsoidHeight.ToString("0.000"));
             template.WriteToPdfTextField("NGSAdjustment", cord.Adjustment);
 
             return template;
