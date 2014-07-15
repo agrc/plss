@@ -240,3 +240,4 @@ PLSS/connections.Release.config
 PLSS/connections.Stage.config
 PLSS/connections.config
 PLSS/connections.Production.config
+PLSS/elmah/error-*.xml

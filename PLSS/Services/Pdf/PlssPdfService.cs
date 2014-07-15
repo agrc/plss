@@ -190,23 +190,43 @@ namespace PLSS.Services.Pdf
 
             if (photo.Sketch != null)
             {
-                var msSketch = new MemoryStream(photo.Sketch);
-                var sketch = Image.FromStream(msSketch);
-                canvas.DrawImage(sketch, 217, 115, 359, 272);
+                try
+                {
+                    var msSketch = new MemoryStream(photo.Sketch);
+                    var sketch = Image.FromStream(msSketch);
+                    canvas.DrawImage(sketch, 217, 115, 359, 272);
+                }
+                catch (ArgumentException)
+                {
+                    
+                }
             }
 
             if (photo.Thumb != null)
             {
-                var msThumb = new MemoryStream(photo.Thumb);
-                var thumb = Image.FromStream(msThumb);
-                canvas.DrawImage(thumb, 217, 399, 179, 134);
+                try
+                {
+                    var msThumb = new MemoryStream(photo.Thumb);
+                    var thumb = Image.FromStream(msThumb);
+                    canvas.DrawImage(thumb, 217, 399, 179, 134);
+                }
+                catch (ArgumentException)
+                {
+
+                }
             }
 
             if (photo.Thumb2 != null)
             {
-                var msThumb2 = new MemoryStream(photo.Thumb2);
-                var thumb2 = Image.FromStream(msThumb2);
-                canvas.DrawImage(thumb2, 397, 399, 179, 134);
+                try
+                {
+                    var msThumb2 = new MemoryStream(photo.Thumb2);
+                    var thumb2 = Image.FromStream(msThumb2);
+                    canvas.DrawImage(thumb2, 397, 399, 179, 134);
+                }
+                catch (ArgumentException)
+                {
+                }
             }
 
             if (photo.ExtraPages != null)
@@ -222,10 +242,17 @@ namespace PLSS.Services.Pdf
 
             if (user.SurveyorSeal != null)
             {
-                var sealStream = new MemoryStream(user.SurveyorSeal);
-                var image = Image.FromStream(sealStream);
+                try
+                {
+                    var sealStream = new MemoryStream(user.SurveyorSeal);
+                    var image = Image.FromStream(sealStream);
 
-                canvas.DrawImage(image, 431, 648, 143, 113);
+                    canvas.DrawImage(image, 431, 648, 143, 113);
+                }
+                catch (ArgumentException)
+                {
+
+                }
             }
 
             template.WriteToPdfTextField("BLMPointName", corner.BlmPointId);

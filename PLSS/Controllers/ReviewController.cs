@@ -22,6 +22,7 @@ namespace PLSS.Controllers
         {
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString);
             PDFDocument pdf;
+
             try
             {
                 await connection.OpenAsync();
@@ -72,7 +73,7 @@ namespace PLSS.Controllers
                 connection.Dispose();
             }
 
-            return File(pdf.GetPDFAsByteArray(), "application/pdf", "{0}-preview.pdf");
+            return File(pdf.GetPDFAsByteArray(), "application/pdf", "Review.pdf");
         }
 
     }
