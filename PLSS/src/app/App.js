@@ -41,11 +41,13 @@ define([
     'app/Corners',
     'app/CornerInformation',
     'app/AuthStatus',
-    'app/main',
+    'app/config',
 
     'dojo/NodeList-html',
     'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'dijit/layout/ContentPane',
+
+    'bootstrap'
 ], function(
     template,
 
@@ -89,7 +91,7 @@ define([
     CornerZoom,
     CornerInformation,
     AuthStatus,
-    settings
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -137,12 +139,12 @@ define([
 
             this._childWidgets.push(new TrsSearch({
                 map: this.map,
-                apiKey: settings.apiKey
+                apiKey: config.apiKey
             }, this.trsNode));
 
             this._childWidgets.push(new MagicZoom({
                 map: this.map,
-                mapServiceURL: settings.urls.vector,
+                mapServiceURL: config.urls.vector,
                 searchLayerIndex: 3,
                 searchField: 'Name',
                 placeHolder: 'place name...',
@@ -156,7 +158,7 @@ define([
 
             this._childWidgets.push(new CornerZoom({
                 map: this.map,
-                linkTemplate: settings.urls.tieSheets + '{id}.pdf'
+                linkTemplate: config.urls.tieSheets + '{id}.pdf'
             }, this.cornerNode));
 
             this._childWidgets.push(new AuthStatus({},
@@ -201,11 +203,11 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            this.plssLayer = new TiledLayer(settings.urls.plss);
+            this.plssLayer = new TiledLayer(config.urls.plss);
             this.map.addLayer(this.plssLayer);
             this.map.addLoaderToLayer(this.plssLayer);
 
-            this.pointsLayer = new DynamicLayer(settings.urls.points);
+            this.pointsLayer = new DynamicLayer(config.urls.points);
             this.map.addLayer(this.pointsLayer);
             this.map.addLoaderToLayer(this.pointsLayer);
         },
@@ -215,7 +217,7 @@ define([
             //
             console.log('app::initIdentify', arguments);
 
-            this.identifyTask = new IdentifyTask(settings.urls.points);
+            this.identifyTask = new IdentifyTask(config.urls.points);
 
             this.identifyParams = new IdentifyParameters();
             this.identifyParams.tolerance = 3;
@@ -240,7 +242,7 @@ define([
             this.map.showLoader();
 
             this._graphic = new Graphic(evt.mapPoint,
-                new PictureMarkerSymbol(settings.urls.pin, 30, 23).setOffset(13, 6));
+                new PictureMarkerSymbol(config.urls.pin, 30, 23).setOffset(13, 6));
 
             this.map.graphics.add(this._graphic);
 
@@ -280,7 +282,7 @@ define([
                 return;
             }
 
-            var def = xhr(settings.urls.authenticate, {
+            var def = xhr(config.urls.authenticate, {
                 data: JSON.stringify({
                     username: this.loginEmail.value,
                     password: this.loginPassword.value
@@ -318,7 +320,7 @@ define([
             // evt
             console.log('app::updateLogout', arguments);
 
-            xhr(settings.urls.leave, {
+            xhr(config.urls.leave, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -333,7 +335,7 @@ define([
         reset: function() {
             console.log('app::reset');
 
-            var def = xhr(settings.urls.reset, {
+            var def = xhr(config.urls.reset, {
                 data: JSON.stringify({
                     username: this.loginEmail.value
                 }),
@@ -364,7 +366,7 @@ define([
             //      handles the login click event
             console.log('app::authorize', arguments);
 
-            xhr(settings.urls.authorize, {
+            xhr(config.urls.authorize, {
                 handleAs: 'json',
                 method: 'GET',
                 headers: {
@@ -407,7 +409,7 @@ define([
                 return;
             }
 
-            var def = xhr(settings.urls.register, {
+            var def = xhr(config.urls.register, {
                 data: JSON.stringify({
                     email: this.registerEmail.value,
                     password: this.registerPassword.value,
@@ -503,7 +505,7 @@ define([
                     'Content-Type': 'application/json'
                 }
             }).then(function(urls) {
-                lang.mixin(settings.urls, urls);
+                lang.mixin(config.urls, urls);
             });
         }
     });

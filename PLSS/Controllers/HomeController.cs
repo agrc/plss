@@ -13,7 +13,7 @@ namespace PLSS.Controllers
                             new[]
                                 {
                                     string.Format(
-                                        "<script data-dojo-config=\"isDebug: 1, tlmSiblingOfDojo: 1, deps:['app/runApp']\" src='{0}'></script>",
+                                        "<script data-dojo-config=\"isDebug: 1, tlmSiblingOfDojo: 1, deps:['app/run']\" src='{0}'></script>",
                                         Url.Content("~/src/dojo/dojo.js"))
                                 },
                             new[]
@@ -25,7 +25,7 @@ namespace PLSS.Controllers
 #endif
 #if !DEBUG
             return View(new AssetsViewModel(new[]{
-                string.Format("<script data-dojo-config='async: 1, deps: [\"app/runApp\"]' src='{0}'></script>", Url.Content("~/dist/app/App.js"))
+                string.Format("<script data-dojo-config='async: 1, deps: [\"app/run\"]' src='{0}'></script>", Url.Content("~/dist/dojo/plss.js"))
             },
             new[]{
                     string.Format("<link rel='stylesheet' href='{0}'>", Url.Content("~/dist/app/resources/App.css"))

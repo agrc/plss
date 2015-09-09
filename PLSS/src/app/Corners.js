@@ -20,7 +20,7 @@ define([
     'esri/geometry/Extent',
     'esri/symbols/SimpleMarkerSymbol',
 
-    'app/main'
+    'app/config'
 ], function(
     template,
 
@@ -43,7 +43,7 @@ define([
     Extent,
     SimpleMarkerSymbol,
 
-    settings
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -58,8 +58,8 @@ define([
         // map - agrc.widgets.map
         map: null,
 
-        // linkTemplate - string 
-        //      the template of the link with lang.replace {id} 
+        // linkTemplate - string
+        //      the template of the link with lang.replace {id}
         //       substitutions for the corner value
         linkTemplate: null,
 
@@ -69,7 +69,7 @@ define([
             //
             console.log('app.Corners::postCreate', arguments);
 
-            this.queryTask = new QueryTask(settings.urls.points + '/4');
+            this.queryTask = new QueryTask(config.urls.points + '/4');
             this.queryParams = new Query();
             this.queryParams.outFields = ['POINTID'];
             this.queryParams.returnGeometry = true;

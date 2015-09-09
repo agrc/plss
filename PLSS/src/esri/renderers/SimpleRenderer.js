@@ -1,3 +1,0 @@
-//>>built
-define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel","esri/lang","esri/symbols/jsonUtils","esri/renderers/Renderer"],function(c,g,h,i,d,e,f){return c(f,{declaredClass:"esri.renderer.SimpleRenderer",constructor:function(a){if(a&&!a.declaredClass){var b=a;if(a=b.symbol)this.symbol=e.fromJson(a);this.label=b.label;this.description=b.description}else this.symbol=a},getSymbol:function(){return this.symbol},toJson:function(){return d.fixJson({type:"simple",label:this.label,description:this.description,
-symbol:this.symbol&&this.symbol.toJson()})}})});

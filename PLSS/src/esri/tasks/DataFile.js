@@ -1,2 +1,0 @@
-//>>built
-define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel"],function(b,c){return b(null,{declaredClass:"esri.tasks.DataFile",constructor:function(a){a&&c.mixin(this,a)},url:null,itemID:null,toJson:function(){var a={};if(this.url)a.url=this.url;if(this.itemID)a.itemID=this.itemID;return a}})});

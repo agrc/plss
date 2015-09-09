@@ -26,7 +26,7 @@ define([
     'mustache/mustache',
 
     'app/data/existingPlssWebsitesByCounty',
-    'app/main',
+    'app/config',
 
 
     'dojo/NodeList-dom'
@@ -58,7 +58,7 @@ define([
     mustache,
 
     plssWebSites,
-    settings
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -77,8 +77,6 @@ define([
             if (!this.app) {
                 throw 'must define app when creating app.CornerInformation';
             }
-
-            this.identifyTemplate = mustache.compile(identifyTemplateText);
 
             this.setupConnections();
         },
@@ -125,7 +123,7 @@ define([
                 model = {};
 
             if (templateData && templateData.results.length === 0) {
-                this.content.innerHTML = this.identifyTemplate(model);
+                this.content.innerHTML = mustache.render(identifyTemplateText, model);
 
                 return;
             }
@@ -147,7 +145,7 @@ define([
                 item: feature.attributes
             };
 
-            this.content.innerHTML = this.identifyTemplate(model);
+            this.content.innerHTML = mustache.render(identifyTemplateText, model);
 
             this.highlightPoint(feature.geometry);
 
@@ -178,7 +176,7 @@ define([
 
                 return mustache.render('<span class="glyphicon glyphicon-picture"></span>' +
                     ' <a href="{{& url}}{{& pdf}}" target="_blank">View tie sheet.</a>', {
-                        url: settings.urls.tieSheets,
+                        url: config.urls.tieSheets,
                         pdf: render(text)
                     });
             };
@@ -248,8 +246,8 @@ define([
                 domClass.replace(this.authorizedContent, 'show', 'hide');
             }
 
-            domAttr.set(this.existingSubmit, 'href', settings.urls.existing + '?blmid=' + blmId);
-            domAttr.set(this.newSubmit, 'href', settings.urls.tiesheet + '?blmid=' + blmId);
+            domAttr.set(this.existingSubmit, 'href', config.urls.existing + '?blmid=' + blmId);
+            domAttr.set(this.newSubmit, 'href', config.urls.tiesheet + '?blmid=' + blmId);
         },
         highlightPoint: function(geometry) {
             // summary:

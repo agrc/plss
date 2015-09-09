@@ -1,15 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSS", "PLSS\PLSS.csproj", "{FB1FF5AC-0A2A-4E2E-B937-E9F773261361}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D} = {B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}
+		{882F2044-A716-43E1-89BD-5B59FACD4F71} = {882F2044-A716-43E1-89BD-5B59FACD4F71}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrcPasswordManagement", "..\..\Libraries\AgrcPasswordManagement\AgrcPasswordManagement.csproj", "{882F2044-A716-43E1-89BD-5B59FACD4F71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrcPasswordManagement", "AgrcPasswordManagement\AgrcPasswordManagement.csproj", "{882F2044-A716-43E1-89BD-5B59FACD4F71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandPattern", "..\..\Libraries\CommandPattern\CommandPattern.csproj", "{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownMail", "..\..\Libraries\MarkdownMail\MarkdownMail\MarkdownMail.csproj", "{26B40432-2430-4AF1-93C9-6955DEE2D036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandPattern", "CommandPattern\CommandPattern.csproj", "{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSS.Tests", "PLSS.Tests\PLSS.Tests.csproj", "{77CE750C-D228-4067-BEBC-A54875166B43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownMail", "MarkdownMail\MarkdownMail.csproj", "{26B40432-2430-4AF1-93C9-6955DEE2D036}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,26 +34,26 @@ Global
 		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Stage|Any CPU.ActiveCfg = Stage|Any CPU
-		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Stage|Any CPU.Build.0 = Stage|Any CPU
+		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Stage|Any CPU.ActiveCfg = Release|Any CPU
+		{882F2044-A716-43E1-89BD-5B59FACD4F71}.Stage|Any CPU.Build.0 = Release|Any CPU
 		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Stage|Any CPU.ActiveCfg = Stage|Any CPU
-		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Stage|Any CPU.Build.0 = Stage|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Stage|Any CPU.ActiveCfg = Stage|Any CPU
-		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Stage|Any CPU.Build.0 = Stage|Any CPU
+		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Stage|Any CPU.ActiveCfg = Release|Any CPU
+		{B041C22A-A2FA-4805-BB6C-80C1E1C4FE4D}.Stage|Any CPU.Build.0 = Release|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Stage|Any CPU.ActiveCfg = Stage|Any CPU
 		{77CE750C-D228-4067-BEBC-A54875166B43}.Stage|Any CPU.Build.0 = Stage|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Stage|Any CPU.ActiveCfg = Stage|Any CPU
+		{26B40432-2430-4AF1-93C9-6955DEE2D036}.Stage|Any CPU.Build.0 = Stage|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

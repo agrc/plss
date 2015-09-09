@@ -8,14 +8,14 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FB1FF5AC-0A2A-4E2E-B937-E9F773261361}</ProjectGuid>
-    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PLSS</RootNamespace>
     <AssemblyName>PLSS</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -51,7 +51,7 @@
     </Reference>
     <Reference Include="CommandPattern, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Bin\CommandPattern.dll</HintPath>
+      <HintPath>..\CommandPattern\bin\Debug\CommandPattern.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
@@ -82,11 +82,8 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\PLSS.Tests\bin\Debug\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="O2S.Components.PDF4NET">
-      <HintPath>..\..\..\Libraries\PDF4NET\3.2.1.0\O2S.Components.PDF4NET.dll</HintPath>
+      <HintPath>..\Libs\O2S.Components.PDF4NET.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
@@ -244,83 +241,16 @@
     <Content Include="dist\agrc\resources\images\background_v-1.png" />
     <Content Include="dist\agrc\resources\images\BaseMapSelectorSprite.png" />
     <Content Include="dist\app\resources\App.css" />
-    <Content Include="dist\esri\dijit\images\ajax-loader-blue.gif" />
-    <Content Include="dist\esri\dijit\images\ajax-loader.gif" />
-    <Content Include="dist\esri\dijit\images\arcgisGeocoder.png" />
-    <Content Include="dist\esri\dijit\images\attribute_inspector_sprite.png" />
-    <Content Include="dist\esri\dijit\images\button-active.png" />
-    <Content Include="dist\esri\dijit\images\button-hover.png" />
-    <Content Include="dist\esri\dijit\images\claro.infowindow.png" />
-    <Content Include="dist\esri\dijit\images\close.gif" />
-    <Content Include="dist\esri\dijit\images\Directions\loading-32.gif" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTBearLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTBearRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTDepart.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTDoorPassage.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTElevator.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTEndOfFerry.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTEscalator.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTFerry.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkCenter.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTForkRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayChange.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayExit.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTHighwayMerge.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTPedestrianRamp.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRampLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRampRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTRoundabout.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTSharpLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTSharpRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStairs.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStop.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStopDestination.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStopOrigin.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTStraight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTripItem.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeftLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnLeftRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRightLeft.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTTurnRightRight.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTUnknown.png" />
-    <Content Include="dist\esri\dijit\images\Directions\maneuvers\esriDMTUTurn.png" />
-    <Content Include="dist\esri\dijit\images\Directions\print.png" />
-    <Content Include="dist\esri\dijit\images\Directions\remove-destination.png" />
-    <Content Include="dist\esri\dijit\images\Directions\reverse.png" />
-    <Content Include="dist\esri\dijit\images\edit.png" />
-    <Content Include="dist\esri\dijit\images\HistogramTimeSlider\circle_slider.png" />
-    <Content Include="dist\esri\dijit\images\leftlongarrow.png" />
-    <Content Include="dist\esri\dijit\images\loading.gif" />
-    <Content Include="dist\esri\dijit\images\Measure_Area16.png" />
-    <Content Include="dist\esri\dijit\images\Measure_Distance16.png" />
-    <Content Include="dist\esri\dijit\images\Measure_Point16.png" />
-    <Content Include="dist\esri\dijit\images\MosaicRule_Query.png" />
-    <Content Include="dist\esri\dijit\images\MosaicRule_Threedots.png" />
-    <Content Include="dist\esri\dijit\images\nihilo.infowindow.png" />
-    <Content Include="dist\esri\dijit\images\overview.png" />
-    <Content Include="dist\esri\dijit\images\pointerbottom.png" />
-    <Content Include="dist\esri\dijit\images\pointertop.png" />
-    <Content Include="dist\esri\dijit\images\popup.png" />
-    <Content Include="dist\esri\dijit\images\remove-24x24.png" />
-    <Content Include="dist\esri\dijit\images\rightlongarrow.png" />
-    <Content Include="dist\esri\dijit\images\simpleGeocoder.png" />
-    <Content Include="dist\esri\dijit\images\soria.infowindow.png" />
-    <Content Include="dist\esri\dijit\images\spinner.gif" />
-    <Content Include="dist\esri\dijit\images\squarearrow.png" />
-    <Content Include="dist\esri\dijit\images\time_slider_sprite.png" />
-    <Content Include="dist\esri\dijit\images\tundra.infowindow.png" />
-    <Content Include="dist\esri\dijit\images\whiter.png" />
-    <Content Include="dist\esri\dijit\images\whitex.png" />
-    <Content Include="src\app\AuthStatus.js" />
-    <Content Include="src\app\data\existingPlssWebsitesByCounty.js" />
+    <Content Include="dist\bootstrap\dist\css\bootstrap.min.css" />
+    <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="dist\dojo\plss.js" />
+    <Content Include="dist\dojo\plss.js.uncompressed.js" />
+    <Content Include="dist\dojo\tiesheet.js" />
+    <Content Include="dist\dojo\tiesheet.js.uncompressed.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Pdf\StateOfUtah-Header.jpg" />
     <Content Include="Global.asax" />
-    <Content Include="Migrations\Rollback.bat" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.pdf" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.v1.pdf" />
     <Content Include="Assets\Pdf\TrajanPro-Regular.otf" />
@@ -343,10 +273,17 @@
     <None Include="connections.Stage.config">
       <DependentUpon>connections.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
+      <SubType>Designer</SubType>
     </None>
-    <Content Include="src\app\Tiesheet.js" />
-    <Content Include="dist\app\Tiesheet.js" />
-    <Content Include="dist\app\App.js" />
+    <Content Include="src\agrc\widgets\locate\templates\TRSsearch.html" />
+    <Content Include="src\bootstrap\dist\css\bootstrap-theme.css" />
+    <Content Include="src\bootstrap\dist\css\bootstrap-theme.min.css" />
+    <Content Include="src\bootstrap\dist\css\bootstrap.css" />
+    <Content Include="src\bootstrap\dist\css\bootstrap.min.css" />
+    <Content Include="src\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="src\bootstrap\dist\js\bootstrap.js" />
+    <Content Include="src\bootstrap\dist\js\bootstrap.min.js" />
+    <Content Include="src\bootstrap\dist\js\npm.js" />
     <Content Include="src\dojo\resources\blank.gif" />
     <Content Include="src\dojo\resources\blank.html" />
     <Content Include="src\dojo\resources\dnd.css" />
@@ -356,33 +293,21 @@
     <Content Include="src\dojo\resources\images\dndMove.png" />
     <Content Include="src\dojo\resources\images\dndNoCopy.png" />
     <Content Include="src\dojo\resources\images\dndNoMove.png" />
+    <Content Include="src\ijit\widgets\upload\templates\MultiFileUploaderTemplate.html" />
     <Content Include="src\plss\templates\Geo_NAD83.html" />
     <Content Include="src\plss\templates\Geo_WGS84_NAD27.html" />
     <Content Include="src\plss\templates\Grid_NAD27StatePlane.html" />
     <Content Include="src\plss\templates\Grid_NAD83StatePlane.html" />
     <Content Include="src\plss\templates\Grid_Utm.html" />
-    <Content Include="Web.sample.csx" />
-    <Content Include="connections.sample.config" />
-    <None Include="Migrations\Migrate.bat" />
-    <Content Include="src\app\App.js" />
-    <Content Include="src\app\CornerInformation.js" />
-    <Content Include="src\app\Corners.js" />
-    <Content Include="src\app\main.js" />
-    <Content Include="src\app\resources\agrc_logo.jpg" />
-    <Content Include="src\app\resources\App.css" />
-    <Content Include="src\app\resources\push_pin.png" />
-    <Content Include="src\app\templates\App.html" />
-    <Content Include="src\app\templates\AuthStatus.html" />
-    <Content Include="src\app\templates\CornerInformation.html" />
-    <Content Include="src\app\templates\Corners.html" />
-    <Content Include="src\app\templates\IdentifyTemplate.html" />
-    <Content Include="src\bootstrap\css\bootstrap-theme.css" />
-    <Content Include="src\bootstrap\css\bootstrap-theme.min.css" />
-    <Content Include="src\bootstrap\css\bootstrap.css" />
-    <Content Include="src\bootstrap\css\bootstrap.min.css" />
+    <None Include="Web.sample.csx" />
+    <None Include="connections.sample.config" />
+    <Content Include="dist\dojo\plss.js.map" />
+    <Content Include="dist\dojo\tiesheet.js.map" />
+    <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="src\bootstrap\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="src\bootstrap\js\bootstrap.js" />
-    <Content Include="src\bootstrap\js\bootstrap.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -398,23 +323,33 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\10.3.1 web server.pubxml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
-    <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
-    <Content Include="src\app\package.json" />
     <Content Include="src\dojo\resources\LICENSE" />
+    <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
+    <Content Include="src\bootstrap\dist\css\bootstrap-theme.css.map" />
+    <Content Include="src\bootstrap\dist\css\bootstrap.css.map" />
+    <Content Include="src\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="src\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="src\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="src\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Web.csx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Stage.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\bootstrap\js\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
@@ -435,8 +370,8 @@
     <Content Include="Views\TieSheet\Existing.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\MarkdownMail\MarkdownMail\MarkdownMail.csproj">
-      <Project>{26b40432-2430-4af1-93c9-6955dee2d036}</Project>
+    <ProjectReference Include="..\MarkdownMail\MarkdownMail.csproj">
+      <Project>{26B40432-2430-4AF1-93C9-6955DEE2D036}</Project>
       <Name>MarkdownMail</Name>
     </ProjectReference>
   </ItemGroup>
@@ -454,8 +389,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Label="SlowCheetah">
-    <SlowCheetahToolsPath>$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\..\packages\SlowCheetah.2.5.10.3\tools\))</SlowCheetahToolsPath>
-    <SlowCheetah_EnableImportFromNuGet Condition=" '$(SC_EnableImportFromNuGet)'=='' ">true</SlowCheetah_EnableImportFromNuGet>
+    <SlowCheetahToolsPath>$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\..\packages\SlowCheetah.2.5.15\tools\))</SlowCheetahToolsPath>
+    <SlowCheetah_EnableImportFromNuGet Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='' ">true</SlowCheetah_EnableImportFromNuGet>
     <SlowCheetah_NuGetImportPath Condition=" '$(SlowCheetah_NuGetImportPath)'=='' ">$([System.IO.Path]::GetFullPath( $(MSBuildProjectDirectory)\Properties\SlowCheetah\SlowCheetah.Transforms.targets ))</SlowCheetah_NuGetImportPath>
     <SlowCheetahTargets Condition=" '$(SlowCheetah_EnableImportFromNuGet)'=='true' and Exists('$(SlowCheetah_NuGetImportPath)') ">$(SlowCheetah_NuGetImportPath)</SlowCheetahTargets>
   </PropertyGroup>
@@ -469,10 +404,19 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/PLSS</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_BuildAction="Build" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="Build" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />

@@ -13,7 +13,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
 
-    'app/main'
+    'app/config'
 ], function(
     template,
 
@@ -29,7 +29,7 @@
     _WidgetBase,
     _TemplatedMixin,
 
-    settings
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -87,7 +87,7 @@
 
             if (status === 'login') {
                 this.userSettingsNode = domConstruct.place('<li><a href=\'' +
-                    settings.urls.settings +
+                    config.urls.settings +
                     '\'><span class=\'glyphicon glyphicon-user\'></span> Settings</a></li>', this.domNode, 'after');
                 domClass.replace(this.loginNode, 'hidden', 'show');
 

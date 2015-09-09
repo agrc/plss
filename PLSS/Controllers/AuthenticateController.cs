@@ -11,6 +11,7 @@ using CommandPattern;
 using NLog;
 using PLSS.Commands;
 using PLSS.Commands.Queries;
+using PLSS.FormsAuthentication;
 using PLSS.Models;
 using PLSS.Models.Response;
 
@@ -44,7 +45,7 @@ namespace PLSS.Controllers
                                                   new []{new KeyValuePair<string, string>("login.email", "User does not exist.")});
                 }
 
-                var formsAuth = new FormsAuthentication.FormsAuthenticationWrapper();
+                var formsAuth = new FormsAuthenticationWrapper();
 
                 if (databaseUser.Password != formsAuth.HashPasswordForStoringInConfigFile(user.Password))
                 {
@@ -75,7 +76,7 @@ namespace PLSS.Controllers
         [Route("authenticate/logout", Name="bye"), HttpGet]
         public HttpResponseMessage Logout()
         {
-            var formsAuth = new FormsAuthentication.FormsAuthenticationWrapper();
+            var formsAuth = new FormsAuthenticationWrapper();
             formsAuth.SignOut();
 
             return Request.CreateResponse(HttpStatusCode.NoContent);

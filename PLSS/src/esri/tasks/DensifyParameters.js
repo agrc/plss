@@ -1,3 +1,0 @@
-//>>built
-define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/json","dojo/has","esri/kernel","esri/geometry/jsonUtils"],function(b,f,d,c,g,h,e){return b(null,{declaredClass:"esri.tasks.DensifyParameters",geometries:null,geodesic:null,lengthUnit:null,maxSegmentLength:null,toJson:function(){var b=d.map(this.geometries,function(a){return a.toJson()}),a={};if(this.geometries&&0<this.geometries.length)a.geometries=c.toJson({geometryType:e.getJsonType(this.geometries[0]),geometries:b}),a.sr=
-c.toJson(this.geometries[0].spatialReference.toJson());if(this.geodesic)a.geodesic=this.geodesic;if(this.lengthUnit)a.lengthUnit=this.lengthUnit;if(this.maxSegmentLength)a.maxSegmentLength=this.maxSegmentLength;return a}})});

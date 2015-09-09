@@ -6,7 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Dapper;
-
+using NLog;
 using PLSS.Models;
 
 namespace PLSS
@@ -16,8 +16,11 @@ namespace PLSS
 
     public class App : System.Web.HttpApplication
     {
+        public static Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected void Application_Start()
         {
+            Logger.Info("Program started"); 
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -31,6 +34,8 @@ namespace PLSS
         {
             // Code that runs when an unhandled error occurs
             var exc = Server.GetLastError();
+            Logger.Fatal(exc);
+
             try
             {
                 if (exc.Message.Contains("Maximum request length exceeded"))
@@ -50,8 +55,12 @@ namespace PLSS
 
     public class CacheConfig
     {
+        public static Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static void CacheValues()
         {
+            Logger.Info("Caching values"); 
+
             App.AdminEmails = new string[]{};
 
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString);
@@ -61,6 +70,8 @@ namespace PLSS
                 connection.Open();
 
                 App.AdminEmails = connection.Query<string>(AdminEmail.GetStatement).ToArray();
+                
+                Logger.Info("Caching finished");
             }
             finally
             {

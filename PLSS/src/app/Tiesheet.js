@@ -9,7 +9,7 @@ require([
 
     'ijit/widgets/upload/MultiFileUploader',
 
-    'app/main',
+    'app/config',
 
     'dojo/_base/lang',
     'dojo/_base/event',
@@ -22,6 +22,8 @@ require([
     'dojo/html',
     'dojo/query',
     'dojo/parser',
+
+    'esri/config',
 
 
     'dojo/domReady!'
@@ -36,7 +38,7 @@ require([
 
     Uploader,
 
-    settings,
+    config,
 
     lang,
     events,
@@ -48,10 +50,16 @@ require([
     on,
     html,
     query,
-    parser
+    parser,
+
+    esriConfig
 ) {
+    esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
+
     var trs = new Trs({
-        apiKey: settings.apiKey,
+        apiKey: config.apiKey,
         requireSection: true,
         formName: 'township'
     }, 'trsNode');

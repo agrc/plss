@@ -35,6 +35,8 @@ namespace PLSS.Controllers
         [Route("tiesheet", Name = "new"), HttpGet]
         public async Task<ActionResult> New(string blmid, string message)
         {
+            Log.Info("Showing tie sheet for {0}", blmid);
+
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString);
             try
             {
@@ -42,6 +44,8 @@ namespace PLSS.Controllers
 
                 if (string.IsNullOrEmpty(User.Identity.Name))
                 {
+                    Log.Info("user has no identity, redirecting to home page");
+
                     TempData["error"] = "You must log in to submit a corner";
 
                     return RedirectToRoute("", new
@@ -58,14 +62,18 @@ namespace PLSS.Controllers
 
                 if (user == null)
                 {
+                    Log.Info("user not found, redirecting to home page");
+
                     TempData["error"] = "You must log in to submit a corner";
 
                     return RedirectToRoute("", new
-                        {
-                            Controller = "Home",
-                            Action = "Index"
-                        });
+                    {
+                        Controller = "Home",
+                        Action = "Index"
+                    });
                 }
+
+                Log.Info("showing tiesheet for user, {0}", user.UserName);
 
                 dynamic viewModel = new ExpandoObject();
 
@@ -93,14 +101,14 @@ namespace PLSS.Controllers
                 viewModel.apikey = Config.Global.Get<string>("devKey");
                 viewModel.Scripts = new[]
                     {
-                        string.Format("<script data-dojo-config='isDebug: 1, deps:[\"app/runTiesheet\"]' src='{0}'></script>", Url.Content("~/src/dojo/dojo.js")),
+                        string.Format("<script data-dojo-config='isDebug: 1, deps:[\"app/run\"]' src='{0}'></script>", Url.Content("~/src/dojo/dojo.js")),
                         string.Format("<script src='{0}'></script>", Url.Content("~/src/populatr/populatr.min.js"))
                     };
 #endif
 
 #if !DEBUG
             viewModel.Scripts = new[]{
-                string.Format("<script data-dojo-config='async: 1, deps: [\"app/runTiesheet\"]' src='{0}'></script>", Url.Content("~/dist/app/Tiesheet.js"))
+                string.Format("<script data-dojo-config='async: 1, deps: [\"app/runTiesheet\"]' src='{0}'></script>", Url.Content("~/dist/dojo/tiesheet.js"))
             };
 #endif
 
@@ -145,6 +153,8 @@ namespace PLSS.Controllers
 
             if (Request.Form["submitType"] == "preview")
             {
+                Log.Info("Showing preview for {0}", cornerViewModel.BlmPointId);
+
                 return await Preview(cornerViewModel);
             }
 
@@ -159,6 +169,8 @@ namespace PLSS.Controllers
 
                 if (user == null)
                 {
+                    Log.Info("Could not find user {0} redirecting to home.", User.Identity.Name);
+
                     TempData["error"] = "You must log in to submit a corner";
 
                     return RedirectToRoute("", new
@@ -167,6 +179,8 @@ namespace PLSS.Controllers
                             Action = "Index"
                         });
                 }
+
+                Log.Info("Submitting tiesheet for {0}", user.Name);
 
                 cornerViewModel.User = user;
 
@@ -199,6 +213,8 @@ namespace PLSS.Controllers
 #if DEBUG
                 pdf.FlattenFormFields();
 #endif
+                Log.Info("finished created database models");
+
                 var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
                                                 Config.Global.Get<string>("FtpPassword"),
                                                 Config.Global.Get<string>("FtpUrl"));
@@ -207,6 +223,7 @@ namespace PLSS.Controllers
                 string actualPath = null;
                 try
                 {
+                    Log.Info("Ftping pdf to {0}", formInfo.Path);
                     ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), formInfo.Path, out actualPath);
                 }
                 catch (Exception ex)
@@ -221,6 +238,10 @@ namespace PLSS.Controllers
                 {
                     uploadedSuccessfully = true;
 
+                    Log.Info("PDF uploaded successfully to {0}", Config.Global.Get<string>("FtpUrl"));
+
+                    Log.Info("Sending success notification email to {0}", string.Join(", ", App.AdminEmails));
+
                     CommandExecutor.ExecuteCommand(new UserSubmittedEmailCommand(
                                                        new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
                                                                                                   new[] {user.UserName},
@@ -231,6 +252,8 @@ namespace PLSS.Controllers
                 }
                 else
                 {
+                    Log.Info("Sending failed notification email to {0}", string.Join(", ", App.AdminEmails));
+
                     CommandExecutor.ExecuteCommand(new UserSubmitionFailedEmailCommand(
                                                        new UserSubmitionFailedEmailCommand.MailTemplate(App.AdminEmails,
                                                                                                         new[]
@@ -243,6 +266,8 @@ namespace PLSS.Controllers
                                                                                                         model.
                                                                                                             CollectionDate)));
                 }
+
+                Log.Info("updating forminfoes table path: {0} success: {1}", actualPath, uploadedSuccessfully);
 
                 var cUpdate = connection.Execute(
                     "update FormInfoes set " +
@@ -535,7 +560,7 @@ namespace PLSS.Controllers
             var apikey = Config.Global.Get<string>("devKey");
             const string referrer = "http://localhost";
 #endif
-            Log.Info("Getting county from api with referrer {0} and api key {1}",referrer, apikey);
+            Log.Info("Getting county from api with referrer {0} and api key {1}", referrer, apikey);
             //find what county the point is in
             string countyName;
             try
@@ -652,6 +677,7 @@ namespace PLSS.Controllers
                 }
 
                 countyName = countResult.attributes["name"].ToUpper();
+                Log.Info("County: {0}", countyName);
             }
             catch (Exception ex)
             {
@@ -695,6 +721,7 @@ namespace PLSS.Controllers
 
             //send county contact an email with link to pdf or attachment
             var file = new FileInfo(actualPath);
+            Log.Info("Sending county contact email to: {0}", contact.Email);
             CommandExecutor.ExecuteCommand(new NotifyCountyEmailCommand(
                                                new NotifyCountyEmailCommand.MailTemplate(new[] {contact.Email},
                                                                                          App.AdminEmails,
@@ -707,7 +734,8 @@ namespace PLSS.Controllers
 
 
             TempData["message"] = "Monument saved successfully.";
-
+            Log.Info("Monument was saved successfully");
+            
             return RedirectToRoute("", new
                 {
                     Controller = "Home",

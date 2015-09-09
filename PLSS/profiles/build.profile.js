@@ -4,26 +4,31 @@ var profile = {
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: undefined,//'closure',
-    layerOptimize: 'closure',
+    optimize: 'uglify',
+    layerOptimize: 'uglify',
     stripConsole: 'all',
     selectorEngine: 'acme',
     layers: {
-        'app/Tiesheet': {
+        'dojo/plss': {
             include: [
-                'app/runTiesheet'
-            ],
-            includeLocales: ['en-us'],
-            customBase: true, //replaces the dojo main.
-            boot: true //includes the module loader.
-        },
-        'app/App': {
-            include: [
-                'app/runApp',
-                'esri/dijit/Attribution',
+                'dojo/i18n',
+                'dojo/domReady',
+                'app/run',
+                'app/App',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
-                'dojox/gfx/shape'
+                'dojox/gfx/shape',
+                'esri/dijit/Attribution'
+            ],
+            targetStylesheet: 'app/resources/App.css',
+            includeLocales: ['en-us'],
+            customBase: true,
+            boot: true
+        },
+        'dojo/tiesheet': {
+            include: [
+                'app/runTiesheet',
+                'app/Tiesheet'
             ],
             includeLocales: ['en-us'],
             customBase: true,
@@ -31,7 +36,7 @@ var profile = {
         }
     },
     userConfig: {
-        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss']
+        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss', 'esri']
     },
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader,

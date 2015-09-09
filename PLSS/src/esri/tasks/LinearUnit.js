@@ -1,2 +1,0 @@
-//>>built
-define(["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel"],function(b,c){return b(null,{declaredClass:"esri.tasks.LinearUnit",constructor:function(a){a&&c.mixin(this,a)},distance:0,units:null,toJson:function(){var a={};if(this.distance)a.distance=this.distance;if(this.units)a.units=this.units;return a}})});

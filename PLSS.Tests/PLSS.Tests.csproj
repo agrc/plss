@@ -71,12 +71,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\CommandPattern\CommandPattern.csproj">
+    <ProjectReference Include="..\CommandPattern\CommandPattern.csproj">
       <Project>{b041c22a-a2fa-4805-bb6c-80c1e1c4fe4d}</Project>
       <Name>CommandPattern</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\MarkdownMail\MarkdownMail\MarkdownMail.csproj">
-      <Project>{26b40432-2430-4af1-93c9-6955dee2d036}</Project>
+    <ProjectReference Include="..\MarkdownMail\MarkdownMail.csproj">
+      <Project>{26B40432-2430-4AF1-93C9-6955DEE2D036}</Project>
       <Name>MarkdownMail</Name>
     </ProjectReference>
     <ProjectReference Include="..\PLSS\PLSS.csproj">

@@ -1,5 +1,5 @@
 (function() {
-    require({
+    var config = {
         baseUrl: '/plss/src',
         packages: [
             'app',
@@ -7,17 +7,36 @@
             'dojo',
             'dojox',
             'dijit',
+            'dgrid',
             'esri',
             'ijit',
-            'mustache',
-            'plss', {
+            'plss',
+            'put-selector',
+            'xstyle',
+            {
+                name: 'ladda',
+                location: './ladda-bootstrap',
+                main: 'dist/ladda'
+            }, {
+                name: 'mustache',
+                location: './mustache',
+                main: 'mustache'
+            }, {
                 name: 'jquery',
+                location: './jquery/dist',
                 main: 'jquery'
             }, {
                 name: 'bootstrap',
-                location: 'bootstrap/js',
-                main: 'bootstrap'
+                location: './bootstrap',
+                main: 'dist/js/bootstrap'
+            }, {
+                name: 'spin',
+                location: './spinjs',
+                main: 'spin'
             }
         ]
-    }, ['app/Tiesheet']);
+    };
+    require(config, ['app/Tiesheet', 'jquery', 'dojo/domReady!'], function() {
+
+    });
 })();

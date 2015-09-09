@@ -1,2 +1,0 @@
-//>>built
-define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/json","dojo/has","esri/kernel"],function(a,c,b){return a(null,{declaredClass:"esri.tasks.GenerateRendererParameters",classificationDefinition:null,where:null,toJson:function(){return{classificationDef:b.toJson(this.classificationDefinition.toJson()),where:this.where}}})});
