@@ -15,7 +15,7 @@ class PlssPallet(Pallet):
     def __init__(self):
         super(PlssPallet, self).__init__()
 
-        # self.arcgis_services = [('PLSS', 'MapServer')]
+        self.arcgis_services = [('PLSS', 'MapServer')]
         self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre.gdb'
         self.copy_data = [self.destination_workspace]
         self.destination_coordinate_system = 26912
