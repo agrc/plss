@@ -18,8 +18,8 @@ class PlssPallet(Pallet):
         # self.arcgis_services = [('PLSS', 'MapServer')]
         self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre.gdb'
         self.copy_data = [self.destination_workspace]
+        self.destination_coordinate_system = 26912
 
     def build(self, configuration=None):
         self.add_crates(['PLSSPoint_AGRC', 'Counties'], {'source_workspace': join(self.garage, 'SGID10.sde'),
-                                                         'destination_workspace': self.destination_workspace,
-                                                         'destination_coordinate_system': 26912})
+                                                         'destination_workspace': self.destination_workspace})
