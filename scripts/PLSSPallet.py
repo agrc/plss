@@ -23,3 +23,20 @@ class PlssPallet(Pallet):
     def build(self, configuration=None):
         self.add_crates(['PLSSPoint_AGRC', 'Counties'], {'source_workspace': join(self.garage, 'SGID10.sde'),
                                                          'destination_workspace': self.destination_workspace})
+
+
+class PlssCachePallet(Pallet):
+
+    def __init__(self):
+        super(PlssPallet, self).__init__()
+
+        self.arcgis_services = [('UtahPLSS', 'MapServer')]
+        self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre.gdb'
+        self.copy_data = [self.destination_workspace]
+        self.destination_coordinate_system = 26912
+
+    def build(self, configuration=None):
+        self.add_crates(
+            ['PLSSTownships_GCDB', 'PLSSSections_GCDB', 'PLSSQuarterSections_GCDB', 'PLSSQuarterQuarterSections_GCDB'],
+            {'source_workspace': join(self.garage, 'SGID10.sde'),
+             'destination_workspace': self.destination_workspace})
