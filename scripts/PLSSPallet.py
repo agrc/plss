@@ -16,13 +16,18 @@ class PlssPallet(Pallet):
         super(PlssPallet, self).__init__()
 
         self.arcgis_services = [('PLSS', 'MapServer')]
-        self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre.gdb'
-        self.copy_data = [self.destination_workspace]
+        self.boundaries = 'C:\\Scheduled\\Staging\\Boundaries_UTM.gdb'
+        self.cadastre = 'C:\\Scheduled\\Staging\\Cadastre_UTM.gdb'
+
+        self.copy_data = [self.boundaries, self.cadastre]
         self.destination_coordinate_system = 26912
 
     def build(self, configuration=None):
-        self.add_crates(['PLSSPoint_AGRC', 'Counties'], {'source_workspace': join(self.garage, 'SGID10.sde'),
-                                                         'destination_workspace': self.destination_workspace})
+        self.add_crates(['PLSSPoint_AGRC'], {'source_workspace': join(self.garage, 'SGID10.sde'),
+                                             'destination_workspace': self.cadastre})
+
+        self.add_crates(['Counties'], {'source_workspace': join(self.garage, 'SGID10.sde'),
+                                       'destination_workspace': self.boundaries})
 
 
 class PlssCachePallet(Pallet):
@@ -31,7 +36,7 @@ class PlssCachePallet(Pallet):
         super(PlssPallet, self).__init__()
 
         self.arcgis_services = [('UtahPLSS', 'MapServer')]
-        self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre.gdb'
+        self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre_UTM.gdb'
         self.copy_data = [self.destination_workspace]
         self.destination_coordinate_system = 26912
 
