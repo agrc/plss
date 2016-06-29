@@ -16,8 +16,8 @@ class PlssPallet(Pallet):
         super(PlssPallet, self).__init__()
 
         self.arcgis_services = [('PLSS', 'MapServer')]
-        self.boundaries = 'C:\\Scheduled\\Staging\\Boundaries_UTM.gdb'
-        self.cadastre = 'C:\\Scheduled\\Staging\\Cadastre_UTM.gdb'
+        self.boundaries = 'C:\\Scheduled\\Staging\\boundaries_utm.gdb'
+        self.cadastre = 'C:\\Scheduled\\Staging\\cadastre_utm.gdb'
 
         self.copy_data = [self.boundaries, self.cadastre]
         self.destination_coordinate_system = 26912
@@ -36,7 +36,7 @@ class PlssCachePallet(Pallet):
         super(PlssCachePallet, self).__init__()
 
         self.arcgis_services = [('UtahPLSS', 'MapServer')]
-        self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre_UTM.gdb'
+        self.destination_workspace = 'C:\\Scheduled\\Staging\\cadastre_utm.gdb'
         self.copy_data = [self.destination_workspace]
         self.destination_coordinate_system = 26912
 
