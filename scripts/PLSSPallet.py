@@ -33,7 +33,7 @@ class PlssPallet(Pallet):
 class PlssCachePallet(Pallet):
 
     def __init__(self):
-        super(PlssPallet, self).__init__()
+        super(PlssCachePallet, self).__init__()
 
         self.arcgis_services = [('UtahPLSS', 'MapServer')]
         self.destination_workspace = 'C:\\Scheduled\\Staging\\Cadastre_UTM.gdb'
