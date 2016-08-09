@@ -20,7 +20,6 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
-            vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
             points: 'http://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
             plss: 'http://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
             tieSheets: 'ftp://ftp.agrc.utah.gov/PLSS/TieSheets/',
