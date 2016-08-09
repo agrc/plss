@@ -237,6 +237,7 @@
     <Compile Include="Services\Pdf\PdfExtensions.cs" />
     <Compile Include="Services\Pdf\PdfServiceBase.cs" />
     <Compile Include="Services\Pdf\PlssPdfService.cs" />
+    <Content Include="dist\agrc\resources\images\agrc_logo.svg" />
     <Content Include="dist\agrc\resources\images\agrc_map_logo_small.png" />
     <Content Include="dist\agrc\resources\images\background_v-1.png" />
     <Content Include="dist\agrc\resources\images\BaseMapSelectorSprite.png" />
@@ -244,12 +245,14 @@
     <Content Include="dist\bootstrap\dist\css\bootstrap.min.css" />
     <Content Include="dist\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="dist\dojo\plss.js" />
-    <Content Include="dist\dojo\plss.js.uncompressed.js" />
     <Content Include="dist\dojo\tiesheet.js" />
-    <Content Include="dist\dojo\tiesheet.js.uncompressed.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Pdf\StateOfUtah-Header.jpg" />
+    <Content Include="dist\esri\dijit\images\ajax-loader.gif" />
+    <Content Include="dist\esri\dijit\images\popup.png" />
+    <Content Include="dist\esri\layers\vector-tile.js" />
+    <Content Include="dist\layer-selector\resources\layers.min.svg" />
     <Content Include="Global.asax" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.pdf" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.v1.pdf" />
@@ -293,6 +296,7 @@
     <Content Include="src\dojo\resources\images\dndMove.png" />
     <Content Include="src\dojo\resources\images\dndNoCopy.png" />
     <Content Include="src\dojo\resources\images\dndNoMove.png" />
+    <Content Include="src\esri\layers\vector-tile.js" />
     <Content Include="src\ijit\widgets\upload\templates\MultiFileUploaderTemplate.html" />
     <Content Include="src\plss\templates\Geo_NAD83.html" />
     <Content Include="src\plss\templates\Geo_WGS84_NAD27.html" />
@@ -416,7 +420,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_BuildAction="Build" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildAction="Build" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />
