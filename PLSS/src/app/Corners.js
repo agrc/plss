@@ -59,10 +59,11 @@ define([
             //
             console.log('app.Corners::postCreate', arguments);
 
-            this.queryTask = new QueryTask(config.urls.points + '/4');
+            this.queryTask = new QueryTask(config.urls.points + '/0');
             this.queryParams = new Query();
             this.queryParams.outFields = ['POINTID'];
             this.queryParams.returnGeometry = true;
+            this.queryParams.outSpatialReference = this.map.spatialReference;
 
             this.setupConnections();
         },
@@ -120,6 +121,10 @@ define([
                 this.map.graphics.remove(this._graphic);
             }
 
+            if (featureSet.features.length < 1) {
+                return;
+            }
+
             var corner = featureSet.features[0].geometry;
             var symbol = new SimpleMarkerSymbol();
             var buffer = 1000;
@@ -130,7 +135,7 @@ define([
 
             this._graphic = new Graphic(corner, symbol);
 
-            this.map.setExtent(new Extent(xMin, yMin, xMax, yMax, new SpatialReference(26912)), true);
+            this.map.setExtent(new Extent(xMin, yMin, xMax, yMax, this.map.spatialReference), true);
             this.map.graphics.add(this._graphic);
         },
         _updateLinkLocation: function () {
