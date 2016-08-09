@@ -1,98 +1,85 @@
 /* global $ */
 define([
-    'dojo/text!app/templates/App.html',
+    'agrc/widgets/locate/MagicZoom',
+    'agrc/widgets/locate/TRSsearch',
+    'agrc/widgets/locate/ZoomToCoords',
+    'agrc/widgets/map/BaseMap',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/event',
-    'dojo/_base/array',
+    'app/AuthStatus',
+    'app/config',
+    'app/CornerInformation',
+    'app/Corners',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/dom',
-    'dojo/dom-style',
-    'dojo/dom-class',
     'dojo/dom-attr',
-
+    'dojo/dom-class',
     'dojo/on',
-    'dojo/request',
-    'dojo/topic',
     'dojo/query',
+    'dojo/request',
+    'dojo/text!app/templates/App.html',
+    'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/event',
+    'dojo/_base/lang',
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
-    'dijit/registry',
-
-    'agrc/widgets/map/BaseMap',
-    'layer-selector',
-
-    'agrc/widgets/locate/MagicZoom',
-    'agrc/widgets/locate/ZoomToCoords',
-    'agrc/widgets/locate/TRSsearch',
+    'esri/graphic',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/VectorTileLayer',
+    'esri/symbols/PictureMarkerSymbol',
+    'esri/tasks/IdentifyParameters',
+    'esri/tasks/IdentifyTask',
+    'esri/tasks/ImageServiceIdentifyResult',
 
     'ijit/widgets/layout/SideBarToggler',
 
-    'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/VectorTileLayer',
-    'esri/tasks/IdentifyTask',
-    'esri/tasks/IdentifyParameters',
-    'esri/tasks/IdentifyResult',
-    'esri/graphic',
-    'esri/symbols/PictureMarkerSymbol',
+    'layer-selector',
 
-    'app/Corners',
-    'app/CornerInformation',
-    'app/AuthStatus',
-    'app/config',
-
-    'dojo/NodeList-html',
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane',
-
-    'bootstrap'
+    'bootstrap',
+    'dojo/NodeList-html'
 ], function (
-    template,
+    MagicZoom,
+    TrsSearch,
+    ZoomToCoords,
+    BaseMap,
 
-    declare,
-    lang,
-    events,
-    array,
+    AuthStatus,
+    config,
+    CornerInformation,
+    CornerZoom,
+
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
 
     dom,
-    domStyle,
-    domClass,
     domAttr,
-
+    domClass,
     on,
-    xhr,
-    topic,
     query,
+    xhr,
+    template,
+    topic,
+    array,
+    declare,
+    events,
+    lang,
 
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    registry,
-
-    BaseMap,
-    BaseMapSelector,
-
-    MagicZoom,
-    ZoomToCoords,
-    TrsSearch,
+    Graphic,
+    DynamicLayer,
+    VectorTileLayer,
+    PictureMarkerSymbol,
+    IdentifyParameters,
+    IdentifyTask,
+    ImageServiceIdentifyResult,
 
     SideBarToggler,
 
-    DynamicLayer,
-    VectorTileLayer,
-    IdentifyTask,
-    IdentifyParameters,
-    IdentifyResult,
-    Graphic,
-    PictureMarkerSymbol,
-
-    CornerZoom,
-    CornerInformation,
-    AuthStatus,
-    config
+    BaseMapSelector
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -127,26 +114,25 @@ define([
             this._childWidgets = [];
 
             this.map = new BaseMap(this.mapDiv, {
-                defaultBaseMap: 'Topo',
                 useDefaultBaseMap: false
             });
 
             this._childWidgets.push(new BaseMapSelector({
                 map: this.map,
-                id: 'claro',
-                defaultThemeLabel: 'Topo',
-                position: 'TR'
+                quadWord: config.quadWord,
+                baseLayers: ['Topo', 'Hybrid', 'Lite', 'Terrain', 'Color IR']
             }));
 
             this._childWidgets.push(new TrsSearch({
                 map: this.map,
-                apiKey: config.apiKey
+                apiKey: config.apiKey,
+                wkid: 3857
             }, this.trsNode));
 
             this._childWidgets.push(new MagicZoom({
                 map: this.map,
-                mapServiceURL: config.urls.vector,
-                searchLayerIndex: 3,
+                wkid: 3857,
+                apiKey: config.apiKey,
                 searchField: 'Name',
                 placeHolder: 'place name...',
                 maxResultsToDisplay: 10,
