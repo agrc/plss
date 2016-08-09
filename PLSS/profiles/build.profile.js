@@ -51,17 +51,6 @@ var profile = {
             }
         }
     }],
-    plugins: {
-        'xstyle/css': 'xstyle/build/amd-css'
-    },
-    map: {
-        '*': {
-            'dojox/dgauges': 'dgauges'
-        }
-    },
-    userConfig: {
-        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss', 'esri', 'layer-selector']
-    },
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader,
         // so we don’t need them in the build
@@ -80,5 +69,16 @@ var profile = {
 
         // We aren’t loading tests in production
         'dojo-test-sniff': 0
+    },
+    plugins: {
+        'xstyle/css': 'xstyle/build/amd-css'
+    },
+    map: {
+        '*': {
+            'dojox/dgauges': 'dgauges'
+        }
+    },
+    userConfig: {
+        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss', 'esri', 'layer-selector']
     }
 };
