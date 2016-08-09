@@ -213,6 +213,20 @@ define([
             this.pointsLayer = new DynamicLayer(config.urls.points);
             this.map.addLayer(this.pointsLayer);
             this.map.addLoaderToLayer(this.pointsLayer);
+
+            this.map.zoomToGeometry = function (geometry) {
+                // summary:
+                //      Zooms the map to any type of geometry
+                // geometry: esri.Geometry
+                console.log('agrc.widgets.map.BaseMap::zoomToGeometry', arguments);
+
+                if (geometry.type === 'polygon' || geometry.type === 'polyline' || geometry.type === 'multipoint') {
+                    this.setExtent(geometry.getExtent(), true);
+                } else {
+                    // point
+                    this.centerAndZoom(geometry, 16);
+                }
+            };
         },
         initIdentify: function () {
             // summary:
