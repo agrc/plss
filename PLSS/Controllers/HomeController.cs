@@ -15,7 +15,7 @@ namespace PLSS.Controllers
                     string.Format("<script src='{0}'></script>",
                         Url.Content("~/src/secrets.js")),
                     string.Format(
-                        "<script data-dojo-config=\"isDebug: 1, tlmSiblingOfDojo: 1, deps:['app/run']\" src='{0}'></script>",
+                        "<script data-dojo-config=\"isDebug: 1, deps:['app/run']\" src='{0}'></script>",
                         Url.Content("~/src/dojo/dojo.js"))
                 },
                 new[]
