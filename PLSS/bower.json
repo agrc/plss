@@ -13,7 +13,8 @@
     "esri": "arcgis-js-api#3.17.0",
     "layer-selector": "agrc-layer-selector#^0.4.0",
     "dgauges": "*",
-    "moment": "^2.14.1"
+    "moment": "^2.14.1",
+    "bootstrap": "3.3.6"
   },
   "devDependencies": {
     "matchers": "agrc-jasmine-matchers#~0.1",
