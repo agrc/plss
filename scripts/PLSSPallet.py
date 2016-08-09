@@ -35,7 +35,7 @@ class PlssPallet(Pallet):
         start_seconds = clock()
 
         workspace = arcpy.env.workspace
-        arcpy.env.workspace = self.destination_workspace
+        arcpy.env.workspace = self.cadastre
 
         self.log.debug('removing index')
         try:
