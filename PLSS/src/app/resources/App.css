@@ -1,13 +1,8 @@
-@import "../../dijit/themes/claro/claro.css";
-
+/*@import "../../dijit/themes/claro/claro.css";*/
 @import "../../esri/css/esri.css";
-
 @import "../../agrc/resources/map/BaseMap.css";
-
-@import "../../agrc/resources/map/BaseMapSelector.css";
-
+@import "../../layer-selector/resources/LayerSelector.css";
 @import "../../agrc/resources/locate/FindAddress.css";
-
 @import "../../agrc/resources/locate/MagicZoom.css";
 
 body, html {
@@ -51,8 +46,6 @@ body, html {
 
 .app .esriSimpleSlider { top: 60px }
 
-.agrc.TR .selectorMain { top: 60px }
-
 .dijitPopup.dijitComboBoxMenuPopup, .dijitPopup.dijitComboBoxMenuPopup, .dijitPopup.dijitMenuPopup { z-index: 1001 !important }
 
 .navbar {
@@ -91,4 +84,8 @@ body, html {
 .pending {
     background-color: #ff0;
     color: #777
+}
+
+.layer-selector-top {
+    top: 50px;
 }
