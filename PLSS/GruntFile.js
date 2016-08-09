@@ -1,10 +1,88 @@
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
-    // Project configuration.
+
+    var otherFiles = [
+        'src/app/**/*.html',
+        'src/app/**/*.css',
+        'src/index.html',
+        'src/ChangeLog.html',
+        'tests/**/*.js'
+    ];
+    var jsFiles = [
+        'src/app/**/*.js',
+        'profiles/*.js',
+        'GruntFile.js'
+    ];
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/package.json',
+        'src/app/config.js'
+    ];
+    var deployFiles = [
+        '**',
+        '!**/*.uncompressed.js',
+        '!**/*consoleStripped.js',
+        '!**/bootstrap/less/**',
+        '!**/bootstrap/test-infra/**',
+        '!**/tests/**',
+        '!build-report.txt',
+        '!components-jasmine/**',
+        '!favico.js/**',
+        '!jasmine-favicon-reporter/**',
+        '!jasmine-jsreporter/**',
+        '!stubmodule/**',
+        '!util/**'
+    ];
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        amdcheck: {
+            main: {
+                options: {
+                    removeUnusedDependencies: false
+                },
+                files: [{
+                    src: [
+                        'src/app/**/*.js'
+                    ]
+                }]
+            }
+        },
+        bump: {
+            options: {
+                files: bumpFiles,
+                commitFiles: bumpFiles.concat('src/ChangeLog.html'),
+                push: false
+            }
+        },
         clean: {
-            build: ['dist']
+            build: ['dist'],
+            deploy: ['deploy']
+        },
+        compress: {
+            main: {
+                options: {
+                    archive: 'deploy/deploy.zip'
+                },
+                files: [{
+                    src: deployFiles,
+                    dest: './',
+                    cwd: 'dist/',
+                    expand: true
+                }]
+            }
+        },
+        connect: {
+            uses_mains: {}
+        },
+        copy: {
+            main: {
+                expand: true,
+                cwd: 'src/',
+                src: ['ChangeLog.html'],
+                dest: 'dist/'
+            }
         },
         dojo: {
             prod: {
@@ -28,58 +106,93 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
-        esri_slurp: {
+        eslint: {
             options: {
-                version: '3.13'
+                configFile: '.eslintrc'
             },
-            dev: {
+            main: {
+                src: jsFiles
+            }
+        },
+        imagemin: {
+            main: {
                 options: {
-                    beautify: true
+                    optimizationLevel: 3
                 },
-                dest: 'src/esri'
+                files: [{
+                    expand: true, // Enable dynamic expansion
+                    cwd: 'src/', // Src matches are relative to this path
+                    src: '**/*.{png,jpg,gif}', // Actual patterns to match
+                    dest: 'src/' // Destination path prefix
+                }]
+            }
+        },
+        parallel: {
+            options: {
+                grunt: true
             },
-            travis: {
-                dest: 'src/esri'
+            assets: {
+                tasks: ['eslint:main', 'amdcheck:main', 'jasmine:main:build']
+            },
+            buildAssets: {
+                tasks: ['eslint:main', 'clean:build', 'newer:imagemin:main']
+            }
+        },
+        uglify: {
+            options: {
+                preserveComments: false,
+                sourceMap: true,
+                compress: {
+                    drop_console: true,
+                    passes: 2,
+                    dead_code: true
+                }
+            },
+            stage: {
+                options: {
+                    compress: {
+                        drop_console: false
+                    }
+                },
+                files: {
+                    'dist/dojo/dojo.js': ['dist/dojo/dojo.js'],
+                    'dist/app/run_user_admin.js': ['dist/app/run_user_admin.js']
+                }
+            },
+            prod: {
+                files: [{
+                    expand: true,
+                    cwd: 'dist',
+                    src: '**/*.js',
+                    dest: 'dist'
+                }]
             }
         },
         watch: {
-            files: [
-                'app/**/*.js',
-                'app/**/*.html'
-            ],
-            options: {
-                livereload: true
+            eslint: {
+                files: jsFiles,
+                tasks: ['newer:eslint:main', 'jasmine:main:build']
+            },
+            src: {
+                files: jsFiles.concat(otherFiles),
+                options: { livereload: true }
             }
-        },
-        jshint: {
-            files: [
-                'app/**/*.js',
-                'Gruntfile.js',
-                'app.profile.js'
-            ],
-            options: {
-                jshintrc: '.jshintrc',
-                ignores: ['dist/**/*.js']
-            }
-        },
-        connect: {
-            uses_defaults: {}
         }
     });
 
-    // Default task.
-    grunt.registerTask('default', ['jshint',
+    grunt.registerTask('default', [
+        'parallel:assets',
         'connect',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
-        'clean:build',
-        'if-missing:esri_slurp:dev',
-        'dojo:prod'
+        'parallel:buildAssets',
+        'dojo:prod',
+        'uglify:prod'
     ]);
     grunt.registerTask('build-stage', [
-        'clean:build',
-        'if-missing:esri_slurp:dev',
-        'dojo:stage'
+        'parallel:buildAssets',
+        'dojo:stage',
+        'uglify:stage'
     ]);
 };

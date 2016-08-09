@@ -1,17 +1,36 @@
 {
   "name": "plss",
-  "version": "0.1.5.0715",
+  "version": "1.0.0",
   "dependencies": {
-    "agrc": "agrc-widgets#2.12.0",
-    "dijit": "^1.10",
-    "dojo": "^1.10",
-    "dojox": "^1.10",
-    "util": "dojo-util#^1.10",
-    "ijit": "agrc-ijit#3.1.1",
-    "dgrid": "dgrid#0.3.17",
-    "mustache": "~2.1.3"
+    "agrc": "agrc-widgets#5.0.1",
+    "dijit": "^1.11",
+    "dojo": "^1.11",
+    "dojox": "^1.11",
+    "util": "dojo-util#^1.11",
+    "ijit": "agrc-ijit#3.1.3",
+    "dgrid": "dgrid#1.1.0",
+    "mustache": "^2.2.1",
+    "esri": "arcgis-js-api#3.17.0",
+    "layer-selector": "agrc-layer-selector#^0.4.0",
+    "dgauges": "*",
+    "moment": "^2.14.1"
+  },
+  "devDependencies": {
+    "matchers": "agrc-jasmine-matchers#~0.1",
+    "jasmine-favicon-reporter": "*",
+    "stubmodule": "*"
   },
   "resolutions": {
-    "mustache": "~2.1.3"
+    "mustache": "^2.2.1",
+    "dojo": "^1.11",
+    "dojox": "^1.11",
+    "dijit": "^1.11",
+    "dgrid": "0.3.17/esri-3.14.0",
+    "xstyle": "v0.3.2",
+    "util": "^1.11",
+    "dojo-themes": "^1.11",
+    "esri": "3.17.0",
+    "moment": "^2.14.1",
+    "dstore": "v1.1.1"
   }
 }

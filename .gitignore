@@ -265,3 +265,11 @@ PLSS/src/esri
 PLSS/src/mustache
 PLSS/src/dstore
 dgrid0.3
+PLSS/src/agrc-jasmine-matchers/
+PLSS/src/components-jasmine/
+PLSS/src/dgauges/
+PLSS/src/dojo-themes/
+PLSS/src/layer-selector/
+PLSS/src/matchers/
+PLSS/src/moment/
+PLSS/src/stubmodule/
