@@ -1,11 +1,11 @@
-/*jshint unused:false */
+/*eslint-disable no-unused-vars*/
 var profile = {
     basePath: '../src',
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: 'uglify',
-    layerOptimize: 'uglify',
+    optimize: false,
+    layerOptimize: false,
     stripConsole: 'all',
     selectorEngine: 'acme',
     layers: {
@@ -15,8 +15,10 @@ var profile = {
                 'dojo/domReady',
                 'app/run',
                 'app/App',
+                'dojox/gfx/filters',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
+                'dojox/gfx/svgext',
                 'dojox/gfx/shape',
                 'esri/dijit/Attribution'
             ],
@@ -35,8 +37,30 @@ var profile = {
             boot: true
         }
     },
+    packages: [{
+        name: 'moment',
+        location: 'moment',
+        main: 'moment',
+        trees: [
+           // don't bother with .hidden, tests, min, src, and templates
+           ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
+        ],
+        resourceTags: {
+            amd: function (filename, mid) {
+                return /\.js$/.test(filename);
+            }
+        }
+    }],
+    plugins: {
+        'xstyle/css': 'xstyle/build/amd-css'
+    },
+    map: {
+        '*': {
+            'dojox/dgauges': 'dgauges'
+        }
+    },
     userConfig: {
-        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss', 'esri']
+        packages: ['app', 'agrc', 'dijit', 'ijit', 'plss', 'esri', 'layer-selector']
     },
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader,
