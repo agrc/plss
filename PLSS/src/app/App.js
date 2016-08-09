@@ -32,7 +32,7 @@ define([
     'ijit/widgets/layout/SideBarToggler',
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/layers/VectorTileLayer',
     'esri/tasks/IdentifyTask',
     'esri/tasks/IdentifyParameters',
     'esri/tasks/IdentifyResult',
@@ -82,7 +82,7 @@ define([
     SideBarToggler,
 
     DynamicLayer,
-    TiledLayer,
+    VectorTileLayer,
     IdentifyTask,
     IdentifyParameters,
     IdentifyResult,
@@ -204,7 +204,9 @@ define([
             //      Sets up the map
             console.info('app.App::initMap', arguments);
 
-            this.plssLayer = new TiledLayer(config.urls.plss);
+            this.plssLayer = new VectorTileLayer(config.urls.plss, {
+                minScale: 600000
+            });
             this.map.addLayer(this.plssLayer);
             this.map.addLoaderToLayer(this.plssLayer);
 
