@@ -96,12 +96,15 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     if (has('agrc-build') === 'prod') {
         // mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-94703F79341773';
+        window.AGRC.quadWord = 'alfred-plaster-crystal-dexter';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
+        window.AGRC.quadWord = 'opera-event-little-pinball';
     } else {
         // localhost
-        window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
+        window.AGRC.apiKey = window.agrcDev.apiKey;
+        window.AGRC.quadWord = window.agrcDev.quadWord;
     }
 
     return window.AGRC;

@@ -1,0 +1,4 @@
+;window.agrcDev = {
+    quadWord: '',
+    apiKey: ''
+};
