@@ -16,11 +16,10 @@ class PlssPallet(Pallet):
         super(PlssPallet, self).__init__()
 
         self.arcgis_services = [('PLSS', 'MapServer')]
-        self.boundaries = 'C:\\Scheduled\\Staging\\boundaries_utm.gdb'
-        self.cadastre = 'C:\\Scheduled\\Staging\\cadastre_utm.gdb'
+        self.boundaries = 'C:\\Scheduled\\Staging\\boundaries.gdb'
+        self.cadastre = 'C:\\Scheduled\\Staging\\cadastre.gdb'
 
         self.copy_data = [self.boundaries, self.cadastre]
-        self.destination_coordinate_system = 26912
 
     def build(self, configuration=None):
         self.add_crates(['PLSSPoint_AGRC'], {'source_workspace': join(self.garage, 'SGID10.sde'),
