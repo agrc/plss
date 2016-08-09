@@ -2,13 +2,13 @@
     var config = {
         baseUrl: '/plss/src',
         packages: [
-            'app',
             'agrc',
+            'app',
             'dgauges',
+            'dgrid',
+            'dijit',
             'dojo',
             'dojox',
-            'dijit',
-            'dgrid',
             'esri',
             'ijit',
             'layer-selector',
