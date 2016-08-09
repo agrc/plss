@@ -155,7 +155,7 @@ module.exports = function (grunt) {
                     }
                 },
                 files: {
-                    'dist/dojo/dojo.js': ['dist/dojo/dojo.js'],
+                    'dist/dojo/plss.js': ['dist/dojo/plss.js'],
                     'dist/dojo/tiesheet.js': ['dist/dojo/tiesheet.js']
                 }
             },
