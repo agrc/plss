@@ -1,49 +1,39 @@
 define([
-    'dojo/text!app/templates/Corners.html',
+    'app/config',
 
-    'dojo/_base/declare',
-    'dojo/_base/Color',
-    'dojo/_base/lang',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/dom-attr',
-
-    'dojo/topic',
     'dojo/on',
+    'dojo/text!app/templates/Corners.html',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-
-    'esri/SpatialReference',
-    'esri/graphic',
-    'esri/tasks/query',
-    'esri/tasks/QueryTask',
     'esri/geometry/Extent',
+    'esri/graphic',
+    'esri/SpatialReference',
     'esri/symbols/SimpleMarkerSymbol',
+    'esri/tasks/query',
+    'esri/tasks/QueryTask'
+], function (
+    config,
 
-    'app/config'
-], function(
-    template,
-
-    declare,
-    Color,
-    lang,
+    _TemplatedMixin,
+    _WidgetBase,
 
     domAttr,
-
-    topic,
     on,
+    template,
+    declare,
+    lang,
 
-    _WidgetBase,
-    _TemplatedMixin,
-
-    SpatialReference,
-    Graphic,
-    Query,
-    QueryTask,
     Extent,
+    Graphic,
+    SpatialReference,
     SimpleMarkerSymbol,
-
-    config
+    Query,
+    QueryTask
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -63,7 +53,7 @@ define([
         //       substitutions for the corner value
         linkTemplate: null,
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      after creation
             //
@@ -76,7 +66,7 @@ define([
 
             this.setupConnections();
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      after creation
             //
@@ -85,7 +75,7 @@ define([
             on(this.corner, 'input', lang.hitch(this, '_updateLinkLocation'));
             on(this.corner, 'keyup', lang.hitch(this, '_updateLinkLocation'));
         },
-        zoom: function() {
+        zoom: function () {
             // summary:
             //      handles the on click event of the button
             console.log('app.Corners::zoom', arguments);
@@ -100,7 +90,7 @@ define([
 
             this._zoom(id);
         },
-        _zoom: function(cornerId) {
+        _zoom: function (cornerId) {
             // summary:
             //      description
             // cornerId
@@ -116,7 +106,7 @@ define([
             this.inflight = this.queryTask.execute(this.queryParams,
                 lang.hitch(this, '_success'));
         },
-        _success: function(featureSet) {
+        _success: function (featureSet) {
             // summary:
             //      success callback from query task
             // featureSet
@@ -130,20 +120,20 @@ define([
                 this.map.graphics.remove(this._graphic);
             }
 
-            var corner = featureSet.features[0].geometry,
-                symbol = new SimpleMarkerSymbol(),
-                buffer = 1000,
-                xMin = corner.x - buffer,
-                yMin = corner.y - buffer,
-                xMax = corner.x + buffer,
-                yMax = corner.y + buffer;
+            var corner = featureSet.features[0].geometry;
+            var symbol = new SimpleMarkerSymbol();
+            var buffer = 1000;
+            var xMin = corner.x - buffer;
+            var yMin = corner.y - buffer;
+            var xMax = corner.x + buffer;
+            var yMax = corner.y + buffer;
 
             this._graphic = new Graphic(corner, symbol);
 
             this.map.setExtent(new Extent(xMin, yMin, xMax, yMax, new SpatialReference(26912)), true);
             this.map.graphics.add(this._graphic);
         },
-        _updateLinkLocation: function() {
+        _updateLinkLocation: function () {
             // summary:
             //      opens a new window for the url
             // url

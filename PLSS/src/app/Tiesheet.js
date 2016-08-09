@@ -27,7 +27,7 @@ require([
 
 
     'dojo/domReady!'
-], function(
+], function (
     nad83,
     wgs84,
     nad83tatePlane,
@@ -73,65 +73,65 @@ require([
     uploader.startup();
     trs.startup();
 
-    var geoNode = dom.byId('geographicNode'),
-        gridNode = dom.byId('gridNode');
+    var geoNode = dom.byId('geographicNode');
+    var gridNode = dom.byId('gridNode');
 
     html.set(geoNode, wgs84);
     html.set(gridNode, nad83tatePlane);
 
-    var swapTemplateForGeographic = function(evt) {
+    var swapTemplateForGeographic = function (evt) {
         console.log('swapTemplateForGeographic');
 
         var value = evt.target.value;
         switch (value) {
-        case 'WGS84 Geographic':
-            html.set(geoNode, wgs84);
-            break;
-        case 'NAD27 Geographic':
-            html.set(geoNode, wgs84);
-            break;
-        case 'NAD83 Geographic':
-            html.set(geoNode, nad83);
-            break;
+            case 'WGS84 Geographic':
+                html.set(geoNode, wgs84);
+                break;
+            case 'NAD27 Geographic':
+                html.set(geoNode, wgs84);
+                break;
+            case 'NAD83 Geographic':
+                html.set(geoNode, nad83);
+                break;
         }
     };
 
-    var swapTemplateForGrid = function(evt) {
+    var swapTemplateForGrid = function (evt) {
         console.log('swapTemplateForGrid');
 
         var value = evt.target.value;
         switch (value) {
-        case 'NAD83 State Plane':
-            html.set(gridNode, nad83tatePlane);
-            break;
-        case 'NAD83 UTM Zone 12N':
-            html.set(gridNode, utm);
-            break;
-        case 'NAD83 UTM Zone 11N':
-            html.set(gridNode, utm);
-            break;
-        case 'NAD27 State Plane':
-            html.set(gridNode, nad27StatePlane);
-            break;
+            case 'NAD83 State Plane':
+                html.set(gridNode, nad83tatePlane);
+                break;
+            case 'NAD83 UTM Zone 12N':
+                html.set(gridNode, utm);
+                break;
+            case 'NAD83 UTM Zone 11N':
+                html.set(gridNode, utm);
+                break;
+            case 'NAD27 State Plane':
+                html.set(gridNode, nad27StatePlane);
+                break;
         }
     };
 
     var form = dom.byId('cornerForm');
 
-    var validateAll = function(evt) {
+    var validateAll = function (evt) {
         console.log('validateAll');
 
         var valid = true;
         var formNodes = query('[data-required="true"]', form);
 
         //reset validation
-        formNodes.forEach(function(node) {
+        formNodes.forEach(function (node) {
             domClass.remove(node.parentElement, 'has-error');
             domClass.remove(node.parentElement, 'has-success');
         });
 
         //validate input
-        formNodes.forEach(function(node) {
+        formNodes.forEach(function (node) {
             if (!node.value || lang.trim(node.value) === '') {
                 domClass.add(node.parentElement, 'has-error');
                 valid = false;
@@ -144,15 +144,15 @@ require([
             events.stop(evt);
         }
 
-        var add = valid ? 'hidden' : 'show',
-            remove = valid ? 'show' : 'hidden';
+        var add = valid ? 'hidden' : 'show';
+        var remove = valid ? 'show' : 'hidden';
 
         domClass.replace(dom.byId('messageNode'), add, remove);
 
 
         return valid;
     };
-    var validate = function(evt) {
+    var validate = function (evt) {
         console.log('validate');
 
         var node = evt.target;

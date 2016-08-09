@@ -1,6 +1,6 @@
 ﻿define({
     'UTAH': 'http://maps2.utahcountyonline.org/TieSheets/TieSheet.htm',
-    'WASATCH': 'http://www.co.wasatch.ut.us/departments/'+
+    'WASATCH': 'http://www.co.wasatch.ut.us/departments/' +
                 'property_tax_services/surveyor/on-line_survey_lookup_service.aspx',
     'DAVIS': 'http://www.co.davis.ut.us/surveyor/default.cfm',
     'SALT LAKE': 'http://surveyor.slco.org/jsapi/map/survey_monument.html',

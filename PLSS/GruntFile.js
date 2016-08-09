@@ -122,7 +122,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true, // Enable dynamic expansion
                     cwd: 'src/', // Src matches are relative to this path
-                    src: '**/*.{png,jpg,gif}', // Actual patterns to match
+                    src: '**/*.{png,jpg,jpeg,gif}', // Actual patterns to match
                     dest: 'src/' // Destination path prefix
                 }]
             }
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
                 grunt: true
             },
             assets: {
-                tasks: ['eslint:main', 'amdcheck:main', 'jasmine:main:build']
+                tasks: ['eslint:main', 'amdcheck:main']
             },
             buildAssets: {
                 tasks: ['eslint:main', 'clean:build', 'newer:imagemin:main']
@@ -156,7 +156,7 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'dist/dojo/dojo.js': ['dist/dojo/dojo.js'],
-                    'dist/app/run_user_admin.js': ['dist/app/run_user_admin.js']
+                    'dist/dojo/tiesheet.js': ['dist/dojo/tiesheet.js']
                 }
             },
             prod: {
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
         watch: {
             eslint: {
                 files: jsFiles,
-                tasks: ['newer:eslint:main', 'jasmine:main:build']
+                tasks: ['newer:eslint:main']
             },
             src: {
                 files: jsFiles.concat(otherFiles),

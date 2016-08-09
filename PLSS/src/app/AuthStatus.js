@@ -1,48 +1,40 @@
 ﻿define([
-    'dojo/text!app/templates/AuthStatus.html',
+    'app/config',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/dom-class',
     'dojo/dom-construct',
-
+    'dojo/text!app/templates/AuthStatus.html',
     'dojo/topic',
-    'dojo/request',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
+], function (
+    config,
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-
-    'app/config'
-], function(
-    template,
-
-    declare,
-    lang,
+    _TemplatedMixin,
+    _WidgetBase,
 
     domClass,
     domConstruct,
-
+    template,
     topic,
-    request,
-
-    _WidgetBase,
-    _TemplatedMixin,
-
-    config
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
 
         templateString: template,
 
-        constructor: function() {
+        constructor: function () {
             // summary:
             //      first function to fire after page loads
             console.info('app.AuthStatus::constructor', arguments);
 
             this.inherited(arguments);
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Fires when
             console.log('app.AuthStatus::postCreate', arguments);
@@ -51,7 +43,7 @@
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      sets up events, topics, etc
             // evt
@@ -59,7 +51,7 @@
 
             topic.subscribe('app.authorize', lang.hitch(this, 'updateLogout'));
         },
-        updateLogout: function(args) {
+        updateLogout: function (args) {
             // summary:
             //      handles the login click event
             // evt
@@ -73,7 +65,7 @@
 
             this._updateDisplayFor('logout');
         },
-        logout: function() {
+        logout: function () {
             // summary:
             //      handles the login click event
             // evt
@@ -82,7 +74,7 @@
             topic.publish('app.logout');
             this._updateDisplayFor('logout');
         },
-        _updateDisplayFor: function(status) {
+        _updateDisplayFor: function (status) {
             console.log('app.AuthStatus::_updateDisplayFor', arguments);
 
             if (status === 'login') {

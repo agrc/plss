@@ -1,3 +1,4 @@
+/* global $ */
 define([
     'dojo/text!app/templates/App.html',
 
@@ -22,7 +23,7 @@ define([
     'dijit/registry',
 
     'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
+    'layer-selector',
 
     'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/locate/ZoomToCoords',
@@ -48,7 +49,7 @@ define([
     'dijit/layout/ContentPane',
 
     'bootstrap'
-], function(
+], function (
     template,
 
     declare,
@@ -106,7 +107,7 @@ define([
         // map: agrc.widgets.map.Basemap
         map: null,
 
-        constructor: function() {
+        constructor: function () {
             // summary:
             //      first function to fire after page loads
             console.info('app.App::constructor', arguments);
@@ -115,7 +116,7 @@ define([
 
             this.inherited(arguments);
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Executes while dom is detached
             console.log('app.App::postCreate', arguments);
@@ -173,7 +174,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      sets up events, topics, etc
             // evt
@@ -183,7 +184,7 @@ define([
             on(this.loginForm, 'input:change', lang.hitch(this, 'updateValidation'));
             this.subscribe('app.logout', lang.hitch(this, 'logout'));
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app.App::startup', arguments);
@@ -194,11 +195,11 @@ define([
 
             this.authorize();
 
-            array.forEach(this._childWidgets, function(w){
+            array.forEach(this._childWidgets, function (w) {
                 w.startup();
             });
         },
-        initMap: function() {
+        initMap: function () {
             // summary:
             //      Sets up the map
             console.info('app.App::initMap', arguments);
@@ -211,7 +212,7 @@ define([
             this.map.addLayer(this.pointsLayer);
             this.map.addLoaderToLayer(this.pointsLayer);
         },
-        initIdentify: function() {
+        initIdentify: function () {
             // summary:
             //      sets up the identify thang
             //
@@ -229,7 +230,7 @@ define([
                 on(this.map, 'click', lang.hitch(this, 'performIdentify'))
             );
         },
-        performIdentify: function(evt) {
+        performIdentify: function (evt) {
             // summary:
             //      handles map click event
             // evt
@@ -249,17 +250,17 @@ define([
             this.identifyParams.geometry = evt.mapPoint;
             this.identifyParams.mapExtent = this.map.extent;
             this.identifyTask.execute(this.identifyParams, lang.hitch(this,
-                function(result) {
+                function (result) {
                     this.map.hideLoader();
                     this.emit('identify-success', {
                         results: result
                     });
                 }
-            ), lang.hitch(this, function() {
+            ), lang.hitch(this, function () {
                 this.map.hideLoader();
             }));
         },
-        login: function(evt) {
+        login: function (evt) {
             // summary:
             //      handles the login click event
             // evt
@@ -267,11 +268,11 @@ define([
 
             events.stop(evt);
 
-            var nodes = this.resetValidations(this.loginForm),
-                valid = true;
+            var nodes = this.resetValidations(this.loginForm);
+            var valid = true;
             //validate input
 
-            nodes.forEach(function(node) {
+            nodes.forEach(function (node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
@@ -297,24 +298,24 @@ define([
             domAttr.set(this.loginNode, 'disabled', true);
             domClass.add(this.loginNode, 'disabled');
 
-            def.then(lang.hitch(this, function(args) {
+            def.then(lang.hitch(this, function (args) {
                 $('#loginModal').modal('hide');
                 topic.publish('app.authorize', {
                     token: args.result.token
                 });
-            }), lang.hitch(this, function(args) {
+            }), lang.hitch(this, function (args) {
                 console.log('app::login::errorCallback', arguments);
 
                 var problems = args.response.data;
                 this.displayIssues(problems);
             }));
 
-            def.always(lang.hitch(this, function() {
+            def.always(lang.hitch(this, function () {
                 domAttr.remove(this.loginNode, 'disabled');
                 domClass.remove(this.loginNode, 'disabled');
             }));
         },
-        logout: function() {
+        logout: function () {
             // summary:
             //      handles the login click event
             // evt
@@ -332,7 +333,7 @@ define([
                 token: null
             });
         },
-        reset: function() {
+        reset: function () {
             console.log('app::reset');
 
             var def = xhr(config.urls.reset, {
@@ -350,18 +351,18 @@ define([
             domClass.add(this.resetNode, 'disabled');
             domAttr.set(this.loginPassword, 'value', '');
 
-            def.then(lang.hitch(this, function() {
+            def.then(lang.hitch(this, function () {
                 alert('your new password is in your email');
-            }, function() {
+            }, function () {
                 alert('there was a problem resetting your pasword');
             }));
 
-            def.always(lang.hitch(this, function() {
+            def.always(lang.hitch(this, function () {
                 domAttr.remove(this.resetNode, 'disabled');
                 domClass.remove(this.resetNode, 'disabled');
             }));
         },
-        authorize: function() {
+        authorize: function () {
             // summary:
             //      handles the login click event
             console.log('app::authorize', arguments);
@@ -373,20 +374,20 @@ define([
                     'Content-Type': 'application/json'
                 }
             }).then(
-                function(args) {
+                function (args) {
                     console.log('app::authorize::successCallback', args);
                     topic.publish('app.authorize', {
                         token: args.result.token
                     });
                 },
-                function() {
+                function () {
                     console.log('app::authorize::errorCallback');
                     topic.publish('app.authorize', {
                         token: null
                     });
                 });
         },
-        register: function(evt) {
+        register: function (evt) {
             // summary:
             //      handles the login click event
             // evt
@@ -394,11 +395,11 @@ define([
 
             events.stop(evt);
 
-            var formNodes = this.resetValidations(this.registerForm),
-                valid = true;
+            var formNodes = this.resetValidations(this.registerForm);
+            var valid = true;
             //validate input
 
-            formNodes.forEach(function(node) {
+            formNodes.forEach(function (node) {
                 if (!node.value || lang.trim(node.value) === '') {
                     domClass.add(node.parentNode, 'has-error');
                     valid = false;
@@ -430,14 +431,14 @@ define([
 
             var widget = this;
             def.then(
-                function(args) {
+                function (args) {
                     $('#registerModal').modal('hide');
 
                     topic.publish('app.authorize', {
                         token: args.result.token
                     });
                 },
-                function(args) {
+                function (args) {
                     console.log('app::register::errorCallback', arguments);
 
                     var problems = args.response.data;
@@ -445,12 +446,12 @@ define([
                 }
             );
 
-            def.always(lang.hitch(this, function() {
+            def.always(lang.hitch(this, function () {
                 domAttr.remove(this.registerButtonNode, 'disabled');
                 domClass.remove(this.registerButtonNode, 'disabled');
             }));
         },
-        updateValidation: function(evt) {
+        updateValidation: function (evt) {
             // summary:
             //      handles the ui stuffs
             // evt: on change event
@@ -470,31 +471,31 @@ define([
                 domClass.add(node.parentNode, 'has-error');
             }
         },
-        displayIssues: function(issues) {
+        displayIssues: function (issues) {
             console.log('app::displayIssues');
 
-            array.forEach(issues, function(issue) {
-                var node = dom.byId(issue.key),
-                    parent = node.parentNode;
+            array.forEach(issues, function (issue) {
+                var node = dom.byId(issue.key);
+                var parent = node.parentNode;
 
                 domClass.add(parent, 'has-error');
                 query('.help-block', parent).html(issue.value);
             });
         },
-        resetValidations: function(form) {
+        resetValidations: function (form) {
             var nodes = query('[data-required="true"]', form);
             //reset validation
 
             query('.help-block', form).html();
 
-            nodes.forEach(function(node) {
+            nodes.forEach(function (node) {
                 domClass.remove(node.parentNode, 'has-error');
                 domClass.remove(node.parentNode, 'has-success');
             });
 
             return nodes;
         },
-        getUrls: function() {
+        getUrls: function () {
             console.log('app::getUrls');
 
             xhr('/plss/config', {
@@ -504,7 +505,7 @@ define([
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(function(urls) {
+            }).then(function (urls) {
                 lang.mixin(config.urls, urls);
             });
         }

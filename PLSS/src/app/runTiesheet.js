@@ -1,15 +1,18 @@
-(function() {
+((function () {
     var config = {
         baseUrl: '/plss/src',
         packages: [
             'app',
             'agrc',
+            'dgauges',
             'dojo',
             'dojox',
             'dijit',
             'dgrid',
             'esri',
             'ijit',
+            'layer-selector',
+            'moment',
             'plss',
             'put-selector',
             'xstyle',
@@ -36,7 +39,6 @@
             }
         ]
     };
-    require(config, ['app/Tiesheet', 'jquery', 'dojo/domReady!'], function() {
-
+    require(config, ['app/Tiesheet', 'jquery', 'dojo/domReady!'], function () {
     });
-})();
+})());

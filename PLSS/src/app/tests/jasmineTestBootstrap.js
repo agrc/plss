@@ -1,4 +1,4 @@
-/*jshint unused:false*/
+/*eslint-disable no-unused-vars*/
 var dojoConfig = {
     isDebug: false,
     isJasmineTestRunner: true, // prevents parser in main.js from running
@@ -6,6 +6,6 @@ var dojoConfig = {
 };
 
 // override alert to console
-window.alert = function(msg) {
+window.alert = function (msg) {
     console.error('ALERT OVERRIDDEN TO LOG: ' + msg);
 };

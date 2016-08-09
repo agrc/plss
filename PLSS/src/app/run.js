@@ -1,9 +1,12 @@
-(function() {
+((function () {
     var config = {
         baseUrl: 'src',
         packages: [
             'app',
             'agrc',
+            'dgauges',
+            'layer-selector',
+            'moment',
             'dojo',
             'dojox',
             'dijit',
@@ -36,7 +39,7 @@
             }
         ]
     };
-    require(config, ['dojo/parser', 'jquery', 'dojo/domReady!'], function(parser) {
+    require(config, ['dojo/parser', 'jquery', 'dojo/domReady!'], function (parser) {
         parser.parse();
     });
-})();
+})());

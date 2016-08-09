@@ -30,7 +30,7 @@ define([
 
 
     'dojo/NodeList-dom'
-], function(
+], function (
     template,
     identifyTemplateText,
 
@@ -69,7 +69,7 @@ define([
         // required ctor variables
         app: null,
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      does some things when the widget has loaded
             console.log('app.CornerInformation::postCreate', arguments);
@@ -80,7 +80,7 @@ define([
 
             this.setupConnections();
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      setup events and subscriptions
             //
@@ -88,13 +88,13 @@ define([
 
             var defaultState = this;
             this.own(
-                on(this.app, 'identify-success', function(args){
+                on(this.app, 'identify-success', function (args) {
                     defaultState.multipleResults = null;
                     defaultState.showTemplate(args);
                 })
             );
 
-            topic.subscribe('app.authorize', lang.hitch(this, function(args) {
+            topic.subscribe('app.authorize', lang.hitch(this, function (args) {
                 console.log('app.CornerInformation::app.authorize', args);
                 if (args && args.token) {
                     this.token = args.token;
@@ -107,11 +107,11 @@ define([
                 domClass.replace(this.authorizedContent, 'hide', 'show');
             }));
 
-            aspect.after(this, 'showTemplate', lang.hitch(this, function() {
+            aspect.after(this, 'showTemplate', lang.hitch(this, function () {
                 domClass.remove(this.domNode.parentNode, 'closed');
             }));
         },
-        showTemplate: function(templateData, changeToId) {
+        showTemplate: function (templateData, changeToId) {
             // summary:
             //      pushes the data through mustache and into the dom
             //      after an identify emits the identify-success event
@@ -119,8 +119,8 @@ define([
             // changeToid - string: blmid to change template to
             console.log('app.CornerInformation::showTemplate', arguments);
 
-            var feature = null,
-                model = {};
+            var feature = null;
+            var model = {};
 
             if (templateData && templateData.results.length === 0) {
                 this.content.innerHTML = mustache.render(identifyTemplateText, model);
@@ -152,13 +152,13 @@ define([
             this.displayAuthorizedContent(feature.attributes['Corner Point Identifier']);
             this.setupMultipleConnection();
         },
-        showTiesheetMessage: function() {
+        showTiesheetMessage: function () {
             // summary:
             //      mustache templating function
             //
             console.log('app.CornerInformation::showTiesheetMessage', arguments);
 
-            return function(text, render) {
+            return function (text, render) {
                 var county = render(text);
 
                 if (!county || county === 'Null') {
@@ -181,7 +181,7 @@ define([
                     });
             };
         },
-        changeTemplate: function(evt) {
+        changeTemplate: function (evt) {
             // summary:
             //      handles the change event of the multiple select node
             // evt
@@ -190,7 +190,7 @@ define([
             var node = this.domNode;
             fx.fadeOut({
                 node: this.domNode,
-                onEnd: function() {
+                onEnd: function () {
                     fx.fadeIn({
                         node: node
                     }).play();
@@ -201,7 +201,7 @@ define([
 
             return this.showTemplate(null, value);
         },
-        hydrateListsFromMultipleResults: function(results) {
+        hydrateListsFromMultipleResults: function (results) {
             // summary:
             //      hydrates an array of blmid's for a select
             //      and an associative array of blmids to the features
@@ -212,7 +212,7 @@ define([
                 this.multipleResults = {};
 
                 this.options = [];
-                array.forEach(results, function(item) {
+                array.forEach(results, function (item) {
                     var id = item.feature.attributes['Corner Point Identifier'];
 
                     this.options.push(id);
@@ -222,7 +222,7 @@ define([
                 this.multipleResults = null;
             }
         },
-        setupMultipleConnection: function() {
+        setupMultipleConnection: function () {
             // summary:
             //      setup
             //
@@ -234,7 +234,7 @@ define([
                 domConstruct.destroy('moreThanOneRow');
             }
         },
-        displayAuthorizedContent: function(blmId) {
+        displayAuthorizedContent: function (blmId) {
             // summary:
             //      shows buttons or hides them
             //      and shows
@@ -249,7 +249,7 @@ define([
             domAttr.set(this.existingSubmit, 'href', config.urls.existing + '?blmid=' + blmId);
             domAttr.set(this.newSubmit, 'href', config.urls.tiesheet + '?blmid=' + blmId);
         },
-        highlightPoint: function(geometry) {
+        highlightPoint: function (geometry) {
             // summary:
             //      zooms the map and highlights the point
             // geometry
@@ -261,14 +261,14 @@ define([
                 this.app.map.graphics.remove(this._graphic);
             }
 
-            var corner = geometry,
-                symbol = new SimpleMarkerSymbol();
+            var corner = geometry;
+            var symbol = new SimpleMarkerSymbol();
 
             this._graphic = new Graphic(corner, symbol);
 
             this.app.map.graphics.add(this._graphic);
         },
-        close: function() {
+        close: function () {
             console.log('app.CornerInformation::close', arguments);
 
             domClass.add(this.domNode.parentNode, 'closed');

@@ -10,7 +10,7 @@ require([
     'agrc/widgets/map/BaseMap',
 
     'dojo/domReady!'
-], function(
+], function (
     Corner,
 
     win,
@@ -21,7 +21,7 @@ require([
 
     Map
 ) {
-    describe('app/Corners', function() {
+    describe('app/Corners', function () {
         var testWidget;
         window.AGRC = {
             urls: {
@@ -30,45 +30,45 @@ require([
             }
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
             var map = new Map(domConstruct.create('div', {}, win.body()));
             testWidget = new Corner({
                 map: map
             }, domConstruct.create('div', {}, win.body()));
             testWidget.startup();
         });
-        afterEach(function() {
+        afterEach(function () {
             testWidget.destroy();
             testWidget = null;
         });
 
-        it('creates a valid object', function() {
+        it('creates a valid object', function () {
             expect(testWidget).toEqual(jasmine.any(Corner));
         });
 
-        describe('zooms to corner', function() {
-            it('builds the right query string', function() {
+        describe('zooms to corner', function () {
+            it('builds the right query string', function () {
                 testWidget._zoom('UT260090N0070E0_200400');
 
                 expect(testWidget.queryParams.where)
                 .toEqual('POINTID=\'UT260090N0070E0_200400\'');
             });
 
-            it('builds the right url', function() {
+            it('builds the right url', function () {
                 testWidget._zoom('UT260090N0070E0_200400');
 
                 expect(testWidget.queryTask.url)
                 .toEqual('http://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer/4');
             });
 
-            it('shows progress somehow', function() {
+            it('shows progress somehow', function () {
                 testWidget.corner.value = '1';
                 testWidget.zoom();
 
                 expect(domAttr.has(testWidget.zoomButton, 'disabled')).toBeTruthy();
             });
 
-            it('shows a graphic and zooms to it', function() {
+            it('shows a graphic and zooms to it', function () {
                 spyOn(testWidget.map, 'setExtent');
 
                 testWidget._success({
@@ -103,8 +103,8 @@ require([
             });
         });
 
-        describe('show tie sheet', function() {
-            it('bulds the right url', function() {
+        describe('show tie sheet', function () {
+            it('bulds the right url', function () {
                 spyOn(testWidget, '_openWindow');
 
                 testWidget.corner.value = '1';
