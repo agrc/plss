@@ -68,7 +68,9 @@ var profile = {
         'dojo-xhr-factory': 0,
 
         // We aren’t loading tests in production
-        'dojo-test-sniff': 0
+        'dojo-test-sniff': 0,
+        'dojo-guarantee-console': 1,
+        'console-as-object': 0
     },
     plugins: {
         'xstyle/css': 'xstyle/build/amd-css'
