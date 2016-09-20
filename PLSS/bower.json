@@ -1,6 +1,6 @@
 {
   "name": "plss",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "agrc": "agrc-widgets#5.0.1",
     "dijit": "^1.11",
