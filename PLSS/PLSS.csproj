@@ -237,6 +237,7 @@
     <Compile Include="Services\Pdf\PdfExtensions.cs" />
     <Compile Include="Services\Pdf\PdfServiceBase.cs" />
     <Compile Include="Services\Pdf\PlssPdfService.cs" />
+    <Content Include="dist\agrc\resources\images\agrc_logo.png" />
     <Content Include="dist\agrc\resources\images\agrc_logo.svg" />
     <Content Include="dist\agrc\resources\images\agrc_map_logo_small.png" />
     <Content Include="dist\agrc\resources\images\background_v-1.png" />
@@ -253,6 +254,7 @@
     <Content Include="dist\esri\dijit\images\popup.png" />
     <Content Include="dist\esri\layers\vector-tile.js" />
     <Content Include="dist\layer-selector\resources\layers.min.svg" />
+    <Content Include="dist\layer-selector\resources\layers.png" />
     <Content Include="Global.asax" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.pdf" />
     <Content Include="Assets\Pdf\MonumentStatusTemplate.v1.pdf" />
