@@ -19,8 +19,8 @@ class PlssPallet(Pallet):
         super(PlssPallet, self).__init__()
 
         self.arcgis_services = [('PLSS', 'MapServer')]
-        self.boundaries = 'c:\\scheduled\\staging\\boundaries.gdb'
-        self.cadastre = 'c:\\scheduled\\staging\\cadastre.gdb'
+        self.boundaries = join(self.staging_rack, 'boundaries.gdb')
+        self.cadastre = join(self.staging_rack, 'cadastre.gdb')
 
         self.copy_data = [self.boundaries, self.cadastre]
 
