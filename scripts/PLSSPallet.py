@@ -38,13 +38,13 @@ class PlssPallet(Pallet):
         try:
             arcpy.RemoveIndex_management(in_table='PLSSPoint_AGRC', index_name='webquery')
         except Exception as e:
-            self.log.warn('error removing PLSS index: %s', e.message)
+            self.log.warn('error removing PLSS index: %s', e)
 
         self.log.debug('adding index')
         try:
             arcpy.AddIndex_management(in_table='PLSSPoint_AGRC', fields='POINTID', index_name='webquery')
         except Exception as e:
-            self.log.warn('error adding parcel index: %s', e.message)
+            self.log.warn('error adding parcel index: %s', e)
 
         arcpy.env.workspace = workspace
 
