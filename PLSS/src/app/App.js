@@ -500,7 +500,7 @@ define([
         getUrls: function () {
             console.log('app::getUrls');
 
-            xhr('/plss/config', {
+            xhr('/config', {
                 handleAs: 'json',
                 method: 'GET',
                 sync: true,
