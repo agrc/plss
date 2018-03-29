@@ -1,6 +1,6 @@
 ((function () {
     var config = {
-        baseUrl: '/plss/src',
+        baseUrl: '/src',
         packages: [
             'agrc',
             'app',
