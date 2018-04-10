@@ -3,7 +3,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
-    esriConfig.defaults.io.corsEnabledServers.push('discover.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
 
     window.AGRC = {
@@ -93,8 +93,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     };
 
     if (has('agrc-build') === 'prod') {
-        // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-94703F79341773';
+        // plss.utah.gov
+        window.AGRC.apiKey = 'AGRC-175BBEF9897179';
         window.AGRC.quadWord = 'alfred-plaster-crystal-dexter';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
