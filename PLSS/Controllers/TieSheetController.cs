@@ -550,7 +550,7 @@ namespace PLSS.Controllers
 
 #if RELEASE
                 var apikey = Config.Global.Get<string>("prodKey");
-                const string referrer = "http://mapserv.utah.gov/plss";
+                const string referrer = "http://plss.utah.gov/";
 #endif
 #if STAGE
                 var apikey = Config.Global.Get<string>("stageKey");
