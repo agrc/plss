@@ -109,6 +109,9 @@ body, html {
 .buttons .geolocate:hover {
   background-color: #0e69a9;
 }
+.buttons .geolocate:focus {
+  background-color: #0e69a9;
+}
 .buttons .geolocate .glyphicon {
   color: #fff;
   font-size: 20px;
