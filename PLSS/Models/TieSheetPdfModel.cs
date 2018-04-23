@@ -1,5 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Web;
+using AutoMapper;
+using NLog;
 using PLSS.Models.ViewModel;
 using PLSS.Services;
 
@@ -7,12 +10,12 @@ namespace PLSS.Models
 {
     public class TieSheetPdfModel
     {
-        private readonly ImageService _imageService;
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private string _accuracy;
 
         public TieSheetPdfModel(CornerViewModel model, Corner corner, Photo photo)
         {
-            _imageService = new ImageService();
+            var imageService = new ImageService();
             const int factor = 2;
 
             OverrideTitle = model.UseCountyTitle;
@@ -51,19 +54,19 @@ namespace PLSS.Models
             var sketch = ConvertToImage(model.Sketch);
             if (sketch != null)
             {
-                Sketch = _imageService.CreateSizedImage(sketch, new ImageSize(height: 270*factor, width: 357*factor));
+                Sketch = imageService.CreateSizedImage(sketch, new ImageSize(height: 270*factor, width: 357*factor));
             }
 
             var thumb = ConvertToImage(model.Thumb);
             if (thumb != null)
             {
-                Thumb = _imageService.CreateSizedImage(thumb, new ImageSize(height: 270*factor, width: 357*factor));
+                Thumb = imageService.CreateSizedImage(thumb, new ImageSize(height: 270*factor, width: 357*factor));
             }
 
             var thumb2 = ConvertToImage(model.Thumb2);
             if (thumb2 != null)
             {
-                Thumb2 = _imageService.CreateSizedImage(thumb2, new ImageSize(height: 270*factor, width: 357*factor));
+                Thumb2 = imageService.CreateSizedImage(thumb2, new ImageSize(height: 270*factor, width: 357*factor));
             }
 
             var extras = photo.ExtraPages;
@@ -153,7 +156,20 @@ namespace PLSS.Models
                 return null;
             }
 
-            return Image.FromStream(file.InputStream);
+            Image image;
+            try
+            {
+                image = Image.FromStream(file.InputStream);
+            }
+            catch (Exception ex)
+            {
+                Log.Info("file name: {0}, file size: {1}, file type: {2}", file.FileName, file.ContentLength, file.ContentType);
+                Log.FatalException("Error Converting posted file to an image", ex);
+
+                return null;
+            }
+
+            return image;
         }
     }
 }
