@@ -9,6 +9,7 @@ define([
     'app/config',
     'app/CornerInformation',
     'app/Corners',
+    'app/Geolocation',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -17,12 +18,14 @@ define([
     'dojo/dom',
     'dojo/dom-attr',
     'dojo/dom-class',
+    'dojo/dom-construct',
     'dojo/on',
     'dojo/query',
     'dojo/request',
     'dojo/text!app/templates/App.html',
     'dojo/topic',
     'dojo/_base/array',
+    'dojo/_base/Color',
     'dojo/_base/declare',
     'dojo/_base/event',
     'dojo/_base/lang',
@@ -31,9 +34,14 @@ define([
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/VectorTileLayer',
     'esri/symbols/PictureMarkerSymbol',
+    'esri/symbols/SimpleMarkerSymbol',
     'esri/tasks/IdentifyParameters',
     'esri/tasks/IdentifyTask',
     'esri/tasks/ImageServiceIdentifyResult',
+    'esri/geometry/webMercatorUtils',
+    'esri/geometry/Point',
+    'esri/dijit/HomeButton',
+    'esri/layers/GraphicsLayer',
 
     'ijit/widgets/layout/SideBarToggler',
 
@@ -51,6 +59,7 @@ define([
     config,
     CornerInformation,
     CornerZoom,
+    Geolocator,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -59,12 +68,14 @@ define([
     dom,
     domAttr,
     domClass,
+    domConstruct,
     on,
     query,
     xhr,
     template,
     topic,
     array,
+    Color,
     declare,
     events,
     lang,
@@ -73,9 +84,14 @@ define([
     DynamicLayer,
     VectorTileLayer,
     PictureMarkerSymbol,
+    SimpleMarkerSymbol,
     IdentifyParameters,
     IdentifyTask,
     ImageServiceIdentifyResult,
+    webMercatorUtils,
+    Point,
+    HomeButton,
+    GraphicsLayer,
 
     SideBarToggler,
 
@@ -157,6 +173,24 @@ define([
 
             this.initMap();
             this.initIdentify();
+            this.symbols = {};
+            this.symbols.point = new SimpleMarkerSymbol({
+                color: [0, 116, 217, 200], // eslint-disable-line no-magic-numbers
+                size: 11,
+                angle: 0,
+                xoffset: 0,
+                yoffset: 0,
+                type: 'esriSMS',
+                style: 'esriSMSCircle',
+                outline: {
+                    color: [255, 255, 255, 255], // eslint-disable-line no-magic-numbers
+                    width: 1.6,
+                    type: 'esriSLS',
+                    style: 'esriSLSSolid'
+                }
+            });
+
+            this.graphic = null;
 
             this.inherited(arguments);
         },
@@ -213,6 +247,14 @@ define([
                     this.centerAndZoom(geometry, 16);
                 }
             };
+
+            this.graphicsLayer = new GraphicsLayer({
+                className: 'pulse'
+            });
+
+            this.map.addLayer(this.graphicsLayer);
+
+            this._addButtons(this.map);
         },
         initIdentify: function () {
             // summary:
@@ -239,7 +281,7 @@ define([
             console.log('app::performIdentify', arguments);
 
             if (this._graphic) {
-                this.map.graphics.remove(this._graphic);
+                this.graphicsLayer.remove(this._graphic);
             }
 
             this.map.showLoader();
@@ -247,7 +289,7 @@ define([
             this._graphic = new Graphic(evt.mapPoint,
                 new PictureMarkerSymbol(config.urls.pin, 30, 23).setOffset(13, 6));
 
-            this.map.graphics.add(this._graphic);
+            this.graphicsLayer.add(this._graphic);
 
             this.identifyParams.geometry = evt.mapPoint;
             this.identifyParams.mapExtent = this.map.extent;
@@ -510,6 +552,118 @@ define([
             }).then(function (urls) {
                 lang.mixin(config.urls, urls);
             });
+        },
+        zoomToCurrentPosition: function (evt) {
+            // summary:
+            //      description
+            // param or return
+            console.info('app/App:zoomToCurrentPosition', arguments);
+
+            domClass.add(evt.target, 'spin');
+
+            Geolocator.getCurrentPosition(navigator).then(
+                function (pos) {
+                    domClass.remove(evt.target, 'spin');
+
+                    var coords = webMercatorUtils.lngLatToXY(pos.coords.longitude, pos.coords.latitude);
+                    var location = new Point(coords, this.map.spatialReference);
+                    var graphic = new Graphic(location);
+
+                    this.map.zoomToGeometry(location);
+                    this.highlight(graphic);
+                }.bind(this),
+                function (err) {
+                    console.error(err);
+                    domClass.remove(evt.target, 'spin');
+                }
+            );
+        },
+        _addButtons: function (map) {
+            // summary:
+            //      add the buttons below the zoomer
+            console.info('app/App:_addButtons', arguments);
+
+            var geoButtonTemplate = '<button class="geolocate btn btn-default btn-icon nav-btn">' +
+                            '<span class="glyphicon glyphicon-screenshot"></span></button>';
+
+            var home = new HomeButton({
+                map: map
+            }, this.homeNode);
+
+            home.startup();
+
+            if (!this.supportsGeolocation()) {
+                console.warn('geolocation is not supported in this browser or without https.');
+
+                return;
+            }
+
+            var geoButton = domConstruct.toDom(geoButtonTemplate);
+            domConstruct.place(geoButton, this.buttonContainer);
+
+            on(geoButton, 'click', this.zoomToCurrentPosition.bind(this));
+        },
+        supportsGeolocation: function () {
+            // summary:
+            //      returns true if geolocation is ok
+            // boolean
+            console.info('app/App:supportsGeolocation', arguments);
+
+            if (!navigator.geolocation) {
+                return false;
+            }
+
+            if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+                return false;
+            }
+
+            return true;
+        },
+        highlight: function (graphic) {
+            console.info('app.GraphicsController::highlight', arguments);
+
+            if (!graphic) {
+                return;
+            }
+
+            this.removeGraphic(this.graphic);
+
+            var symbol = this.symbols.point;
+
+            if (Array.isArray(graphic)) {
+                this.graphic = [];
+
+                graphic.forEach(function (item) {
+                    var g = new Graphic(item.geometry, symbol);
+
+                    this.graphic.push(g);
+                    this.graphics.add(g);
+                }, this);
+            } else {
+                this.graphic = new Graphic(graphic.geometry, symbol);
+                this.graphicsLayer.add(this.graphic);
+            }
+        },
+        removeGraphic: function (graphic) {
+            // summary:
+            //      removes the graphic from the map
+            // graphic - esri/Graphic
+            console.info('app.GraphicsController::removeGraphic', arguments);
+
+            graphic = lang.getObject('graphic', false, graphic) || graphic || this.graphic;
+            if (!graphic) {
+                return;
+            }
+
+            if (Array.isArray(graphic)) {
+                graphic.forEach(function (item) {
+                    this.graphicsLayer.remove(item);
+                }, this);
+            } else {
+                this.graphicsLayer.remove(graphic);
+            }
+
+            this.graphic = null;
         }
     });
 });
