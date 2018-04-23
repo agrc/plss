@@ -89,3 +89,119 @@ body, html {
 .layer-selector-top {
     top: 50px;
 }
+
+.buttons {
+  position: absolute;
+  top: 60px;
+  left: 58px;
+  z-index: 50;
+}
+.buttons .geolocate {
+  padding: 2px;
+  width: 30px;
+  height: 30px;
+  background-color: #0f75bc;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 3px;
+}
+.buttons .geolocate:hover {
+  background-color: #0e69a9;
+}
+.buttons .geolocate .glyphicon {
+  color: #fff;
+  font-size: 20px;
+  top: 2px;
+}
+.buttons .geolocate .glyphicon span {
+  display: block;
+}
+.HomeButton .home {
+  background-color: #0f75bc;
+}
+.HomeButton .home:hover {
+  background-color: #0e69a9;
+}
+.spin {
+  animation: spin 2s infinite linear;
+}
+.pulse {
+  animation: pulse 3s infinite;
+}
+@-moz-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
