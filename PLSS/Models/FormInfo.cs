@@ -35,13 +35,7 @@ namespace PLSS.Models
         /// </value>
         public bool UploadedSuccessfully { get; set; }
 
-        public static string InsertString
-        {
-            get
-            {
-                return "insert into FormInfoes(FormInfoId, Path, UploadedSuccessfully) " +
-                "values(@forminfoid, @path, @uploadedsuccessfully)";
-            }
-        }
+        public static string InsertString => "insert into FormInfoes(FormInfoId, Path, UploadedSuccessfully) " +
+                                             "values(@forminfoid, @path, @uploadedsuccessfully)";
     }
 }
