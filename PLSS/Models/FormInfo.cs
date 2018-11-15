@@ -9,8 +9,7 @@ namespace PLSS.Models
             FormInfoId = Guid.NewGuid();
             Path = System.IO.Path.Combine("UserCommittedTieSheets", surveyorName,
                                 DateTime.Now.ToShortDateString().Replace("/", "-"),
-                                cornerId).
-                        Replace(@"\", "/") + ".pdf";
+                                cornerId) + ".pdf";
         }
         /// <summary>
         /// Gets the form information identifier. Primary Key

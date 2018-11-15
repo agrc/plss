@@ -15,9 +15,9 @@ namespace PLSS.Commands.Email
 **{{Name}}** has submitted corner information about **{{BlmPointId}}**.  
 It was collected on **{{CollectionDate}}**. 
 
-_Unfortunately_, the pdf was **not** transferred to your sever via ftp. We will need to **rebuild** it from the database.
+_Unfortunately_, the pdf was **not** saved properly. We will need to **rebuild** it from the database.
 
-_Fortunately_, I think I still remember how to do that. So just come and ask me **nicely**.
+_Fortunately_, I think I still remember how to do that. So just come and ask me.
 
 Sincerly your friend,  
 

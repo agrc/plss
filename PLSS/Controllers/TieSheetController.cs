@@ -21,6 +21,7 @@ using PLSS.Extensions;
 using PLSS.Models;
 using PLSS.Models.ViewModel;
 using PLSS.Models.WebServiceModel;
+using PLSS.Services;
 using PLSS.Services.Ftp;
 using PLSS.Services.Pdf;
 using RestSharp;
@@ -83,8 +84,7 @@ namespace PLSS.Controllers
                 if (user.SurveyorSeal != null && user.SurveyorSeal.Length > 0)
                 {
                     viewModel.SurveyorSeal =
-                        string.Format("<div class=\"col-xs-offset-4\"><img src=\"data:image/png;base64,{0}\" /></div>",
-                                      Convert.ToBase64String(user.SurveyorSeal));
+                        $"<div class=\"col-xs-offset-4\"><img src=\"data:image/png;base64,{Convert.ToBase64String(user.SurveyorSeal)}\" /></div>";
                 }
                 else
                 {
@@ -101,8 +101,8 @@ namespace PLSS.Controllers
                 viewModel.apikey = Config.Global.Get<string>("devKey");
                 viewModel.Scripts = new[]
                     {
-                        string.Format("<script data-dojo-config='isDebug: 1, deps:[\"app/run\"]' src='{0}'></script>", Url.Content("~/src/dojo/dojo.js")),
-                        string.Format("<script src='{0}'></script>", Url.Content("~/src/populatr/populatr.min.js"))
+                        $"<script data-dojo-config='isDebug: 1, deps:[\"app/run\"]' src='{Url.Content("~/src/dojo/dojo.js")}'></script>",
+                        $"<script src='{Url.Content("~/src/populatr/populatr.min.js")}'></script>"
                     };
 #endif
 
@@ -118,7 +118,7 @@ namespace PLSS.Controllers
             {
                 Log.LogException(LogLevel.Fatal, "problem with database", ex);
 
-                TempData["error"] = string.Format("Unable to reach our user database. {0}", ex.Message);
+                TempData["error"] = $"Unable to reach our user database. {ex.Message}";
 
                 return RedirectToRoute("", new
                     {
@@ -159,8 +159,6 @@ namespace PLSS.Controllers
             }
 
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PLSS"].ConnectionString);
-            PDFDocument pdf;
-            TieSheetPdfModel model;
             try
             {
                 await connection.OpenAsync();
@@ -207,51 +205,23 @@ namespace PLSS.Controllers
                 var cornInserts = connection.Execute(Corner.InsertString, corner);
                 Debug.Assert(cornInserts == 1, "inserted into corners successfully");
 
-                model = new TieSheetPdfModel(cornerViewModel, corner, photos);
+                var model = new TieSheetPdfModel(cornerViewModel, corner, photos);
                 var pdfService = new PlssPdfService("Assets\\pdf");
-                pdf = pdfService.HydratePdfForm("MonumentStatusTemplate.pdf", model);
+                var pdf = pdfService.HydratePdfForm("MonumentStatusTemplate.pdf", model);
 #if DEBUG
                 pdf.FlattenFormFields();
 #endif
                 Log.Info("finished created database models");
 
-                var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
-                                                Config.Global.Get<string>("FtpPassword"),
-                                                Config.Global.Get<string>("FtpUrl"));
+                var actualPath = Path.Combine(Config.Global.Get<string>("SharePath"), formInfo.Path);
+                Log.Info($"Writing PDF to: {actualPath}");
+                var success = FileSaver.SaveFile(actualPath, pdf.GetPDFAsByteArray());
 
-                var ftpStatusCode = FtpStatusCode.Undefined;
-                string actualPath = null;
-                try
+                if (!success)
                 {
-                    Log.Info("Ftping pdf to {0}", formInfo.Path);
-                    ftpStatusCode = ftpService.Upload(pdf.GetPDFAsByteArray(), formInfo.Path, out actualPath);
-                }
-                catch (Exception ex)
-                {
-                    Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", cornerViewModel), ex);
+                    Log.Fatal($"problem saving pdf for {cornerViewModel}");
 
                     //do nothing, email will get sent about issue and we'll rebuild pdf form later.
-                }
-
-                var uploadedSuccessfully = false;
-                if (ftpStatusCode == FtpStatusCode.ClosingData)
-                {
-                    uploadedSuccessfully = true;
-
-                    Log.Info("PDF uploaded successfully to {0}", Config.Global.Get<string>("FtpUrl"));
-
-                    Log.Info("Sending success notification email to {0}", string.Join(", ", App.AdminEmails));
-
-                    CommandExecutor.ExecuteCommand(new UserSubmittedEmailCommand(
-                                                       new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
-                                                                                                  new[] {user.UserName},
-                                                                                                  user.Name,
-                                                                                                  model.BlmPointId,
-                                                                                                  model.CollectionDate,
-                                                                                                  actualPath)));
-                }
-                else
-                {
                     Log.Info("Sending failed notification email to {0}", string.Join(", ", App.AdminEmails));
 
                     CommandExecutor.ExecuteCommand(new UserSubmitionFailedEmailCommand(
@@ -266,8 +236,17 @@ namespace PLSS.Controllers
                                                                                                         model.
                                                                                                             CollectionDate)));
                 }
+                else { 
+                    CommandExecutor.ExecuteCommand(new UserSubmittedEmailCommand(
+                                                       new UserSubmittedEmailCommand.MailTemplate(App.AdminEmails,
+                                                                                                  new[] {user.UserName},
+                                                                                                  user.Name,
+                                                                                                  model.BlmPointId,
+                                                                                                  model.CollectionDate,
+                                                                                                  actualPath)));
+                }
 
-                Log.Info("updating forminfoes table path: {0} success: {1}", actualPath, uploadedSuccessfully);
+                Log.Info("updating forminfoes table path: {0}", actualPath, success);
 
                 var cUpdate = connection.Execute(
                     "update FormInfoes set " +
@@ -277,13 +256,13 @@ namespace PLSS.Controllers
                         {
                             actualPath,
                             formInfo.FormInfoId,
-                            uploadedSuccessfully
-                        });
+                            success
+                    });
                 Debug.Assert(cUpdate == 1, "updated form infos correctly");
             }
             catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem saving new corner for {0}", cornerViewModel), ex);
+                Log.LogException(LogLevel.Fatal, $"problem saving new corner for {cornerViewModel}", ex);
 
                 TempData["error"] = ex.Message;
 
@@ -353,13 +332,13 @@ namespace PLSS.Controllers
 
                 return File(pdf.GetPDFAsByteArray(),
                             MediaTypeNames.Application.Pdf,
-                            string.Format("{0}-preview.pdf", model.BlmPointId));
+                            $"{model.BlmPointId}-preview.pdf");
             }
             catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem previewing pdf for {0}", cornerViewModel), ex);
+                Log.LogException(LogLevel.Fatal, $"problem previewing pdf for {cornerViewModel}", ex);
 
-                TempData["error"] = string.Format("There was a problem generating your preview. {0}", ex.Message);
+                TempData["error"] = $"There was a problem generating your preview. {ex.Message}";
 
                 return RedirectToRoute("", new
                     {
@@ -369,10 +348,7 @@ namespace PLSS.Controllers
             }
             finally
             {
-                if (pdf != null)
-                {
-                    pdf.Dispose();
-                }
+                pdf?.Dispose();
 
                 connection.Close();
                 connection.Dispose();
@@ -403,7 +379,7 @@ namespace PLSS.Controllers
             }
             catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem showing existing page for {0}", blmid), ex);
+                Log.LogException(LogLevel.Fatal, $"problem showing existing page for {blmid}", ex);
                 throw;
             }
             finally
@@ -498,36 +474,14 @@ namespace PLSS.Controllers
                                     user.Name,
                                     DateTime.Now.ToShortDateString().Replace("/", "-"),
                                     exitingViewModel.BlmPointId).Replace(@"\", "/") + ".pdf";
+            var actualPath = Path.Combine(Config.Global.Get<string>("SharePath"), path);
 
-            var ftpService = new FtpService(Config.Global.Get<string>("FtpUser"),
-                                            Config.Global.Get<string>("FtpPassword"),
-                                            Config.Global.Get<string>("FtpUrl"));
-            var ftpStatusCode = FtpStatusCode.Undefined;
-            string actualPath;
+            Log.Info($"Writing PDF to: {actualPath}");
+            var success = FileSaver.SaveFile(actualPath, pdfBytes);
 
-            Log.Info("Uploading PDF");
-            try
+            if (!success)
             {
-                ftpStatusCode = ftpService.Upload(pdfBytes, path, out actualPath);
-            }
-            catch (Exception ex)
-            {
-                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf {1} for {0}", exitingViewModel, ftpStatusCode), ex);
-
                 //show error and redirect to page
-                TempData["error"] = string.Format("There was a problem uploading your document. Please try again. {0}",
-                                                  ex.Message);
-
-                return RedirectToRoute("", new
-                    {
-                        Controller = "Home",
-                        Action = "Index"
-                    });
-            }
-            Log.Info("Checking upload status");
-
-            if (ftpStatusCode != FtpStatusCode.ClosingData)
-            {
                 TempData["error"] = "There was a problem uploading your document. Please try again.";
 
                 return RedirectToRoute("", new
@@ -544,8 +498,7 @@ namespace PLSS.Controllers
                                                                                           new[] {user.UserName},
                                                                                           user.Name,
                                                                                           exitingViewModel.BlmPointId,
-                                                                                          DateTime.Now.ToShortDateString
-                                                                                              (),
+                                                                                          DateTime.Now.ToShortDateString(),
                                                                                           actualPath)));
 
 #if RELEASE
@@ -570,7 +523,7 @@ namespace PLSS.Controllers
 
                 request.AddUrlSegment("layer", "SGID10.CADASTRE.PLSSPoint_AGRC");
                 request.AddUrlSegment("returnValues", "xcoord, ycoord");
-                request.AddParameter("predicate", string.Format("pointid = '{0}'", exitingViewModel.BlmPointId));
+                request.AddParameter("predicate", $"pointid = '{exitingViewModel.BlmPointId}'");
                 request.AddParameter("attributeStyle", "lower");
                 request.AddParameter("apiKey", apikey);
 
@@ -580,7 +533,7 @@ namespace PLSS.Controllers
 
                 if (response.Data == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.ErrorMessage));
+                    Log.Warn($"problem querying webservice for blm point id {client.BuildUri(request)}. {response.ErrorMessage}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -593,7 +546,7 @@ namespace PLSS.Controllers
 
                 if (response.Data.result == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.Content));
+                    Log.Warn($"problem querying webservice for blm point id {client.BuildUri(request)}. {response.Content}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -608,7 +561,7 @@ namespace PLSS.Controllers
 
                 if (searchApiResult == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice for blm point id {0}. {1}", client.BuildUri(request), response.Content));
+                    Log.Warn($"problem querying webservice for blm point id {client.BuildUri(request)}. {response.Content}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -627,7 +580,7 @@ namespace PLSS.Controllers
                 request.AddUrlSegment("returnValues", "NAME");
                 request.AddParameter("attributeStyle", "lower");
 
-                request.AddParameter("geometry", string.Format("point:[{0},{1}]", xcoord, ycoord));
+                request.AddParameter("geometry", $"point:[{xcoord},{ycoord}]");
 
                 request.AddParameter("spatialReference", "4326");
                 request.AddParameter("apiKey", apikey);
@@ -638,7 +591,7 @@ namespace PLSS.Controllers
 
                 if (county.Data == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice forcounty {0}. {1}", client.BuildUri(request), county.ErrorMessage));
+                    Log.Warn($"problem querying webservice forcounty {client.BuildUri(request)}. {county.ErrorMessage}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -651,7 +604,7 @@ namespace PLSS.Controllers
 
                 if (county.Data.result == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice for county {0}. {1}", client.BuildUri(request), county.Content));
+                    Log.Warn($"problem querying webservice for county {client.BuildUri(request)}. {county.Content}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -665,7 +618,7 @@ namespace PLSS.Controllers
                 var countResult = county.Data.result.FirstOrDefault();
                 if (countResult == null)
                 {
-                    Log.Warn(string.Format("problem querying webservice for county {0}", client.BuildUri(request)));
+                    Log.Warn($"problem querying webservice for county {client.BuildUri(request)}");
 
                     TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
@@ -681,7 +634,7 @@ namespace PLSS.Controllers
             }
             catch (Exception ex)
             {
-                Log.LogException(LogLevel.Fatal, string.Format("problem uploading pdf for {0}", exitingViewModel), ex);
+                Log.LogException(LogLevel.Fatal, $"problem uploading pdf for {exitingViewModel}", ex);
 
                 TempData["message"] = "Monument saved successfully but the county contact was not notfied.";
 
