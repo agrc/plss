@@ -65,10 +65,14 @@
     <Compile Include="AutoMapperTests.cs" />
     <Compile Include="ConversionTests.cs" />
     <Compile Include="EmailTests.cs" />
+    <Compile Include="FileSaverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="MonumentStatusTemplate.v1.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         urls: {
             points: 'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
             plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
-            tieSheets: 'ftp://ftp.agrc.utah.gov/PLSS/TieSheets/',
+            tieSheets: 'https://plss.utah.gov/data/',
             tiesheet: './secure/tiesheet',
             existing: './secure/tiesheet/existing',
             reset: './reset',

@@ -21,6 +21,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -229,6 +231,7 @@
     <Compile Include="Models\WebServiceModel\SearchApiContainer.cs" />
     <Compile Include="Models\WebServiceModel\SearchApiResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FileSaver.cs" />
     <Compile Include="Services\Ftp\FtpService.cs" />
     <Compile Include="Services\Ftp\FtpServiceBase.cs" />
     <Compile Include="Services\Ftp\IFtpService.cs" />
@@ -414,7 +417,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>50260</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/PLSS</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

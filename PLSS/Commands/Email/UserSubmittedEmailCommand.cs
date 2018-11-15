@@ -13,7 +13,7 @@ namespace PLSS.Commands.Email
             MessageTemplate = @"### Hello Everyone,
 
 **{{Name}}** has submitted corner information about **{{BlmPointId}}**.  
-It was was collected on **{{CollectionDate}}**. Isn't that nice.
+It was was collected on **{{CollectionDate}}**. 
 
 The file is located at `{{actualPath}}`.
 
@@ -29,8 +29,8 @@ Steve";
             Init();
         }
 
-        public override sealed string MessageTemplate { get; protected set; }
-        public override sealed dynamic TemplateData { get; protected set; }
+        public sealed override string MessageTemplate { get; protected set; }
+        public sealed override dynamic TemplateData { get; protected set; }
 
         public override string ToString()
         {
@@ -55,8 +55,7 @@ Steve";
 
             public override string ToString()
             {
-                return string.Format("{0}, Point: {1}, Date: {2}", "UserSubmittedEmailCommand.Template", Blmpointid,
-                                     CollectionDate);
+                return $"UserSubmittedEmailCommand.Template, Point: {Blmpointid}, Date: {CollectionDate}";
             }
         }
     }
