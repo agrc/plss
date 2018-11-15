@@ -251,7 +251,7 @@ namespace PLSS.Controllers
                 var cUpdate = connection.Execute(
                     "update FormInfoes set " +
                     "path = @actualpath, " +
-                    "uploadedSuccessfully = @uploadedSuccessfully " +
+                    "uploadedSuccessfully = @success " +
                     "where forminfoid = @FormInfoId", new
                         {
                             actualPath,
