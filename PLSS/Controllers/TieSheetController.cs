@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,7 +21,6 @@ using PLSS.Models;
 using PLSS.Models.ViewModel;
 using PLSS.Models.WebServiceModel;
 using PLSS.Services;
-using PLSS.Services.Ftp;
 using PLSS.Services.Pdf;
 using RestSharp;
 
