@@ -25,8 +25,8 @@ class PlssPallet(Pallet):
         self.copy_data = [self.boundaries, self.cadastre]
 
     def build(self, configuration=None):
-        self.add_crates(['PLSSPoint_AGRC'], {'source_workspace': join(self.garage, 'SGID10.sde'), 'destination_workspace': self.cadastre})
-        self.add_crates(['Counties'], {'source_workspace': join(self.garage, 'SGID10.sde'), 'destination_workspace': self.boundaries})
+        self.add_crates(['PLSSPoint_AGRC'], {'source_workspace': join(self.garage, 'SGID.sde'), 'destination_workspace': self.cadastre})
+        self.add_crates(['Counties'], {'source_workspace': join(self.garage, 'SGID.sde'), 'destination_workspace': self.boundaries})
 
     def process(self):
         start_seconds = clock()
