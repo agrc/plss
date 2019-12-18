@@ -77,14 +77,16 @@ body, html {
     z-index: 50
 }
 
-.unavailable { background-color: #fa0 }
-
-.available { background-color: #c500ff }
-
-.pending {
-    background-color: #ff0;
-    color: #777
+.county {
+  background-color: #4de600;
+  color: #000000
 }
+
+.monument { background-color: #c500ff }
+
+.calculated { background-color: #fa0 }
+
+.control { background-color: #000000 }
 
 .layer-selector-top {
     top: 50px;
