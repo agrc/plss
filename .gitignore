@@ -248,6 +248,7 @@ PLSS/src/bootstrap
 PLSS/src/components-jasmine
 PLSS/src/dgrid
 PLSS/src/dijit
+PLSS/src/dijit-themes
 PLSS/src/dojo
 PLSS/src/dojox
 PLSS/src/favico.js
