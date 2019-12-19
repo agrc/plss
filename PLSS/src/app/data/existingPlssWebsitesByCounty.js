@@ -5,5 +5,6 @@ define({
     'SALT LAKE': 'https://slco.org/surveyor/apps/surveymonument/map.html',
     'WEBER': 'https://www3.co.weber.ut.us/gis/maps/survey/index.html',
     'DUCHESNE': 'https://duchesne.utah.gov/surveyor/base&meridian.html',
-    'UINTAH': 'https://www.co.uintah.ut.us/surveyor/UCTieSheet.htm'
+    'UINTAH': 'https://www.co.uintah.ut.us/surveyor/UCTieSheet.htm',
+    'CACHE': 'http://66.232.67.238/websites/surveyviewer/'
 });
