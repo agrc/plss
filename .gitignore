@@ -276,3 +276,5 @@ PLSS/src/matchers/
 PLSS/src/moment/
 PLSS/src/stubmodule/
 PLSS/src/secrets.js
+src/plss.web/plss-client/.env-cmdrc.json
+src/plss.web/plss-client/deploy/deploy.zip
