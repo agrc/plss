@@ -1,6 +1,6 @@
 {
-  "name": "map",
+  "name": "logo",
   "version": "1.0.0",
   "private": true,
-  "main": "./Map.js"
+  "main": "./Logo.js"
 }

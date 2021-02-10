@@ -1,6 +1,9 @@
 import { useImmerReducer } from 'use-immer';
-import Map from './components/Map';
-import { Drawer, LayerList, Menu, MyContent } from './components/Sidebar';
+import Logo from './components/Logo/Logo';
+import Map from './components/Map/Map';
+import MapLayers from './components/MapLayers';
+import Menu, { Drawer } from './components/Menu/Menu';
+import MyContent from './components/MyContent';
 
 const reduce = (draft, action) => {
   switch (action.type) {
@@ -15,7 +18,7 @@ const reduce = (draft, action) => {
       draft.trayItem = action.payload;
       switch (action.payload) {
         case 'layers': {
-          draft.component = <LayerList></LayerList>;
+          draft.component = <MapLayers></MapLayers>;
           break;
         }
         case 'content': {
@@ -41,12 +44,13 @@ const reduce = (draft, action) => {
 
 function App() {
   const [state, dispatch] = useImmerReducer(reduce, {
-    drawerOpen: true,
-    component: <LayerList></LayerList>,
+    drawerOpen: false,
+    component: null,
   });
 
   return (
     <>
+      <Logo className="absolute"></Logo>
       <main className="grid w-screen h-screen app">
         <Map />
         <Menu dispatch={dispatch} />
