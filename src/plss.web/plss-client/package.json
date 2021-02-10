@@ -4,15 +4,22 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@agrc/layer-selector": "^4.0.2",
-    "@arcgis/core": "^4.18.0-next.20201109",
-    "@testing-library/jest-dom": "^5.11.5",
-    "@testing-library/react": "^11.1.1",
-    "@testing-library/user-event": "^12.2.0",
+    "@agrc/layer-selector": "^4.0.4",
+    "@arcgis/core": "^4.18.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.6.3",
+    "clsx": "^1.1.1",
+    "eslint-config-prettier": "^7.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.0",
-    "web-vitals": "^0.2.4"
+    "react-scripts": "4.0.2",
+    "react-tabs": "^3.2.0",
+    "use-immer": "^0.4.2",
+    "web-vitals": "^1.1.0"
   },
   "scripts": {
     "postinstall": "cp -R ./node_modules/@arcgis/core/assets ./public/assets",
@@ -29,14 +36,15 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "prettier"
     ]
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ],
     "development": [
       "last 1 chrome version",
@@ -44,20 +52,24 @@
       "last 1 safari version"
     ]
   },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
+  },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^3.0.0",
-    "autoprefixer": "^10.0.1",
+    "@agrc/wonkavision": "^1.0.2",
+    "@fullhuman/postcss-purgecss": "^4.0.0",
+    "autoprefixer": "^10.2.4",
     "env-cmd": "^10.1.0",
-    "eslint": "^7.13.0",
+    "eslint": "^7.19.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.21.5",
-    "postcss": "^8.1.6",
-    "postcss-cli": "^8.2.0",
-    "purgecss": "^3.0.0",
+    "eslint-plugin-react": "^7.22.0",
+    "postcss": "^8.2.5",
+    "postcss-cli": "^8.3.1",
+    "purgecss": "^4.0.0",
     "rimraf": "^3.0.2",
-    "tailwindcss": "^1.9.6",
-    "wonkavision": "file:../../../../wonkavision"
+    "tailwindcss": "^2.0.3"
   }
 }
