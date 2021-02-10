@@ -1,12 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-#sidebar:hover {
-  width: 250px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  /*shadow-2xl*/
+
+.app {
+  grid: [map] 1fr [drawer] 60% [menu] 76px / [map] 1fr;
 }
 
-#sidebar:hover span {
-  opacity: 1;
+.parole__map {
+  grid-area: map/map/menu;
+}
+
+.drawer {
+  grid-area: drawer/map/menu;
+  will-change: transform;
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menu {
+  grid-area: menu/map;
+}
+
+.drawer--closed {
+  transform: translateY(100vh);
+}
+
+.react-tabs {
+  @apply flex flex-col flex-1 overflow-hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-tabs__tab-list {
+  @apply flex p-0 mb-4 justify-evenly;
+}
+
+.react-tabs__tab {
+  @apply relative inline-block w-full px-4 pt-2 font-bold list-none border-b-2 border-gray-100 cursor-pointer whitespace-nowrap;
+}
+
+.react-tabs__tab--selected {
+  @apply font-bold border-b-2 border-indigo-300;
+}
+
+.react-tabs__tab:focus {
+  outline: none;
+}
+
+.react-tabs__tab-panel {
+  @apply hidden;
+}
+
+.react-tabs__tab-panel--selected {
+  @apply block overflow-y-auto;
+}
+
+.toggle-checkbox:checked {
+  @apply right-0 border-indigo-400;
+}
+
+.toggle-checkbox:checked+.toggle-label {
+  @apply bg-indigo-400;
 }

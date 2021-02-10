@@ -3,13 +3,14 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
   },
-  purge: [
-      './src/**/*.js',
-      './public/index.html'
-  ],
+  purge: ['./src/**/*.js', './public/index.html'],
   theme: {
-    extend: {},
+    extend: {
+      maxWidth: {
+        '2/3': '66%',
+      },
+    },
   },
   variants: {},
   plugins: [],
-}
+};
