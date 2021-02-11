@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function Logo() {
+export default function User() {
   return (
     <div className="">
       <div className="grid mx-2 place-items-center sm:my-auto">

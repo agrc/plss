@@ -80,6 +80,6 @@
   @apply right-0 border-indigo-400;
 }
 
-.toggle-checkbox:checked+.toggle-label {
+.toggle-checkbox:checked + .toggle-label {
   @apply bg-indigo-400;
 }
