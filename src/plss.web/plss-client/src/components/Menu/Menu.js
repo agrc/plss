@@ -2,23 +2,34 @@ import { faFolder, faMapMarkedAlt, faMapMarker, faUser } from '@fortawesome/free
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import * as React from 'react';
+import Logo from '../Logo';
 
-const Menu = ({ dispatch }) => (
-  <nav className="z-10 flex py-4 bg-gray-900 shadow menu justify-evenly">
-    <MenuItem icon={faMapMarkedAlt} onClick={() => dispatch({ type: 'sidebar', payload: 'layers' })}>
-      Map Layers
-    </MenuItem>
-    <MenuItem icon={faFolder} onClick={() => dispatch({ type: 'sidebar', payload: 'content' })}>
-      My Content
-    </MenuItem>
-    <MenuItem icon={faMapMarker} onClick={() => dispatch({ type: 'sidebar', payload: 'point' })}>
-      Add Point
-    </MenuItem>
-    <MenuItem icon={faUser} onClick={() => dispatch({ type: 'sidebar', payload: 'login' })}>
-      Login/Register
-    </MenuItem>
-  </nav>
-);
+const Menu = ({ open, dispatch }) => {
+  const classes = clsx(
+    ['menu', 'z-10', 'flex', 'py-4', 'bg-gray-900', 'shadow', 'md:z-0', 'menu', 'md:justify-between', 'justify-evenly'],
+    {
+      'menu--open': open,
+    }
+  );
+
+  return (
+    <nav className={classes}>
+      <Logo />
+      <MenuItem icon={faMapMarkedAlt} onClick={() => dispatch({ type: 'sidebar', payload: 'layers' })}>
+        Map Layers
+      </MenuItem>
+      <MenuItem icon={faFolder} onClick={() => dispatch({ type: 'sidebar', payload: 'content' })}>
+        My Content
+      </MenuItem>
+      <MenuItem icon={faMapMarker} onClick={() => dispatch({ type: 'sidebar', payload: 'point' })}>
+        Add Point
+      </MenuItem>
+      <MenuItem icon={faUser} onClick={() => dispatch({ type: 'sidebar', payload: 'login' })}>
+        Login/Register
+      </MenuItem>
+    </nav>
+  );
+};
 
 const MenuItem = ({ icon, children, onClick }) => (
   <div
@@ -43,6 +54,7 @@ export function Drawer({ open, component }) {
       'border',
       'border-indigo-700',
       'rounded-t-2xl',
+      'md:rounded-none',
       'px-4',
       'pt-4',
     ],

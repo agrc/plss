@@ -1,9 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 .app {
   grid: [map] 1fr [drawer] 60% [menu] 76px / [map] 1fr;
+}
+
+.menu {
+  grid-area: menu/map;
 }
 
 .parole__map {
@@ -16,12 +19,32 @@
   transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.menu {
-  grid-area: menu/map;
-}
-
 .drawer--closed {
   transform: translateY(100vh);
+}
+
+@media (min-width: 640px) {
+  .app {
+    grid: [menu] 1fr / [menu] 95px [map] 1fr;
+  }
+  .menu {
+    @apply flex-col;
+    grid-area: menu;
+  }
+  .drawer {
+    grid-area: menu;
+    width: 320px;
+  }
+  .drawer--closed {
+    transform: translateX(-100%);
+  }
+  .menu {
+    will-change: transform;
+    transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .menu--open {
+    transform: translateX(320px);
+  }
 }
 
 .react-tabs {
