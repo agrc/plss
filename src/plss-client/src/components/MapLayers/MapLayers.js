@@ -5,23 +5,58 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 const legendItems = [
   {
     name: 'County Managed',
-    color: 'rgb(124,226,69)',
+    color: {
+      r: 124,
+      g: 226,
+      b: 69,
+      toString: function () {
+        return `rgb(${this.r},${this.g},${this.b})`;
+      },
+    },
   },
   {
     name: 'Monument Record',
-    color: 'rgb(180,52,246)',
+    color: {
+      r: 180,
+      g: 52,
+      b: 246,
+      toString: function () {
+        return `rgb(${this.r},${this.g},${this.b})`;
+      },
+    },
   },
   {
     name: 'Control',
-    color: 'black',
+    color: {
+      r: 0,
+      g: 0,
+      b: 0,
+      toString: function () {
+        return `rgb(${this.r},${this.g},${this.b})`;
+      },
+    },
   },
   {
     name: 'Calculated',
-    color: 'rgb(244,173,61)',
+    color: {
+      r: 244,
+      g: 173,
+      b: 61,
+      toString: function () {
+        return `rgb(${this.r},${this.g},${this.b})`;
+      },
+    },
   },
   {
     name: 'Pending',
-    color: 'rgb(26,34,229)',
+    color: {
+      r: 26,
+      g: 34,
+      b: 229,
+      toString: function () {
+        return `rgb(${this.r},${this.g},${this.b})`;
+      },
+    },
   },
 ];
 
@@ -66,14 +101,24 @@ const MapLayers = () => (
   </>
 );
 
-const LegendPill = ({ name, color }) => (
-  <div
-    style={{ backgroundColor: color }}
-    className="flex justify-center px-3 py-2 text-sm font-bold tracking-wider border border-gray-800 rounded-lg"
-  >
-    <span className="w-full py-1 text-center bg-gray-800 rounded max-w-2/3">{name}</span>
-  </div>
-);
+const getBrightness = ({ r, g, b }) => (r * 299 + g * 587 + b * 114) / 1000;
+
+const LegendPill = ({ name, color }) => {
+  const brightBg = getBrightness(color) > 128;
+  const classes = clsx({
+    'text-white': !brightBg,
+    'text-black': brightBg,
+  });
+
+  return (
+    <div
+      style={{ backgroundColor: color.toString() }}
+      className="flex justify-center px-3 py-2 text-sm font-bold tracking-wider border border-gray-800 rounded-lg"
+    >
+      <span className={classes}>{name}</span>
+    </div>
+  );
+};
 
 const ReferencePill = ({ name, active }) => {
   const classes = clsx(

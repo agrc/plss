@@ -23,16 +23,26 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "postinstall": "cp -R ./node_modules/@arcgis/core/assets ./public/assets",
-    "start": "rimraf ./build && env-cmd -e development react-scripts start",
-    "build": "npm run build:css && env-cmd -e development react-scripts build",
-    "build:stage": "npm run build:purge-css && env-cmd -e staging react-scripts build",
+    "build-react:stage": "npm run build:purge-css && env-cmd --environments staging react-scripts build",
     "build:css": "tailwind build src/styles/tailwind.css -o src/index.css",
     "build:purge-css": "NODE_ENV=production tailwind build src/styles/tailwind.css -o src/index.css",
-    "test": "react-scripts test",
+    "build:stage": "env-cmd --environments staging dotnet publish ../plss.web.csproj -c Release -r win10-x64 --self-contained false && npm run copy:build",
+    "build": "npm run build:css && env-cmd --environments development react-scripts build",
+    "copy:arcgis": "npm run copy:public && npm run copy:build",
+    "copy:build": "ncp ./node_modules/@arcgis/core/assets ../bin/Release/net5.0/win10-x64/publish/plss-client/build/assets",
+    "copy:public": "ncp ./node_modules/@arcgis/core/assets ./public/assets",
+    "deploy:stage": "npm run build:stage && wonkavision clean && wonkavision zip && env-cmd --environments staging wonkavision ship ./deploy/deploy.zip wwwroot/plss && env-cmd -e staging wonkavision unzip wwwroot/plss",
+    "eject": "react-scripts eject",
+    "format": "prettier --write src --ignore-path ./.gitignore",
     "lint": "eslint ./src/",
-    "deploy:stage": "npm run build:stage && wonkavision clean && wonkavision zip && env-cmd -e staging wonkavision ship ./deploy/deploy.zip wwwroot/plss && env-cmd -e staging wonkavision unzip wwwroot/plss",
-    "eject": "react-scripts eject"
+    "start:all": "env-cmd --environments development dotnet run -p ../plss.web.csproj",
+    "start": "env-cmd --environments development react-scripts start",
+    "test": "react-scripts test",
+    "wonkavise:clean": "wonkavision clean ./build ./../bin ./../../deploy",
+    "wonkavise:extract": "env-cmd --environments staging wonkavision unzip plss deploy.zip --extra-command \"rm app_offline.htm\"",
+    "wonkavise:ship": "env-cmd --environments staging wonkavision ship ./../../deploy/deploy.zip plss && env-cmd --environments staging wonkavision ship ../app_offline.htm plss",
+    "wonkavise:zip": "wonkavision zip ../bin/Release/net5.0/win10-x64/publish ./../../deploy deploy.zip",
+    "wonkavise": "npm run wonkavise:clean && npm run build:stage && npm run wonkavise:zip && npm run wonkavise:ship && npm run wonkavise:extract"
   },
   "eslintConfig": {
     "extends": [
@@ -67,6 +77,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
+    "ncp": "^2.0.0",
     "postcss": "^8.2.5",
     "postcss-cli": "^8.3.1",
     "purgecss": "^4.0.0",
