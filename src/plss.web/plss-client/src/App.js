@@ -1,10 +1,10 @@
 import { useImmerReducer } from 'use-immer';
-import Logo from './components/Logo/Logo';
 import AddPoint from './components/AddPoint';
 import Map from './components/Map/Map';
 import MapLayers from './components/MapLayers';
 import Menu, { Drawer } from './components/Menu/Menu';
 import MyContent from './components/MyContent';
+import Login from './components/User';
 
 const reduce = (draft, action) => {
   switch (action.type) {
@@ -31,6 +31,7 @@ const reduce = (draft, action) => {
           break;
         }
         case 'login': {
+          draft.component = <Login></Login>;
           break;
         }
         default: {
