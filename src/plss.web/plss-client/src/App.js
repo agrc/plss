@@ -1,5 +1,6 @@
 import { useImmerReducer } from 'use-immer';
 import Logo from './components/Logo/Logo';
+import AddPoint from './components/AddPoint';
 import Map from './components/Map/Map';
 import MapLayers from './components/MapLayers';
 import Menu, { Drawer } from './components/Menu/Menu';
@@ -26,6 +27,7 @@ const reduce = (draft, action) => {
           break;
         }
         case 'point': {
+          draft.component = <AddPoint></AddPoint>;
           break;
         }
         case 'login': {
@@ -50,10 +52,9 @@ function App() {
 
   return (
     <>
-      <Logo className="absolute"></Logo>
       <main className="grid w-screen h-screen app">
         <Map />
-        <Menu dispatch={dispatch} />
+        <Menu open={state.drawerOpen} dispatch={dispatch} />
         <Drawer open={state.drawerOpen} component={state.component} />
       </main>
     </>
