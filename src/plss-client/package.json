@@ -80,6 +80,7 @@
     "ncp": "^2.0.0",
     "postcss": "^8.2.5",
     "postcss-cli": "^8.3.1",
+    "prettier": "^2.2.1",
     "purgecss": "^4.0.0",
     "rimraf": "^3.0.2",
     "tailwindcss": "^2.0.3"
