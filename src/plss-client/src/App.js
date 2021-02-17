@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
-import reduce from './AppReducer';
+import reduce, { defaults } from './AppReducer';
 import Map from './components/Map/Map';
 import Menu, { Drawer } from './components/Menu/Menu';
 
 const App = () => {
-  const [state, dispatch] = useImmerReducer(reduce, {
-    trayItem: null,
-    authenticated: false,
-    activeLayers: ['Parcels'],
-  });
+  const [state, dispatch] = useImmerReducer(reduce, defaults);
 
   return (
     <Router>

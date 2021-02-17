@@ -10,6 +10,13 @@ const toggleDrawer = (draft, action) => {
 
   return draft;
 };
+
+export const defaults = {
+  trayItem: null,
+  authenticated: false,
+  activeLayers: ['Parcels'],
+};
+
 const reduce = (draft, action) => {
   console.log(`reducing ${action.type}`);
 
