@@ -131,13 +131,13 @@ const SortOrder = () => (
 );
 
 const MapFilterToggle = () => (
-  <div>
+  <div className="mt-2">
     <div className="relative inline-block w-10 mr-2 align-middle transition duration-200 ease-in select-none">
       <input
         type="checkbox"
         name="toggle"
         id="toggle"
-        className="absolute block w-6 h-6 bg-white border-4 rounded-full appearance-none cursor-pointer toggle-checkbox"
+        className="absolute block w-6 h-6 bg-white border-4 border-indigo-400 rounded-full appearance-none cursor-pointer toggle-checkbox"
       />
       <label
         htmlFor="toggle"
