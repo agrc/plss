@@ -2,9 +2,17 @@ import { faFolder, faMapMarkedAlt, faMapMarker, faUser } from '@fortawesome/free
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import * as React from 'react';
+import { Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import AddPoint from '../AddPoint';
+import Identify from '../Identify';
 import Logo from '../Logo';
+import MapLayers from '../MapLayers';
+import MyContent from '../MyContent';
+import Login from '../User';
 
-const Menu = ({ open, dispatch }) => {
+const Menu = ({ authenticated, dispatch }) => {
+  const open = useDrawerOpen();
+
   const classes = clsx(
     ['menu', 'z-10', 'flex', 'py-4', 'bg-gray-900', 'shadow', 'md:z-0', 'menu', 'md:justify-between', 'justify-evenly'],
     {
@@ -15,33 +23,46 @@ const Menu = ({ open, dispatch }) => {
   return (
     <nav className={classes}>
       <Logo />
-      <MenuItem icon={faMapMarkedAlt} onClick={() => dispatch({ type: 'sidebar', payload: 'layers' })}>
+      <MenuItem icon={faMapMarkedAlt} route="/map-layers">
         Map Layers
       </MenuItem>
-      <MenuItem icon={faFolder} onClick={() => dispatch({ type: 'sidebar', payload: 'content' })}>
+      <MenuItem icon={faFolder} route="/my-content">
         My Content
       </MenuItem>
-      <MenuItem icon={faMapMarker} onClick={() => dispatch({ type: 'sidebar', payload: 'point' })}>
+      <MenuItem icon={faMapMarker} route="/add-point">
         Add Point
       </MenuItem>
-      <MenuItem icon={faUser} onClick={() => dispatch({ type: 'sidebar', payload: 'login' })}>
+      <MenuItem icon={faUser} route="/login">
         Login/Register
       </MenuItem>
     </nav>
   );
 };
 
-const MenuItem = ({ icon, children, onClick }) => (
-  <div
-    className="relative flex flex-col items-center justify-center text-xs text-indigo-300 select-none fill-current"
-    onClick={onClick}
-  >
-    <FontAwesomeIcon icon={icon} fixedWidth size="2x" />
-    <p className="pt-1 ">{children}</p>
-  </div>
-);
+const MenuItem = ({ icon, children, onClick, route }) => {
+  const history = useHistory();
 
-export function Drawer({ open, component }) {
+  return (
+    <Link
+      to={() => {
+        if (history.location.pathname === route) {
+          return '/';
+        } else {
+          return route;
+        }
+      }}
+      className="relative flex flex-col items-center justify-center text-xs text-indigo-300 select-none fill-current"
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={icon} fixedWidth size="2x" />
+      <p className="pt-1 ">{children}</p>
+    </Link>
+  );
+};
+
+export function Drawer({ dispatch, authenticated, activeLayers, graphic }) {
+  const open = useDrawerOpen();
+
   const classes = clsx(
     [
       'flex',
@@ -54,7 +75,7 @@ export function Drawer({ open, component }) {
       'border',
       'border-indigo-700',
       'rounded-t-2xl',
-      'md:rounded-none',
+      'sm:rounded-t-none',
       'px-4',
       'pt-4',
     ],
@@ -63,7 +84,34 @@ export function Drawer({ open, component }) {
     }
   );
 
-  return <aside className={classes}>{component}</aside>;
+  return (
+    <aside className={classes}>
+      <Switch>
+        <Route path="/add-point" exact component={AddPoint} />
+        <Route path="/my-content" exact component={MyContent} />
+        <Route
+          exact
+          path="/map-layers"
+          render={() => <MapLayers activeLayers={activeLayers} dispatch={dispatch}></MapLayers>}
+        />
+        <Route exact path="/login" render={() => <Login dispatch={dispatch} authenticated={authenticated} />} />
+        <Route path="/identify" exact render={() => <Identify graphic={graphic} />} />
+        <Route render={() => <></>} />
+      </Switch>
+    </aside>
+  );
 }
+
+const useDrawerOpen = () => {
+  const location = useLocation();
+  const [drawOpen, setDrawerOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    console.log('path changed');
+    setDrawerOpen(location?.pathname !== '/');
+  }, [location.pathname]);
+
+  return drawOpen;
+};
 
 export default Menu;

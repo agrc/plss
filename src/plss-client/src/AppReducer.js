@@ -18,11 +18,6 @@ const reduce = (draft, action) => {
       draft.authenticated = true;
       break;
     }
-    case 'menu/click': {
-      draft = toggleDrawer(draft, action);
-
-      break;
-    }
     case 'map-layers/click': {
       const index = draft.activeLayers.indexOf(action.payload);
 
