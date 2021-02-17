@@ -1,65 +1,26 @@
+import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { useImmerReducer } from 'use-immer';
-import AddPoint from './components/AddPoint';
+import reduce from './AppReducer';
 import Map from './components/Map/Map';
-import MapLayers from './components/MapLayers';
 import Menu, { Drawer } from './components/Menu/Menu';
-import MyContent from './components/MyContent';
-import Login from './components/User';
 
-const reduce = (draft, action) => {
-  switch (action.type) {
-    case 'sidebar': {
-      // same component is visible -> toggle it
-      if (draft.trayItem === action.payload) {
-        draft.drawerOpen = !draft.drawerOpen;
-      } else {
-        draft.drawerOpen = true;
-      }
-
-      draft.trayItem = action.payload;
-      switch (action.payload) {
-        case 'layers': {
-          draft.component = <MapLayers></MapLayers>;
-          break;
-        }
-        case 'content': {
-          draft.component = <MyContent></MyContent>;
-          break;
-        }
-        case 'point': {
-          draft.component = <AddPoint></AddPoint>;
-          break;
-        }
-        case 'login': {
-          draft.component = <Login></Login>;
-          break;
-        }
-        default: {
-          draft.component = null;
-        }
-      }
-      break;
-    }
-    default:
-      return;
-  }
-};
-
-function App() {
+const App = () => {
   const [state, dispatch] = useImmerReducer(reduce, {
-    drawerOpen: false,
-    component: null,
+    trayItem: null,
+    authenticated: false,
+    activeLayers: ['Parcels'],
   });
 
   return (
-    <>
+    <Router>
       <main className="grid w-screen h-screen app">
-        <Map />
-        <Menu open={state.drawerOpen} dispatch={dispatch} />
-        <Drawer open={state.drawerOpen} component={state.component} />
+        <Map dispatch={dispatch} />
+        <Menu dispatch={dispatch} />
+        <Drawer {...state} dispatch={dispatch} />
       </main>
-    </>
+    </Router>
   );
-}
+};
 
 export default App;
