@@ -75,7 +75,7 @@ const referenceLayers = [
   },
 ];
 
-const MapLayers = () => (
+const MapLayers = ({ activeLayers, dispatch }) => (
   <>
     <h1 className="text-2xl font-bold">Map Layers</h1>
     <Tabs>
@@ -93,7 +93,17 @@ const MapLayers = () => (
       <TabPanel>
         <section className="inline-grid w-full gap-2">
           {referenceLayers.map((item, key) => (
-            <ReferencePill key={key} {...item}></ReferencePill>
+            <ReferencePill
+              key={key}
+              {...item}
+              activeLayers={activeLayers}
+              onClick={() =>
+                dispatch({
+                  type: 'map-layers/click',
+                  payload: item.name,
+                })
+              }
+            />
           ))}
         </section>
       </TabPanel>
@@ -120,7 +130,9 @@ const LegendPill = ({ name, color }) => {
   );
 };
 
-const ReferencePill = ({ name, active }) => {
+const ReferencePill = ({ name, activeLayers, onClick }) => {
+  const active = activeLayers.includes(name);
+
   const classes = clsx(
     [
       'flex',
@@ -133,12 +145,13 @@ const ReferencePill = ({ name, active }) => {
       'border',
       'border-gray-800',
       'rounded-lg',
+      'cursor-pointer',
     ],
     { 'bg-indigo-300': active },
     { 'bg-white': !active }
   );
   return (
-    <div className={classes}>
+    <div className={classes} onClick={onClick}>
       <span className="py-1 text-center text-black">{name}</span>
     </div>
   );
