@@ -15,16 +15,19 @@ export const defaults = {
   trayItem: null,
   authenticated: false,
   activeLayers: ['Parcels'],
+  addPoint: {
+    color: { hex: '#fff' },
+    point: null,
+  },
+  map: {
+    activeTool: null,
+  },
 };
 
 const reduce = (draft, action) => {
   console.log(`reducing ${action.type}`);
 
   switch (action.type) {
-    case 'user/login': {
-      draft.authenticated = true;
-      break;
-    }
     case 'map-layers/click': {
       const index = draft.activeLayers.indexOf(action.payload);
 
@@ -34,6 +37,26 @@ const reduce = (draft, action) => {
         draft.activeLayers.push(action.payload);
       }
 
+      break;
+    }
+    case 'add-point/color': {
+      draft.addPoint.color = action.payload;
+      break;
+    }
+    case 'add-point/click': {
+      draft.addPoint.point = action.payload;
+      break;
+    }
+    case 'add-point/activate': {
+      draft.map.activeTool = draft.map.activeTool !== 'add-point' ? 'add-point' : null;
+      if (draft.map.activeTool === null) {
+        draft.addPoint.point = null;
+      }
+
+      break;
+    }
+    case 'user/login': {
+      draft.authenticated = true;
       break;
     }
     case 'map/identify': {

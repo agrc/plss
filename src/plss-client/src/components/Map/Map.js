@@ -15,11 +15,13 @@ const urls = {
     '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
 };
 
-export default function PlssMap({ dispatch }) {
+export default function PlssMap({ state, dispatch }) {
   const node = React.useRef(null);
+  const mapView = React.useRef();
   const [selectorOptions, setSelectorOptions] = React.useState();
   const history = useHistory();
 
+  // create map
   React.useEffect(() => {
     if (!node.current) {
       return;
@@ -28,7 +30,8 @@ export default function PlssMap({ dispatch }) {
     const esriMap = new EsriMap({
       basemap: {},
     });
-    const mapView = new MapView({
+
+    mapView.current = new MapView({
       container: node.current,
       map: esriMap,
       extent: {
@@ -43,61 +46,8 @@ export default function PlssMap({ dispatch }) {
       },
     });
 
-    mapView.on('click', () => {
-      const graphic = {
-        features: [
-          {
-            geometry: {
-              x: 39.9038,
-              y: -112.1379,
-            },
-            attributes: {
-              OBJECTID: '836687',
-              Shape: 'Point',
-              'Corner Point Label': '100540',
-              'Corner Point Identifier': 'UT260020S0010W0_100540',
-              'PLSS Area Identification': 'UT260020S0010W0',
-              'X or East Coordinate': '-111.890539',
-              'Y or North Coordinate': '40.660419',
-              'Z or Height Coordinate': 'Null',
-              'Average Township Elevation': '1426',
-              'Horizontal Datum': 'Null',
-              'Vertical Datum': ' ',
-              'Data Steward': 'AGRC - State of Utah',
-              'Second Data Steward': '',
-              'First PLSS Point Alternate Name': '',
-              'Second PLSS Point Alternate Name': '',
-              'Third PLSS Point Alternate Name': '',
-              'Fourth PLSS Point Alternate Name': '',
-              'Coordinate Reliability': ' Feet',
-              'Coordinate Computation Procedure': 'Null',
-              'Coordinate System': 'Geographic',
-              'Coordinate Collection Method': 'Null',
-              'Revised Date': '11/24/2017 8:18:10 PM',
-              'Error in X': 'Null',
-              'Error in Y': 'Null',
-              ERRORZ: 'Null',
-              Coord_Source: 'Null',
-              TieSheet_Name: 'SALT LAKE',
-              DISPLAY_GRP: 'Zoomed in',
-              Point_Category: 'Calculated',
-              isMonument: 'no',
-              isControl: 'no',
-              LONG_NAD83: '-111.89130785706529',
-              LAT_NAD83: '40.66036623589644',
-              County: 'SALT LAKE',
-            },
-          },
-        ],
-      };
-
-      console.log('map view click');
-      dispatch({ type: 'map/identify', payload: graphic.features[0] });
-      history.push('/identify');
-    });
-
     setSelectorOptions({
-      view: mapView,
+      view: mapView.current,
       quadWord: process.env.REACT_APP_DISCOVER,
       baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR'],
       overlays: [
@@ -112,7 +62,78 @@ export default function PlssMap({ dispatch }) {
       modules: { LOD, TileInfo, Basemap, WebTileLayer, FeatureLayer },
       position: 'top-right',
     });
-  }, [dispatch, history]);
+  }, []);
+
+  // handle clicks
+  React.useEffect(() => {
+    if (!mapView.current) {
+      return;
+    }
+
+    const clickHandler = mapView.current.on('click', (event) => {
+      switch (state.activeTool) {
+        case 'add-point': {
+          const { x, y } = event.mapPoint;
+          dispatch({ type: 'add-point/click', payload: { x, y } });
+          break;
+        }
+        default: {
+          const graphic = {
+            features: [
+              {
+                geometry: {
+                  x: 39.9038,
+                  y: -112.1379,
+                },
+                attributes: {
+                  OBJECTID: '836687',
+                  Shape: 'Point',
+                  'Corner Point Label': '100540',
+                  'Corner Point Identifier': 'UT260020S0010W0_100540',
+                  'PLSS Area Identification': 'UT260020S0010W0',
+                  'X or East Coordinate': '-111.890539',
+                  'Y or North Coordinate': '40.660419',
+                  'Z or Height Coordinate': 'Null',
+                  'Average Township Elevation': '1426',
+                  'Horizontal Datum': 'Null',
+                  'Vertical Datum': ' ',
+                  'Data Steward': 'AGRC - State of Utah',
+                  'Second Data Steward': '',
+                  'First PLSS Point Alternate Name': '',
+                  'Second PLSS Point Alternate Name': '',
+                  'Third PLSS Point Alternate Name': '',
+                  'Fourth PLSS Point Alternate Name': '',
+                  'Coordinate Reliability': ' Feet',
+                  'Coordinate Computation Procedure': 'Null',
+                  'Coordinate System': 'Geographic',
+                  'Coordinate Collection Method': 'Null',
+                  'Revised Date': '11/24/2017 8:18:10 PM',
+                  'Error in X': 'Null',
+                  'Error in Y': 'Null',
+                  ERRORZ: 'Null',
+                  Coord_Source: 'Null',
+                  TieSheet_Name: 'SALT LAKE',
+                  DISPLAY_GRP: 'Zoomed in',
+                  Point_Category: 'Calculated',
+                  isMonument: 'no',
+                  isControl: 'no',
+                  LONG_NAD83: '-111.89130785706529',
+                  LAT_NAD83: '40.66036623589644',
+                  County: 'SALT LAKE',
+                },
+              },
+            ],
+          };
+
+          console.log('map view click');
+          dispatch({ type: 'map/identify', payload: graphic.features[0] });
+          history.push('/identify');
+        }
+      }
+    });
+
+    return () => clickHandler?.remove();
+  }, [state, dispatch, history]);
 
   return (
     <div ref={node} className="bg-white agrc__map">

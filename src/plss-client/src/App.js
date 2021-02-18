@@ -11,7 +11,7 @@ const App = () => {
   return (
     <Router>
       <main className="grid w-screen h-screen app">
-        <Map dispatch={dispatch} />
+        <Map state={state.map} dispatch={dispatch} />
         <Menu dispatch={dispatch} />
         <Drawer {...state} dispatch={dispatch} />
       </main>

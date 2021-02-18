@@ -60,7 +60,7 @@ const MenuItem = ({ icon, children, onClick, route }) => {
   );
 };
 
-export function Drawer({ dispatch, authenticated, activeLayers, graphic }) {
+export function Drawer({ dispatch, authenticated, activeLayers, graphic, map, addPoint }) {
   const open = useDrawerOpen();
 
   const classes = clsx(
@@ -87,12 +87,16 @@ export function Drawer({ dispatch, authenticated, activeLayers, graphic }) {
   return (
     <aside className={classes}>
       <Switch>
-        <Route path="/add-point" exact component={AddPoint} />
-        <Route path="/my-content" exact component={MyContent} />
         <Route
           exact
           path="/map-layers"
           render={() => <MapLayers activeLayers={activeLayers} dispatch={dispatch}></MapLayers>}
+        />
+        <Route path="/my-content" exact component={MyContent} />
+        <Route
+          path="/add-point"
+          exact
+          render={() => <AddPoint {...addPoint} active={map.activeTool === 'add-point'} dispatch={dispatch} />}
         />
         <Route exact path="/login" render={() => <Login dispatch={dispatch} authenticated={authenticated} />} />
         <Route path="/identify" exact render={() => <Identify graphic={graphic} />} />
