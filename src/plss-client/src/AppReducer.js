@@ -18,6 +18,7 @@ export const defaults = {
   addPoint: {
     color: { hex: '#fff' },
     point: null,
+    notes: '',
   },
   map: {
     activeTool: null,
@@ -45,6 +46,10 @@ const reduce = (draft, action) => {
     }
     case 'add-point/click': {
       draft.addPoint.point = action.payload;
+      break;
+    }
+    case 'add-point/notes': {
+      draft.addPoint.notes = action.payload;
       break;
     }
     case 'add-point/activate': {

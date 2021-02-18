@@ -1,17 +1,12 @@
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import clsx from 'clsx';
 import { contrastColor } from 'contrast-color';
 import * as React from 'react';
 import { CirclePicker } from 'react-color';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 
-export default function AddPoint({ active, color, point, dispatch }) {
-  const classes = clsx([], {
-    'bg-gray-500': !active,
-  });
-
+export default function AddPoint({ active, color, point, dispatch, notes }) {
   const inactiveStyle = {
     color: color.hex,
     backgroundColor: '#111',
@@ -33,14 +28,14 @@ export default function AddPoint({ active, color, point, dispatch }) {
           <div className="flex w-full">
             <button
               style={active ? style : inactiveStyle}
-              className="px-6 font-bold text-white border-t border-b border-l border-gray-600 rounded-l-lg"
+              className="px-6 font-bold text-white transition duration-100 ease-in-out border-t border-b border-l border-gray-600 rounded-l-lg"
               type="button"
               onClick={() => dispatch({ type: 'add-point/activate' })}
             >
               {active ? 'draw' : 'activate'}
             </button>
             <input
-              className="flex-1 p-3 text-gray-800 bg-white border-t border-b border-r border-gray-500 rounded-r-lg"
+              className="flex-1 px-3 py-2 text-gray-800 bg-white border-t border-b border-r border-gray-500 rounded-r-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:ring-opacity-50"
               type="text"
               placeholder="Point Name"
             />
@@ -62,6 +57,20 @@ export default function AddPoint({ active, color, point, dispatch }) {
           ></CirclePicker>
         </div>
         <h2 className="text-lg font-bold">Notes</h2>
+
+        <LimitedTextArea
+          value={notes}
+          className="text-xs"
+          placeholder="start typing to remember why you are creating this point..."
+          limit={450}
+          onChange={(event) =>
+            dispatch({
+              type: 'add-point/notes',
+              payload: event.target.value,
+            })
+          }
+        />
+
         <h2 className="text-lg font-bold">Photos</h2>
         <div className="flex items-end justify-center">
           <button
@@ -76,3 +85,18 @@ export default function AddPoint({ active, color, point, dispatch }) {
     </>
   );
 }
+
+const LimitedTextArea = ({ placeholder, value, limit, onChange }) => {
+  return (
+    <div className="flex flex-col">
+      <textarea
+        value={value}
+        maxLength={limit}
+        placeholder={placeholder}
+        className="block w-full px-3 py-2 text-sm leading-tight text-gray-800 placeholder-gray-400 transition duration-100 ease-in-out bg-white border border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:ring-opacity-50"
+        onChange={onChange}
+      ></textarea>
+      <span className="self-end text-xs text-gray-400">{limit - value.length} characters left</span>
+    </div>
+  );
+};

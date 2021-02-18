@@ -53,3 +53,8 @@ export const PointSet = Template.bind({});
 PointSet.args = {
   point: { x: 100.123456, y: -112.234234 },
 };
+
+export const Notes = Template.bind({});
+Notes.args = {
+  notes: 'i really like this area where i put the point.',
+};
