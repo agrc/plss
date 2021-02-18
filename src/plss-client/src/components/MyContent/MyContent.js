@@ -174,7 +174,7 @@ const Item = ({ item, dispatch }) => (
       </div>
       <p className="pl-5 text-xs text-gray-400">{dateFormatter.format(item.when)}</p>
     </div>
-    <hr className="w-3/4 m-auto border-gray-500" />
+    <span class="inline-block h-1 w-2/3 rounded bg-gray-500 mx-auto"></span>
   </>
 );
 
