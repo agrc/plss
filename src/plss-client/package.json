@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
     "clsx": "^1.1.1",
+    "contrast-color": "^1.0.1",
     "eslint-config-prettier": "^7.2.0",
     "react": "^17.0.1",
     "react-color": "^2.19.3",
