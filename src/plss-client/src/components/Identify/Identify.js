@@ -40,33 +40,33 @@ export default function Identify({ graphic }) {
           </a>
         </section>
 
-        <hr className="my-2 border-indigo-400 sm:my-6" />
+        <span class="inline-block h-1 w-full my-2 sm:my-6 rounded bg-indigo-400"></span>
 
         <section className="flex flex-col w-full sm:gap-3">
-          <div className="flex justify-between w-2/3 sm:w-full">
+          <div className="flex justify-between w-2/3 pb-1 border-b border-gray-500 sm:w-full">
             <label className="font-semibold">Corner Id</label>
             <span>{graphic.attributes['Corner Point Identifier']}</span>
           </div>
-          <div className="flex justify-between w-2/3 sm:w-full">
+          <div className="flex justify-between w-2/3 py-1 border-b border-gray-500 sm:w-full">
             <label className="font-semibold">PLSS Id</label>
             <span>{graphic.attributes['PLSS Area Identification']}</span>
           </div>
-          <div className="flex justify-between w-2/3 sm:w-full">
+          <div className="flex justify-between w-2/3 py-1 border-b border-gray-500 sm:w-full">
             <label className="font-semibold">Point Label</label>
             <span>{graphic.attributes['Corner Point Label']}</span>
           </div>
-          <div className="flex justify-between w-2/3 sm:w-full">
+          <div className="flex justify-between w-2/3 py-1 border-b border-gray-500 sm:w-full">
             <label className="font-semibold">Error North</label>
             <span>{getDefault(graphic.attributes['Error in Y'])}</span>
           </div>
-          <div className="flex justify-between w-2/3 sm:w-full">
+          <div className="flex justify-between w-2/3 py-1 border-b border-gray-500 sm:w-full">
             <label className="font-semibold">Error East</label>
             <span>{getDefault(graphic.attributes['Error in X'])}</span>
           </div>
         </section>
 
         <button
-          className=""
+          className="px-6 py-2 mx-auto mt-6 font-medium uppercase transition bg-transparent border-2 rounded w-min ripple hover:bg-indigo-200 hover:text-black focus:outline-none"
           onClick={() => {
             console.log(history.goBack());
           }}
