@@ -29762,6 +29762,11 @@ video {
   background-color: rgba(129, 140, 248, var(--tw-bg-opacity));
 }
 
+.esri-view .esri-view-surface--inset-outline:focus::after {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

@@ -1,11 +1,13 @@
 import LayerSelector from '@agrc/layer-selector';
 import Basemap from '@arcgis/core/Basemap';
+import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import LOD from '@arcgis/core/layers/support/LOD';
 import TileInfo from '@arcgis/core/layers/support/TileInfo';
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
+import { contrastColor } from 'contrast-color';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -15,7 +17,7 @@ const urls = {
     '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
 };
 
-export default function PlssMap({ state, dispatch }) {
+export default function PlssMap({ state, dispatch, color }) {
   const node = React.useRef(null);
   const mapView = React.useRef();
   const [selectorOptions, setSelectorOptions] = React.useState();
@@ -75,6 +77,28 @@ export default function PlssMap({ state, dispatch }) {
         case 'add-point': {
           const { x, y } = event.mapPoint;
           dispatch({ type: 'add-point/click', payload: { x, y } });
+          mapView.current.graphics.add(
+            new Graphic({
+              geometry: {
+                type: 'point',
+                x,
+                y,
+                spatialReference: {
+                  wkid: 3857,
+                },
+              },
+              symbol: {
+                type: 'simple-marker',
+                style: 'circle',
+                color: color.hex,
+                size: '8px',
+                outline: {
+                  color: contrastColor({ bgColor: color.hex }),
+                  width: 1,
+                },
+              },
+            })
+          );
           break;
         }
         default: {
@@ -133,7 +157,7 @@ export default function PlssMap({ state, dispatch }) {
     });
 
     return () => clickHandler?.remove();
-  }, [state, dispatch, history]);
+  }, [state, dispatch, history, color]);
 
   return (
     <div ref={node} className="bg-white agrc__map">
