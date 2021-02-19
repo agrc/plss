@@ -26,11 +26,10 @@ export default story;
 
 const Template = (args) => {
   const [state, dispatch] = useImmerReducer(reduce, defaults);
-  console.log(state);
   const data = { ...state.addPoint, ...args };
-  console.log(data);
+
   return (
-    <div className="text-white">
+    <div className="text-white" style={{ width: '320px' }}>
       <AddPoint
         dispatch={(action) => {
           dispatch(action);
@@ -57,4 +56,9 @@ PointSet.args = {
 export const Notes = Template.bind({});
 Notes.args = {
   notes: 'i really like this area where i put the point.',
+};
+
+export const Images = Template.bind({});
+Images.args = {
+  photos: ['some photo', 'another photo'],
 };
