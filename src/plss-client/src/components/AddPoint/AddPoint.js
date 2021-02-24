@@ -91,8 +91,8 @@ export default function AddPoint({ active, color, point, dispatch, notes, photos
         </div>
 
         <div className="flex flex-wrap self-center gap-3 justify-evenly">
-          {images.map(() => (
-            <div className="w-20 h-20 bg-gray-400 border border-gray-800 rounded"></div>
+          {images.map((_, key) => (
+            <div key={key} className="w-20 h-20 bg-gray-400 border border-gray-800 rounded"></div>
           ))}
         </div>
         <div className="flex items-end justify-center">
