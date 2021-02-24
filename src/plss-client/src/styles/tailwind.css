@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+  @apply flex h-screen overflow-hidden font-sans bg-gray-100;
+  /* https://css-tricks.com/the-trick-to-viewport-units-on-mobile/ */
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 .app {
   grid: [map] 1fr [drawer] 60% [menu] 76px / [map] 1fr;
 }
