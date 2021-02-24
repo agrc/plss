@@ -31,7 +31,7 @@ export default function AddPoint({ active, color, point, dispatch, notes, photos
   return (
     <>
       <h1 className="text-2xl font-bold">Add Point</h1>
-      <section className="inline-grid gap-3 mt-3">
+      <section className="inline-grid gap-3 mt-3 mb-4 overflow-x-auto">
         <div>
           <div className="flex">
             <button
