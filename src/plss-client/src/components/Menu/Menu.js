@@ -10,7 +10,7 @@ import MapLayers from '../MapLayers';
 import MyContent from '../MyContent';
 import Login from '../User';
 
-const Menu = ({ authenticated, dispatch }) => {
+const Menu = () => {
   const open = useDrawerOpen();
 
   const classes = clsx(
@@ -78,6 +78,7 @@ export function Drawer({ dispatch, authenticated, activeLayers, graphic, map, ad
       'sm:rounded-t-none',
       'px-4',
       'pt-4',
+      'overflow-hidden',
     ],
     {
       'drawer--closed': !open,
