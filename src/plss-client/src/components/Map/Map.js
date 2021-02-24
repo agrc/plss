@@ -1,5 +1,6 @@
 import LayerSelector from '@agrc/layer-selector';
 import Basemap from '@arcgis/core/Basemap';
+import esriConfig from '@arcgis/core/config';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import LOD from '@arcgis/core/layers/support/LOD';
@@ -10,6 +11,8 @@ import MapView from '@arcgis/core/views/MapView';
 import { contrastColor } from 'contrast-color';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
+
+esriConfig.assetsPath = `${process.env.PUBLIC_URL}/assets`;
 
 const urls = {
   landownership:
