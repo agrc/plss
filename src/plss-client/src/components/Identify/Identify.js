@@ -40,7 +40,7 @@ export default function Identify({ graphic }) {
           </a>
         </section>
 
-        <span class="inline-block h-1 w-full my-2 sm:my-6 rounded bg-indigo-400"></span>
+        <span className="inline-block w-full h-1 my-2 bg-indigo-400 rounded sm:my-6"></span>
 
         <section className="flex flex-col w-full sm:gap-3">
           <div className="flex justify-between w-2/3 pb-1 border-b border-gray-500 sm:w-full">
