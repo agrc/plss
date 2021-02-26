@@ -22,16 +22,17 @@ resource "google_compute_url_map" "default" {
   }
 }
 
-resource "google_compute_target_http_proxy" "default" {
-  name        = "http-proxy"
-  description = "the proxy between the internet and the bucket backend"
-  url_map     = google_compute_url_map.default.id
+resource "google_compute_target_https_proxy" "default" {
+  name             = "https-proxy"
+  description      = "the proxy between the internet and the bucket backend"
+  url_map          = google_compute_url_map.default.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.default.id]
 }
 
 resource "google_compute_global_forwarding_rule" "default" {
   name        = "front-end-load-balancer"
   description = "the front end load balancer"
-  target      = google_compute_target_http_proxy.default.id
-  port_range  = "80"
+  target      = google_compute_target_https_proxy.default.id
+  port_range  = "443"
   ip_address  = google_compute_global_address.default.address
 }

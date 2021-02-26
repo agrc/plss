@@ -61,3 +61,7 @@ variable "storage_class" {
     error_message = "Value must be one of: STANDARD, MULTI_REGIONAL, REGIONAL, NEARLINE, COLDLINE, ARCHIVE."
   }
 }
+
+variable "managed_cert_urls" {
+  type = list(any)
+}
