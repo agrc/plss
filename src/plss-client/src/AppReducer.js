@@ -29,17 +29,6 @@ const reduce = (draft, action) => {
   console.log(`reducing ${action.type}`);
 
   switch (action.type) {
-    case 'map-layers/click': {
-      const index = draft.activeLayers.indexOf(action.payload);
-
-      if (index > -1) {
-        draft.activeLayers.splice(index, 1);
-      } else {
-        draft.activeLayers.push(action.payload);
-      }
-
-      break;
-    }
     case 'add-point/color': {
       draft.addPoint.color = action.payload;
       break;

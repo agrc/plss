@@ -4,9 +4,9 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import AddPoint from '../AddPoint';
+import CornerSubmission from '../CornerSubmission/CornerSubmission';
 import Identify from '../Identify';
 import Logo from '../Logo';
-import MapLayers from '../MapLayers';
 import MyContent from '../MyContent';
 import Login from '../User';
 
@@ -23,8 +23,8 @@ const Menu = () => {
   return (
     <nav className={classes}>
       <Logo />
-      <MenuItem icon={faMapMarkedAlt} route="/map-layers">
-        Map Layers
+      <MenuItem icon={faMapMarkedAlt} route="/submission/new">
+        Submit
       </MenuItem>
       <MenuItem icon={faFolder} route="/my-content">
         My Content
@@ -60,7 +60,7 @@ const MenuItem = ({ icon, children, onClick, route }) => {
   );
 };
 
-export function Drawer({ dispatch, authenticated, activeLayers, graphic, map, addPoint }) {
+export function Drawer({ dispatch, authenticated, graphic, map, addPoint }) {
   const open = useDrawerOpen();
 
   const classes = clsx(
@@ -88,11 +88,7 @@ export function Drawer({ dispatch, authenticated, activeLayers, graphic, map, ad
   return (
     <aside className={classes}>
       <Switch>
-        <Route
-          exact
-          path="/map-layers"
-          render={() => <MapLayers activeLayers={activeLayers} dispatch={dispatch}></MapLayers>}
-        />
+        <Route path="/submission" render={() => <CornerSubmission />} />
         <Route path="/my-content" exact component={MyContent} />
         <Route
           path="/add-point"
