@@ -25,7 +25,7 @@ export default function Logo() {
           <path d="M385.76,131.87l-1.08,7.44L398,141.25l1.09-7.44ZM363.55,129l-0.9,7.46L376,138.11l0.91-7.46Zm-22.15-2.19-0.72,7.48,13.43,1.3,0.73-7.48Zm-22.12-2-0.61,7.49,13.46,1.1,0.61-7.49ZM297,123.29l-0.53,7.5,13.46,1,0.54-7.5ZM274.83,122l-0.38,7.5,13.48,0.68,0.38-7.51Zm-22.61,6.56L265.71,129l0.27-7.51-13.48-.47Z"></path>
         </g>
       </svg>
-      <div className="flex justify-center w-full text-sm font-bold text-center text-gray-800 md:text-white whitespace-nowrap">
+      <div className="flex justify-center w-full text-sm font-bold text-center text-gray-800 sm:text-white whitespace-nowrap">
         Utah PLSS
       </div>
     </div>
