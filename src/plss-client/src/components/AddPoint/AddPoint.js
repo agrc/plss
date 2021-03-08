@@ -4,6 +4,7 @@ import { contrastColor } from 'contrast-color';
 import * as React from 'react';
 import { CirclePicker } from 'react-color';
 import { useImmer } from 'use-immer';
+import { LimitedTextarea } from '../FormElements';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 
@@ -66,7 +67,7 @@ export default function AddPoint({ active, color, point, dispatch, notes, photos
         </div>
         <h2 className="text-lg font-bold">Notes</h2>
 
-        <LimitedTextArea
+        <LimitedTextarea
           value={notes}
           className="text-xs"
           placeholder="start typing to remember why you are creating this point..."
@@ -108,18 +109,3 @@ export default function AddPoint({ active, color, point, dispatch, notes, photos
     </>
   );
 }
-
-const LimitedTextArea = ({ placeholder, value, limit, onChange }) => {
-  return (
-    <div className="flex flex-col">
-      <textarea
-        value={value}
-        maxLength={limit}
-        placeholder={placeholder}
-        className="block w-full px-3 py-2 text-sm leading-tight text-gray-800 placeholder-gray-400 transition duration-100 ease-in-out bg-white border border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:ring-opacity-50"
-        onChange={onChange}
-      ></textarea>
-      <span className="self-end text-xs text-gray-400">{limit - value.length} characters left</span>
-    </div>
-  );
-};
