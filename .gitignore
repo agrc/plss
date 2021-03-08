@@ -5,6 +5,7 @@
 node_modules/
 assets/
 deploy/
+storybook-static/
 
 #################
 ## Visual Studio
