@@ -5,12 +5,14 @@ import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import LOD from '@arcgis/core/layers/support/LOD';
 import TileInfo from '@arcgis/core/layers/support/TileInfo';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import { contrastColor } from 'contrast-color';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
+// import Search from '../Search/Search';
 
 esriConfig.assetsPath = `${process.env.PUBLIC_URL}/assets`;
 
@@ -18,6 +20,9 @@ const urls = {
   landownership:
     'https://gis.trustlands.utah.gov/server/' +
     '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
+  parcels: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer',
+  plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
+  points: 'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
 };
 
 export default function PlssMap({ state, dispatch, color }) {
@@ -62,6 +67,18 @@ export default function PlssMap({ state, dispatch, color }) {
           url: urls.landownership,
           id: 'Land Ownership',
           opacity: 0.3,
+        },
+        {
+          Factory: FeatureLayer,
+          url: urls.parcels,
+          id: 'Parcels',
+          opacity: 0.5,
+        },
+        {
+          Factory: VectorTileLayer,
+          url: urls.plss,
+          id: 'PLSS',
+          opacity: 0.5,
         },
       ],
       modules: { LOD, TileInfo, Basemap, WebTileLayer, FeatureLayer },
@@ -165,6 +182,7 @@ export default function PlssMap({ state, dispatch, color }) {
   return (
     <div ref={node} className="bg-white agrc__map">
       {selectorOptions ? <LayerSelector {...selectorOptions}></LayerSelector> : null}
+      {/* <Search view={mapView.current} /> */}
     </div>
   );
 }
