@@ -6,7 +6,7 @@ import { useStateMachine } from 'little-state-machine';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
-import { Input, Select } from '../FormElements';
+import { Button, Input, Select } from '../FormElements';
 import ErrorMessageTag from '../FormElements/ErrorMessage';
 import { updateAction } from './CornerSubmission';
 import { accuracy, adjustment, geographic, grid, status } from './Options';
@@ -355,12 +355,28 @@ export const GridCoordinates = () => {
   );
 };
 
+const formatDegrees = (dms) => `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
+const formatDatum = (value) => {
+  const [datum] = value.split('-');
+  let options = grid;
+  if (datum === 'geographic') {
+    options = geographic;
+  }
+
+  return reverseLookup(options, value);
+};
 const reverseLookup = (options, value) => options.filter((item) => item.value === value)[0].label;
 const keyMap = {
   status: (value) => reverseLookup(status, value),
   accuracy: (value) => reverseLookup(accuracy, value),
   description: (value) => value,
   notes: (value) => value,
+  datum: (value) => formatDatum(value),
+  northing: (value) => formatDegrees(value),
+  easting: (value) => formatDegrees(value),
+  unit: (value) => value,
+  adjustment: (value) => reverseLookup(adjustment, value),
+  height: (value) => value,
 };
 
 export const Review = () => {
@@ -370,13 +386,18 @@ export const Review = () => {
   const { id } = useParams();
 
   return (
-    <div>
-      {Object.keys(state.newSheet).map((x) => (
-        <div className="flex justify-between" key={x}>
-          <label className="font-semibold">{x}</label>
-          <span>{x in keyMap && keyMap[x](state.newSheet[x])}</span>
-        </div>
-      ))}
-    </div>
+    <>
+      <div>
+        {Object.keys(state.newSheet).map((x) => (
+          <div className="flex justify-between" key={x}>
+            <label className="font-semibold">{x}</label>
+            <span>{x in keyMap && keyMap[x](state.newSheet[x])}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <Button primary type="submit" label="Submit" />
+      </div>
+    </>
   );
 };
