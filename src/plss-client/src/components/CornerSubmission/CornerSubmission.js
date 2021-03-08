@@ -55,7 +55,7 @@ const CornerSubmission = () => {
           satisfy the requirements of state code 17-23-17-7a.
         </p>
       )}
-      <Router basename="/submission">
+      <Router basename={`${process.env.PUBLIC_URL}/submission`}>
         {!hide && (
           <div className="inline-grid w-full text-xs">
             <div className="flex justify-between">
