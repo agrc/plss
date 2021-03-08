@@ -1,0 +1,32 @@
+{
+  "name": "@agrc/use-view-ui-position",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A react hook to place components in an esri view ui position.",
+  "license": "MIT",
+  "homepage": "https://github.com/agrc/kitchen-sink/tree/main/packages/useViewUiPosition",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agrc/kitchen-sink.git"
+  },
+  "main": "./src/index.js",
+  "files": [
+    "/dist"
+  ],
+  "peerDependencies": {
+    "@arcgis/core": "^4.0.0",
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
+  },
+  "keywords": [
+    "agrc",
+    "widgets",
+    "esri",
+    "react",
+    "hook"
+  ],
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "dependencies": {}
+}
