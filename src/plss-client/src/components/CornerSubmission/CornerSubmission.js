@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createStore, StateMachineProvider } from 'little-state-machine';
 import * as React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import extractTownshipInformation from '../BlmPointId';
 import { CoordinatePicker, GeographicHeight, GridCoordinates, Latitude, Longitude, Review } from './Coordinates';
 import Metadata from './Metadata';
 
@@ -27,16 +28,13 @@ const CornerSubmission = () => {
     license: 1123123,
   };
 
+  const townshipInformation = extractTownshipInformation(pointId);
   const location = {
     county: 'Beaver',
-    meridian: 'SL',
-    township: '29S',
-    range: '6W',
-    section: 16,
-    corner: 'SE',
+    meridian: townshipInformation.meridian.abbr,
+    township: townshipInformation.township,
+    range: townshipInformation.range,
   };
-
-  const pointId = 'UT260020S0080E0_500420';
 
   return (
     <StateMachineProvider>
@@ -75,9 +73,9 @@ const CornerSubmission = () => {
               <span>{location.county}</span>
             </div>
             <div className="flex justify-between">
-              <label className="font-semibold">TRSC</label>
+              <label className="font-semibold">Township</label>
               <span>
-                {location.meridian}T{location.township}R{location.range} {location.section} {location.corner}
+                {location.meridian}T{location.township}R{location.range}
               </span>
             </div>
             <span className="inline-block w-2/3 h-1 mx-auto my-4 bg-gray-500 rounded"></span>
