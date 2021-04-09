@@ -6,10 +6,10 @@
     "dgauges": "*",
     "ijit": "agrc-ijit#3.1.3",
     "mustache": "^2.2.1",
-    "esri": "arcgis-js-api#3.17.0",
+    "esri": "arcgis-js-api#3.35.0",
     "layer-selector": "agrc-layer-selector#^0.4.0",
     "bootstrap": "3.3.6",
-    "dijit-themes": "https://github.com/dojo/dijit-themes.git#1.11.2"
+    "dijit-themes": "https://github.com/dojo/dijit-themes.git#1.14.0"
   },
   "devDependencies": {
     "matchers": "agrc-jasmine-matchers#~0.1",
@@ -17,14 +17,14 @@
     "stubmodule": "*"
   },
   "resolutions": {
-    "esri": "3.17.0",
+    "esri": "3.35.0",
     "mustache": "^2.2.1",
-    "xstyle": "v0.3.2",
-    "dgrid": "0.3.17/esri-3.14.0",
-    "dojo": "v1.11.1/esri-3.17.0",
-    "dijit": "v1.11.1/esri-3.17.0",
-    "dojox": "v1.11.1/esri-3.17.0",
-    "dstore": "v1.1.1",
-    "util": "v1.11.1/esri-3.17.0"
+    "dgrid": "0.3.17/esri-3.20.0",
+    "xstyle": "0.3.2",
+    "dojo": "v1.14.2/esri-3.28.0",
+    "dijit": "v1.14.2/esri-3.28.0",
+    "dojox": "v1.14.2/esri-3.28.0",
+    "util": "v1.14.2/esri-3.28.0",
+    "dstore": "1.1.2"
   }
 }
