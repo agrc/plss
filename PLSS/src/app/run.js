@@ -6,6 +6,7 @@
             'app',
             'dgauges',
             'dgrid',
+            'dgrid1',
             'dijit',
             'dojo',
             'dojox',
