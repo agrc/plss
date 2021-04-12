@@ -10,6 +10,7 @@
             'dijit',
             'dojo',
             'dojox',
+            'dstore',
             'esri',
             'ijit',
             'layer-selector',
