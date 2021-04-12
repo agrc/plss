@@ -20,7 +20,9 @@ var profile = {
                 'dojox/gfx/svg',
                 'dojox/gfx/svgext',
                 'dojox/gfx/shape',
-                'esri/dijit/Attribution'
+                'esri/dijit/Attribution',
+                'esri/layers/VectorTileLayerImpl',
+                'esri/layers/vectorTiles/views/vectorTiles/WorkerTileHandler'
             ],
             targetStylesheet: 'app/resources/App.css',
             includeLocales: ['en-us'],
