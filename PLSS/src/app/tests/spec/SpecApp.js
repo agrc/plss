@@ -9,7 +9,7 @@ function (
     App,
     domConstruct,
     win
-    ) {
+) {
     describe('app/App', function () {
         var testWidget;
         beforeEach(function () {
