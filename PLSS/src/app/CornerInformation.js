@@ -170,15 +170,15 @@ define([
                 if (url) {
                     return mustache.render('<span class="glyphicon glyphicon-share"></span>' +
                         ' <a href="{{& url}}" target="_blank">County Managed.</a>', {
-                            url: url
-                        });
+                        url: url
+                    });
                 }
 
                 return mustache.render('<span class="glyphicon glyphicon-picture"></span>' +
                     ' <a href="{{& url}}{{& pdf}}" target="_blank">View tie sheet.</a>', {
-                        url: config.urls.tieSheets,
-                        pdf: render(text)
-                    });
+                    url: config.urls.tieSheets,
+                    pdf: render(text)
+                });
             };
         },
         changeTemplate: function (evt) {
