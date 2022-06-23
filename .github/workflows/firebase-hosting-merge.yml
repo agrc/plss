@@ -2,18 +2,76 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+on:
   push:
     branches:
-      - firebase
+      - main
+      - dev
+
+concurrency:
+  group: '${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
 jobs:
-  build_and_deploy:
+  test-unit:
+    name: Unit tests
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: ⬇️ Set up code
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: 📥 Download dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests
+        run: npm test
+
+  deploy-dev:
+    name: Deploy to dev
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://plss.dev.utah.gov
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: ⬇️ Set up code
+        uses: actions/checkout@v3
+
+      - name: ⎔ Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: 📥 Download dependencies
+        run: npm ci
+
+      - name: 🏗 Run build script
+        run: npm run build
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_DATABASE_URL: ${{ secrets.VITE_FIREBASE_DATABASE_URL }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APPID: ${{ secrets.VITE_FIREBASE_APPID }}
+          VITE_FIREBASE_MEASUREMENTID: ${{ secrets.VITE_FIREBASE_MEASUREMENTID }}
+          VITE_USE_FIREBASE_EMULATOR: ${{ secrets.VITE_USE_FIREBASE_EMULATOR }}
+          VITE_API_ORIGIN: ${{ secrets.VITE_API_ORIGIN }}
+          VITE_DISCOVER_KEY: ${{ secrets.VITE_DISCOVER_KEY }}
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_UT_DTS_AGRC_PLSS_DEV }}'
           channelId: live
-          projectId: ut-dts-agrc-plss-dev
+          projectId: ${{ secrets.PROJECT_ID }}
