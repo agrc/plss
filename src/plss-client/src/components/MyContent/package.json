@@ -1,6 +1,0 @@
-{
-  "name": "my-content",
-  "version": "1.0.0",
-  "private": true,
-  "main": "./MyContent.js"
-}
