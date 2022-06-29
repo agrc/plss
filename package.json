@@ -25,6 +25,7 @@
     "@heroicons/react": "^1.0.6",
     "@hookform/error-message": "^2.0.0",
     "@hookform/resolvers": "^2.9.3",
+    "@ugrc/layer-selector": "^5.0.0",
     "clsx": "^1.1.1",
     "contrast-color": "^1.0.1",
     "firebase": "^9.8.4",
