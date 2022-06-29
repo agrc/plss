@@ -45,6 +45,7 @@ const Review = lazy(() =>
     default: module.Review,
   }))
 );
+const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
 export default function Drawer({
   dispatch,
@@ -125,6 +126,7 @@ export default function Drawer({
               <Login dispatch={dispatch} authenticated={authenticated} />
             }
           />
+          <Route path="legend" element={<Legend />} />
           <Route path="identify" element={<Identify graphic={graphic} />} />
           <Route path="*" element={<>404</>} />
         </Routes>

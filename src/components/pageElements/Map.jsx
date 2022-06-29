@@ -81,6 +81,7 @@ export default function PlssMap({ state, dispatch, color }) {
           url: urls.plss,
           id: 'PLSS',
           opacity: 0.5,
+          selected: true,
         },
       ],
       modules: { LOD, TileInfo, Basemap, WebTileLayer, FeatureLayer },

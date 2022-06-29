@@ -7,6 +7,7 @@ import {
   FolderIcon,
   PlusCircleIcon,
   UserCircleIcon,
+  ColorSwatchIcon,
 } from '@heroicons/react/outline';
 import { useAuthState } from '../contexts/AuthContext.jsx';
 
@@ -47,6 +48,9 @@ export default function Menu() {
           </MenuItem>
         </>
       )}
+      <MenuItem Icon={ColorSwatchIcon} route="/legend">
+        Map Legend
+      </MenuItem>
       <MenuItem Icon={UserCircleIcon} route="/login">
         {userState.state === 'SIGNED_IN' ? 'Logout' : 'Login/Register'}
       </MenuItem>
