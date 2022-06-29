@@ -13,7 +13,6 @@ const toggleDrawer = (draft, action) => {
 
 export const defaults = {
   trayItem: null,
-  authenticated: false,
   activeLayers: ['Parcels'],
   addPoint: {
     color: { hex: '#fff' },
@@ -48,10 +47,6 @@ const reduce = (draft, action) => {
         draft.addPoint.point = null;
       }
 
-      break;
-    }
-    case 'user/login': {
-      draft.authenticated = true;
       break;
     }
     case 'map/identify': {

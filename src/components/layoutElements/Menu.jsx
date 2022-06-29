@@ -34,15 +34,19 @@ export default function Menu() {
 
   return (
     <nav className={classes}>
-      <MenuItem Icon={LocationMarkerIcon} route="/submission/new">
-        Submit
-      </MenuItem>
-      <MenuItem Icon={FolderIcon} route="/my-content">
-        My Content
-      </MenuItem>
-      <MenuItem Icon={PlusCircleIcon} route="/add-point">
-        Add Point
-      </MenuItem>
+      {userState.state === 'SIGNED_IN' && (
+        <>
+          <MenuItem Icon={LocationMarkerIcon} route="/submission/new">
+            Submit
+          </MenuItem>
+          <MenuItem Icon={FolderIcon} route="/my-content">
+            My Content
+          </MenuItem>
+          <MenuItem Icon={PlusCircleIcon} route="/add-point">
+            Add Point
+          </MenuItem>
+        </>
+      )}
       <MenuItem Icon={UserCircleIcon} route="/login">
         {userState.state === 'SIGNED_IN' ? 'Logout' : 'Login/Register'}
       </MenuItem>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Logo from '../pageElements/Logo.jsx';
+import { useAuthState } from '../contexts/AuthContext.jsx';
 
 const CornerSubmission = lazy(() =>
   import('../pageElements/CornerSubmission/CornerSubmission.jsx')
@@ -53,6 +54,7 @@ export default function Drawer({
   addPoint,
 }) {
   const open = useDrawerOpen();
+  const { state: userState } = useAuthState();
 
   const classes = clsx(
     [
@@ -81,38 +83,42 @@ export default function Drawer({
       <Logo />
       <Suspense fallback={<div>loading...</div>}>
         <Routes path="/">
-          <Route path="submission" element={<CornerSubmission />}>
-            <Route path="new" element={<Metadata />} />
-            <Route path=":id/coordinates" element={<CoordinatePicker />} />
-            <Route
-              path=":id/coordinates/geographic/:system/northing"
-              element={<Latitude />}
-            />
-            <Route
-              path=":id/coordinates/geographic/:system/easting"
-              element={<Longitude />}
-            />
-            <Route
-              path=":id/coordinates/geographic/:system/height"
-              element={<GeographicHeight />}
-            />
-            <Route
-              path=":id/coordinates/grid/:system"
-              element={<GridCoordinates />}
-            />
-            <Route path=":id/review" element={<Review />} />
-          </Route>
-          <Route path="my-content" element={<MyContent />} />
-          <Route
-            path="add-point"
-            element={
-              <AddPoint
-                {...addPoint}
-                active={map.activeTool === 'add-point'}
-                dispatch={dispatch}
+          {userState.state === 'SIGNED_IN' && (
+            <>
+              <Route path="submission" element={<CornerSubmission />}>
+                <Route path="new" element={<Metadata />} />
+                <Route path=":id/coordinates" element={<CoordinatePicker />} />
+                <Route
+                  path=":id/coordinates/geographic/:system/northing"
+                  element={<Latitude />}
+                />
+                <Route
+                  path=":id/coordinates/geographic/:system/easting"
+                  element={<Longitude />}
+                />
+                <Route
+                  path=":id/coordinates/geographic/:system/height"
+                  element={<GeographicHeight />}
+                />
+                <Route
+                  path=":id/coordinates/grid/:system"
+                  element={<GridCoordinates />}
+                />
+                <Route path=":id/review" element={<Review />} />
+              </Route>
+              <Route path="my-content" element={<MyContent />} />
+              <Route
+                path="add-point"
+                element={
+                  <AddPoint
+                    {...addPoint}
+                    active={map.activeTool === 'add-point'}
+                    dispatch={dispatch}
+                  />
+                }
               />
-            }
-          />
+            </>
+          )}
           <Route
             path="login"
             element={
