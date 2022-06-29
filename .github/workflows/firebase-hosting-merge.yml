@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      - dev
+      - development
 
 concurrency:
   group: '${{ github.head_ref || github.ref }}'
