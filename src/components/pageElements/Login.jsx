@@ -1,4 +1,4 @@
-import { useAuthState } from '../contexts/UserContext.jsx';
+import { useAuthState } from '../contexts/AuthContext.jsx';
 import { LogInButton, LogOutButton } from '../formElements/Buttons.jsx';
 
 export default function Login() {

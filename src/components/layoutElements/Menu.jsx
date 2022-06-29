@@ -8,7 +8,7 @@ import {
   PlusCircleIcon,
   UserCircleIcon,
 } from '@heroicons/react/outline';
-import { useAuthState } from '../contexts/UserContext.jsx';
+import { useAuthState } from '../contexts/AuthContext.jsx';
 
 export default function Menu() {
   const open = useDrawerOpen();
