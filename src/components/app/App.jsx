@@ -2,7 +2,7 @@ import { Router } from '../router/Router.jsx';
 import { setupFirebase } from '../../firebase/firebase';
 import { useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useSignIn, useSignOut } from '../contexts/UserContext.jsx';
+import { useSignIn, useSignOut } from '../contexts/AuthContext.jsx';
 
 export default function App() {
   const { signIn } = useSignIn();

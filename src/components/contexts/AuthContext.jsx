@@ -1,49 +1,31 @@
 import { createContext, useContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
-
-const AuthReducer = (state, action) => {
-  switch (action.type) {
-    case 'SIGN_IN': {
-      return {
-        state: 'SIGNED_IN',
-        currentUser: action.payload.user,
-      };
-    }
-    case 'SIGN_OUT': {
-      return {
-        state: 'SIGNED_OUT',
-      };
-    }
-  }
-};
+import AuthReducer from '../reducers/AuthReducer';
 
 export const AuthContext = createContext({
   state: { state: 'UNKNOWN' },
   dispatch: () => {},
 });
+const Provider = AuthContext.Provider;
 
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, { state: 'UNKNOWN' });
 
-  return (
-    <AuthContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <Provider value={{ state, dispatch }}>{children}</Provider>;
 };
 
 AuthProvider.propTypes = {
   children: PropTypes.object.isRequired,
 };
 
-const useAuthState = () => {
+export const useAuthState = () => {
   const { state } = useContext(AuthContext);
   return {
     state,
   };
 };
 
-const useSignIn = () => {
+export const useSignIn = () => {
   const { dispatch } = useContext(AuthContext);
   return {
     signIn: (user) => {
@@ -52,7 +34,7 @@ const useSignIn = () => {
   };
 };
 
-const useSignOut = () => {
+export const useSignOut = () => {
   const { dispatch } = useContext(AuthContext);
   return {
     signOut: () => {
@@ -60,5 +42,3 @@ const useSignOut = () => {
     },
   };
 };
-
-export { useAuthState, useSignIn, useSignOut, AuthProvider };
