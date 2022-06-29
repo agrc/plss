@@ -36,6 +36,7 @@ jobs:
   deploy-dev:
     name: Deploy to dev
     runs-on: ubuntu-latest
+    needs: [test-unit]
     environment:
       name: dev
       url: https://plss.dev.utah.gov
