@@ -36,6 +36,7 @@ export const addAuth = () => {
     }
   } catch (error) {
     console.error({ error });
+    return auth;
   }
 
   return auth;
