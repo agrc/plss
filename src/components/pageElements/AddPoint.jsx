@@ -1,35 +1,62 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { contrastColor } from 'contrast-color';
 import { CirclePicker } from 'react-color';
 import { Controller, useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 import { useImmer } from 'use-immer';
+import { httpsCallable } from 'firebase/functions';
+import { useQueryClient } from 'react-query';
 import { LimitedTextarea } from '../formElements/LimitedTextarea.jsx';
+import { Input } from '../formElements/Inputs.jsx';
+import { Button } from '../formElements/Buttons.jsx';
+import { addFunctions } from '../../firebase/firebase.js';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'short',
+  timeStyle: 'short',
+});
+const functions = addFunctions();
+const addPoint = httpsCallable(functions, 'addPoint');
 
 export default function AddPoint({
   active,
   color,
-  point,
+  geometry,
   dispatch,
   notes = '',
   photos = [],
 }) {
   const [images, updateImage] = useImmer(photos);
+  const [status, setStatus] = useState('disabled');
+  const { control, formState, handleSubmit, register, reset } = useForm();
+  const { isSubmitSuccessful } = formState;
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setStatus(geometry ? 'idle' : 'disabled');
+  }, [geometry]);
+
+  // reset after successful form submission
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      // toast.success('Your message has been sent');
+      dispatch({ type: 'add-point/reset', payload: isSubmitSuccessful });
+      reset({
+        name: `Point (${dateFormatter.format(new Date())})`,
+        notes: '',
+      });
+      queryClient.invalidateQueries('myPoints');
+    }
+  }, [dispatch, isSubmitSuccessful, reset, queryClient]);
+
   const addImage = () => {
     updateImage((draft) => {
       draft.push(0);
     });
   };
 
-  const inactiveStyle = {
-    color: color.hex,
-    backgroundColor: '#111',
-  };
-  const style = {
-    color: contrastColor.call({}, { bgColor: color.hex }),
-    backgroundColor: color.hex,
-  };
   const pointStyle = {
     color: color.hex,
     backgroundColor: contrastColor.call(
@@ -42,43 +69,48 @@ export default function AddPoint({
     ),
   };
 
-  const { control, formState } = useForm({});
+  const savePoint = async (data) => {
+    setStatus('loading');
+    try {
+      await addPoint({
+        ...data,
+        location: { x: geometry.x, y: geometry.y },
+        color: color.hex,
+      });
+    } catch {
+      //TODO! log error
+    } finally {
+      setStatus('idle');
+    }
+
+    return true;
+  };
 
   return (
-    <>
-      <h1 className="text-2xl font-bold">Add Point</h1>
+    <form onSubmit={handleSubmit(savePoint)}>
+      <DevTool control={control} />
+      <h1 className="text-2xl font-bold">Add a Point</h1>
+      <p className="my-3 text-sm leading-tight text-white">
+        Saving points are available to help you remember points of interest when
+        out in the field collection information.
+      </p>
       <section className="mt-3 mb-4 inline-grid gap-3 overflow-x-auto">
-        <div>
-          <div className="flex">
-            <button
-              style={active ? style : inactiveStyle}
-              className="rounded-l-lg border-t border-b border-l border-slate-600 px-6 font-bold text-white transition duration-100 ease-in-out focus:outline-none"
-              type="button"
-              onClick={() => dispatch({ type: 'add-point/activate' })}
-            >
-              {active ? 'draw' : 'activate'}
-            </button>
-            <input
-              className="w-full flex-1 rounded-r-lg border-t border-b border-r border-slate-500 bg-white px-3 py-2 text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-              type="text"
-              placeholder="Point Name"
-            />
-          </div>
-          <div
-            className="mx-auto flex w-min items-center justify-center whitespace-nowrap rounded px-3"
-            style={pointStyle}
-          >
-            <span className="pl-5 text-sm">
-              ({numberFormatter.format(point?.x || 0)},{' '}
-              {numberFormatter.format(point?.y || 0)})
-            </span>
-          </div>
-        </div>
-        <h2 className="text-lg font-bold">Color</h2>
+        <h2 className="text-lg font-bold">Name the point</h2>
+        <Input
+          name="name"
+          type="text"
+          placeholder="Point Name"
+          value={`Point (${dateFormatter.format(new Date())})`}
+          inputRef={register}
+        />
+        <h2 className="text-lg font-bold">Pick a point color</h2>
         <div className="flex justify-center">
           <CirclePicker
             onChangeComplete={(color) =>
-              dispatch({ type: 'add-point/color', payload: color })
+              dispatch({
+                type: 'add-point/color',
+                payload: color,
+              })
             }
           ></CirclePicker>
         </div>
@@ -95,15 +127,34 @@ export default function AddPoint({
               field={field}
               className="w-full text-xs"
               errors={formState.errors}
-              onChange={(event) =>
-                dispatch({
-                  type: 'add-point/notes',
-                  payload: event.target.value,
-                })
-              }
             />
           )}
         />
+        <div>
+          <h2 className="mb-2 text-lg font-bold">Place the point</h2>
+          <Button
+            name="draw-point"
+            style={active ? 'secondary' : 'primary'}
+            type="button"
+            onClick={() => dispatch({ type: 'add-point/activate' })}
+          >
+            {active ? 'ready' : 'click to draw'}
+          </Button>
+          {geometry?.x && (
+            <>
+              <div className="mt-2">Point Coordinates</div>
+              <div
+                className="mx-auto flex w-min whitespace-nowrap rounded px-3"
+                style={pointStyle}
+              >
+                <span className="text-sm">
+                  ({numberFormatter.format(geometry?.x || 0)},{' '}
+                  {numberFormatter.format(geometry?.y || 0)})
+                </span>
+              </div>
+            </>
+          )}
+        </div>
 
         <div className="flex flex-row justify-between">
           <h2 className="text-lg font-bold">Photos</h2>
@@ -125,23 +176,23 @@ export default function AddPoint({
           ))}
         </div>
         <div className="flex items-end justify-center">
-          <button
+          <Button
             className="ripple inline-block w-min rounded border-2 border-green-500 bg-transparent px-6 py-2 text-center text-xs font-medium uppercase text-white transition hover:bg-green-300 hover:text-black focus:outline-none disabled:cursor-not-allowed disabled:border-red-500 disabled:opacity-50"
-            type="button"
-            disabled={!point}
+            type="submit"
+            state={status}
           >
             Save
-          </button>
+          </Button>
         </div>
       </section>
-    </>
+    </form>
   );
 }
 
 AddPoint.propTypes = {
   active: PropTypes.bool,
   color: PropTypes.object,
-  point: PropTypes.object,
+  geometry: PropTypes.object,
   dispatch: PropTypes.func,
   notes: PropTypes.string,
   photos: PropTypes.array,

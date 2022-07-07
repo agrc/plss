@@ -53,6 +53,7 @@ export default function Drawer({
   graphic,
   map,
   addPoint,
+  userPoints,
 }) {
   const open = useDrawerOpen();
   const { state: userState } = useAuthState();
@@ -107,7 +108,10 @@ export default function Drawer({
                 />
                 <Route path=":id/review" element={<Review />} />
               </Route>
-              <Route path="my-content" element={<MyContent />} />
+              <Route
+                path="my-content"
+                element={<MyContent content={userPoints} />}
+              />
               <Route
                 path="add-point"
                 element={
@@ -140,6 +144,7 @@ Drawer.propTypes = {
   graphic: PropTypes.object,
   map: PropTypes.object,
   addPoint: PropTypes.object,
+  userPoints: PropTypes.array,
 };
 
 export const useDrawerOpen = () => {

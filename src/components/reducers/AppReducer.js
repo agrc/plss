@@ -15,10 +15,10 @@ export const defaults = {
   trayItem: null,
   activeLayers: ['Parcels'],
   addPoint: {
-    color: { hex: '#fff' },
-    point: null,
-    notes: '',
+    color: { hex: '' },
+    geometry: {},
   },
+  userPoints: '',
   map: {
     activeTool: null,
   },
@@ -33,20 +33,28 @@ const reduce = (draft, action) => {
       break;
     }
     case 'add-point/click': {
-      draft.addPoint.point = action.payload;
-      break;
-    }
-    case 'add-point/notes': {
-      draft.addPoint.notes = action.payload;
+      draft.addPoint.geometry = action.payload;
       break;
     }
     case 'add-point/activate': {
       draft.map.activeTool =
         draft.map.activeTool !== 'add-point' ? 'add-point' : null;
       if (draft.map.activeTool === null) {
-        draft.addPoint.point = null;
+        draft.addPoint.geometry = null;
       }
 
+      break;
+    }
+    case 'add-point/reset': {
+      draft.map.activeTool === null;
+      draft.addPoint = {
+        color: { hex: '' },
+        geometry: null,
+      };
+      break;
+    }
+    case 'map/userPoints': {
+      draft.userPoints = action.payload;
       break;
     }
     case 'map/identify': {
@@ -56,6 +64,7 @@ const reduce = (draft, action) => {
       break;
     }
     default:
+      console.error(`missing case ${action.type}`);
       return;
   }
 };
