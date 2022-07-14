@@ -10,7 +10,7 @@ import arcpy
 from forklift import seat
 from forklift.models import Pallet
 from os.path import join
-from time import clock
+from time import perf_counter
 
 
 class PlssPallet(Pallet):
@@ -29,7 +29,7 @@ class PlssPallet(Pallet):
         self.add_crates(['Counties'], {'source_workspace': join(self.garage, 'SGID.sde'), 'destination_workspace': self.boundaries})
 
     def process(self):
-        start_seconds = clock()
+        start_seconds = perf_counter()
 
         workspace = arcpy.env.workspace
         arcpy.env.workspace = self.cadastre
@@ -48,4 +48,4 @@ class PlssPallet(Pallet):
 
         arcpy.env.workspace = workspace
 
-        self.log.debug('finished PLSS processing %s', seat.format_time(clock() - start_seconds))
+        self.log.debug('finished PLSS processing %s', seat.format_time(perf_counter() - start_seconds))
