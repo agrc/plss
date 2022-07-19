@@ -18,7 +18,7 @@ export const defaults = {
     color: { hex: '' },
     geometry: {},
   },
-  userPoints: '',
+  userPoints: [],
   map: {
     activeTool: null,
   },
