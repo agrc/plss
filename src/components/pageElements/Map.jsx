@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import LayerSelector from '@ugrc/layer-selector';
+import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import Basemap from '@arcgis/core/Basemap';
 import esriConfig from '@arcgis/core/config';
 import Graphic from '@arcgis/core/Graphic';
