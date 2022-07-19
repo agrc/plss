@@ -197,7 +197,7 @@ ListCounter.propTypes = {
 const ItemList = ({ items, dispatch }) => (
   <section className="mb-4 inline-grid w-full gap-2 overflow-y-auto">
     {items.map((item) => (
-      <Item dispatch={dispatch} key={item.id} item={item}></Item>
+      <Item dispatch={dispatch} key={item.attributes.id} item={item}></Item>
     ))}
   </section>
 );
