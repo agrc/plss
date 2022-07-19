@@ -56,7 +56,7 @@ jobs:
         run: npm ci
 
       - name: 🏗 Run build script
-        run: npm run build && npm run copy:public
+        run: npm run build
         env:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
@@ -68,6 +68,9 @@ jobs:
           VITE_FIREBASE_MEASUREMENTID: ${{ secrets.VITE_FIREBASE_MEASUREMENTID }}
           VITE_API_ORIGIN: ${{ secrets.VITE_API_ORIGIN }}
           VITE_DISCOVER_KEY: ${{ secrets.VITE_DISCOVER_KEY }}
+
+      - name: 🏗 Run build script
+        run: npm run copy:arcgis
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
