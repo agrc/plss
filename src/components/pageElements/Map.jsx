@@ -254,7 +254,6 @@ export default function PlssMap({ state, dispatch, color }) {
           isLoading || mapState === 'loading' ? '' : 'opacity-0'
         )}
       ></div>
-      ;
       <div ref={node} className="h-screen w-full bg-white">
         {selectorOptions ? (
           <LayerSelector {...selectorOptions}></LayerSelector>
