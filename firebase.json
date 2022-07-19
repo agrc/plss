@@ -1,7 +1,23 @@
 {
   "functions": {
     "source": ".",
-    "runtime": "nodejs16"
+    "runtime": "nodejs16",
+    "ignore": [
+      ".emulator-data",
+      ".git",
+      ".github",
+      ".husky",
+      ".storybook",
+      ".vscode",
+      "coverage",
+      "dist",
+      "firebase-export-*",
+      "node_modules",
+      "public",
+      "src",
+      "*.config.js",
+      "*.rules"
+    ]
   },
   "firestore": {
     "rules": "firestore.rules",
