@@ -72,6 +72,7 @@ const graphicConverter = {
         name: data.name,
         notes: data.notes,
         when: data.created_at.toDate().toISOString(),
+        id: snapshot.id,
       },
     };
   },
