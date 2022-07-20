@@ -70,7 +70,7 @@ export const Button = ({
       disabled={state === 'disabled'}
       onClick={onClick}
       className={clsx(
-        'flex min-h-[2rem] cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
         style === 'primary' && primaryClasses,
         style === 'secondary' && secondaryClasses,
         style === 'alternate' && alternateClasses,

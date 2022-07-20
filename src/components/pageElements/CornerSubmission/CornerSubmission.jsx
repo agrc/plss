@@ -1,64 +1,55 @@
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
 import { createStore, StateMachineProvider } from 'little-state-machine';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import PropTypes from 'prop-types';
 import extractTownshipInformation from './blmPointId';
 import clsx from 'clsx';
-// import Metadata from './Metadata.jsx';
-
-// const Metadata = lazy(() => import('./Metadata.jsx'));
-// const CoordinatePicker = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({
-//     default: module.CoordinatePicker,
-//   }))
-// );
-// const GeographicHeight = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({
-//     default: module.GeographicHeight,
-//   }))
-// );
-// const GridCoordinates = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({
-//     default: module.GridCoordinates,
-//   }))
-// );
-// const Latitude = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({ default: module.Latitude }))
-// );
-// const Longitude = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({ default: module.Longitude }))
-// );
-// const Review = lazy(() =>
-//   import('./Coordinates.jsx').then((module) => ({ default: module.Review }))
-// );
 
 export const updateAction = (state, payload) => {
-  return {
-    ...state,
-    newSheet: {
-      ...state.newSheet,
-      ...payload,
-    },
+  // { submissions: { blmid: {data}}}
+  const newState = { ...state };
+  newState.submissions[payload.blmPointId] = {
+    ...newState.submissions[payload.blmPointId],
+    ...payload,
   };
+
+  return newState;
+};
+
+function ErrorFallback({ error }) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <p>{error.message}</p>
+    </div>
+  );
+}
+ErrorFallback.propTypes = {
+  error: PropTypes.object.isRequired,
 };
 
 export default function CornerSubmission() {
   const [hide, setHide] = useState(false);
-  const pointId = 'UT260110S0030E0_460700';
+  const { id } = useParams();
+
+  const pointId = id;
+  const submissions = {};
+  submissions[pointId] = {};
   createStore(
     {
-      newSheet: {
-        blmPointId: pointId,
-      },
+      submissions: submissions,
     },
     {
-      name: 'newSheetSubmission',
+      name: 'submissions',
       middleWares: [
         (store) => {
           console.log(store);
           return store;
         },
       ],
+      storageType: window.localStorage,
     }
   );
 
@@ -122,7 +113,9 @@ export default function CornerSubmission() {
         </div>
       )}
       <div className="mb-2 overflow-y-auto pb-16">
-        <Outlet />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Outlet />
+        </ErrorBoundary>
       </div>
     </StateMachineProvider>
   );

@@ -1,30 +1,28 @@
-import { DevTool } from '@hookform/devtools';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { updateAction } from './CornerSubmission.jsx';
 import { accuracy, status } from './Options';
-import { metadataSchema } from './Schema';
+import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 
 const Metadata = () => {
+  let { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state.newSheet,
-    resolver: yupResolver(metadataSchema),
+    defaultValues: state?.submissions[id],
+    resolver: yupResolver(schema),
   });
-
-  const { touched } = formState;
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${data.blmPointId}/coordinates`);
+    navigate(`/submission/${id}/coordinates`);
   };
 
   return (
@@ -32,12 +30,7 @@ const Metadata = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DevTool control={control} />
-      <input
-        type="hidden"
-        value={state.newSheet.blmPointId}
-        {...register('blmPointId')}
-      />
+      <input type="hidden" value={id} {...register('blmPointId')} />
       <div>
         <label htmlFor="monumentStatus" className="font-semibold">
           Monument Status
@@ -48,7 +41,6 @@ const Metadata = () => {
           name="status"
           options={status}
           inputRef={register}
-          touched={touched?.status}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -66,7 +58,6 @@ const Metadata = () => {
           name="accuracy"
           options={accuracy}
           inputRef={register}
-          touched={touched?.accuracy}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -84,9 +75,9 @@ const Metadata = () => {
           render={({ field }) => (
             <LimitedTextarea
               value={state.description}
-              placeholder="Location information, terrain, general findings, monument condition, etc."
+              placeholder="Notes about the monument"
               rows="5"
-              maxLength={500}
+              maxLength={1000}
               field={field}
               errors={formState.errors}
               className="w-full"
@@ -106,7 +97,7 @@ const Metadata = () => {
               value={state.notes}
               placeholder="Information about the method used to locate the monument (GPS, traditional survey instrument); type of GPS receiver; if TURN GPS network was used; if two hour OPUS solution was taken; weather conditions; etc."
               rows="5"
-              maxLength={500}
+              maxLength={1000}
               field={field}
               errors={formState.errors}
               className="w-full"
@@ -114,7 +105,7 @@ const Metadata = () => {
           )}
         />
       </div>
-      <Wizard next={true} clear={reset} />
+      <Wizard back={() => navigate(-1)} next={true} clear={reset} />
     </form>
   );
 };

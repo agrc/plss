@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import { DevTool } from '@hookform/devtools';
+import { Fragment, useState, useEffect } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { useStateMachine } from 'little-state-machine';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Listbox, RadioGroup, Tab, Transition } from '@headlessui/react';
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { updateAction } from './CornerSubmission.jsx';
-import { accuracy, adjustment, geographic, grid, status } from './Options';
+import { adjustment, geographic, grid, height } from './Options';
 import {
   coordinatePickerSchema,
   latitudeSchema,
@@ -18,106 +20,207 @@ import {
   nad83GeographicHeightSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
+import { keyMap, formatDatum } from '../../helpers';
+
+const formats = { Grid: grid, Geographic: geographic };
+
+const getOpenTabIndex = (datum) => {
+  if (!datum) {
+    return 0;
+  }
+
+  if (datum.indexOf('-') < 0) {
+    return 0;
+  }
+
+  datum = datum.split('-')[0];
+
+  const index = datum === 'grid' ? 0 : 1;
+
+  return index;
+};
+
+const getSelectedOption = (datum) => {
+  if (!datum) {
+    return '';
+  }
+
+  if (datum.indexOf('-') < 0) {
+    return '';
+  }
+
+  const [type] = datum.split('-');
+  let options = geographic;
+
+  if (type === 'grid') {
+    options === grid;
+  }
+
+  const result = options.find((item) => item.value === datum);
+
+  if (!result) {
+    return '';
+  }
+
+  return result;
+};
 
 export const CoordinatePicker = () => {
+  let { id } = useParams();
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
-  const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state.newSheet,
+  const { control, handleSubmit, reset, formState } = useForm({
+    defaultValues: state?.submissions[id],
     resolver: yupResolver(coordinatePickerSchema),
   });
-  const { touchedFields } = formState;
-  const [active, setActive] = useState(
-    state.newSheet?.datum?.split('-')[0] ?? 'grid'
-  );
+  const [selected, setSelected] = useState();
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  useEffect(() => {
+    setSelected(getSelectedOption(state?.submissions[id]?.datum));
+    setSelectedTab(getOpenTabIndex(state?.submissions[id]?.datum));
+  }, [state, id]);
 
   const onSubmit = (data) => {
     actions.updateAction(data);
     navigate(
-      `/submission/${data.blmPointId}/coordinates/geographic/${
+      `/submission/${id}/coordinates/geographic/${
         data.datum.split('-')[1]
       }/northing`
     );
   };
 
-  const getClasses = (left, active) =>
-    clsx(
-      'inline-block px-4 py-2 transition duration-100 ease-in-out border border-transparent shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none focus:ring-opacity-50',
-      { 'rounded-l': left },
-      { 'rounded-r': !left },
-      { 'text-white bg-slate-500 hover:bg-indigo-600': !active },
-      {
-        'text-white bg-indigo-500 hover:text-white hover:bg-indigo-600': active,
-      }
-    );
-
   return (
     <form
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DevTool control={control} />
       <span className="font-semibold">Collected coordinate format</span>
-      <div className="mb-6 flex justify-center">
-        <button
-          name="grid"
-          type="button"
-          className={getClasses(true, active === 'grid')}
-          onClick={() => setActive('grid')}
-        >
-          Grid
-        </button>
-        <button
-          name="geographic"
-          type="button"
-          className={getClasses(false, active === 'geographic')}
-          onClick={() => setActive('geographic')}
-        >
-          Geographic
-        </button>
-      </div>
-      <div>
-        {active ? (
-          <>
-            <Select
-              name="datum"
-              value={state.datum}
-              placeholder={`Choose the ${
-                active === 'grid' ? 'datum' : 'coordinate system'
-              }`}
-              options={active === 'grid' ? grid : geographic}
-              inputRef={register}
-              touched={touchedFields?.datum}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="datum"
-              as={ErrorMessageTag}
-            />
-          </>
-        ) : null}
-      </div>
-      <Wizard back={() => navigate(-1)} next={true} clear={reset} />
+      <Tab.Group selectedIndex={selectedTab} onChange={() => setSelected(null)}>
+        <Tab.List className="flex space-x-1 rounded-xl bg-slate-900/20 p-1">
+          {Object.keys(formats).map((category) => (
+            <Tab
+              key={category}
+              className={({ selected }) =>
+                clsx(
+                  'w-full rounded-lg py-2.5 font-medium leading-5',
+                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
+                  selected
+                    ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
+                    : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
+                )
+              }
+            >
+              {category}
+            </Tab>
+          ))}
+        </Tab.List>
+        <Tab.Panels className="mt-2">
+          {Object.values(formats).map((options, idx) => (
+            <Tab.Panel key={idx}>
+              <Controller
+                control={control}
+                name="datum"
+                render={({ field: { onChange } }) => (
+                  <Listbox
+                    value={selected}
+                    onChange={(option) => {
+                      onChange(option.value);
+                      setSelected(option);
+                    }}
+                  >
+                    <div className="relative z-10 mt-1">
+                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                        <span className="block truncate text-slate-800">
+                          {selected?.label ?? 'coordinate system'}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                          <SelectorIcon
+                            className="h-5 w-5 text-slate-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
+                      <Transition
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {options.map((option, id) => (
+                            <Listbox.Option
+                              key={id}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                  active
+                                    ? 'bg-indigo-100 text-indigo-900'
+                                    : 'text-slate-900'
+                                }`
+                              }
+                              value={option}
+                            >
+                              {({ selected }) => (
+                                <>
+                                  <span
+                                    className={`block truncate ${
+                                      selected ? 'font-medium' : 'font-normal'
+                                    }`}
+                                  >
+                                    {option.label}
+                                  </span>
+                                  {selected ? (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </Listbox>
+                )}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="datum"
+                as={ErrorMessageTag}
+              />
+            </Tab.Panel>
+          ))}
+        </Tab.Panels>
+      </Tab.Group>
+      <Wizard
+        back={() => navigate(-1)}
+        next={true}
+        clear={() => {
+          reset({ datum: '' });
+          setSelected(null);
+        }}
+      />
+      <DevTool control={control} />
     </form>
   );
 };
 
 export const Latitude = () => {
+  const { id, system } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
-  const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state.newSheet,
+  const { register, handleSubmit, reset, formState } = useForm({
+    defaultValues: state?.submissions[id],
     resolver: yupResolver(latitudeSchema),
   });
 
-  const { touchedFields } = formState;
-  const { system } = useParams();
-
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(
-      `/submission/${data.blmPointId}/coordinates/geographic/${system}/easting`
-    );
+    navigate(`/submission/${id}/coordinates/geographic/${system}/easting`);
   };
 
   return (
@@ -125,15 +228,13 @@ export const Latitude = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DevTool control={control} />
-      <label className="font-semibold" htmlFor="geographic">
-        Geographic Coordinates {system}
-      </label>
       <div>
-        <label htmlFor="northing.direction" className="font-semibold">
-          Latitude
-        </label>
+        <h3 className="text-2xl font-semibold">Geographic Easting</h3>
+        <p className="text-sm leading-none">
+          {formatDatum(state?.submissions[id]?.datum)}
+        </p>
       </div>
+      <p className="font-semibold">Latitude</p>
       <div>
         <Input
           value={state.northing?.degrees}
@@ -141,7 +242,6 @@ export const Latitude = () => {
           name="northing.degrees"
           label="Degrees"
           inputRef={register}
-          touched={touchedFields?.northing?.degrees}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -156,7 +256,6 @@ export const Latitude = () => {
           placeholder="##"
           name="northing.minutes"
           inputRef={register}
-          touched={touchedFields?.northing?.minutes}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -171,7 +270,6 @@ export const Latitude = () => {
           placeholder="##.00000"
           name="northing.seconds"
           inputRef={register}
-          touched={touchedFields?.northing?.seconds}
         />
         <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
         <ErrorMessage
@@ -180,27 +278,33 @@ export const Latitude = () => {
           as={ErrorMessageTag}
         />
       </div>
-      <Wizard back={() => navigate(-1)} next={true} clear={reset} />
+      <Wizard
+        back={() => navigate(-1)}
+        next={true}
+        clear={() =>
+          reset({
+            'northing.seconds': '',
+            'northing.minutes': '',
+            'northing.degrees': '',
+          })
+        }
+      />
     </form>
   );
 };
 
 export const Longitude = () => {
+  const { id, system } = useParams();
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
-  const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state.newSheet,
+  const { register, handleSubmit, reset, formState } = useForm({
+    defaultValues: state?.submissions[id],
     resolver: yupResolver(longitudeSchema),
   });
 
-  const { touchedFields } = formState;
-  const { system } = useParams();
-
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(
-      `/submission/${data.blmPointId}/coordinates/geographic/${system}/height`
-    );
+    navigate(`/submission/${id}/coordinates/geographic/${system}/height`);
   };
 
   return (
@@ -208,15 +312,13 @@ export const Longitude = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DevTool control={control} />
-      <label className="font-semibold" htmlFor="geographic">
-        Geographic northings {system}
-      </label>
       <div>
-        <label htmlFor="easting.direction" className="font-semibold">
-          Longitude
-        </label>
+        <h3 className="text-2xl font-semibold">Geographic Northing</h3>
+        <p className="text-sm leading-none">
+          {formatDatum(state?.submissions[id]?.datum)}
+        </p>
       </div>
+      <p className="font-semibold">Longitude</p>
       <div>
         <Input
           value={state.easting?.degrees}
@@ -224,7 +326,6 @@ export const Longitude = () => {
           placeholder="###"
           name="easting.degrees"
           inputRef={register}
-          touched={touchedFields?.easting?.degrees}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -239,7 +340,6 @@ export const Longitude = () => {
           placeholder="##"
           name="easting.minutes"
           inputRef={register}
-          touched={touchedFields?.easting?.minutes}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -254,7 +354,6 @@ export const Longitude = () => {
           placeholder="##.00000"
           name="easting.seconds"
           inputRef={register}
-          touched={touchedFields?.easting?.seconds}
         />
         <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
         <ErrorMessage
@@ -269,20 +368,20 @@ export const Longitude = () => {
 };
 
 export const GeographicHeight = () => {
+  const { id, system } = useParams();
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
 
-  const { system } = useParams();
-
-  const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state.newSheet,
+  const { control, register, handleSubmit, reset, formState } = useForm({
+    defaultValues: state?.submissions[id],
     resolver: yupResolver(nad83GeographicHeightSchema),
   });
-  const { touchedFields } = formState;
+
+  const [selected, setSelected] = useState(height[0]);
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${data.blmPointId}/review`);
+    navigate(`/submission/${id}/review`);
   };
 
   return (
@@ -291,47 +390,81 @@ export const GeographicHeight = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <input type="hidden" name="system" value={system} />
-      <DevTool control={control} />
-      <div>
-        <label htmlFor="height" className="font-semibold">
-          Ellipsoid Height
-        </label>
-        <div className="flex">
-          <Input
-            value={state?.height}
-            label={false}
-            name="height"
-            inputRef={register}
-            left={true}
-            touched={touchedFields?.height}
-          />
-          <Select
+      <label htmlFor="height" className="font-semibold">
+        Ellipsoid Height
+      </label>
+      <Input
+        value={state?.height}
+        label={false}
+        name="height"
+        inputRef={register}
+      />
+      <Controller
+        control={control}
+        name="unit"
+        render={({ field: { onChange } }) => (
+          <RadioGroup
+            className="flex space-x-1 rounded-xl bg-slate-900/20 p-1"
+            value={selected}
+            onChange={(option) => {
+              onChange(option.value);
+              setSelected(option);
+            }}
+          >
+            <RadioGroup.Label className="sr-only">
+              Elevation unit
+            </RadioGroup.Label>
+            {height.map((option) => (
+              <RadioGroup.Option
+                key={option.value}
+                value={option}
+                className={({ checked }) =>
+                  clsx(
+                    'flex w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
+                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
+                    checked
+                      ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
+                      : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
+                  )
+                }
+              >
+                {({ checked }) => (
+                  <div className="text-sm">
+                    <RadioGroup.Label
+                      as="p"
+                      className={`font-medium ${
+                        checked ? 'text-white' : 'text-indigo-100'
+                      }`}
+                    >
+                      {option.label}
+                    </RadioGroup.Label>
+                  </div>
+                )}
+              </RadioGroup.Option>
+            ))}
+          </RadioGroup>
+        )}
+      />
+      {/* <Select
             name="unit"
             value={state?.unit}
             placeholder="unit"
-            options={[
-              { label: 'Meters', value: 'm' },
-              { label: 'US Survey Feet', value: 'ft.survey' },
-              { label: 'International Feet', value: 'ft' },
-            ]}
+            options={}
             inputRef={register}
             className="bg-slate-200"
             right={true}
-            touched={touchedFields?.unit}
-          />
-        </div>
-        <ErrorMessage
-          errors={formState.errors}
-          name="height"
-          as={ErrorMessageTag}
-        />
-        <ErrorMessage
-          errors={formState.errors}
-          name="unit"
-          as={ErrorMessageTag}
-        />
-      </div>
-      {system === 'nad83' && (
+          /> */}
+      <ErrorMessage
+        errors={formState.errors}
+        name="height"
+        as={ErrorMessageTag}
+      />
+      <ErrorMessage
+        errors={formState.errors}
+        name="unit"
+        as={ErrorMessageTag}
+      />
+      {system.indexOf('nad83') > -1 && (
         <div>
           <label htmlFor="adjustment" className="font-semibold">
             NGS Adjustment
@@ -342,7 +475,6 @@ export const GeographicHeight = () => {
             name="adjustment"
             options={adjustment}
             inputRef={register}
-            touched={touchedFields?.adjustment}
           />
           <ErrorMessage
             errors={formState.errors}
@@ -358,15 +490,16 @@ export const GeographicHeight = () => {
 };
 
 export const GridCoordinates = () => {
+  const { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { handleSubmit } = useForm({
-    defaultValues: state.newSheet,
+    defaultValues: state?.submissions[id],
   });
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${data.blmPointId}/coordinates/grid`);
+    navigate(`/submission/${id}/coordinates/grid`);
   };
 
   return (
@@ -448,33 +581,8 @@ export const GridCoordinates = () => {
   );
 };
 
-const formatDegrees = (dms) =>
-  `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
-const formatDatum = (value) => {
-  const [datum] = value.split('-');
-  let options = grid;
-  if (datum === 'geographic') {
-    options = geographic;
-  }
-
-  return reverseLookup(options, value);
-};
-const reverseLookup = (options, value) =>
-  options.filter((item) => item.value === value)[0].label;
-const keyMap = {
-  status: (value) => reverseLookup(status, value),
-  accuracy: (value) => reverseLookup(accuracy, value),
-  description: (value) => value,
-  notes: (value) => value,
-  datum: (value) => formatDatum(value),
-  northing: (value) => formatDegrees(value),
-  easting: (value) => formatDegrees(value),
-  unit: (value) => value,
-  adjustment: (value) => reverseLookup(adjustment, value),
-  height: (value) => value,
-};
-
 export const Review = () => {
+  const { id } = useParams();
   const { state } = useStateMachine({ updateAction });
   const navigate = useNavigate();
 
@@ -484,7 +592,7 @@ export const Review = () => {
         {Object.keys(state.newSheet).map((x) => (
           <div className="flex justify-between" key={x}>
             <label className="font-semibold">{x}</label>
-            <span>{x in keyMap && keyMap[x](state.newSheet[x])}</span>
+            <span>{x in keyMap && keyMap[x](state?.submissions[id][x])}</span>
           </div>
         ))}
       </div>
