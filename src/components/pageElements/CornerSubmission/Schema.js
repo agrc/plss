@@ -5,7 +5,7 @@ export const metadataSchema = yup.object().shape({
     .string()
     .required()
     .oneOf(
-      ['exiting', 'obliterated', 'lost', 'original'],
+      ['existing', 'obliterated', 'lost', 'original'],
       'A valid selection must be made'
     ),
   accuracy: yup
@@ -87,7 +87,7 @@ export const nad83GeographicHeightSchema = yup.object().shape({
   adjustment: yup
     .string()
     .when('system', {
-      is: 'nad83',
+      is: (val) => val.indexOf('nad83') > -1,
       then: yup.number().required().oneOf([1996, 2007, 2011]),
     })
     .label('NGS Adjustment'),
