@@ -7,6 +7,8 @@ import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
+import { identify } from '@arcgis/core/rest/identify';
+import IdentifyParameters from '@arcgis/core/rest/support/IdentifyParameters';
 import { contrastColor } from 'contrast-color';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -125,7 +127,7 @@ export default function PlssMap({ state, dispatch, color }) {
     if (!mapView.current) {
       return;
     }
-    const clickHandler = mapView.current.on('click', (event) => {
+    const clickHandler = mapView.current.on('click', async (event) => {
       switch (state.activeTool) {
         case 'add-point': {
           const point = { ...event.mapPoint.toJSON(), type: 'point' };
@@ -148,55 +150,27 @@ export default function PlssMap({ state, dispatch, color }) {
           break;
         }
         default: {
-          const graphic = {
-            features: [
-              {
-                geometry: {
-                  x: 39.9038,
-                  y: -112.1379,
-                },
-                attributes: {
-                  OBJECTID: '836687',
-                  Shape: 'Point',
-                  'Corner Point Label': '100540',
-                  'Corner Point Identifier': 'UT260020S0010W0_100540',
-                  'PLSS Area Identification': 'UT260020S0010W0',
-                  'X or East Coordinate': '-111.890539',
-                  'Y or North Coordinate': '40.660419',
-                  'Z or Height Coordinate': 'Null',
-                  'Average Township Elevation': '1426',
-                  'Horizontal Datum': 'Null',
-                  'Vertical Datum': ' ',
-                  'Data Steward': 'UGRC - State of Utah',
-                  'Second Data Steward': '',
-                  'First PLSS Point Alternate Name': '',
-                  'Second PLSS Point Alternate Name': '',
-                  'Third PLSS Point Alternate Name': '',
-                  'Fourth PLSS Point Alternate Name': '',
-                  'Coordinate Reliability': ' Feet',
-                  'Coordinate Computation Procedure': 'Null',
-                  'Coordinate System': 'Geographic',
-                  'Coordinate Collection Method': 'Null',
-                  'Revised Date': '11/24/2017 8:18:10 PM',
-                  'Error in X': 'Null',
-                  'Error in Y': 'Null',
-                  ERRORZ: 'Null',
-                  Coord_Source: 'Null',
-                  TieSheet_Name: 'SALT LAKE',
-                  DISPLAY_GRP: 'Zoomed in',
-                  Point_Category: 'Calculated',
-                  isMonument: 'no',
-                  isControl: 'no',
-                  LONG_NAD83: '-111.89130785706529',
-                  LAT_NAD83: '40.66036623589644',
-                  County: 'SALT LAKE',
-                },
-              },
-            ],
-          };
+          const parameters = new IdentifyParameters({
+            returnGeometry: true,
+            tolerance: 3,
+            geometry: event.mapPoint,
+            mapExtent: mapView.current.extent,
+            layerIds: [0],
+            layerOption: 'all',
+            returnFieldName: true,
+          });
 
-          console.log('map view click');
-          dispatch({ type: 'map/identify', payload: graphic.features[0] });
+          const response = await identify(
+            'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
+            parameters
+          );
+
+          let payload = null;
+          if (response?.results?.length > 0) {
+            payload = response.results[0].feature;
+          }
+
+          dispatch({ type: 'map/identify', payload });
           navigate('/identify');
         }
       }
