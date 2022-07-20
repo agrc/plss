@@ -3,7 +3,6 @@ import { useDrawerOpen } from './Drawer.jsx';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import {
-  LocationMarkerIcon,
   FolderIcon,
   PlusCircleIcon,
   UserCircleIcon,
@@ -35,24 +34,21 @@ export default function Menu() {
 
   return (
     <nav className={classes}>
+      <MenuItem Icon={UserCircleIcon} route="/login">
+        {userState.state === 'SIGNED_IN' ? 'Logout' : 'Login/Register'}
+      </MenuItem>
       {userState.state === 'SIGNED_IN' && (
         <>
-          <MenuItem Icon={LocationMarkerIcon} route="/submission/new">
-            Submit
+          <MenuItem Icon={PlusCircleIcon} route="/add-point">
+            Add Point
           </MenuItem>
           <MenuItem Icon={FolderIcon} route="/my-content">
             My Content
-          </MenuItem>
-          <MenuItem Icon={PlusCircleIcon} route="/add-point">
-            Add Point
           </MenuItem>
         </>
       )}
       <MenuItem Icon={ColorSwatchIcon} route="/legend">
         Map Legend
-      </MenuItem>
-      <MenuItem Icon={UserCircleIcon} route="/login">
-        {userState.state === 'SIGNED_IN' ? 'Logout' : 'Login/Register'}
       </MenuItem>
     </nav>
   );
