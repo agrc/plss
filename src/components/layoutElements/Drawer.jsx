@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 import Logo from '../pageElements/Logo.jsx';
 import { useAuthState } from '../contexts/AuthContext.jsx';
 
@@ -47,6 +48,18 @@ const Review = lazy(() =>
 );
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
+function ErrorFallback({ error }) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <p>{error.message}</p>
+    </div>
+  );
+}
+ErrorFallback.propTypes = {
+  error: PropTypes.object.isRequired,
+};
+
 export default function Drawer({
   dispatch,
   authenticated,
@@ -83,58 +96,63 @@ export default function Drawer({
   return (
     <aside className={classes}>
       <Logo />
-      <Suspense fallback={<div>loading...</div>}>
-        <Routes path="/">
-          {userState.state === 'SIGNED_IN' && (
-            <>
-              <Route path="submission" element={<CornerSubmission />}>
-                <Route path="new" element={<Metadata />} />
-                <Route path=":id/coordinates" element={<CoordinatePicker />} />
-                <Route
-                  path=":id/coordinates/geographic/:system/northing"
-                  element={<Latitude />}
-                />
-                <Route
-                  path=":id/coordinates/geographic/:system/easting"
-                  element={<Longitude />}
-                />
-                <Route
-                  path=":id/coordinates/geographic/:system/height"
-                  element={<GeographicHeight />}
-                />
-                <Route
-                  path=":id/coordinates/grid/:system"
-                  element={<GridCoordinates />}
-                />
-                <Route path=":id/review" element={<Review />} />
-              </Route>
-              <Route
-                path="my-content"
-                element={<MyContent content={userPoints} />}
-              />
-              <Route
-                path="add-point"
-                element={
-                  <AddPoint
-                    {...addPoint}
-                    active={map.activeTool === 'add-point'}
-                    dispatch={dispatch}
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Suspense fallback={<div>loading...</div>}>
+          <Routes path="/">
+            {userState.state === 'SIGNED_IN' && (
+              <>
+                <Route path="submission" element={<CornerSubmission />}>
+                  <Route path=":id" element={<Metadata />} />
+                  <Route
+                    path=":id/coordinates"
+                    element={<CoordinatePicker />}
                   />
-                }
-              />
-            </>
-          )}
-          <Route
-            path="login"
-            element={
-              <Login dispatch={dispatch} authenticated={authenticated} />
-            }
-          />
-          <Route path="legend" element={<Legend />} />
-          <Route path="identify" element={<Identify graphic={graphic} />} />
-          <Route path="*" element={<>404</>} />
-        </Routes>
-      </Suspense>
+                  <Route
+                    path=":id/coordinates/geographic/:system/northing"
+                    element={<Latitude />}
+                  />
+                  <Route
+                    path=":id/coordinates/geographic/:system/easting"
+                    element={<Longitude />}
+                  />
+                  <Route
+                    path=":id/coordinates/geographic/:system/height"
+                    element={<GeographicHeight />}
+                  />
+                  <Route
+                    path=":id/coordinates/grid/:system"
+                    element={<GridCoordinates />}
+                  />
+                  <Route path=":id/review" element={<Review />} />
+                </Route>
+                <Route
+                  path="my-content"
+                  element={<MyContent content={userPoints} />}
+                />
+                <Route
+                  path="add-point"
+                  element={
+                    <AddPoint
+                      {...addPoint}
+                      active={map.activeTool === 'add-point'}
+                      dispatch={dispatch}
+                    />
+                  }
+                />
+              </>
+            )}
+            <Route
+              path="login"
+              element={
+                <Login dispatch={dispatch} authenticated={authenticated} />
+              }
+            />
+            <Route path="legend" element={<Legend />} />
+            <Route path="identify" element={<Identify graphic={graphic} />} />
+            <Route path="*" element={<>404</>} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </aside>
   );
 }
