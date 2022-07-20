@@ -1,13 +1,9 @@
 import PropTypes from 'prop-types';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
-import Basemap from '@arcgis/core/Basemap';
 import esriConfig from '@arcgis/core/config';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import LOD from '@arcgis/core/layers/support/LOD';
-import TileInfo from '@arcgis/core/layers/support/TileInfo';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
-import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -115,7 +111,6 @@ export default function PlssMap({ state, dispatch, color }) {
           minScale: 2000000,
         },
       ],
-      modules: { LOD, TileInfo, Basemap, WebTileLayer, FeatureLayer },
       position: 'top-right',
     });
 
