@@ -8,6 +8,7 @@ import LOD from '@arcgis/core/layers/support/LOD';
 import TileInfo from '@arcgis/core/layers/support/TileInfo';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import { contrastColor } from 'contrast-color';
@@ -103,6 +104,13 @@ export default function PlssMap({ state, dispatch, color }) {
           url: urls.plss,
           id: 'PLSS',
           opacity: 0.5,
+          selected: true,
+          minScale: 2000000,
+        },
+        {
+          Factory: MapImageLayer,
+          url: urls.points,
+          id: 'PLSS Points',
           selected: true,
           minScale: 2000000,
         },
