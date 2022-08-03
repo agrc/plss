@@ -9,8 +9,13 @@ const formatDegrees = (dms) =>
   `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
 
 export const formatDatum = (value) => {
+  if (value?.length < 1) {
+    return '';
+  }
+
   const [datum] = value.split('-');
   let options = grid;
+
   if (datum === 'geographic') {
     options = geographic;
   }
