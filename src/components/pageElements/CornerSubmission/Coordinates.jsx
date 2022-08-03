@@ -374,7 +374,7 @@ export const GeographicHeight = () => {
         name="unit"
         as={ErrorMessageTag}
       />
-      {system.indexOf('nad83') > -1 && (
+      {system?.indexOf('nad83') > -1 && (
         <div>
           <label htmlFor="adjustment" className="font-semibold">
             NGS Adjustment

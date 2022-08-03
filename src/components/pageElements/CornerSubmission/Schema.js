@@ -88,7 +88,10 @@ export const nad83GeographicHeightSchema = yup.object().shape({
   adjustment: yup
     .string()
     .when('system', {
-      is: (val) => val.indexOf('nad83') > -1,
+      is: (val) => {
+        console.log(val);
+        return val?.indexOf('nad83') > -1;
+      },
       then: yup.number().required().oneOf([1996, 2007, 2011]),
     })
     .label('NGS Adjustment'),
