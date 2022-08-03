@@ -8,6 +8,7 @@ import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import {
   updateAction,
+  getStateForId,
   getStateValue,
 } from './CornerSubmission.jsx';
 import { accuracy, status } from './Options';
@@ -19,7 +20,7 @@ const Metadata = () => {
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId(id),
     resolver: yupResolver(schema),
   });
 
@@ -89,7 +90,7 @@ const Metadata = () => {
           name="description"
           render={({ field }) => (
             <LimitedTextarea
-              value={state.description}
+              value={getStateValue(state, id, field.name)}
               placeholder="Notes about the monument"
               rows="5"
               maxLength={1000}
@@ -109,7 +110,7 @@ const Metadata = () => {
           name="notes"
           render={({ field }) => (
             <LimitedTextarea
-              value={state.notes}
+              value={getStateValue(state, id, field.name)}
               placeholder="Information about the method used to locate the monument (GPS, traditional survey instrument); type of GPS receiver; if TURN GPS network was used; if two hour OPUS solution was taken; weather conditions; etc."
               rows="5"
               maxLength={1000}

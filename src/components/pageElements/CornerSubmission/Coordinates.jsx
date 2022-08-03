@@ -12,6 +12,7 @@ import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import {
   updateAction,
+  getStateForId,
   getStateValue,
 } from './CornerSubmission.jsx';
 import { adjustment, geographic, grid, height } from './Options';
@@ -47,7 +48,7 @@ export const CoordinatePicker = () => {
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
   const { control, handleSubmit, reset, formState } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId(state, id),
     resolver: yupResolver(coordinatePickerSchema),
   });
   const [selectedTab, setSelectedTab] = useState(0);
@@ -132,7 +133,7 @@ export const Latitude = () => {
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId(state, id),
     resolver: yupResolver(latitudeSchema),
   });
 
@@ -149,13 +150,13 @@ export const Latitude = () => {
       <div>
         <h3 className="text-2xl font-semibold">Geographic Easting</h3>
         <p className="text-sm leading-none">
-          {formatDatum(state?.submissions[id]?.datum)}
+          {formatDatum(getStateValue(state, id, 'datum'))}
         </p>
       </div>
       <p className="font-semibold">Latitude</p>
       <div>
         <Input
-          value={state.northing?.degrees}
+          value={getStateValue(state, id, 'degrees')}
           placeholder="###"
           name="northing.degrees"
           label="Degrees"
@@ -169,7 +170,7 @@ export const Latitude = () => {
       </div>
       <div>
         <Input
-          value={state.northing?.minutes}
+          value={getStateValue(state, id, 'minutes')}
           label="Minutes"
           placeholder="##"
           name="northing.minutes"
@@ -183,7 +184,7 @@ export const Latitude = () => {
       </div>
       <div>
         <Input
-          value={state.northing?.seconds}
+          value={getStateValue(state, id, 'seconds')}
           label="Seconds"
           placeholder="##.00000"
           name="northing.seconds"
@@ -216,7 +217,7 @@ export const Longitude = () => {
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId,
     resolver: yupResolver(longitudeSchema),
   });
 
@@ -233,13 +234,13 @@ export const Longitude = () => {
       <div>
         <h3 className="text-2xl font-semibold">Geographic Northing</h3>
         <p className="text-sm leading-none">
-          {formatDatum(state?.submissions[id]?.datum)}
+          {formatDatum(getStateValue(state, id, 'datum'))}
         </p>
       </div>
       <p className="font-semibold">Longitude</p>
       <div>
         <Input
-          value={state.easting?.degrees}
+          value={getStateValue(state, id, 'degrees')}
           label="Degrees"
           placeholder="###"
           name="easting.degrees"
@@ -253,7 +254,7 @@ export const Longitude = () => {
       </div>
       <div>
         <Input
-          value={state.easting?.minutes}
+          value={getStateValue(state, id, 'minutes')}
           label="Minutes"
           placeholder="##"
           name="easting.minutes"
@@ -267,7 +268,7 @@ export const Longitude = () => {
       </div>
       <div>
         <Input
-          value={state.easting?.seconds}
+          value={getStateValue(state, id, 'seconds')}
           label="Seconds"
           placeholder="##.00000"
           name="easting.seconds"
@@ -291,7 +292,7 @@ export const GeographicHeight = () => {
   const { state, actions } = useStateMachine({ updateAction });
 
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId(state, id),
     resolver: yupResolver(nad83GeographicHeightSchema),
   });
 
@@ -312,7 +313,7 @@ export const GeographicHeight = () => {
         Ellipsoid Height
       </label>
       <Input
-        value={state?.height}
+        value={getStateValue(state, id, 'height')}
         label={false}
         name="height"
         inputRef={register}
@@ -409,7 +410,7 @@ export const GridCoordinates = () => {
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { handleSubmit } = useForm({
-    defaultValues: state?.submissions[id],
+    defaultValues: getStateForId(state, id),
   });
 
   const onSubmit = (data) => {
@@ -504,10 +505,12 @@ export const Review = () => {
   return (
     <>
       <div>
-        {Object.keys(state.newSheet).map((x) => (
+        {Object.keys(getStateForId(state, id)).map((x) => (
           <div className="flex justify-between" key={x}>
             <label className="font-semibold">{x}</label>
-            <span>{x in keyMap && keyMap[x](state?.submissions[id][x])}</span>
+            <span>
+              {x in keyMap && keyMap[x](getStateValue(state, id, [x]))}
+            </span>
           </div>
         ))}
       </div>
