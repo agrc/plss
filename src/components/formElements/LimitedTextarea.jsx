@@ -14,7 +14,7 @@ export const LimitedTextarea = ({
   disabled,
 }) => {
   const { limit, remaining } = useMaxLength({
-    value: field.value,
+    value: field.value ?? value,
     limit: maxLength,
   });
 
@@ -25,14 +25,15 @@ export const LimitedTextarea = ({
         id={field.name}
         rows={rows}
         type="textarea"
-        value={value}
         maxLength={limit}
         placeholder={placeholder}
         className={clsx('rounded px-2 text-black', className)}
         {...field}
-      ></textarea>
+      >
+        {field.value ?? value}
+      </textarea>
       <CharactersRemaining limit={limit} remaining={remaining} />
-      <ErrorMessage errors={errors} name={name} as={ErrorMessageTag} />
+      <ErrorMessage errors={errors} name={field.name} as={ErrorMessageTag} />
     </div>
   );
 };
