@@ -17,6 +17,22 @@ export const updateAction = (state, payload) => {
 
   return newState;
 };
+export const getStateForId = (state, id) =>
+  id in (state?.submissions ?? {}) ? state.submissions[id] : {};
+export const getStateValue = (state, id, property) => {
+  const data = getStateForId(state, id);
+  const keys = Object.keys(data);
+
+  if (keys.length === 0) {
+    return '';
+  }
+
+  if (!(property in data)) {
+    return '';
+  }
+
+  return data[property];
+};
 
 function ErrorFallback({ error }) {
   return (

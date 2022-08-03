@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
@@ -6,12 +6,14 @@ import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Listbox, RadioGroup, Tab, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { RadioGroup, Tab } from '@headlessui/react';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import { updateAction } from './CornerSubmission.jsx';
+import {
+  updateAction,
+  getStateValue,
+} from './CornerSubmission.jsx';
 import { adjustment, geographic, grid, height } from './Options';
 import {
   coordinatePickerSchema,
@@ -40,31 +42,6 @@ const getOpenTabIndex = (datum) => {
   return index;
 };
 
-const getSelectedOption = (datum) => {
-  if (!datum) {
-    return '';
-  }
-
-  if (datum.indexOf('-') < 0) {
-    return '';
-  }
-
-  const [type] = datum.split('-');
-  let options = geographic;
-
-  if (type === 'grid') {
-    options === grid;
-  }
-
-  const result = options.find((item) => item.value === datum);
-
-  if (!result) {
-    return '';
-  }
-
-  return result;
-};
-
 export const CoordinatePicker = () => {
   let { id } = useParams();
   const navigate = useNavigate();
@@ -73,12 +50,10 @@ export const CoordinatePicker = () => {
     defaultValues: state?.submissions[id],
     resolver: yupResolver(coordinatePickerSchema),
   });
-  const [selected, setSelected] = useState();
   const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
-    setSelected(getSelectedOption(state?.submissions[id]?.datum));
-    setSelectedTab(getOpenTabIndex(state?.submissions[id]?.datum));
+    setSelectedTab(getOpenTabIndex(getStateValue(state, id, 'datum')));
   }, [state, id]);
 
   const onSubmit = (data) => {
@@ -96,7 +71,7 @@ export const CoordinatePicker = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <span className="font-semibold">Collected coordinate format</span>
-      <Tab.Group selectedIndex={selectedTab} onChange={() => setSelected(null)}>
+      <Tab.Group selectedIndex={selectedTab}>
         <Tab.List className="flex space-x-1 rounded-xl bg-slate-900/20 p-1">
           {Object.keys(formats).map((category) => (
             <Tab
@@ -121,70 +96,14 @@ export const CoordinatePicker = () => {
               <Controller
                 control={control}
                 name="datum"
-                render={({ field: { onChange } }) => (
-                  <Listbox
-                    value={selected}
-                    onChange={(option) => {
-                      onChange(option.value);
-                      setSelected(option);
-                    }}
-                  >
-                    <div className="relative z-10 mt-1">
-                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                        <span className="block truncate text-slate-800">
-                          {selected?.label ?? 'coordinate system'}
-                        </span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <SelectorIcon
-                            className="h-5 w-5 text-slate-400"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Listbox.Button>
-                      <Transition
-                        as={Fragment}
-                        leave="transition ease-in duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                          {options.map((option, id) => (
-                            <Listbox.Option
-                              key={id}
-                              className={({ active }) =>
-                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                  active
-                                    ? 'bg-indigo-100 text-indigo-900'
-                                    : 'text-slate-900'
-                                }`
-                              }
-                              value={option}
-                            >
-                              {({ selected }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? 'font-medium' : 'font-normal'
-                                    }`}
-                                  >
-                                    {option.label}
-                                  </span>
-                                  {selected ? (
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
-                                      <CheckIcon
-                                        className="h-5 w-5"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  ) : null}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Transition>
-                    </div>
-                  </Listbox>
+                render={({ field: { onChange, name } }) => (
+                  <Select
+                    name={name}
+                    options={options}
+                    placeholder="Coordinate System"
+                    currentValue={getStateValue(state, id, name)}
+                    onUpdate={onChange}
+                  />
                 )}
               />
               <ErrorMessage
@@ -201,7 +120,6 @@ export const CoordinatePicker = () => {
         next={true}
         clear={() => {
           reset({ datum: '' });
-          setSelected(null);
         }}
       />
       <DevTool control={control} />
@@ -445,15 +363,6 @@ export const GeographicHeight = () => {
           </RadioGroup>
         )}
       />
-      {/* <Select
-            name="unit"
-            value={state?.unit}
-            placeholder="unit"
-            options={}
-            inputRef={register}
-            className="bg-slate-200"
-            right={true}
-          /> */}
       <ErrorMessage
         errors={formState.errors}
         name="height"
@@ -469,12 +378,18 @@ export const GeographicHeight = () => {
           <label htmlFor="adjustment" className="font-semibold">
             NGS Adjustment
           </label>
-          <Select
-            value={state.adjustment}
-            placeholder="Select the year"
+          <Controller
+            control={control}
             name="adjustment"
-            options={adjustment}
-            inputRef={register}
+            render={({ field: { onChange, name } }) => (
+              <Select
+                name={name}
+                options={adjustment}
+                placeholder="Select the year"
+                currentValue={getStateValue(state, id, 'adjustment')}
+                onUpdate={onChange}
+              />
+            )}
           />
           <ErrorMessage
             errors={formState.errors}

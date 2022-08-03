@@ -6,7 +6,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import { updateAction } from './CornerSubmission.jsx';
+import {
+  updateAction,
+  getStateValue,
+} from './CornerSubmission.jsx';
 import { accuracy, status } from './Options';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
@@ -35,12 +38,18 @@ const Metadata = () => {
         <label htmlFor="monumentStatus" className="font-semibold">
           Monument Status
         </label>
-        <Select
-          value={state.status}
-          placeholder="What is the status"
+        <Controller
+          control={control}
           name="status"
-          options={status}
-          inputRef={register}
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={status}
+              placeholder="What is the status"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
         />
         <ErrorMessage
           errors={formState.errors}
@@ -52,12 +61,18 @@ const Metadata = () => {
         <label htmlFor="accuracy" className="font-semibold">
           Accuracy
         </label>
-        <Select
-          value={state.accuracy}
-          placeholder="Choose the accuracy"
+        <Controller
+          control={control}
           name="accuracy"
-          options={accuracy}
-          inputRef={register}
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={accuracy}
+              placeholder="Choose the accuracy"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
         />
         <ErrorMessage
           errors={formState.errors}
