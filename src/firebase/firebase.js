@@ -5,7 +5,7 @@ import { connectStorageEmulator, getStorage } from 'firebase/storage';
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 
 let firebaseApp;
-const usingEmulator = () => import.meta.env.VITE_USE_FIREBASE_EMULATOR;
+const usingEmulator = () => import.meta.env.DEV;
 
 export const setupFirebase = () => {
   try {
