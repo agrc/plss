@@ -18,7 +18,7 @@ export const geographic = [
   { label: 'NAD83 Geographic', value: 'geographic-nad83' },
 ];
 export const grid = [
-  { label: 'NAD83 State Plane', value: 'grid-nad83.state-place' },
+  { label: 'NAD83 State Plane', value: 'grid-nad83.state-plane' },
   { label: 'NAD83 UTM Zone 12N', value: 'grid-nad83.utm12n' },
   { label: 'NAD83 UTM Zone 11N', value: 'grid-nad83.utm11n' },
   { label: 'NAD27 State Plane', value: 'grid-nad27' },

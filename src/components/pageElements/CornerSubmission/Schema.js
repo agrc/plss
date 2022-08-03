@@ -28,6 +28,7 @@ export const coordinatePickerSchema = yup.object().shape({
         'grid-nad83.state-plane',
         'grid-nad83.utm12n',
         'grid-nad83.utm11n',
+        'grid-nad27',
       ],
       'A valid selection must be made'
     ),
