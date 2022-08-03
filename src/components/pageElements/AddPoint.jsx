@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useImmer } from 'use-immer';
 import { httpsCallable } from 'firebase/functions';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { LimitedTextarea } from '../formElements/LimitedTextarea.jsx';
 import { Input } from '../formElements/Inputs.jsx';
 import { Button } from '../formElements/Buttons.jsx';

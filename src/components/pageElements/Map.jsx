@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import esriConfig from '@arcgis/core/config';
+import '@ugrc/layer-selector/src/LayerSelector.css';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
@@ -14,7 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import clsx from 'clsx';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
 import { addFunctions } from '../../firebase/firebase.js';
 import { useAuthState } from '../contexts/AuthContext.jsx';
