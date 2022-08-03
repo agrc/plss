@@ -21,48 +21,49 @@ const Template = (args) => <Select {...args} />;
 export const Empty = Template.bind({});
 Empty.args = {
   name: 'input',
-  inputRef: () => {
-    return {
-      onChange: () => {},
-    };
-  },
 };
 
 export const Placeholder = Template.bind({});
 Placeholder.args = {
-  placeholder: 'place holder',
+  placeholder: 'this is a place holder',
   name: 'input',
-  inputRef: () => {
-    return {
-      onChange: () => {},
-    };
-  },
+  options: [],
+  currentValue: null,
+  onChange: () => {},
 };
 
 export const Options = Template.bind({});
 Options.args = {
-  placeholder: 'place holder',
+  placeholder: 'options as primitives',
   options: ['1', '2', '3'],
   name: 'input',
-  inputRef: () => {
-    return {
-      onChange: () => {},
-    };
-  },
+  currentValue: null,
+  onChange: () => {},
 };
 
 export const LabelValue = Template.bind({});
 LabelValue.args = {
-  placeholder: 'place holder',
+  placeholder: 'options as objects',
   options: [
     { label: '1', value: 'one' },
     { label: '2', value: 'two' },
     { label: '3', value: 'three' },
   ],
   name: 'input',
-  inputRef: () => {
-    return {
-      onChange: () => {},
-    };
-  },
+  currentValue: null,
+  onChange: () => {},
+};
+
+export const SelectedItem = Template.bind({});
+const options = [
+  { label: '1', value: 'one' },
+  { label: '2', value: 'two' },
+  { label: '3', value: 'three' },
+];
+SelectedItem.args = {
+  placeholder: 'place holder should not be used',
+  options,
+  name: 'input',
+  currentValue: options[2],
+  onChange: () => {},
 };
