@@ -8,7 +8,6 @@ import extractTownshipInformation from './blmPointId';
 import clsx from 'clsx';
 
 export const updateAction = (state, payload) => {
-  // { submissions: { blmid: {data}}}
   const newState = { ...state };
   newState.submissions[payload.blmPointId] = {
     ...newState.submissions[payload.blmPointId],
