@@ -1,5 +1,5 @@
 import { createStore, StateMachineProvider } from 'little-state-machine';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Metadata from './Metadata.jsx';
 
 export default {
@@ -7,11 +7,13 @@ export default {
   component: Metadata,
   decorators: [
     (Story) => (
-      <BrowserRouter>
-        <StateMachineProvider>
-          <Story />
-        </StateMachineProvider>
-      </BrowserRouter>
+      <StateMachineProvider>
+        <MemoryRouter initialEntries={['/submission/1']}>
+          <Routes>
+            <Route path="/submission/:id" element={<Story />} />
+          </Routes>
+        </MemoryRouter>
+      </StateMachineProvider>
     ),
   ],
   parameters: {
@@ -30,7 +32,15 @@ export default {
 const Template = (args) => {
   const data = { ...args };
   createStore({
-    newSheet: {},
+    name: 'submissions',
+    submissions: {
+      1: {
+        blmPointId: 1,
+        notes: 'hi there',
+        status: 'existing',
+        accuracy: 'survey',
+      },
+    },
   });
 
   return (

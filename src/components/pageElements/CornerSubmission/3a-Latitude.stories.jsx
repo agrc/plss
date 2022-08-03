@@ -1,5 +1,5 @@
 import { createStore, StateMachineProvider } from 'little-state-machine';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Latitude } from './Coordinates.jsx';
 
 export default {
@@ -7,11 +7,20 @@ export default {
   component: Latitude,
   decorators: [
     (Story) => (
-      <BrowserRouter>
-        <StateMachineProvider>
-          <Story />
-        </StateMachineProvider>
-      </BrowserRouter>
+      <StateMachineProvider>
+        <MemoryRouter
+          initialEntries={[
+            '/submission/1/coordinates/geographic/nad83/northing',
+          ]}
+        >
+          <Routes>
+            <Route
+              path="/submission/:id/coordinates/geographic/:system/northing"
+              element={<Story />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </StateMachineProvider>
     ),
   ],
   parameters: {
@@ -30,7 +39,16 @@ export default {
 const Template = (args) => {
   const data = { ...args };
   createStore({
-    newSheet: {},
+    name: 'submissions',
+    submissions: {
+      1: {
+        blmPointId: 1,
+        notes: 'hi there',
+        status: 'existing',
+        accuracy: 'survey',
+        datum: 'geographic-nad83',
+      },
+    },
   });
 
   return (
