@@ -17,12 +17,11 @@ export default function Menu() {
   const classes = clsx(
     [
       'menu',
-      'z-10',
+      'z-20',
       'flex',
       'py-4',
       'bg-slate-900',
       'shadow',
-      'md:z-0',
       'menu',
       'md:justify-between',
       'justify-evenly',

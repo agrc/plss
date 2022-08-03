@@ -128,7 +128,7 @@ export default function CornerSubmission() {
           <span className="mx-auto my-4 inline-block h-1 w-2/3 rounded bg-slate-500"></span>
         </div>
       )}
-      <div className="mb-2 overflow-y-auto pb-16">
+      <div className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Outlet />
         </ErrorBoundary>

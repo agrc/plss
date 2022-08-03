@@ -38,7 +38,7 @@ const urls = {
 };
 
 const loadingCss =
-  'z-10 transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700 via-teal-100 to-purple-600';
+  'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
 export default function PlssMap({ state, dispatch, color }) {
   const { state: userState } = useAuthState();

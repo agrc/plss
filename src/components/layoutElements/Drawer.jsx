@@ -85,8 +85,10 @@ export default function Drawer({
       'rounded-t-2xl',
       'sm:rounded-t-none',
       'px-4',
-      'pt-4',
-      'overflow-hidden',
+      'py-4',
+      'md:pb-12',
+      'overflow-auto',
+      'z-10',
     ],
     {
       'drawer--closed': !open,
