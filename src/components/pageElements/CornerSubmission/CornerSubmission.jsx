@@ -52,6 +52,7 @@ export default function CornerSubmission() {
   const pointId = id;
   const submissions = {};
   submissions[pointId] = {};
+
   createStore(
     {
       submissions: submissions,

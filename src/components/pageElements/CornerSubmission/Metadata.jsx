@@ -1,8 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { DevTool } from '@hookform/devtools';
 import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import extractTownshipInformation from './blmPointId.js';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
@@ -20,13 +22,27 @@ const Metadata = () => {
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(id),
+    defaultValues: getStateForId(state, id),
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
+    const townshipInformation = extractTownshipInformation(id);
+    data = { ...townshipInformation, ...data };
     actions.updateAction(data);
     navigate(`/submission/${id}/coordinates`);
+  };
+  const onReset = () => {
+    const defaults = {
+      blmPointId: id,
+      notes: '',
+      description: '',
+      status: '',
+      accuracy: '',
+    };
+
+    actions.updateAction(defaults);
+    reset(defaults);
   };
 
   return (
@@ -34,6 +50,7 @@ const Metadata = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <DevTool control={control} />
       <input type="hidden" value={id} {...register('blmPointId')} />
       <div>
         <label htmlFor="monumentStatus" className="font-semibold">
@@ -121,7 +138,7 @@ const Metadata = () => {
           )}
         />
       </div>
-      <Wizard back={() => navigate(-1)} next={true} clear={reset} />
+      <Wizard back={() => navigate(-1)} next={true} clear={onReset} />
     </form>
   );
 };

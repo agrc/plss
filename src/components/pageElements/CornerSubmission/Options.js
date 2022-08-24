@@ -33,3 +33,8 @@ export const height = [
   { label: 'US Survey Feet', value: 'ft.survey' },
   { label: 'International Feet', value: 'ft' },
 ];
+export const statePlaneZones = [
+  { label: 'North', value: 'north' },
+  { label: 'Central', value: 'central' },
+  { label: 'South', value: 'south' },
+];

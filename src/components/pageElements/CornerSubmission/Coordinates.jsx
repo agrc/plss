@@ -15,7 +15,13 @@ import {
   getStateForId,
   getStateValue,
 } from './CornerSubmission.jsx';
-import { adjustment, geographic, grid, height } from './Options';
+import {
+  adjustment,
+  geographic,
+  grid,
+  height,
+  statePlaneZones,
+} from './Options';
 import {
   coordinatePickerSchema,
   latitudeSchema,
@@ -59,10 +65,11 @@ export const CoordinatePicker = () => {
 
   const onSubmit = (data) => {
     actions.updateAction(data);
+    const [datum, system] = data.datum.split('-');
     navigate(
-      `/submission/${id}/coordinates/geographic/${
-        data.datum.split('-')[1]
-      }/northing`
+      `/submission/${id}/coordinates/${datum}/${system}/${
+        datum === 'geographic' ? 'northing' : ''
+      }`
     );
   };
 
@@ -409,13 +416,13 @@ export const GridCoordinates = () => {
   const { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
-  const { handleSubmit } = useForm({
+  const { control, register, handleSubmit, reset, formState } = useForm({
     defaultValues: getStateForId(state, id),
   });
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${id}/coordinates/grid`);
+    navigate(`/submission/${id}/review`);
   };
 
   return (
@@ -424,75 +431,142 @@ export const GridCoordinates = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div>
-        <label className="font-semibold" htmlFor="grid">
-          Grid Coordinates
+        <h3 className="text-2xl font-semibold">Grid Coordinates</h3>
+        <p className="text-sm leading-none">
+          {formatDatum(getStateValue(state, id, 'datum'))}
+        </p>
+      </div>
+      <div>
+        <label htmlFor="grid.zone" className="font-semibold">
+          State plane zone
         </label>
+        <Controller
+          control={control}
+          name="grid.zone"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={statePlaneZones}
+              placeholder="What is the zone"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.zone"
+          as={ErrorMessageTag}
+        />
       </div>
-      <div className="row">
-        <div className="col-sm-6 form-group">
-          <label htmlFor="Grid.Zone" className="font-semibold">
-            State Plane Zone
-          </label>
-          <select
-            className="form-control"
-            name="Grid.Zone"
-            data-required="true"
-          >
-            <option>North Zone</option>
-            <option>Central Zone</option>
-            <option>South Zone</option>
-          </select>
-        </div>
-        <div className="col-sm-6 form-group">
-          <label htmlFor="Grid.HorizontalUnits" className="font-semibold">
-            Horizontal Units
-          </label>
-          <select
-            className="form-control"
-            name="Grid.HorizontalUnits"
-            data-required="true"
-          >
-            <option>US Survey Feet</option>
-            <option>International Feet</option>
-            <option selected="selected">Meters</option>
-          </select>
-        </div>
+      <div>
+        <label htmlFor="grid.height" className="font-semibold">
+          Horizontal units
+        </label>
+        <Controller
+          control={control}
+          name="grid.height"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={height}
+              placeholder="What are the units"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.height"
+          as={ErrorMessageTag}
+        />
       </div>
-      <div className="row">
-        <div className="col-sm-4 form-group">
-          <label htmlFor="Grid.Northing" className="font-semibold">
-            Northing
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="Grid.Northing"
-            data-required="true"
-          />
-        </div>
-        <div className="col-sm-4 form-group">
-          <label htmlFor="Grid.Easting" className="font-semibold">
-            Easting
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="Grid.Easting"
-            data-required="true"
-          />
-        </div>
-        <div className="col-sm-4 form-group">
-          <label htmlFor="Grid.Elevation" className="font-semibold">
-            NAVD88 Elevation
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="Grid.Elevation"
-            data-required="true"
-          />
-        </div>
+      <div>
+        <label htmlFor="grid.adjustment" className="font-semibold">
+          NGS Adjustment
+        </label>
+        <Controller
+          control={control}
+          name="grid.adjustment"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={statePlaneZones}
+              placeholder="What is the zone"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.adjustment"
+          as={ErrorMessageTag}
+        />
       </div>
+      <div>
+        <label htmlFor="grid.northing" className="font-semibold">
+          Northing
+        </label>
+        <Input
+          value={getStateValue(state, id, 'northing')}
+          label={false}
+          name="grid.northing"
+          inputRef={register}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.northing"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <div>
+        <label htmlFor="grid.easting" className="font-semibold">
+          Easting
+        </label>
+        <Input
+          value={getStateValue(state, id, 'easting')}
+          label={false}
+          name="grid.easting"
+          inputRef={register}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.easting"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <div>
+        <label htmlFor="grid.elevation" className="font-semibold">
+          NAVD88 elevation
+        </label>
+        <Input
+          value={getStateValue(state, id, 'grid.elevation')}
+          label={false}
+          name="grid.elevation"
+          inputRef={register}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.elevation"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <Wizard
+        back={() => navigate(-1)}
+        next={true}
+        clear={() =>
+          reset({
+            'grid.zone': '',
+            'grid.adjustment': '',
+            'grid.height': '',
+            'grid.northing': '',
+            'grid.easting': '',
+            'grid.elevation': '',
+          })
+        }
+      />
     </form>
   );
 };
