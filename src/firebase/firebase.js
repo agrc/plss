@@ -32,7 +32,9 @@ export const addAuth = () => {
   auth = getAuth(firebaseApp);
   try {
     if (usingEmulator()) {
-      connectAuthEmulator(auth, 'http://localhost:9099');
+      connectAuthEmulator(auth, 'http://localhost:9099', {
+        disableWarnings: true,
+      });
     }
   } catch (error) {
     console.error({ error });
