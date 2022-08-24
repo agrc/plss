@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { contrastColor } from 'contrast-color';
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Popover, Transition } from '@headlessui/react';
 
 export default function Legend() {

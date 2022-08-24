@@ -1,4 +1,4 @@
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/outline';
+import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { createStore, StateMachineProvider } from 'little-state-machine';
 import { Outlet, useParams } from 'react-router-dom';

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const getDefaultValue = (value, placeholder, options) => {
   if (options?.length < 1) {
@@ -46,7 +46,7 @@ export const Select = ({ options, currentValue, onUpdate, placeholder }) => {
             {getDefaultValue(value, placeholder, options)}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <SelectorIcon
+            <ChevronDownIcon
               className="h-5 w-5 text-slate-400"
               aria-hidden="true"
             />

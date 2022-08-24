@@ -6,8 +6,8 @@ import {
   FolderIcon,
   PlusCircleIcon,
   UserCircleIcon,
-  ColorSwatchIcon,
-} from '@heroicons/react/outline';
+  SwatchIcon,
+} from '@heroicons/react/24/outline';
 import { useAuthState } from '../contexts/AuthContext.jsx';
 
 export default function Menu() {
@@ -46,7 +46,7 @@ export default function Menu() {
           </MenuItem>
         </>
       )}
-      <MenuItem Icon={ColorSwatchIcon} route="/legend">
+      <MenuItem Icon={SwatchIcon} route="/legend">
         Map Legend
       </MenuItem>
     </nav>
