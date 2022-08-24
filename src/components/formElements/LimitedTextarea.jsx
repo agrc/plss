@@ -29,9 +29,8 @@ export const LimitedTextarea = ({
         placeholder={placeholder}
         className={clsx('rounded px-2 text-black', className)}
         {...field}
-      >
-        {field.value ?? value}
-      </textarea>
+        value={field.value ?? value}
+      ></textarea>
       <CharactersRemaining limit={limit} remaining={remaining} />
       <ErrorMessage errors={errors} name={field.name} as={ErrorMessageTag} />
     </div>
