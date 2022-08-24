@@ -25,7 +25,7 @@ import { useAuthState } from '../contexts/AuthContext.jsx';
 esriConfig.assetsPath = '/assets';
 
 const functions = addFunctions();
-const myPoints = httpsCallable(functions, 'getMyPoints');
+const myPoints = httpsCallable(functions, 'functions-httpsGetPoints');
 
 const urls = {
   landownership:
