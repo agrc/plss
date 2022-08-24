@@ -85,13 +85,11 @@ export const nad83GeographicHeightSchema = yup.object().shape({
     .min(2000)
     .max(14000)
     .label('Ellipsoid Height'),
+  datum: yup.string().optional(),
   adjustment: yup
-    .string()
-    .when('system', {
-      is: (val) => {
-        console.log(val);
-        return val?.indexOf('nad83') > -1;
-      },
+    .number()
+    .when('datum', {
+      is: 'geographic-nad83',
       then: yup.number().required().oneOf([1996, 2007, 2011]),
     })
     .label('NGS Adjustment'),

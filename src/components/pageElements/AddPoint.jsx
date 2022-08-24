@@ -18,7 +18,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeStyle: 'short',
 });
 const functions = addFunctions();
-const addPoint = httpsCallable(functions, 'addPoint');
+const addPoint = httpsCallable(functions, 'functions-httpsPostPoint');
 
 export default function AddPoint({
   active,

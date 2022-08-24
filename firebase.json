@@ -1,6 +1,7 @@
 {
   "functions": {
     "source": ".",
+    "codebase": "src",
     "runtime": "nodejs16",
     "ignore": [
       ".emulator-data",
