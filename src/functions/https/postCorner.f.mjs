@@ -21,10 +21,11 @@ const postCorner = onCall(async (data, context) => {
     };
 
     await schemas.metadataSchema.validate(data, options);
-    await schemas.coordinatePickerSchema.validate(data, options);
-    await schemas.nad83GeographicHeightSchema.validate(data, options);
-    await schemas.longitudeSchema.validate(data, options);
-    await schemas.latitudeSchema.validate(data, options);
+    // await schemas.coordinatePickerSchema.validate(data, options);
+
+    // await schemas.nad83GeographicHeightSchema.validate(data, options);
+    // await schemas.longitudeSchema.validate(data, options);
+    // await schemas.latitudeSchema.validate(data, options);
   } catch (error) {
     logError('validation error', error, {
       structuredData: true,
@@ -37,9 +38,15 @@ const postCorner = onCall(async (data, context) => {
     );
   }
 
+  // supplementals
+  // county from point id or TRS or input coordinates
+  // project coordinates to what I believe we want them in Geographic Lat Long Height in NAD83 (2011)
+  // Grid coordinates should be meters state plane NAD83
+  // blm point id extractions
+
   const db = getFirestore();
   data.created_at = new Date();
-  data.location = new GeoPoint(data.northing.degrees, data.easting.degrees);
+  // data.location = new GeoPoint(data.northing.degrees, data.easting.degrees);
   data.submittedBy = {
     id: context.auth.uid,
     name: context.auth.token.name,
