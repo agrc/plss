@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
@@ -6,7 +7,10 @@ import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import { RadioGroup, Tab } from '@headlessui/react';
+import { httpsCallable } from 'firebase/functions';
+import { addFunctions } from '../../../firebase/firebase.js';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
@@ -33,6 +37,8 @@ import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers';
 
 const formats = { Grid: grid, Geographic: geographic };
+const functions = addFunctions();
+const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
 
 const getOpenTabIndex = (datum) => {
   if (!datum) {
@@ -588,24 +594,248 @@ export const GridCoordinates = () => {
 
 export const Review = () => {
   const { id } = useParams();
-  const { state } = useStateMachine({ updateAction });
+  const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
+  const data = getStateForId(state, id);
+  const { mutate } = useMutation(
+    ['save-corner', id],
+    (data) => saveCorner(data),
+    {
+      onSuccess: (response) => {
+        console.log('success', response);
+        delete state[id];
+        actions.updateAction(state);
+        navigate('/', { replace: true });
+      },
+      onError: (error) => {
+        console.log('error', error);
+      },
+    }
+  );
 
   return (
     <>
-      <div>
-        {Object.keys(getStateForId(state, id)).map((x) => (
-          <div className="flex justify-between" key={x}>
-            <label className="font-semibold">{x}</label>
-            <span>
-              {x in keyMap && keyMap[x](getStateValue(state, id, [x]))}
-            </span>
-          </div>
-        ))}
+      <div className="grid gap-2">
+        <MetadataReview blmPointId={data.blmPointId} {...data.metadata} />
+        <CoordinateReview
+          datum={data.datum}
+          grid={data.grid}
+          geographic={data.geographic}
+        />
       </div>
       <div className="mt-8 flex justify-center">
-        <Wizard back={() => navigate(-1)} finish={() => {}} />
+        <Wizard
+          back={() => navigate(-1)}
+          finish={async () => {
+            await mutate(data);
+          }}
+        />
       </div>
     </>
   );
+};
+
+const MetadataReview = ({
+  blmPointId,
+  status,
+  notes,
+  description,
+  accuracy,
+}) => {
+  return (
+    <>
+      <div className="mb-4 flex flex-col text-center">
+        <h2 className="text-xl font-bold uppercase">Corner submission for</h2>
+        <p className="text-lg font-bold">{blmPointId}</p>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">Monument Status</span>
+        <span className="ml-4">{keyMap.status(status)}</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">Accuracy</span>
+        <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">Monument Description</span>
+        <span className="ml-4">{description}</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">General Notes</span>
+        <span className="ml-4">{notes}</span>
+      </div>
+    </>
+  );
+};
+MetadataReview.propTypes = {
+  blmPointId: PropTypes.string,
+  status: PropTypes.string,
+  notes: PropTypes.string,
+  description: PropTypes.string,
+  accuracy: PropTypes.string,
+};
+
+const getDatumParts = (input) => {
+  // format grid-nad83.state-plane | grid-nad27
+  const formatted = formatDatum(input);
+  let parts = input;
+  let zone;
+
+  if (input.indexOf('.') > -1) {
+    [parts, zone] = input.split('.');
+  }
+
+  const [coordinateType, datum] = parts.split('-');
+
+  return {
+    original: input,
+    formatted,
+    coordinateType,
+    datum,
+    zone,
+  };
+};
+
+const CoordinateReview = ({ datum, grid, geographic }) => {
+  const parts = getDatumParts(datum);
+
+  return (
+    <>
+      <div className="flex justify-between">
+        <span className="font-semibold">Datum</span>
+        <span>{parts.formatted}</span>
+      </div>
+      {parts.coordinateType === 'grid' && (
+        <GridCoordinateReview grid={grid} datum={parts} />
+      )}
+      {parts.coordinateType === 'geographic' && (
+        <GeographicCoordinateReview geographic={geographic} datum={parts} />
+      )}
+    </>
+  );
+};
+CoordinateReview.propTypes = {
+  datum: PropTypes.string.isRequired,
+  grid: PropTypes.shape({
+    zone: PropTypes.string,
+    northing: PropTypes.number,
+    easting: PropTypes.number,
+    elevation: PropTypes.number,
+    unit: PropTypes.string,
+    adjustment: PropTypes.string,
+  }),
+  geographic: PropTypes.shape({
+    northing: PropTypes.shape({
+      degrees: PropTypes.number,
+      minutes: PropTypes.number,
+      seconds: PropTypes.number,
+    }),
+    easting: PropTypes.shape({
+      degrees: PropTypes.number,
+      minutes: PropTypes.number,
+      seconds: PropTypes.number,
+    }),
+    height: PropTypes.number,
+    unit: PropTypes.string,
+    adjustment: PropTypes.string,
+  }),
+};
+
+const GridCoordinateReview = ({ grid, datum }) => {
+  const configuration = {
+    zone: ['grid-nad83.state-plane', 'grid-nad27'],
+    adjustment: [
+      'grid-nad83.state-plane',
+      'grid-nad83.utm12n',
+      'grid-nad83.utm11n',
+    ],
+  };
+
+  return (
+    <>
+      {datum.original in configuration.zone && (
+        <div className="flex justify-between">
+          <span className="font-semibold">Zone</span>
+          <span>{keyMap.zone(grid?.zone)}</span>
+        </div>
+      )}
+      {datum.original in configuration.adjustment && (
+        <div className="flex justify-between">
+          <span className="font-semibold">Adjustment</span>
+          <span>{keyMap.adjustment(grid?.adjustment)}</span>
+        </div>
+      )}
+      <div className="flex justify-between">
+        <span className="font-semibold">Unit</span>
+        <span>{keyMap.unit(grid?.unit)}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">Coordinates</span>
+        <span>{`${grid?.northing}, ${grid?.easting}`}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">NAVD88 Elevation</span>
+        <span>{grid?.elevation}</span>
+      </div>
+    </>
+  );
+};
+GridCoordinateReview.propTypes = {
+  grid: PropTypes.shape({
+    zone: PropTypes.string,
+    northing: PropTypes.number,
+    easting: PropTypes.number,
+    elevation: PropTypes.number,
+    unit: PropTypes.string,
+    adjustment: PropTypes.string,
+  }),
+  datum: PropTypes.object.isRequired,
+};
+
+const GeographicCoordinateReview = ({ geographic, datum }) => {
+  const configuration = {
+    adjustment: ['geographic-nad83'],
+  };
+
+  return (
+    <>
+      {datum.original in configuration.adjustment && (
+        <div className="flex justify-between">
+          <span className="font-semibold">Adjustment</span>
+          <span>{keyMap.adjustment(geographic?.adjustment)}</span>
+        </div>
+      )}
+      <div className="flex justify-between">
+        <span className="font-semibold">Coordinates</span>
+        <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
+        <span>{`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">Vertical Units</span>
+        <span>{keyMap.unit(geographic?.unit)}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">Ellipsoid Height</span>
+        <span>{geographic?.height}</span>
+      </div>
+    </>
+  );
+};
+GeographicCoordinateReview.propTypes = {
+  geographic: PropTypes.shape({
+    northing: PropTypes.shape({
+      degrees: PropTypes.number,
+      minutes: PropTypes.number,
+      seconds: PropTypes.number,
+    }),
+    easting: PropTypes.shape({
+      degrees: PropTypes.number,
+      minutes: PropTypes.number,
+      seconds: PropTypes.number,
+    }),
+    height: PropTypes.number,
+    unit: PropTypes.string,
+    adjustment: PropTypes.string,
+  }),
+  datum: PropTypes.object.isRequired,
 };
