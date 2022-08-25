@@ -224,7 +224,7 @@ export const Longitude = () => {
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId,
+    defaultValues: getStateForId(state, id),
     resolver: yupResolver(longitudeSchema),
   });
 
