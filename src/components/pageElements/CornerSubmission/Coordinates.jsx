@@ -21,7 +21,7 @@ import {
   grid,
   height,
   statePlaneZones,
-} from './Options';
+} from './Options.mjs';
 import {
   coordinatePickerSchema,
   latitudeSchema,

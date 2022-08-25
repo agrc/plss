@@ -13,7 +13,7 @@ import {
   getStateForId,
   getStateValue,
 } from './CornerSubmission.jsx';
-import { accuracy, status } from './Options';
+import { accuracy, status } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 

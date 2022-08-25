@@ -2,9 +2,11 @@ import {
   accuracy,
   status,
   grid,
+  height,
   adjustment,
   geographic,
-} from '../pageElements/CornerSubmission/Options';
+  statePlaneZones,
+} from '../pageElements/CornerSubmission/Options.mjs';
 const formatDegrees = (dms) =>
   `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
 
@@ -22,8 +24,17 @@ export const formatDatum = (value) => {
 
   return reverseLookup(options, value);
 };
-const reverseLookup = (options, value) =>
-  options.find((item) => item.value === value).label;
+const reverseLookup = (options, value) => {
+  const option = options.find((item) => item.value === value);
+
+  if (!option) {
+    console.log('option is null', options, value);
+
+    return '-';
+  }
+
+  return option.label;
+};
 
 export const keyMap = {
   status: (value) => reverseLookup(status, value),
@@ -33,9 +44,10 @@ export const keyMap = {
   datum: (value) => formatDatum(value),
   northing: (value) => formatDegrees(value),
   easting: (value) => formatDegrees(value),
-  unit: (value) => value,
+  unit: (value) => reverseLookup(height, value),
   adjustment: (value) => reverseLookup(adjustment, value),
   height: (value) => value,
+  zone: (value) => reverseLookup(statePlaneZones, value),
 };
 
 export const getDefault = (value, nullReplacement = '-', suffix = '') => {

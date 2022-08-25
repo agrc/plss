@@ -24,9 +24,9 @@ export const grid = [
   { label: 'NAD27 State Plane', value: 'grid-nad27' },
 ];
 export const adjustment = [
-  { label: 'NGS 1996', value: 1996 },
-  { label: 'NGS 2007', value: 2007 },
-  { label: 'NGS 2011', value: 2011 },
+  { label: 'NGS 1996', value: '1996' },
+  { label: 'NGS 2007', value: '2007' },
+  { label: 'NGS 2011', value: '2011' },
 ];
 export const height = [
   { label: 'Meters', value: 'm' },
