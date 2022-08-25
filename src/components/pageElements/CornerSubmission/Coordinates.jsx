@@ -165,13 +165,13 @@ export const Latitude = () => {
         <Input
           value={getStateValue(state, id, 'degrees')}
           placeholder="###"
-          name="northing.degrees"
+          name="geographic.northing.degrees"
           label="Degrees"
           inputRef={register}
         />
         <ErrorMessage
           errors={formState.errors}
-          name="northing.degrees"
+          name="geographic.northing.degrees"
           as={ErrorMessageTag}
         />
       </div>
@@ -180,12 +180,12 @@ export const Latitude = () => {
           value={getStateValue(state, id, 'minutes')}
           label="Minutes"
           placeholder="##"
-          name="northing.minutes"
+          name="geographic.northing.minutes"
           inputRef={register}
         />
         <ErrorMessage
           errors={formState.errors}
-          name="northing.minutes"
+          name="geographic.northing.minutes"
           as={ErrorMessageTag}
         />
       </div>
@@ -194,13 +194,13 @@ export const Latitude = () => {
           value={getStateValue(state, id, 'seconds')}
           label="Seconds"
           placeholder="##.00000"
-          name="northing.seconds"
+          name="geographic.northing.seconds"
           inputRef={register}
         />
         <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
         <ErrorMessage
           errors={formState.errors}
-          name="northing.seconds"
+          name="geographic.northing.seconds"
           as={ErrorMessageTag}
         />
       </div>
@@ -209,9 +209,9 @@ export const Latitude = () => {
         next={true}
         clear={() =>
           reset({
-            'northing.seconds': '',
-            'northing.minutes': '',
-            'northing.degrees': '',
+            'geographic.northing.seconds': '',
+            'geographic.northing.minutes': '',
+            'geographic.northing.degrees': '',
           })
         }
       />
@@ -250,12 +250,12 @@ export const Longitude = () => {
           value={getStateValue(state, id, 'degrees')}
           label="Degrees"
           placeholder="###"
-          name="easting.degrees"
+          name="geographic.easting.degrees"
           inputRef={register}
         />
         <ErrorMessage
           errors={formState.errors}
-          name="easting.degrees"
+          name="geographic.easting.degrees"
           as={ErrorMessageTag}
         />
       </div>
@@ -264,12 +264,12 @@ export const Longitude = () => {
           value={getStateValue(state, id, 'minutes')}
           label="Minutes"
           placeholder="##"
-          name="easting.minutes"
+          name="geographic.easting.minutes"
           inputRef={register}
         />
         <ErrorMessage
           errors={formState.errors}
-          name="easting.minutes"
+          name="geographic.easting.minutes"
           as={ErrorMessageTag}
         />
       </div>
@@ -278,17 +278,27 @@ export const Longitude = () => {
           value={getStateValue(state, id, 'seconds')}
           label="Seconds"
           placeholder="##.00000"
-          name="easting.seconds"
+          name="geographic.easting.seconds"
           inputRef={register}
         />
         <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
         <ErrorMessage
           errors={formState.errors}
-          name="easting.seconds"
+          name="geographic.easting.seconds"
           as={ErrorMessageTag}
         />
       </div>
-      <Wizard back={() => navigate(-1)} next={true} clear={reset} />
+      <Wizard
+        back={() => navigate(-1)}
+        next={true}
+        clear={() => {
+          reset({
+            'geographic.easting.seconds': '',
+            'geographic.easting.minutes': '',
+            'geographic.easting.degrees': '',
+          });
+        }}
+      />
     </form>
   );
 };
@@ -316,18 +326,18 @@ export const GeographicHeight = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <input type="hidden" name="system" value={system} />
-      <label htmlFor="height" className="font-semibold">
+      <label htmlFor="geographic.height" className="font-semibold">
         Ellipsoid Height
       </label>
       <Input
         value={getStateValue(state, id, 'height')}
         label={false}
-        name="height"
+        name="geographic.height"
         inputRef={register}
       />
       <Controller
         control={control}
-        name="unit"
+        name="geographic.unit"
         render={({ field: { onChange } }) => (
           <RadioGroup
             className="flex space-x-1 rounded-xl bg-slate-900/20 p-1"
@@ -373,22 +383,22 @@ export const GeographicHeight = () => {
       />
       <ErrorMessage
         errors={formState.errors}
-        name="height"
+        name="geographic.height"
         as={ErrorMessageTag}
       />
       <ErrorMessage
         errors={formState.errors}
-        name="unit"
+        name="geographic.unit"
         as={ErrorMessageTag}
       />
       {system?.indexOf('nad83') > -1 && (
         <div>
-          <label htmlFor="adjustment" className="font-semibold">
+          <label htmlFor="geographic.adjustment" className="font-semibold">
             NGS Adjustment
           </label>
           <Controller
             control={control}
-            name="adjustment"
+            name="geographic.adjustment"
             render={({ field: { onChange, name } }) => (
               <Select
                 name={name}
@@ -401,7 +411,7 @@ export const GeographicHeight = () => {
           />
           <ErrorMessage
             errors={formState.errors}
-            name="adjustment"
+            name="geographic.adjustment"
             as={ErrorMessageTag}
           />
         </div>
@@ -460,12 +470,12 @@ export const GridCoordinates = () => {
         />
       </div>
       <div>
-        <label htmlFor="grid.height" className="font-semibold">
+        <label htmlFor="grid.unit" className="font-semibold">
           Horizontal units
         </label>
         <Controller
           control={control}
-          name="grid.height"
+          name="grid.unit"
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
@@ -478,7 +488,7 @@ export const GridCoordinates = () => {
         />
         <ErrorMessage
           errors={formState.errors}
-          name="grid.height"
+          name="grid.unit"
           as={ErrorMessageTag}
         />
       </div>
@@ -492,7 +502,7 @@ export const GridCoordinates = () => {
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
-              options={statePlaneZones}
+              options={adjustment}
               placeholder="What is the zone"
               currentValue={getStateValue(state, id, name)}
               onUpdate={onChange}
@@ -511,6 +521,7 @@ export const GridCoordinates = () => {
         </label>
         <Input
           value={getStateValue(state, id, 'northing')}
+          type="number"
           label={false}
           name="grid.northing"
           inputRef={register}
@@ -527,6 +538,7 @@ export const GridCoordinates = () => {
         </label>
         <Input
           value={getStateValue(state, id, 'easting')}
+          type="number"
           label={false}
           name="grid.easting"
           inputRef={register}
@@ -543,6 +555,7 @@ export const GridCoordinates = () => {
         </label>
         <Input
           value={getStateValue(state, id, 'grid.elevation')}
+          type="number"
           label={false}
           name="grid.elevation"
           inputRef={register}
@@ -560,7 +573,7 @@ export const GridCoordinates = () => {
           reset({
             'grid.zone': '',
             'grid.adjustment': '',
-            'grid.height': '',
+            'grid.unit': '',
             'grid.northing': '',
             'grid.easting': '',
             'grid.elevation': '',

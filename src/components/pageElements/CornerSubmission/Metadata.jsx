@@ -51,12 +51,12 @@ const Metadata = () => {
       <DevTool control={control} />
       <input type="hidden" value={id} {...register('blmPointId')} />
       <div>
-        <label htmlFor="monumentStatus" className="font-semibold">
+        <label htmlFor="metadata.status" className="font-semibold">
           Monument Status
         </label>
         <Controller
           control={control}
-          name="status"
+          name="metadata.status"
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
@@ -69,17 +69,17 @@ const Metadata = () => {
         />
         <ErrorMessage
           errors={formState.errors}
-          name="status"
+          name="metadata.status"
           as={ErrorMessageTag}
         />
       </div>
       <div>
-        <label htmlFor="accuracy" className="font-semibold">
+        <label htmlFor="metadata.accuracy" className="font-semibold">
           Accuracy
         </label>
         <Controller
           control={control}
-          name="accuracy"
+          name="metadata.accuracy"
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
@@ -92,17 +92,17 @@ const Metadata = () => {
         />
         <ErrorMessage
           errors={formState.errors}
-          name="accuracy"
+          name="metadata.accuracy"
           as={ErrorMessageTag}
         />
       </div>
       <div>
-        <label htmlFor="description" className="font-semibold">
+        <label htmlFor="metadata.description" className="font-semibold">
           Monument Description
         </label>
         <Controller
           control={control}
-          name="description"
+          name="metadata.description"
           render={({ field }) => (
             <LimitedTextarea
               value={getStateValue(state, id, field.name)}
@@ -117,12 +117,12 @@ const Metadata = () => {
         />
       </div>
       <div>
-        <label htmlFor="notes" className="font-semibold">
+        <label htmlFor="metadata.notes" className="font-semibold">
           General Notes
         </label>
         <Controller
           control={control}
-          name="notes"
+          name="metadata.notes"
           render={({ field }) => (
             <LimitedTextarea
               value={getStateValue(state, id, field.name)}
