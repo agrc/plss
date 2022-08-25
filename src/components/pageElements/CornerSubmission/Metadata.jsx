@@ -4,7 +4,6 @@ import { DevTool } from '@hookform/devtools';
 import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import extractTownshipInformation from './blmPointId.js';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
@@ -27,18 +26,17 @@ const Metadata = () => {
   });
 
   const onSubmit = (data) => {
-    const townshipInformation = extractTownshipInformation(id);
-    data = { ...townshipInformation, ...data };
     actions.updateAction(data);
     navigate(`/submission/${id}/coordinates`);
   };
   const onReset = () => {
     const defaults = {
-      blmPointId: id,
-      notes: '',
-      description: '',
-      status: '',
-      accuracy: '',
+      metadata: {
+        notes: '',
+        description: '',
+        status: '',
+        accuracy: '',
+      },
     };
 
     actions.updateAction(defaults);
