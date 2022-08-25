@@ -27,6 +27,7 @@ import {
   latitudeSchema,
   longitudeSchema,
   nad83GeographicHeightSchema,
+  gridCoordinatesSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers';
@@ -428,6 +429,7 @@ export const GridCoordinates = () => {
   const navigate = useNavigate();
   const { control, register, handleSubmit, reset, formState } = useForm({
     defaultValues: getStateForId(state, id),
+    resolver: yupResolver(gridCoordinatesSchema),
   });
 
   const onSubmit = (data) => {
