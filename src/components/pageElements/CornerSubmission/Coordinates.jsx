@@ -56,6 +56,27 @@ const getOpenTabIndex = (datum) => {
   return index;
 };
 
+const getDatumParts = (input) => {
+  // format grid-nad83.state-plane | grid-nad27
+  const formatted = formatDatum(input);
+  let parts = input;
+  let zone;
+
+  if (input.indexOf('.') > -1) {
+    [parts, zone] = input.split('.');
+  }
+
+  const [coordinateType, datum] = parts.split('-');
+
+  return {
+    original: input,
+    formatted,
+    coordinateType,
+    datum,
+    zone,
+  };
+};
+
 export const CoordinatePicker = () => {
   let { id } = useParams();
   const navigate = useNavigate();
@@ -673,27 +694,6 @@ MetadataReview.propTypes = {
   notes: PropTypes.string,
   description: PropTypes.string,
   accuracy: PropTypes.string,
-};
-
-const getDatumParts = (input) => {
-  // format grid-nad83.state-plane | grid-nad27
-  const formatted = formatDatum(input);
-  let parts = input;
-  let zone;
-
-  if (input.indexOf('.') > -1) {
-    [parts, zone] = input.split('.');
-  }
-
-  const [coordinateType, datum] = parts.split('-');
-
-  return {
-    original: input,
-    formatted,
-    coordinateType,
-    datum,
-    zone,
-  };
 };
 
 const CoordinateReview = ({ datum, grid, geographic }) => {
