@@ -37,6 +37,17 @@ import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers';
 
 const formats = { Grid: grid, Geographic: geographic };
+const geographicConfiguration = {
+  adjustment: ['geographic-nad83'],
+};
+const gridConfiguration = {
+  zone: ['grid-nad83.state-plane', 'grid-nad27'],
+  adjustment: [
+    'grid-nad83.state-plane',
+    'grid-nad83.utm12n',
+    'grid-nad83.utm11n',
+  ],
+};
 const functions = addFunctions();
 const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
 
@@ -342,6 +353,7 @@ export const GeographicHeight = () => {
   });
 
   const [selected, setSelected] = useState(height[0]);
+  const datum = getStateValue(state, id, 'datum');
 
   const onSubmit = (data) => {
     actions.updateAction(data);
@@ -419,7 +431,7 @@ export const GeographicHeight = () => {
         name="geographic.unit"
         as={ErrorMessageTag}
       />
-      {system?.indexOf('nad83') > -1 && (
+      {gridConfiguration.adjustment.includes(datum) && (
         <div>
           <label htmlFor="geographic.adjustment" className="font-semibold">
             NGS Adjustment
@@ -459,6 +471,8 @@ export const GridCoordinates = () => {
     resolver: yupResolver(gridCoordinatesSchema),
   });
 
+  const datum = getStateValue(state, id, 'datum');
+
   const onSubmit = (data) => {
     actions.updateAction(data);
     navigate(`/submission/${id}/review`);
@@ -475,29 +489,31 @@ export const GridCoordinates = () => {
           {formatDatum(getStateValue(state, id, 'datum'))}
         </p>
       </div>
-      <div>
-        <label htmlFor="grid.zone" className="font-semibold">
-          State plane zone
-        </label>
-        <Controller
-          control={control}
-          name="grid.zone"
-          render={({ field: { onChange, name } }) => (
-            <Select
-              name={name}
-              options={statePlaneZones}
-              placeholder="What is the zone"
-              currentValue={getStateValue(state, id, name)}
-              onUpdate={onChange}
-            />
-          )}
-        />
-        <ErrorMessage
-          errors={formState.errors}
-          name="grid.zone"
-          as={ErrorMessageTag}
-        />
-      </div>
+      {gridConfiguration.zone.includes(datum) && (
+        <div>
+          <label htmlFor="grid.zone" className="font-semibold">
+            State plane zone
+          </label>
+          <Controller
+            control={control}
+            name="grid.zone"
+            render={({ field: { onChange, name } }) => (
+              <Select
+                name={name}
+                options={statePlaneZones}
+                placeholder="What is the zone"
+                currentValue={getStateValue(state, id, name)}
+                onUpdate={onChange}
+              />
+            )}
+          />
+          <ErrorMessage
+            errors={formState.errors}
+            name="grid.zone"
+            as={ErrorMessageTag}
+          />
+        </div>
+      )}
       <div>
         <label htmlFor="grid.unit" className="font-semibold">
           Horizontal units
@@ -521,29 +537,31 @@ export const GridCoordinates = () => {
           as={ErrorMessageTag}
         />
       </div>
-      <div>
-        <label htmlFor="grid.adjustment" className="font-semibold">
-          NGS Adjustment
-        </label>
-        <Controller
-          control={control}
-          name="grid.adjustment"
-          render={({ field: { onChange, name } }) => (
-            <Select
-              name={name}
-              options={adjustment}
-              placeholder="What is the zone"
-              currentValue={getStateValue(state, id, name)}
-              onUpdate={onChange}
-            />
-          )}
-        />
-        <ErrorMessage
-          errors={formState.errors}
-          name="grid.adjustment"
-          as={ErrorMessageTag}
-        />
-      </div>
+      {gridConfiguration.adjustment.includes(datum) && (
+        <div>
+          <label htmlFor="grid.adjustment" className="font-semibold">
+            NGS Adjustment
+          </label>
+          <Controller
+            control={control}
+            name="grid.adjustment"
+            render={({ field: { onChange, name } }) => (
+              <Select
+                name={name}
+                options={adjustment}
+                placeholder="What is the zone"
+                currentValue={getStateValue(state, id, name)}
+                onUpdate={onChange}
+              />
+            )}
+          />
+          <ErrorMessage
+            errors={formState.errors}
+            name="grid.adjustment"
+            as={ErrorMessageTag}
+          />
+        </div>
+      )}
       <div>
         <label htmlFor="grid.northing" className="font-semibold">
           Northing
@@ -741,45 +759,34 @@ CoordinateReview.propTypes = {
   }),
 };
 
-const GridCoordinateReview = ({ grid, datum }) => {
-  const configuration = {
-    zone: ['grid-nad83.state-plane', 'grid-nad27'],
-    adjustment: [
-      'grid-nad83.state-plane',
-      'grid-nad83.utm12n',
-      'grid-nad83.utm11n',
-    ],
-  };
-
-  return (
-    <>
-      {datum.original in configuration.zone && (
-        <div className="flex justify-between">
-          <span className="font-semibold">Zone</span>
-          <span>{keyMap.zone(grid?.zone)}</span>
-        </div>
-      )}
-      {datum.original in configuration.adjustment && (
-        <div className="flex justify-between">
-          <span className="font-semibold">Adjustment</span>
-          <span>{keyMap.adjustment(grid?.adjustment)}</span>
-        </div>
-      )}
+const GridCoordinateReview = ({ grid, datum }) => (
+  <>
+    {gridConfiguration.zone.includes(datum.original) && (
       <div className="flex justify-between">
-        <span className="font-semibold">Unit</span>
-        <span>{keyMap.unit(grid?.unit)}</span>
+        <span className="font-semibold">Zone</span>
+        <span>{keyMap.zone(grid?.zone)}</span>
       </div>
+    )}
+    {gridConfiguration.adjustment.includes(datum.original) && (
       <div className="flex justify-between">
-        <span className="font-semibold">Coordinates</span>
-        <span>{`${grid?.northing}, ${grid?.easting}`}</span>
+        <span className="font-semibold">Adjustment</span>
+        <span>{keyMap.adjustment(grid?.adjustment)}</span>
       </div>
-      <div className="flex justify-between">
-        <span className="font-semibold">NAVD88 Elevation</span>
-        <span>{grid?.elevation}</span>
-      </div>
-    </>
-  );
-};
+    )}
+    <div className="flex justify-between">
+      <span className="font-semibold">Unit</span>
+      <span>{keyMap.unit(grid?.unit)}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="font-semibold">Coordinates</span>
+      <span>{`${grid?.northing}, ${grid?.easting}`}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="font-semibold">NAVD88 Elevation</span>
+      <span>{grid?.elevation}</span>
+    </div>
+  </>
+);
 GridCoordinateReview.propTypes = {
   grid: PropTypes.shape({
     zone: PropTypes.string,
@@ -792,35 +799,29 @@ GridCoordinateReview.propTypes = {
   datum: PropTypes.object.isRequired,
 };
 
-const GeographicCoordinateReview = ({ geographic, datum }) => {
-  const configuration = {
-    adjustment: ['geographic-nad83'],
-  };
-
-  return (
-    <>
-      {datum.original in configuration.adjustment && (
-        <div className="flex justify-between">
-          <span className="font-semibold">Adjustment</span>
-          <span>{keyMap.adjustment(geographic?.adjustment)}</span>
-        </div>
-      )}
+const GeographicCoordinateReview = ({ geographic, datum }) => (
+  <>
+    {geographicConfiguration.adjustment.includes(datum.original) && (
       <div className="flex justify-between">
-        <span className="font-semibold">Coordinates</span>
-        <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
-        <span>{`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}</span>
+        <span className="font-semibold">Adjustment</span>
+        <span>{keyMap.adjustment(geographic?.adjustment)}</span>
       </div>
-      <div className="flex justify-between">
-        <span className="font-semibold">Vertical Units</span>
-        <span>{keyMap.unit(geographic?.unit)}</span>
-      </div>
-      <div className="flex justify-between">
-        <span className="font-semibold">Ellipsoid Height</span>
-        <span>{geographic?.height}</span>
-      </div>
-    </>
-  );
-};
+    )}
+    <div className="flex justify-between">
+      <span className="font-semibold">Coordinates</span>
+      <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
+      <span>{`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="font-semibold">Vertical Units</span>
+      <span>{keyMap.unit(geographic?.unit)}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="font-semibold">Ellipsoid Height</span>
+      <span>{geographic?.height}</span>
+    </div>
+  </>
+);
 GeographicCoordinateReview.propTypes = {
   geographic: PropTypes.shape({
     northing: PropTypes.shape({
