@@ -65,3 +65,24 @@ export const getDefault = (value, nullReplacement = '-', suffix = '') => {
 
   return `${value} ${suffix}`;
 };
+
+export const getDatumParts = (input) => {
+  // format grid-nad83.state-plane | grid-nad27
+  const formatted = formatDatum(input);
+  let parts = input;
+  let zone;
+
+  if (input.indexOf('.') > -1) {
+    [parts, zone] = input.split('.');
+  }
+
+  const [coordinateType, datum] = parts.split('-');
+
+  return {
+    original: input,
+    formatted,
+    coordinateType,
+    datum,
+    zone,
+  };
+};
