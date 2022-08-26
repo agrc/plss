@@ -4,7 +4,7 @@ import { createStore, StateMachineProvider } from 'little-state-machine';
 import { Outlet, useParams } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import PropTypes from 'prop-types';
-import extractTownshipInformation from './blmPointId';
+import extractTownshipInformation from './blmPointId.mjs';
 import clsx from 'clsx';
 
 export const updateAction = (state, payload) => {

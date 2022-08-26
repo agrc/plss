@@ -34,7 +34,7 @@ import {
   gridCoordinatesSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
-import { keyMap, formatDatum } from '../../helpers';
+import { keyMap, formatDatum } from '../../helpers/index.mjs';
 
 const formats = { Grid: grid, Geographic: geographic };
 const geographicConfiguration = {
