@@ -1,0 +1,19 @@
+{
+  "name": "submitters/user_abc/point_abc/pointFolder.png",
+  "bucket": "ut-dts-agrc-plss-dev",
+  "metageneration": 1,
+  "generation": 1661911835278,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "ce0f9c36-0ba3-4c42-8d67-db2cb37fd751"
+  ],
+  "etag": "ghlAa7ObLqXbkBmhneuN+FAkx8w",
+  "customMetadata": {},
+  "timeCreated": "2022-08-31T02:10:35.278Z",
+  "updated": "2022-08-31T02:10:35.278Z",
+  "size": 9837,
+  "md5Hash": "uPE7E01Ncvf72Mk2oo6+nw==",
+  "crc32c": "876944351"
+}
