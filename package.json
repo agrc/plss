@@ -23,6 +23,7 @@
     "build-storybook": "build-storybook",
     "start": "npm run dev",
     "test": "vitest",
+    "test:ci": "firebase emulators:exec --only storage 'vitest'",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
@@ -60,6 +61,7 @@
     "@babel/core": "^7.18.13",
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
+    "@firebase/rules-unit-testing": "^2.0.4",
     "@hookform/devtools": "^4.2.2",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
@@ -83,6 +85,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "firebase-tools": "^11.9.0",
     "husky": "^8.0.1",
     "jsdom": "^20.0.0",
     "lint-staged": "^13.0.3",

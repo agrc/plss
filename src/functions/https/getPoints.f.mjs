@@ -2,7 +2,10 @@ import { warn, error as logError } from 'firebase-functions/logger';
 import { onCall } from 'firebase-functions/v1/https';
 import { HttpsError } from 'firebase-functions/v1/auth';
 import { getFirestore } from 'firebase-admin/firestore';
+import initializeApp from '../firebase.mjs';
 import { graphicConverter } from '../converters.mjs';
+
+initializeApp();
 
 const getPoints = onCall(async (_, context) => {
   if (!context.auth) {
