@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { useSigninCheck } from 'reactfire';
 import { Button } from '../formElements/Buttons.jsx';
-import { useAuthState } from '../contexts/AuthContext.jsx';
 import { getDefault } from '../helpers';
 
 export default function Identify({ graphic }) {
   const navigate = useNavigate();
-  const { state: userState } = useAuthState();
+  const { data: userSignInCheck } = useSigninCheck();
 
   if (graphic === undefined) {
     return <InitialIdentify />;
@@ -74,13 +74,15 @@ export default function Identify({ graphic }) {
             <span className="font-semibold">Category</span>
             <span>{getDefault(graphic.attributes.Point_Category)}</span>
           </div>
-          <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">County</span>
-            <span>{getDefault(graphic.attributes.COUNTY)}</span>
-          </div>
         </section>
 
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-6 justify-self-center">
+          <SubmissionPicker
+            authenticated={userSignInCheck?.signedIn}
+            blmPointId={graphic.attributes.POINTID}
+          />
+        </div>
+        <div className="mt-6 justify-self-center">
           <Button
             style="alternate"
             onClick={() => {
@@ -89,23 +91,6 @@ export default function Identify({ graphic }) {
           >
             close
           </Button>
-          {userState.state === 'SIGNED_IN' ? (
-            <Button
-              onClick={() => {
-                navigate(`/submission/${graphic.attributes.POINTID}`);
-              }}
-            >
-              submit monument
-            </Button>
-          ) : (
-            <Button
-              onClick={() => {
-                navigate(`/login`);
-              }}
-            >
-              login to submit monument
-            </Button>
-          )}
         </div>
       </main>
     </>
@@ -161,4 +146,50 @@ const EmptyIdentify = () => {
       </main>
     </>
   );
+};
+
+const SubmissionPicker = ({ authenticated, blmPointId }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="rounded border bg-slate-100 p-4">
+      <p className="font-bold text-slate-800">
+        Submit a monument record for this point.
+      </p>
+      <span className="my-2 inline-block h-0.5 w-full rounded bg-slate-400 sm:my-6"></span>
+
+      <div className="space-between flex w-full justify-around">
+        {authenticated ? (
+          <>
+            <Button
+              onClick={() => {
+                navigate(`/submission/${blmPointId}`);
+              }}
+            >
+              new
+            </Button>
+            <Button
+              onClick={() => {
+                navigate(`/upload/${blmPointId}`);
+              }}
+            >
+              existing
+            </Button>
+          </>
+        ) : (
+          <Button
+            onClick={() => {
+              navigate(`/login`);
+            }}
+          >
+            login
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};
+SubmissionPicker.propTypes = {
+  authenticated: PropTypes.bool,
+  blmPointId: PropTypes.string.isRequired,
 };
