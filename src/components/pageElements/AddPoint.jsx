@@ -6,19 +6,17 @@ import { Controller, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useImmer } from 'use-immer';
 import { httpsCallable } from 'firebase/functions';
+import { useFunctions } from 'reactfire';
 import { useQueryClient } from '@tanstack/react-query';
 import { LimitedTextarea } from '../formElements/LimitedTextarea.jsx';
 import { Input } from '../formElements/Inputs.jsx';
 import { Button } from '../formElements/Buttons.jsx';
-import { addFunctions } from '../../firebase/firebase.js';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'short',
   timeStyle: 'short',
 });
-const functions = addFunctions();
-const addPoint = httpsCallable(functions, 'functions-httpsPostPoint');
 
 export default function AddPoint({
   active,
@@ -28,6 +26,8 @@ export default function AddPoint({
   notes = '',
   photos = [],
 }) {
+  const functions = useFunctions();
+  const addPoint = httpsCallable(functions, 'functions-httpsPostPoint');
   const [images, updateImage] = useImmer(photos);
   const [status, setStatus] = useState('disabled');
   const { control, formState, handleSubmit, register, reset } = useForm();

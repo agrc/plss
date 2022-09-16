@@ -16,16 +16,12 @@ import { useNavigate } from 'react-router-dom';
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import clsx from 'clsx';
 import { useQuery } from '@tanstack/react-query';
+import { useSigninCheck , useFunctions } from 'reactfire';
 import { httpsCallable } from 'firebase/functions';
-import { addFunctions } from '../../firebase/firebase.js';
-import { useAuthState } from '../contexts/AuthContext.jsx';
 
 // import Search from '../Search/Search';
 
 esriConfig.assetsPath = '/assets';
-
-const functions = addFunctions();
-const myPoints = httpsCallable(functions, 'functions-httpsGetPoints');
 
 const urls = {
   landownership:
@@ -41,17 +37,22 @@ const loadingCss =
   'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
 export default function PlssMap({ state, dispatch, color }) {
-  const { state: userState } = useAuthState();
   const node = useRef(null);
   const mapView = useRef();
   const [selectorOptions, setSelectorOptions] = useState();
-  const navigate = useNavigate();
-  const isLoading = useViewLoading(mapView.current);
   const [mapState, setMapState] = useState('idle');
+
+  const { data: signInCheckResult } = useSigninCheck();
+  const navigate = useNavigate();
+
+  const isLoading = useViewLoading(mapView.current);
   const { graphic, setGraphic } = useGraphicManager(mapView);
   const { setGraphic: setUserGraphics } = useGraphicManager(mapView);
+
+  const functions = useFunctions();
+  const myPoints = httpsCallable(functions, 'functions-httpsGetPoints');
   const { data: thePoints, status } = useQuery(['myPoints'], myPoints, {
-    enabled: userState.state === 'SIGNED_IN',
+    enabled: signInCheckResult?.signedIn === true,
   });
 
   // create map
@@ -213,16 +214,22 @@ export default function PlssMap({ state, dispatch, color }) {
   useEffect(() => {
     setMapState(status);
 
-    if (status === 'success') {
+    if (signInCheckResult?.signedIn === true && status === 'success') {
       setUserGraphics(thePoints.data);
       dispatch({ type: 'map/userPoints', payload: thePoints.data });
     }
 
-    if (userState.state === 'SIGNED_OUT') {
+    if (signInCheckResult?.signedIn === false) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [dispatch, setUserGraphics, thePoints, status, userState.state]);
+  }, [
+    dispatch,
+    setUserGraphics,
+    thePoints,
+    status,
+    signInCheckResult?.signedIn,
+  ]);
 
   return (
     <section className="ugrc__map">

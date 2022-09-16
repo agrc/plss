@@ -8,11 +8,11 @@ import {
   UserCircleIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline';
-import { useAuthState } from '../contexts/AuthContext.jsx';
+import { useUser } from 'reactfire';
 
 export default function Menu() {
   const open = useDrawerOpen();
-  const { state: userState } = useAuthState();
+  const { data: user } = useUser();
 
   const classes = clsx(
     [
@@ -34,9 +34,9 @@ export default function Menu() {
   return (
     <nav className={classes}>
       <MenuItem Icon={UserCircleIcon} route="/login">
-        {userState.state === 'SIGNED_IN' ? 'Logout' : 'Login/Register'}
+        {user !== null ? 'Logout' : 'Login/Register'}
       </MenuItem>
-      {userState.state === 'SIGNED_IN' && (
+      {user !== null && (
         <>
           <MenuItem Icon={PlusCircleIcon} route="/add-point">
             Add Point

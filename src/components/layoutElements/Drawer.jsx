@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useSigninCheck } from 'reactfire';
 import Logo from '../pageElements/Logo.jsx';
-import { useAuthState } from '../contexts/AuthContext.jsx';
 
 const CornerSubmission = lazy(() =>
   import('../pageElements/CornerSubmission/CornerSubmission.jsx')
@@ -69,7 +69,7 @@ export default function Drawer({
   userPoints,
 }) {
   const open = useDrawerOpen();
-  const { state: userState } = useAuthState();
+  const { data: signInCheckResult } = useSigninCheck();
 
   const classes = clsx(
     [
@@ -101,7 +101,7 @@ export default function Drawer({
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Suspense fallback={<div>loading...</div>}>
           <Routes path="/">
-            {userState.state === 'SIGNED_IN' && (
+            {signInCheckResult?.signedIn && (
               <>
                 <Route path="submission" element={<CornerSubmission />}>
                   <Route path=":id" element={<Metadata />} />

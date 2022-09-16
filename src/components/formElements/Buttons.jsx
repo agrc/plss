@@ -1,15 +1,16 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { OAuthProvider, signInWithPopup } from 'firebase/auth';
-import { addAuth } from '../../firebase/firebase';
+import { useAuth } from 'reactfire';
 
 export const LogInButton = () => {
+  const auth = useAuth();
+
   const handleClick = () => {
     const provider = new OAuthProvider('oidc.utahid');
     provider.addScope('profile');
     provider.addScope('email');
 
-    const auth = addAuth();
     // @see https://firebase.google.com/docs/auth/web/google-signin
     signInWithPopup(auth, provider);
   };
@@ -25,8 +26,9 @@ LogInButton.propTypes = {
 };
 
 export const LogOutButton = () => {
+  const auth = useAuth();
+
   const handleClick = () => {
-    const auth = addAuth();
     auth.signOut();
   };
 
@@ -41,11 +43,11 @@ LogOutButton.propTypes = {
 };
 
 const primaryClasses =
-  'border-indigo-600 bg-indigo-500 text-white hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700';
+  'h-8 border-indigo-600 bg-indigo-500 text-white hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700';
 const secondaryClasses =
-  'border-yellow-500 bg-yellow-400 text-black hover:border-yellow-600 hover:bg-yellow-500 focus:border-yellow-400 focus:ring-yellow-500 active:bg-yellow-600';
+  'h-8 border-yellow-500 bg-yellow-400 text-black hover:border-yellow-600 hover:bg-yellow-500 focus:border-yellow-400 focus:ring-yellow-500 active:bg-yellow-600';
 const alternateClasses =
-  'border-slate-400 bg-slate-100 text-slate-900 hover:text-white hover:border-slate-500 hover:bg-slate-400 focus:border-slate-500 focus:ring-slate-500 active:bg-slate-600 active:text-white';
+  'h-8 border-slate-400 bg-slate-100 text-slate-900 hover:text-white hover:border-slate-500 hover:bg-slate-400 focus:border-slate-500 focus:ring-slate-500 active:bg-slate-600 active:text-white';
 
 const noButtonGroup = 'rounded-full';
 const buttonGroupLeft = 'border-r-0 rounded-l-full';

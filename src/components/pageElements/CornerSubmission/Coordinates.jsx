@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { RadioGroup, Tab } from '@headlessui/react';
 import { httpsCallable } from 'firebase/functions';
-import { addFunctions } from '../../../firebase/firebase.js';
+import { useFunctions } from 'reactfire';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
@@ -48,8 +48,6 @@ const gridConfiguration = {
     'grid-nad83.utm11n',
   ],
 };
-const functions = addFunctions();
-const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
 
 const getOpenTabIndex = (datum) => {
   if (!datum) {
@@ -636,6 +634,8 @@ export const Review = () => {
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const data = getStateForId(state, id);
+  const functions = useFunctions();
+  const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
   const { mutate } = useMutation(
     ['save-corner', id],
     (data) => saveCorner(data),

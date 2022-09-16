@@ -1,27 +1,29 @@
 import { Router } from '../router/Router.jsx';
-import { setupFirebase } from '../../firebase/firebase';
-import { useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useSignIn, useSignOut } from '../contexts/AuthContext.jsx';
+import { AuthProvider, useFirebaseApp } from 'reactfire';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
 
 export default function App() {
-  const { signIn } = useSignIn();
-  const { signOut } = useSignOut();
+  const app = useFirebaseApp();
+  const auth = getAuth(app);
 
-  useEffect(() => {
-    setupFirebase();
-
-    const auth = getAuth();
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        signIn(user);
-      } else {
-        signOut();
+  if (import.meta.env.DEV) {
+    if (typeof window === 'undefined' || !window['_firebase_auth_emulator']) {
+      try {
+        connectAuthEmulator(auth, 'http://localhost:9099', {
+          disableWarnings: true,
+        });
+      } catch {
+        console.log('auth emulator already connected');
       }
-    });
-    // signIn and signOut are stable?
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      if (typeof window !== 'undefined') {
+        window['_firebase_auth_emulator'] = true;
+      }
+    }
+  }
 
-  return <Router />;
+  return (
+    <AuthProvider sdk={auth}>
+      <Router />
+    </AuthProvider>
+  );
 }
