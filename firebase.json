@@ -15,9 +15,12 @@
       "firebase-export-*",
       "node_modules",
       "public",
-      "src",
       "*.config.js",
-      "*.rules"
+      "*.rules",
+      "*.log",
+      "*.html",
+      "*.jsx",
+      ".eslintcache"
     ]
   },
   "firestore": {
