@@ -27,7 +27,10 @@ export const LimitedTextarea = ({
         type="textarea"
         maxLength={limit}
         placeholder={placeholder}
-        className={clsx('rounded px-2 text-black', className)}
+        className={clsx(
+          'rounded px-2 text-slate-800 placeholder:text-sm placeholder:text-slate-600',
+          className
+        )}
         {...field}
         value={field.value ?? value}
       ></textarea>
