@@ -1,7 +1,7 @@
 import { Input } from './Inputs.jsx';
 
 export default {
-  title: 'Form Items/Input',
+  title: 'Form Elements/Input',
   component: Input,
   parameters: {
     backgrounds: {

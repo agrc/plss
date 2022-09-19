@@ -1,7 +1,7 @@
 import { LimitedTextarea } from './LimitedTextarea.jsx';
 
 export default {
-  title: 'Form Items/LimitedTextarea',
+  title: 'Form Elements/LimitedTextarea',
   component: LimitedTextarea,
   parameters: {
     backgrounds: {

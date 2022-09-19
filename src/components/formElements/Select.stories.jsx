@@ -1,7 +1,7 @@
 import { Select } from './Select.jsx';
 
 export default {
-  title: 'Form Items/Select',
+  title: 'Form Elements/Select',
   component: Select,
   parameters: {
     backgrounds: {
