@@ -4,8 +4,10 @@ import { DevTool } from '@hookform/devtools';
 import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
+import Switch from '../../formElements/Switch.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import {
   updateAction,
@@ -36,6 +38,7 @@ const Metadata = () => {
         description: '',
         status: '',
         accuracy: '',
+        mrrc: false,
       },
     };
 
@@ -93,6 +96,46 @@ const Metadata = () => {
         <ErrorMessage
           errors={formState.errors}
           name="metadata.accuracy"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <div>
+        <label htmlFor="metadata.accuracy" className="font-semibold">
+          Associated with a{' '}
+          <abbr
+            className="cursor-help"
+            title="Monument Replacement and Restoration Committee"
+          >
+            MRRC
+          </abbr>{' '}
+          Project
+        </label>
+        <div className="flex justify-between">
+          <Controller
+            control={control}
+            name="metadata.mrrc"
+            render={({ field: { onChange, name } }) => (
+              <Switch
+                name={name}
+                screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
+                currentValue={getStateValue(state, id, name)}
+                onUpdate={onChange}
+              />
+            )}
+          />
+          <a
+            target="_blank"
+            rel="noreferer noopener noreferrer"
+            href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
+            className="under flex text-sm font-normal italic text-amber-300 underline visited:text-amber-500 hover:text-white"
+          >
+            Help
+            <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
+          </a>
+        </div>
+        <ErrorMessage
+          errors={formState.errors}
+          name="metadata.mrrc"
           as={ErrorMessageTag}
         />
       </div>

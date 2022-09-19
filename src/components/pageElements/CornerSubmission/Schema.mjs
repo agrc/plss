@@ -19,6 +19,7 @@ export const metadataSchema = yup.object().shape({
       ),
     description: yup.string().max(1000).required(),
     notes: yup.string().max(1000).required(),
+    mrrc: yup.bool().required(),
   }),
 });
 
