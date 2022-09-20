@@ -19,7 +19,7 @@ export const LimitedTextarea = ({
   });
 
   return (
-    <div className="relative flex grow">
+    <div className="relative flex grow flex-col">
       <textarea
         disabled={disabled}
         id={field.name}
