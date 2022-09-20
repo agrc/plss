@@ -24,10 +24,7 @@ export const metadataSchema = yup.object().shape({
     corner: yup
       .string()
       .required()
-      .oneOf(
-        options.corner.map((x) => x.value),
-        'A valid selection must be made'
-      ),
+      .oneOf(options.corner, 'A valid selection must be made'),
   }),
 });
 
