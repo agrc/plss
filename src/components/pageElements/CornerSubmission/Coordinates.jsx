@@ -49,13 +49,15 @@ const gridConfiguration = {
   ],
 };
 
+const defaultTabIndex = 1;
+
 const getOpenTabIndex = (datum) => {
   if (!datum) {
-    return 0;
+    return defaultTabIndex;
   }
 
   if (datum.indexOf('-') < 0) {
-    return 0;
+    return defaultTabIndex;
   }
 
   datum = datum.split('-')[0];
@@ -94,7 +96,7 @@ export const CoordinatePicker = () => {
     defaultValues: getStateForId(state, id),
     resolver: yupResolver(coordinatePickerSchema),
   });
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(defaultTabIndex);
 
   useEffect(() => {
     setSelectedTab(getOpenTabIndex(getStateValue(state, id, 'datum')));
