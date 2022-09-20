@@ -8,14 +8,9 @@ export default {
   decorators: [
     (Story) => (
       <StateMachineProvider>
-        <MemoryRouter
-          initialEntries={['/submission/1/coordinates/geographic/nad83/height']}
-        >
+        <MemoryRouter initialEntries={['/submission/1/coordinates']}>
           <Routes>
-            <Route
-              path="/submission/1/coordinates/geographic/:system/height"
-              element={<Story />}
-            />
+            <Route path="/submission/:id/coordinates" element={<Story />} />
           </Routes>
         </MemoryRouter>
       </StateMachineProvider>
