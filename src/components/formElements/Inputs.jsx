@@ -55,7 +55,7 @@ Input.propTypes = {
   /**
    * The value to preset the input to
    */
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /**
    * The help text to display
    */
