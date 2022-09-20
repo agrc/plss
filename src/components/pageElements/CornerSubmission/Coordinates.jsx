@@ -97,7 +97,7 @@ export const CoordinatePicker = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <span className="font-semibold">Collected coordinate format</span>
-      <Tab.Group selectedIndex={selectedTab}>
+      <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
         <Tab.List className="flex space-x-1 rounded-xl bg-slate-900/20 p-1">
           {Object.keys(formats).map((category) => (
             <Tab
