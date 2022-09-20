@@ -8,13 +8,14 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Switch from '../../formElements/Switch.jsx';
+import { Input } from '../../formElements/Inputs.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import {
   updateAction,
   getStateForId,
   getStateValue,
 } from './CornerSubmission.jsx';
-import { accuracy, status } from './Options.mjs';
+import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 
@@ -34,6 +35,8 @@ const Metadata = () => {
   const onReset = () => {
     const defaults = {
       metadata: {
+        section: '',
+        corner: '',
         notes: '',
         description: '',
         status: '',
@@ -53,6 +56,47 @@ const Metadata = () => {
     >
       <DevTool control={control} />
       <input type="hidden" value={id} {...register('blmPointId')} />
+      <div>
+        <label htmlFor="metadata.section" className="font-semibold">
+          Section
+        </label>
+        <Input
+          name="metadata.section"
+          label={false}
+          type="number"
+          placeholder="What is the section"
+          value={getStateValue(state, id, 'metadata.section')}
+          inputRef={register}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="metadata.section"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <div>
+        <label htmlFor="metadata.corner" className="font-semibold">
+          Section Corner
+        </label>
+        <Controller
+          control={control}
+          name="metadata.corner"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={corner}
+              placeholder="What is the section corner"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="metadata.corner"
+          as={ErrorMessageTag}
+        />
+      </div>
       <div>
         <label htmlFor="metadata.status" className="font-semibold">
           Monument Status
@@ -125,7 +169,7 @@ const Metadata = () => {
           />
           <a
             target="_blank"
-            rel="noreferer noopener noreferrer"
+            rel="noreferer noopener noreferer noreferrer"
             href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
             className="under flex text-sm font-normal italic text-amber-300 underline visited:text-amber-500 hover:text-white"
           >

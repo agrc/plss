@@ -38,3 +38,16 @@ export const statePlaneZones = [
   { label: 'Central', value: 'central' },
   { label: 'South', value: 'south' },
 ];
+export const corner = [
+  'NW',
+  'N 1/4',
+  'NE',
+  'E 1/4',
+  'SE',
+  'S 1/4',
+  'SW',
+  'W 1/4',
+  'Center',
+  '1/16',
+  'Other',
+];
