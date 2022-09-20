@@ -18,13 +18,33 @@ import {
 import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
-
+import { parseBool } from '../../helpers/index.mjs';
+const defaults = {
+  metadata: {
+    section: '',
+    corner: '',
+    notes: '',
+    description: '',
+    status: '',
+    accuracy: '',
+    mrrc: '',
+  },
+};
 const Metadata = () => {
   let { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
+
+  let defaultValues = getStateForId(state, id);
+  if (!defaultValues?.metadata) {
+    defaultValues = defaults;
+  }
+  if (typeof defaultValues?.metadata.mrrc !== 'boolean') {
+    defaultValues.metadata.mrrc = false;
+  }
+
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
@@ -33,18 +53,6 @@ const Metadata = () => {
     navigate(`/submission/${id}/coordinates`);
   };
   const onReset = () => {
-    const defaults = {
-      metadata: {
-        section: '',
-        corner: '',
-        notes: '',
-        description: '',
-        status: '',
-        accuracy: '',
-        mrrc: false,
-      },
-    };
-
     actions.updateAction(defaults);
     reset(defaults);
   };
@@ -162,7 +170,7 @@ const Metadata = () => {
               <Switch
                 name={name}
                 screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                currentValue={getStateValue(state, id, name)}
+                currentValue={parseBool(getStateValue(state, id, name), false)}
                 onUpdate={onChange}
               />
             )}

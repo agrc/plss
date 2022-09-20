@@ -86,3 +86,7 @@ export const getDatumParts = (input) => {
     zone,
   };
 };
+
+export const parseBool = (value, defaultValue) =>
+  (['true', 'false', true, false].includes(value) && JSON.parse(value)) ||
+  defaultValue;
