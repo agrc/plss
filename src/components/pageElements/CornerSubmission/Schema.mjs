@@ -20,7 +20,7 @@ export const metadataSchema = yup.object().shape({
     description: yup.string().max(1000).required(),
     notes: yup.string().max(1000).required(),
     mrrc: yup.bool().required(),
-    section: yup.number().min(1).max(81).required(),
+    section: yup.number().min(1).max(36).required(),
     corner: yup
       .string()
       .required()
