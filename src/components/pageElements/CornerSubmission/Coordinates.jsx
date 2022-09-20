@@ -34,7 +34,7 @@ import {
   gridCoordinatesSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
-import { keyMap, formatDatum } from '../../helpers/index.mjs';
+import { keyMap, formatDatum, getDatumParts } from '../../helpers/index.mjs';
 
 const formats = { Grid: grid, Geographic: geographic };
 const geographicConfiguration = {
@@ -65,27 +65,6 @@ const getOpenTabIndex = (datum) => {
   const index = datum === 'grid' ? 0 : 1;
 
   return index;
-};
-
-const getDatumParts = (input) => {
-  // format grid-nad83.state-plane | grid-nad27
-  const formatted = formatDatum(input);
-  let parts = input;
-  let zone;
-
-  if (input.indexOf('.') > -1) {
-    [parts, zone] = input.split('.');
-  }
-
-  const [coordinateType, datum] = parts.split('-');
-
-  return {
-    original: input,
-    formatted,
-    coordinateType,
-    datum,
-    zone,
-  };
 };
 
 export const CoordinatePicker = () => {
