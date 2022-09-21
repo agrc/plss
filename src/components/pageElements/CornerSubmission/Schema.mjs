@@ -100,10 +100,8 @@ export const nad83GeographicHeightSchema = yup.object().shape({
       .label('Ellipsoid Height'),
     adjustment: yup
       .number()
-      .when('datum', {
-        is: 'geographic-nad83',
-        then: yup.number().required().oneOf([1996, 2007, 2011]),
-      })
+      .required()
+      .oneOf([1996, 2007, 2011])
       .label('NGS Adjustment'),
     unit: yup
       .string()
