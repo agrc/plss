@@ -11,7 +11,7 @@ const formatDegrees = (dms) =>
   `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
 
 export const formatDatum = (value) => {
-  if (value?.length < 1) {
+  if ((value?.length ?? 0) < 1) {
     return '';
   }
 
@@ -63,18 +63,12 @@ export const getDefault = (value, nullReplacement = '-', suffix = '') => {
     return nullReplacement;
   }
 
-  return `${value} ${suffix}`;
+  return `${value} ${suffix}`.trim();
 };
 
 export const getDatumParts = (input) => {
-  // format grid-nad83.state-plane | grid-nad27
   const formatted = formatDatum(input);
   let parts = input;
-  let zone;
-
-  if (input.indexOf('.') > -1) {
-    [parts, zone] = input.split('.');
-  }
 
   const [coordinateType, datum] = parts.split('-');
 
@@ -83,7 +77,6 @@ export const getDatumParts = (input) => {
     formatted,
     coordinateType,
     datum,
-    zone,
   };
 };
 
