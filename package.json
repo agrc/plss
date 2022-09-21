@@ -14,8 +14,8 @@
     "dev:vite": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ./ --ext .js --ignore-path ./.eslintignore",
-    "lint:fix": "eslint ./ --ext .js --quiet --fix --ignore-path ./.eslintignore",
+    "lint": "eslint ./ --ext .js,.mjs,.jsx --ignore-path ./.eslintignore",
+    "lint:fix": "eslint ./ --ext .js,.mjs,.jsx --quiet --fix --ignore-path ./.eslintignore",
     "prepare": "if-env NODE_ENV=production && echo 'Skipping husky install' || husky install",
     "fb:serve": "firebase emulators:start --only functions",
     "fb:deploy": "firebase deploy --only functions",
@@ -96,6 +96,7 @@
     "prettier-plugin-tailwindcss": "^0.1.13",
     "tailwindcss": "^3.1.8",
     "vite": "^3.1.3",
+    "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.23.4"
   },
   "eslintConfig": {
