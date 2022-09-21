@@ -13,15 +13,16 @@ export const accuracy = [
   { label: 'Recreational Grade (+/-) 30m', value: 'rec' },
 ];
 export const geographic = [
-  { label: 'WGS84 Geographic', value: 'geographic-wgs84' },
-  { label: 'NAD27 Geographic', value: 'geographic-nad27' },
   { label: 'NAD83 Geographic', value: 'geographic-nad83' },
+  {
+    label: 'NATRF2022 (coming in 2025)',
+    value: 'geographic-natrf',
+    disabled: true,
+  },
 ];
 export const grid = [
-  { label: 'NAD83 State Plane', value: 'grid-nad83.state-plane' },
-  { label: 'NAD83 UTM Zone 12N', value: 'grid-nad83.utm12n' },
-  { label: 'NAD83 UTM Zone 11N', value: 'grid-nad83.utm11n' },
-  { label: 'NAD27 State Plane', value: 'grid-nad27' },
+  { label: 'NAD83 State Plane', value: 'grid-nad83' },
+  { label: 'NATRF2022 (coming in 2025)', value: 'grid-natrf', disabled: true },
 ];
 export const adjustment = [
   { label: 'NGS 1996', value: '1996' },
