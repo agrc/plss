@@ -139,5 +139,10 @@ export const gridCoordinatesSchema = yup.object().shape({
     northing: yup.number().required().label('northing'),
     easting: yup.number().required().label('easting'),
     elevation: yup.number().required().label('elevation'),
+    verticalDatum: yup
+      .string()
+      .required()
+      .oneOf(options.verticalDatum)
+      .label('The datum'),
   }),
 });

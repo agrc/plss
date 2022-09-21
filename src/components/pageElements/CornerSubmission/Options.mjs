@@ -34,6 +34,7 @@ export const height = [
   { label: 'US Survey Feet', value: 'ft.survey' },
   { label: 'International Feet', value: 'ft' },
 ];
+export const verticalDatum = ['NAVD88', 'NGVD29'];
 export const statePlaneZones = [
   { label: 'North', value: 'north' },
   { label: 'Central', value: 'central' },

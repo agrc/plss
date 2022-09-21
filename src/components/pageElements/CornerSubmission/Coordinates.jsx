@@ -25,6 +25,7 @@ import {
   grid,
   height,
   statePlaneZones,
+  verticalDatum,
 } from './Options.mjs';
 import {
   coordinatePickerSchema,
@@ -427,6 +428,18 @@ export const GeographicHeight = () => {
   );
 };
 
+const gridDefaults = {
+  grid: {
+    'grid.zone': '',
+    'grid.adjustment': '',
+    'grid.unit': '',
+    'grid.northing': '',
+    'grid.easting': '',
+    'grid.elevation': '',
+    'grid.verticalDatum': '',
+  },
+};
+
 export const GridCoordinates = () => {
   const { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
@@ -556,8 +569,31 @@ export const GridCoordinates = () => {
         />
       </div>
       <div>
+        <label htmlFor="grid.verticalDatum" className="font-semibold">
+          Vertical datum
+        </label>
+        <Controller
+          control={control}
+          name="grid.verticalDatum"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={verticalDatum}
+              placeholder="What is the vertical datum"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.verticalDatum"
+          as={ErrorMessageTag}
+        />
+      </div>
+      <div>
         <label htmlFor="grid.elevation" className="font-semibold">
-          NAVD88 elevation
+          Elevation
         </label>
         <Input
           value={getStateValue(state, id, 'grid.elevation')}
@@ -575,16 +611,7 @@ export const GridCoordinates = () => {
       <Wizard
         back={() => navigate(-1)}
         next={true}
-        clear={() =>
-          reset({
-            'grid.zone': '',
-            'grid.adjustment': '',
-            'grid.unit': '',
-            'grid.northing': '',
-            'grid.easting': '',
-            'grid.elevation': '',
-          })
-        }
+        clear={() => reset(gridDefaults)}
       />
     </form>
   );
@@ -737,7 +764,7 @@ const GridCoordinateReview = ({ grid }) => (
       <span>{`${grid?.northing}, ${grid?.easting}`}</span>
     </div>
     <div className="flex justify-between">
-      <span className="font-semibold">NAVD88 Elevation</span>
+      <span className="font-semibold">{grid?.verticalDatum} Elevation</span>
       <span>{grid?.elevation}</span>
     </div>
   </>
@@ -750,6 +777,7 @@ GridCoordinateReview.propTypes = {
     elevation: PropTypes.number,
     unit: PropTypes.string,
     adjustment: PropTypes.string,
+    verticalDatum: PropTypes.string,
   }),
 };
 
