@@ -5,7 +5,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 const getDefaultValue = (value, placeholder, options) => {
-  if (options?.length < 1) {
+  if ((options?.length ?? 0) < 1) {
     return placeholder;
   }
 
