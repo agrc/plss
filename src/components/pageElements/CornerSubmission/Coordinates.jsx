@@ -34,20 +34,9 @@ import {
   gridCoordinatesSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
-import { keyMap, formatDatum, getDatumParts } from '../../helpers/index.mjs';
+import { keyMap, formatDatum } from '../../helpers/index.mjs';
 
 const formats = { Grid: grid, Geographic: geographic };
-const geographicConfiguration = {
-  adjustment: ['geographic-nad83'],
-};
-const gridConfiguration = {
-  zone: ['grid-nad83.state-plane', 'grid-nad27'],
-  adjustment: [
-    'grid-nad83.state-plane',
-    'grid-nad83.utm12n',
-    'grid-nad83.utm11n',
-  ],
-};
 
 const defaultTabIndex = 1;
 
@@ -332,7 +321,6 @@ export const GeographicHeight = () => {
   });
 
   const [selected, setSelected] = useState(height[0]);
-  const datum = getStateValue(state, id, 'datum');
 
   const onSubmit = (data) => {
     actions.updateAction(data);
@@ -410,31 +398,29 @@ export const GeographicHeight = () => {
         name="geographic.unit"
         as={ErrorMessageTag}
       />
-      {gridConfiguration.adjustment.includes(datum) && (
-        <div>
-          <label htmlFor="geographic.adjustment" className="font-semibold">
-            NGS Adjustment
-          </label>
-          <Controller
-            control={control}
-            name="geographic.adjustment"
-            render={({ field: { onChange, name } }) => (
-              <Select
-                name={name}
-                options={adjustment}
-                placeholder="Select the year"
-                currentValue={getStateValue(state, id, 'adjustment')}
-                onUpdate={onChange}
-              />
-            )}
-          />
-          <ErrorMessage
-            errors={formState.errors}
-            name="geographic.adjustment"
-            as={ErrorMessageTag}
-          />
-        </div>
-      )}
+      <div>
+        <label htmlFor="geographic.adjustment" className="font-semibold">
+          NGS Adjustment
+        </label>
+        <Controller
+          control={control}
+          name="geographic.adjustment"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={adjustment}
+              placeholder="Select the year"
+              currentValue={getStateValue(state, id, 'adjustment')}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="geographic.adjustment"
+          as={ErrorMessageTag}
+        />
+      </div>
 
       <Wizard back={() => navigate(-1)} next={true} clear={reset} />
     </form>
@@ -449,8 +435,6 @@ export const GridCoordinates = () => {
     defaultValues: getStateForId(state, id),
     resolver: yupResolver(gridCoordinatesSchema),
   });
-
-  const datum = getStateValue(state, id, 'datum');
 
   const onSubmit = (data) => {
     actions.updateAction(data);
@@ -468,31 +452,29 @@ export const GridCoordinates = () => {
           {formatDatum(getStateValue(state, id, 'datum'))}
         </p>
       </div>
-      {gridConfiguration.zone.includes(datum) && (
-        <div>
-          <label htmlFor="grid.zone" className="font-semibold">
-            State plane zone
-          </label>
-          <Controller
-            control={control}
-            name="grid.zone"
-            render={({ field: { onChange, name } }) => (
-              <Select
-                name={name}
-                options={statePlaneZones}
-                placeholder="What is the zone"
-                currentValue={getStateValue(state, id, name)}
-                onUpdate={onChange}
-              />
-            )}
-          />
-          <ErrorMessage
-            errors={formState.errors}
-            name="grid.zone"
-            as={ErrorMessageTag}
-          />
-        </div>
-      )}
+      <div>
+        <label htmlFor="grid.zone" className="font-semibold">
+          State plane zone
+        </label>
+        <Controller
+          control={control}
+          name="grid.zone"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={statePlaneZones}
+              placeholder="What is the zone"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.zone"
+          as={ErrorMessageTag}
+        />
+      </div>
       <div>
         <label htmlFor="grid.unit" className="font-semibold">
           Horizontal units
@@ -516,31 +498,29 @@ export const GridCoordinates = () => {
           as={ErrorMessageTag}
         />
       </div>
-      {gridConfiguration.adjustment.includes(datum) && (
-        <div>
-          <label htmlFor="grid.adjustment" className="font-semibold">
-            NGS Adjustment
-          </label>
-          <Controller
-            control={control}
-            name="grid.adjustment"
-            render={({ field: { onChange, name } }) => (
-              <Select
-                name={name}
-                options={adjustment}
-                placeholder="What is the zone"
-                currentValue={getStateValue(state, id, name)}
-                onUpdate={onChange}
-              />
-            )}
-          />
-          <ErrorMessage
-            errors={formState.errors}
-            name="grid.adjustment"
-            as={ErrorMessageTag}
-          />
-        </div>
-      )}
+      <div>
+        <label htmlFor="grid.adjustment" className="font-semibold">
+          NGS Adjustment
+        </label>
+        <Controller
+          control={control}
+          name="grid.adjustment"
+          render={({ field: { onChange, name } }) => (
+            <Select
+              name={name}
+              options={adjustment}
+              placeholder="What is the zone"
+              currentValue={getStateValue(state, id, name)}
+              onUpdate={onChange}
+            />
+          )}
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="grid.adjustment"
+          as={ErrorMessageTag}
+        />
+      </div>
       <div>
         <label htmlFor="grid.northing" className="font-semibold">
           Northing
@@ -696,19 +676,17 @@ MetadataReview.propTypes = {
 };
 
 const CoordinateReview = ({ datum, grid, geographic }) => {
-  const parts = getDatumParts(datum);
+  const [type] = datum.split('-');
 
   return (
     <>
       <div className="flex justify-between">
         <span className="font-semibold">Datum</span>
-        <span>{parts.formatted}</span>
+        <span>{formatDatum(datum)}</span>
       </div>
-      {parts.coordinateType === 'grid' && (
-        <GridCoordinateReview grid={grid} datum={parts} />
-      )}
-      {parts.coordinateType === 'geographic' && (
-        <GeographicCoordinateReview geographic={geographic} datum={parts} />
+      {type === 'grid' && <GridCoordinateReview grid={grid} />}
+      {type === 'geographic' && (
+        <GeographicCoordinateReview geographic={geographic} />
       )}
     </>
   );
@@ -740,20 +718,16 @@ CoordinateReview.propTypes = {
   }),
 };
 
-const GridCoordinateReview = ({ grid, datum }) => (
+const GridCoordinateReview = ({ grid }) => (
   <>
-    {gridConfiguration.zone.includes(datum.original) && (
-      <div className="flex justify-between">
-        <span className="font-semibold">Zone</span>
-        <span>{keyMap.zone(grid?.zone)}</span>
-      </div>
-    )}
-    {gridConfiguration.adjustment.includes(datum.original) && (
-      <div className="flex justify-between">
-        <span className="font-semibold">Adjustment</span>
-        <span>{keyMap.adjustment(grid?.adjustment)}</span>
-      </div>
-    )}
+    <div className="flex justify-between">
+      <span className="font-semibold">Zone</span>
+      <span>{keyMap.zone(grid?.zone)}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="font-semibold">Adjustment</span>
+      <span>{keyMap.adjustment(grid?.adjustment)}</span>
+    </div>
     <div className="flex justify-between">
       <span className="font-semibold">Unit</span>
       <span>{keyMap.unit(grid?.unit)}</span>
@@ -777,17 +751,14 @@ GridCoordinateReview.propTypes = {
     unit: PropTypes.string,
     adjustment: PropTypes.string,
   }),
-  datum: PropTypes.object.isRequired,
 };
 
-const GeographicCoordinateReview = ({ geographic, datum }) => (
+const GeographicCoordinateReview = ({ geographic }) => (
   <>
-    {geographicConfiguration.adjustment.includes(datum.original) && (
-      <div className="flex justify-between">
-        <span className="font-semibold">Adjustment</span>
-        <span>{keyMap.adjustment(geographic?.adjustment)}</span>
-      </div>
-    )}
+    <div className="flex justify-between">
+      <span className="font-semibold">Adjustment</span>
+      <span>{keyMap.adjustment(geographic?.adjustment)}</span>
+    </div>
     <div className="flex justify-between">
       <span className="font-semibold">Coordinates</span>
       <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
@@ -819,5 +790,4 @@ GeographicCoordinateReview.propTypes = {
     unit: PropTypes.string,
     adjustment: PropTypes.string,
   }),
-  datum: PropTypes.object.isRequired,
 };

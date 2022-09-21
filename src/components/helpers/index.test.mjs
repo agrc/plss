@@ -1,27 +1,5 @@
-import { getDatumParts, parseBool, getDefault, formatDatum } from './index.mjs';
+import { parseBool, getDefault, formatDatum } from './index.mjs';
 import { describe, expect, test } from 'vitest';
-
-describe('getDatumParts', () => {
-  test('get datum parts breaks a string into parts for geographic types', () => {
-    const { original, formatted, coordinateType, datum } =
-      getDatumParts('geographic-nad83');
-
-    expect(original).toBe('geographic-nad83');
-    expect(formatted).toBe('NAD83 Geographic');
-    expect(datum).toBe('nad83');
-    expect(coordinateType).toBe('geographic');
-  });
-
-  test('get datum parts breaks a string into parts for grid types', () => {
-    const { original, formatted, coordinateType, datum } =
-      getDatumParts('grid-nad83');
-
-    expect(original).toBe('grid-nad83');
-    expect(formatted).toBe('NAD83 State Plane');
-    expect(datum).toBe('nad83');
-    expect(coordinateType).toBe('grid');
-  });
-});
 
 describe('parseBool', () => {
   test('it returns default value for empties', () => {

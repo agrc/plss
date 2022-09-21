@@ -66,20 +66,6 @@ export const getDefault = (value, nullReplacement = '-', suffix = '') => {
   return `${value} ${suffix}`.trim();
 };
 
-export const getDatumParts = (input) => {
-  const formatted = formatDatum(input);
-  let parts = input;
-
-  const [coordinateType, datum] = parts.split('-');
-
-  return {
-    original: input,
-    formatted,
-    coordinateType,
-    datum,
-  };
-};
-
 export const parseBool = (value, defaultValue) =>
   (['true', 'false', true, false].includes(value) && JSON.parse(value)) ||
   defaultValue;

@@ -3,7 +3,6 @@ import { onCall } from 'firebase-functions/v1/https';
 import { HttpsError } from 'firebase-functions/v1/auth';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import * as schemas from '../../components/pageElements/CornerSubmission/Schema.mjs';
-import { getDatumParts } from '../../components/helpers/index.mjs';
 
 const postCorner = onCall(async (data, context) => {
   if (!context.auth) {
@@ -24,9 +23,9 @@ const postCorner = onCall(async (data, context) => {
     await schemas.metadataSchema.validate(data, options);
     await schemas.coordinatePickerSchema.validate(data, options);
 
-    const parts = getDatumParts(data.datum);
+    const [datum, _] = data.datum.split('-');
 
-    if (parts.datum === 'grid') {
+    if (datum === 'grid') {
       await schemas.nad83GeographicHeightSchema.validate(data, options);
       await schemas.longitudeSchema.validate(data, options);
       await schemas.latitudeSchema.validate(data, options);
