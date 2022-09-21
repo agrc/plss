@@ -16,6 +16,18 @@ export default {
   },
 };
 
+const simpleOptions = ['1', '2', '3'];
+const optionsWithLabel = [
+  { value: '1', label: 'one' },
+  { value: '2', label: 'two' },
+  { value: '3', label: 'three' },
+];
+const optionsWithDisabledProperty = [
+  { value: '1', label: 'one' },
+  { value: '2', label: 'two', disabled: true },
+  { value: '3', label: 'three' },
+];
+
 const Template = (args) => <Select {...args} />;
 
 export const Empty = Template.bind({});
@@ -35,7 +47,7 @@ Placeholder.args = {
 export const Options = Template.bind({});
 Options.args = {
   placeholder: 'options as primitives',
-  options: ['1', '2', '3'],
+  options: simpleOptions,
   name: 'input',
   currentValue: null,
   onChange: () => {},
@@ -44,26 +56,25 @@ Options.args = {
 export const LabelValue = Template.bind({});
 LabelValue.args = {
   placeholder: 'options as objects',
-  options: [
-    { label: '1', value: 'one' },
-    { label: '2', value: 'two' },
-    { label: '3', value: 'three' },
-  ],
+  options: optionsWithLabel,
   name: 'input',
   currentValue: null,
   onChange: () => {},
 };
 
 export const SelectedItem = Template.bind({});
-const options = [
-  { label: '1', value: 'one' },
-  { label: '2', value: 'two' },
-  { label: '3', value: 'three' },
-];
 SelectedItem.args = {
   placeholder: 'place holder should not be used',
-  options,
+  options: optionsWithLabel,
   name: 'input',
-  currentValue: options[2],
+  currentValue: optionsWithLabel[2],
+  onChange: () => {},
+};
+
+export const DisabledItem = Template.bind({});
+DisabledItem.args = {
+  placeholder: 'two should be disabled',
+  options: optionsWithDisabledProperty,
+  name: 'input',
   onChange: () => {},
 };
