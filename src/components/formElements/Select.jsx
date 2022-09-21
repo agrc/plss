@@ -69,10 +69,13 @@ export const Select = ({ options, currentValue, onUpdate, placeholder }) => {
                       {
                         'bg-indigo-100 text-indigo-900': active,
                         'text-slate-900': !active,
+                        'cursor-not-allowed text-slate-400':
+                          option?.disabled ?? false,
                       }
                     )
                   }
                   value={option}
+                  disabled={option?.disabled ?? false}
                 >
                   {({ selected }) => (
                     <>
