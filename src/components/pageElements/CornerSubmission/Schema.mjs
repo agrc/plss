@@ -94,9 +94,15 @@ export const nad83GeographicHeightSchema = yup.object().shape({
   geographic: yup.object().shape({
     height: yup
       .number()
+      .when('unit', {
+        is: 'ft',
+        then: yup.number().required().min(2000).max(14000),
+      })
+      .when('unit', {
+        is: 'ft',
+        then: yup.number().required().min(600).max(4300),
+      })
       .required()
-      .min(2000)
-      .max(14000)
       .label('Ellipsoid Height'),
     adjustment: yup
       .number()
