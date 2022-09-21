@@ -78,7 +78,7 @@ export const Select = ({ options, currentValue, onUpdate, placeholder }) => {
                     <>
                       <span
                         className={clsx('block truncate', {
-                          'font-medium': selected,
+                          'font-bold': selected,
                           'font-normal': !selected,
                         })}
                       >
