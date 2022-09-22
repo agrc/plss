@@ -44,7 +44,7 @@
     "firebase": "^9.10.0",
     "firebase-admin": "^11.0.1",
     "firebase-function-tools": "^2.0.1",
-    "firebase-functions": "^3.23.0",
+    "firebase-functions": "^3.24.0",
     "got": "^12.5.0",
     "if-env": "^1.0.4",
     "little-state-machine": "^4.7.0",
@@ -53,7 +53,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.36.0",
-    "react-router-dom": "^6.4.0",
+    "react-router-dom": "^6.4.1",
     "reactfire": "^4.2.2",
     "use-immer": "^0.7.0",
     "yup": "^0.32.11"
