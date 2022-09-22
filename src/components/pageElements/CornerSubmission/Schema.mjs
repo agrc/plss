@@ -99,7 +99,7 @@ export const nad83GeographicHeightSchema = yup.object().shape({
         then: yup.number().required().min(2000).max(14000),
       })
       .when('unit', {
-        is: 'ft',
+        is: 'mt',
         then: yup.number().required().min(600).max(4300),
       })
       .required()
@@ -136,13 +136,19 @@ export const gridCoordinatesSchema = yup.object().shape({
       .required()
       .oneOf(options.adjustment.map((x) => x.value))
       .label('The adjustment'),
-    northing: yup.number().required().label('northing'),
-    easting: yup.number().required().label('easting'),
-    elevation: yup.number().required().label('elevation'),
-    verticalDatum: yup
-      .string()
-      .required()
-      .oneOf(options.verticalDatum)
-      .label('The datum'),
+    northing: yup.number().min(0).required().label('northing'),
+    easting: yup.number().min(0).required().label('easting'),
+    elevation: yup
+      .number()
+      .when('unit', {
+        is: 'ft',
+        then: yup.number().min(2000).max(14000),
+      })
+      .when('unit', {
+        is: 'mt',
+        then: yup.number().min(600).max(4300),
+      })
+      .label('elevation'),
+    verticalDatum: yup.string().oneOf(options.verticalDatum).label('The datum'),
   }),
 });
