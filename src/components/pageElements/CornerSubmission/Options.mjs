@@ -24,17 +24,17 @@ export const grid = [
   { label: 'NAD83 State Plane', value: 'grid-nad83' },
   { label: 'NATRF2022 (coming in 2025)', value: 'grid-natrf', disabled: true },
 ];
-export const adjustment = [
+export const adjustments = [
   { label: 'NGS 1996', value: '1996' },
   { label: 'NGS 2007', value: '2007' },
   { label: 'NGS 2011', value: '2011' },
 ];
-export const height = [
+export const units = [
   { label: 'Meters', value: 'm' },
   { label: 'US Survey Feet', value: 'ft.survey' },
   { label: 'International Feet', value: 'ft' },
 ];
-export const verticalDatum = ['NAVD88', 'NGVD29'];
+export const verticalDatums = ['NAVD88', 'NGVD29'];
 export const statePlaneZones = [
   { label: 'North', value: 'north' },
   { label: 'Central', value: 'central' },

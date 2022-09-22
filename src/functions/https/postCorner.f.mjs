@@ -23,10 +23,10 @@ const postCorner = onCall(async (data, context) => {
     await schemas.metadataSchema.validate(data, options);
     await schemas.coordinatePickerSchema.validate(data, options);
 
-    const [datum, _] = data.datum.split('-');
+    const [datum] = data.datum.split('-');
 
     if (datum === 'grid') {
-      await schemas.nad83GeographicHeightSchema.validate(data, options);
+      await schemas.geographicHeightSchema.validate(data, options);
       await schemas.longitudeSchema.validate(data, options);
       await schemas.latitudeSchema.validate(data, options);
     } else {

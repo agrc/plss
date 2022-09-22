@@ -89,17 +89,17 @@ export const latitudeSchema = yup.object().shape({
   }),
 });
 
-export const nad83GeographicHeightSchema = yup.object().shape({
+export const geographicHeightSchema = yup.object().shape({
   datum: yup.string().optional(),
   geographic: yup.object().shape({
-    height: yup
+    elevation: yup
       .number()
       .when('unit', {
         is: 'ft',
         then: yup.number().required().min(2000).max(14000),
       })
       .when('unit', {
-        is: 'mt',
+        is: 'm',
         then: yup.number().required().min(600).max(4300),
       })
       .required()
@@ -112,13 +112,11 @@ export const nad83GeographicHeightSchema = yup.object().shape({
     unit: yup
       .string()
       .required()
-      .oneOf(options.height.map((x) => x.value))
-      .label('Vertical Units'),
+      .oneOf(options.units.map((x) => x.value))
+      .label('This'),
   }),
 });
 
-// utm xmin 231722.43 xmax 677972.9
-// utm ymin 4084701.37 ymax 4660865.32
 export const gridCoordinatesSchema = yup.object().shape({
   grid: yup.object().shape({
     zone: yup
@@ -129,12 +127,12 @@ export const gridCoordinatesSchema = yup.object().shape({
     unit: yup
       .string()
       .required()
-      .oneOf(options.height.map((x) => x.value))
+      .oneOf(options.units.map((x) => x.value))
       .label('The unit'),
-    adjustment: yup // not required for nad27
+    adjustment: yup
       .string()
       .required()
-      .oneOf(options.adjustment.map((x) => x.value))
+      .oneOf(options.adjustments.map((x) => x.value))
       .label('The adjustment'),
     northing: yup.number().min(0).required().label('northing'),
     easting: yup.number().min(0).required().label('easting'),
@@ -149,6 +147,9 @@ export const gridCoordinatesSchema = yup.object().shape({
         then: yup.number().min(600).max(4300),
       })
       .label('elevation'),
-    verticalDatum: yup.string().oneOf(options.verticalDatum).label('The datum'),
+    verticalDatum: yup
+      .string()
+      .oneOf(options.verticalDatums)
+      .label('The datum'),
   }),
 });

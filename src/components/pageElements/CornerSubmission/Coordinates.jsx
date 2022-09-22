@@ -20,18 +20,18 @@ import {
   getStateValue,
 } from './CornerSubmission.jsx';
 import {
-  adjustment,
+  adjustments,
   geographic,
   grid,
-  height,
+  units,
   statePlaneZones,
-  verticalDatum,
+  verticalDatums,
 } from './Options.mjs';
 import {
   coordinatePickerSchema,
   latitudeSchema,
   longitudeSchema,
-  nad83GeographicHeightSchema,
+  geographicHeightSchema,
   gridCoordinatesSchema,
 } from './Schema';
 import Wizard from './Wizard.jsx';
@@ -311,17 +311,36 @@ export const Longitude = () => {
   );
 };
 
+const geographicHeightDefaults = {
+  geographic: {
+    elevation: '',
+    units: 'meters',
+    adjustment: '',
+  },
+};
 export const GeographicHeight = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
 
+  let defaultValues = getStateForId(state, id);
+  if (!defaultValues?.geographic) {
+    defaultValues = geographicHeightDefaults;
+  }
+  if (!defaultValues?.geographic.unit) {
+    defaultValues.geographic.unit = 'm';
+  }
+
+  const selectedUnit = units.find(
+    (x) => (x.value = defaultValues.geographic.unit)
+  );
+
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
-    resolver: yupResolver(nad83GeographicHeightSchema),
+    defaultValues,
+    resolver: yupResolver(geographicHeightSchema),
   });
 
-  const [selected, setSelected] = useState(height[0]);
+  const [selected, setSelected] = useState(selectedUnit);
 
   const onSubmit = (data) => {
     actions.updateAction(data);
@@ -333,13 +352,14 @@ export const GeographicHeight = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label htmlFor="geographic.height" className="font-semibold">
+      <DevTool control={control} />
+      <label htmlFor="geographic.elevation" className="font-semibold">
         Ellipsoid Height
       </label>
       <Input
-        value={getStateValue(state, id, 'height')}
+        value={getStateValue(state, id, 'elevation')}
         label={false}
-        name="geographic.height"
+        name="geographic.elevation"
         inputRef={register}
       />
       <Controller
@@ -357,7 +377,7 @@ export const GeographicHeight = () => {
             <RadioGroup.Label className="sr-only">
               Elevation unit
             </RadioGroup.Label>
-            {height.map((option) => (
+            {units.map((option) => (
               <RadioGroup.Option
                 key={option.value}
                 value={option}
@@ -390,7 +410,7 @@ export const GeographicHeight = () => {
       />
       <ErrorMessage
         errors={formState.errors}
-        name="geographic.height"
+        name="geographic.elevation"
         as={ErrorMessageTag}
       />
       <ErrorMessage
@@ -408,7 +428,7 @@ export const GeographicHeight = () => {
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
-              options={adjustment}
+              options={adjustments}
               placeholder="Select the year"
               currentValue={getStateValue(state, id, 'adjustment')}
               onUpdate={onChange}
@@ -421,7 +441,6 @@ export const GeographicHeight = () => {
           as={ErrorMessageTag}
         />
       </div>
-
       <Wizard back={() => navigate(-1)} next={true} clear={reset} />
     </form>
   );
@@ -497,7 +516,7 @@ export const GridCoordinates = () => {
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
-              options={height}
+              options={units}
               placeholder="What are the units"
               currentValue={getStateValue(state, id, name)}
               onUpdate={onChange}
@@ -520,7 +539,7 @@ export const GridCoordinates = () => {
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
-              options={adjustment}
+              options={adjustments}
               placeholder="What is the zone"
               currentValue={getStateValue(state, id, name)}
               onUpdate={onChange}
@@ -577,7 +596,7 @@ export const GridCoordinates = () => {
           render={({ field: { onChange, name } }) => (
             <Select
               name={name}
-              options={verticalDatum}
+              options={verticalDatums}
               placeholder="What is the vertical datum"
               currentValue={getStateValue(state, id, name)}
               onUpdate={onChange}
@@ -738,7 +757,7 @@ CoordinateReview.propTypes = {
       minutes: PropTypes.number,
       seconds: PropTypes.number,
     }),
-    height: PropTypes.number,
+    elevation: PropTypes.number,
     unit: PropTypes.string,
     adjustment: PropTypes.string,
   }),
@@ -797,7 +816,7 @@ const GeographicCoordinateReview = ({ geographic }) => (
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Ellipsoid Height</span>
-      <span>{geographic?.height}</span>
+      <span>{geographic?.elevation}</span>
     </div>
   </>
 );
@@ -813,7 +832,7 @@ GeographicCoordinateReview.propTypes = {
       minutes: PropTypes.number,
       seconds: PropTypes.number,
     }),
-    height: PropTypes.number,
+    elevation: PropTypes.number,
     unit: PropTypes.string,
     adjustment: PropTypes.string,
   }),
