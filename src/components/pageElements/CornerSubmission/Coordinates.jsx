@@ -312,7 +312,7 @@ export const Longitude = () => {
 };
 
 export const GeographicHeight = () => {
-  const { id, system } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const { state, actions } = useStateMachine({ updateAction });
 
@@ -333,7 +333,6 @@ export const GeographicHeight = () => {
       className="inline-grid w-full gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <input type="hidden" name="system" value={system} />
       <label htmlFor="geographic.height" className="font-semibold">
         Ellipsoid Height
       </label>
