@@ -314,7 +314,7 @@ export const Longitude = () => {
 const geographicHeightDefaults = {
   geographic: {
     elevation: '',
-    units: 'meters',
+    units: 'm',
     adjustment: '',
   },
 };
