@@ -811,12 +811,8 @@ const GeographicCoordinateReview = ({ geographic }) => (
       <span>{`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}</span>
     </div>
     <div className="flex justify-between">
-      <span className="font-semibold">Vertical Units</span>
-      <span>{keyMap.unit(geographic?.unit)}</span>
-    </div>
-    <div className="flex justify-between">
       <span className="font-semibold">Ellipsoid Height</span>
-      <span>{geographic?.elevation}</span>
+      <span>{`${geographic?.elevation} ${keyMap.unit(geographic?.unit)}`}</span>
     </div>
   </>
 );
