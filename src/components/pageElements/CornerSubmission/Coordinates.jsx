@@ -332,7 +332,7 @@ export const GeographicHeight = () => {
   }
 
   const selectedUnit = units.find(
-    (x) => (x.value = defaultValues.geographic.unit)
+    (x) => x.value === defaultValues.geographic.unit
   );
 
   const { control, register, handleSubmit, reset, formState } = useForm({
