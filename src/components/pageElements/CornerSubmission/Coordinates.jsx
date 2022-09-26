@@ -430,7 +430,7 @@ export const GeographicHeight = () => {
               name={name}
               options={adjustments}
               placeholder="Select the year"
-              currentValue={getStateValue(state, id, 'adjustment')}
+              currentValue={getStateValue(state, id, name)}
               onUpdate={onChange}
             />
           )}
