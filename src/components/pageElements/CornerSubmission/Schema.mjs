@@ -105,9 +105,9 @@ export const geographicHeightSchema = yup.object().shape({
       .required()
       .label('Ellipsoid Height'),
     adjustment: yup
-      .number()
+      .string()
       .required()
-      .oneOf([1996, 2007, 2011])
+      .oneOf(['1996', '2007', '2011'])
       .label('NGS Adjustment'),
     unit: yup
       .string()
