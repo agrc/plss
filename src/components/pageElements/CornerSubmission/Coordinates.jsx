@@ -153,6 +153,7 @@ export const Latitude = () => {
   });
 
   const onSubmit = (data) => {
+    data.grid = null;
     actions.updateAction(data);
     navigate(`/submission/${id}/coordinates/geographic/${system}/easting`);
   };
@@ -237,6 +238,7 @@ export const Longitude = () => {
   });
 
   const onSubmit = (data) => {
+    data.grid = null;
     actions.updateAction(data);
     navigate(`/submission/${id}/coordinates/geographic/${system}/height`);
   };
@@ -468,6 +470,7 @@ export const GridCoordinates = () => {
   });
 
   const onSubmit = (data) => {
+    data.geographic = null;
     actions.updateAction(data);
     navigate(`/submission/${id}/review`);
   };
