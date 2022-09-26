@@ -26,17 +26,21 @@ export const getStateValue = (state, id, property) => {
     return '';
   }
 
-  let section;
-  let subProperty = property;
   if (property.indexOf('.') > -1) {
-    [section, subProperty] = property.split('.');
+    const [section, subProperty] = property.split('.');
+
+    if (!(section in data) || data[section] === null) {
+      return '';
+    }
+
+    return data[section][subProperty] ?? '';
   }
 
-  if (!(property in data) && !(section in data)) {
+  if (!(property in data)) {
     return '';
   }
 
-  return data[property] ?? data[section][subProperty];
+  return data[property] ?? '';
 };
 
 function ErrorFallback({ error }) {
