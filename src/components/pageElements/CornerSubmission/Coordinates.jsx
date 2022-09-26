@@ -379,34 +379,36 @@ export const GeographicHeight = () => {
             <RadioGroup.Label className="sr-only">
               Elevation unit
             </RadioGroup.Label>
-            {units.map((option) => (
-              <RadioGroup.Option
-                key={option.value}
-                value={option}
-                className={({ checked }) =>
-                  clsx(
-                    'flex w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
-                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
-                    checked
-                      ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
-                      : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
-                  )
-                }
-              >
-                {({ checked }) => (
-                  <div className="text-sm">
-                    <RadioGroup.Label
-                      as="p"
-                      className={`font-medium ${
-                        checked ? 'text-white' : 'text-indigo-100'
-                      }`}
-                    >
-                      {option.label}
-                    </RadioGroup.Label>
-                  </div>
-                )}
-              </RadioGroup.Option>
-            ))}
+            {units
+              .filter((x) => x.value !== 'ft.survey')
+              .map((option) => (
+                <RadioGroup.Option
+                  key={option.value}
+                  value={option}
+                  className={({ checked }) =>
+                    clsx(
+                      'flex h-10 w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
+                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
+                      checked
+                        ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
+                        : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
+                    )
+                  }
+                >
+                  {({ checked }) => (
+                    <div className="text-sm">
+                      <RadioGroup.Label
+                        as="p"
+                        className={`font-medium ${
+                          checked ? 'text-white' : 'text-indigo-100'
+                        }`}
+                      >
+                        {option.label}
+                      </RadioGroup.Label>
+                    </div>
+                  )}
+                </RadioGroup.Option>
+              ))}
           </RadioGroup>
         )}
       />
