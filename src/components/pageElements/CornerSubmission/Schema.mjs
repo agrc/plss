@@ -141,14 +141,52 @@ export const gridCoordinatesSchema = yup.object().shape({
     northing: yup.number().min(0).required().label('northing'),
     easting: yup.number().min(0).required().label('easting'),
     elevation: yup
-      .number()
+      .mixed()
+      .notRequired()
       .when('unit', {
         is: 'ft',
-        then: yup.number().min(2000).max(14000),
+        then: yup
+          .number()
+          .typeError('Only number are acceptable')
+          .min(2000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
+          .max(14000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
+          .nullable()
+          .transform((value, originalValue) =>
+            typeof originalValue === 'string' && originalValue.trim() === ''
+              ? null
+              : value
+          )
+          .notRequired(),
       })
       .when('unit', {
-        is: 'mt',
-        then: yup.number().min(600).max(4300),
+        is: 'ft.survey',
+        then: yup
+          .number()
+          .typeError('Only number are acceptable')
+
+          .min(2000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
+          .max(14000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
+          .nullable()
+          .transform((value, originalValue) =>
+            typeof originalValue === 'string' && originalValue.trim() === ''
+              ? null
+              : value
+          )
+          .notRequired(),
+      })
+      .when('unit', {
+        is: 'm',
+        then: yup
+          .number()
+          .min(600, 'Please enter a valid value for Utah (600-4,300 m)')
+          .max(4300, 'Please enter a valid value for Utah (600-4,300 m)')
+          .nullable()
+          .transform((value, originalValue) =>
+            typeof originalValue === 'string' && originalValue.trim() === ''
+              ? null
+              : value
+          )
+          .notRequired(),
       })
       .label('elevation'),
     verticalDatum: yup

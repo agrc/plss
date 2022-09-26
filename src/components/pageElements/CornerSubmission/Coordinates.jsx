@@ -784,10 +784,12 @@ const GridCoordinateReview = ({ grid }) => (
       <span className="font-semibold">Coordinates</span>
       <span>{`${grid?.northing}, ${grid?.easting}`}</span>
     </div>
-    <div className="flex justify-between">
-      <span className="font-semibold">{grid?.verticalDatum} Elevation</span>
-      <span>{grid?.elevation}</span>
-    </div>
+    {grid?.elevation && (
+      <div className="flex justify-between">
+        <span className="font-semibold">{grid?.verticalDatum} Elevation</span>
+        <span>{grid?.elevation}</span>
+      </div>
+    )}
   </>
 );
 GridCoordinateReview.propTypes = {
