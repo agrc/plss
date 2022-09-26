@@ -102,6 +102,10 @@ export const geographicHeightSchema = yup.object().shape({
         is: 'm',
         then: yup.number().required().min(600).max(4300),
       })
+      .when('unit', {
+        is: 'ft.survey',
+        then: yup.number().required().min(2000).max(14000),
+      })
       .required()
       .label('Ellipsoid Height'),
     adjustment: yup
