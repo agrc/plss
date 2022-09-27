@@ -1,10 +1,7 @@
 {
   "buckets": [
     {
-      "id": "ut-dts-agrc-plss-dev"
-    },
-    {
-      "id": "ut-dts-agrc-plss-dev.appspot.com"
+      "id": "localhost"
     }
   ]
 }
