@@ -346,7 +346,7 @@ export const GeographicHeight = () => {
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${id}/review`);
+    navigate(`/submission/${id}/images`);
   };
 
   return (
@@ -474,7 +474,7 @@ export const GridCoordinates = () => {
   const onSubmit = (data) => {
     data.geographic = null;
     actions.updateAction(data);
-    navigate(`/submission/${id}/review`);
+    navigate(`/submission/${id}/images`);
   };
 
   return (

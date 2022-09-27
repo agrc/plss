@@ -47,6 +47,9 @@ const Review = lazy(() =>
   }))
 );
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
+const Images = lazy(() =>
+  import('../pageElements/CornerSubmission/Images.jsx')
+);
 
 function ErrorFallback({ error }) {
   return (
@@ -125,6 +128,7 @@ export default function Drawer({
                     path=":id/coordinates/grid/:system"
                     element={<GridCoordinates />}
                   />
+                  <Route path=":id/images" element={<Images />} />
                   <Route path=":id/review" element={<Review />} />
                 </Route>
                 <Route
