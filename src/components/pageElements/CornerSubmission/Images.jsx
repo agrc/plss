@@ -6,9 +6,11 @@ import {
   useStorageDownloadURL,
   useStorageTask,
 } from 'reactfire';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
-
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
+import Wizard from './Wizard.jsx';
 const UploadProgress = ({ uploadTask, storageRef }) => {
   const { status, data: uploadProgress } = useStorageTask(
     uploadTask,
@@ -34,29 +36,29 @@ UploadProgress.propTypes = {
   storageRef: PropTypes.object.isRequired,
 };
 
-const FetchImage = ({ storagePath }) => {
+const ImagePreview = ({ storagePath }) => {
   const storage = useStorage();
 
   const { data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
 
   return (
-    <div className="mt-6 flex flex-col rounded border bg-slate-800 text-white shadow">
+    <div className="flex flex-col rounded border bg-slate-800 text-white/50 shadow">
       <img
         src={imageURL}
         alt="demo download"
         className="max-w-[200px] rounded-t"
       />
-      <span className="w-full flex-1 select-none border-t py-1 text-center text-sm">
-        image preview
+      <span className="w-full flex-1 select-none border-t py-1 text-center text-sm italic">
+        preview
       </span>
     </div>
   );
 };
-FetchImage.propTypes = {
+ImagePreview.propTypes = {
   storagePath: PropTypes.string.isRequired,
 };
 
-export default function Images() {
+function Image() {
   const { id } = useParams();
   const { data: user } = useUser();
   const storage = useStorage();
@@ -123,7 +125,15 @@ export default function Images() {
 
   return (
     <>
-      <input type="file" onChange={onChange} />
+      <input
+        type="file"
+        onChange={onChange}
+        className="text-center text-slate-300 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
+        file:border-solid file:border-indigo-600 file:bg-indigo-500 file:px-7 file:py-1 file:text-sm
+        file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-indigo-600
+        file:focus:border-indigo-500 file:focus:outline-none file:focus:ring-2 file:focus:ring-indigo-600 file:focus:ring-opacity-50
+        file:active:bg-indigo-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
+      />
       {uploadTask && (
         <UploadProgress uploadTask={uploadTask} storageRef={fileReference} />
       )}
@@ -134,9 +144,38 @@ export default function Images() {
       )}
       {status === 'success' && (
         <div className="flex flex-col items-center">
-          <FetchImage storagePath={fileReference.fullPath} />
+          <ImagePreview storagePath={fileReference.fullPath} />
         </div>
       )}
+    </>
+  );
+}
+
+export default function MonumentImages() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <h3 className="mb-4 text-2xl font-semibold">Monument Images</h3>
+      <NumberedForm>
+        <NumberedFormSection number={1} title="Map view or sketch">
+          <Image />
+        </NumberedFormSection>
+        <NumberedFormSection number={2} title="Monument area">
+          <Image />
+        </NumberedFormSection>
+        <NumberedFormSection number={3} title="Monument close-up">
+          <Image />
+        </NumberedFormSection>
+        <NumberedFormSection number={4} title="Extra pages">
+          <Image />
+          10 extra pages are allowed
+          <Button style="alternate">Add more images</Button>
+        </NumberedFormSection>
+        <NumberedFormSection number={5} title="">
+          <Wizard back={() => navigate(-1)} next={true} clear={() => {}} />
+        </NumberedFormSection>
+      </NumberedForm>
     </>
   );
 }
