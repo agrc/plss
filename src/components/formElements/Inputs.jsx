@@ -6,6 +6,7 @@ export const Input = ({
   type,
   value,
   label,
+  required,
   placeholder,
   inputRef,
   left,
@@ -23,17 +24,21 @@ export const Input = ({
   return (
     <div className="flex flex-col gap-[2px]">
       {label !== false && (
-        <label htmlFor={name} className="">
+        <Label htmlFor={name} required={required} className="font-semibold">
           {label ?? name}
-        </label>
+        </Label>
       )}
       <input
         name={name}
+        id={name}
         type={type}
+        step={type === 'number' ? '0.000001' : null}
         defaultValue={value}
         placeholder={placeholder}
         {...inputRef(name)}
         className={classes}
+        aria-required={required}
+        aria-labelledby={label ? `label.${name}` : null}
       />
     </div>
   );
@@ -52,6 +57,10 @@ Input.propTypes = {
    * The text of the accompanied label otherwise it will be the name of the input
    */
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  /**
+   * If the input is required in the form
+   */
+  required: PropTypes.bool,
   /**
    * The value to preset the input to
    */
@@ -82,10 +91,26 @@ Input.defaultProps = {
   name: null,
   type: 'text',
   label: undefined,
+  required: false,
   value: null,
   placeholder: null,
   inputRef: null,
   left: false,
   className: null,
   touched: false,
+};
+
+export const Label = ({ children, htmlFor, required, className }) => {
+  return (
+    <label id={`label.${htmlFor}`} htmlFor={htmlFor} className={className}>
+      {children}
+      {required && <span className="not-sr-only ml-0.5 text-rose-300">*</span>}
+    </label>
+  );
+};
+Label.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  htmlFor: PropTypes.string,
+  required: PropTypes.bool,
 };
