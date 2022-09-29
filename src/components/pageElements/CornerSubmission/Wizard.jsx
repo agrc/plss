@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function Wizard({ back, next, finish, clear }) {
   return (
-    <div className="mt-6 flex justify-center">
+    <div className="flex justify-center">
       {back && (
         <Button style="secondary" buttonGroup={{ left: true }} onClick={back}>
           Back
