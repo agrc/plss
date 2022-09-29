@@ -30,7 +30,15 @@ const getDefaultValue = (value, placeholder, options) => {
   return option;
 };
 
-export const Select = ({ options, currentValue, onUpdate, placeholder }) => {
+export const Select = ({
+  label,
+  name,
+  required,
+  options,
+  currentValue,
+  onUpdate,
+  placeholder,
+}) => {
   const [value, setValue] = useState(currentValue);
   return (
     <Listbox
@@ -40,8 +48,19 @@ export const Select = ({ options, currentValue, onUpdate, placeholder }) => {
         onUpdate(newValue?.value ?? newValue);
       }}
     >
+      {label !== false && (
+        <Listbox.Label className="font-semibold">
+          {label ?? name}
+          {required && (
+            <span className="not-sr-only ml-0.5 text-rose-300">*</span>
+          )}
+        </Listbox.Label>
+      )}
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+        <Listbox.Button
+          aria-required={required}
+          className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+        >
           <span className="block h-5 truncate text-slate-600">
             {getDefaultValue(value, placeholder, options)}
           </span>
@@ -113,6 +132,14 @@ Select.propTypes = {
    * The property name used by react hook form
    */
   name: PropTypes.string,
+  /**
+   * The text of the accompanied label otherwise it will be the name of the input
+   */
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  /**
+   * If the input is required in the form
+   */
+  required: PropTypes.bool,
   /**
    * The help text to display
    */
