@@ -616,7 +616,7 @@ export const GridCoordinates = () => {
                   name={name}
                   options={verticalDatums}
                   label="Vertical datum"
-                  required={true}
+                  required={false}
                   placeholder="What is the vertical datum"
                   currentValue={getStateValue(state, id, name)}
                   onUpdate={onChange}
@@ -634,7 +634,7 @@ export const GridCoordinates = () => {
               value={getStateValue(state, id, 'grid.elevation')}
               type="number"
               label="Elevation"
-              required={true}
+              required={false}
               name="grid.elevation"
               inputRef={register}
             />
