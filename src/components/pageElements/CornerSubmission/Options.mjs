@@ -31,7 +31,6 @@ export const adjustments = [
 ];
 export const units = [
   { label: 'Meters', value: 'm' },
-  { label: 'US Survey Feet', value: 'ft.survey' },
   { label: 'International Feet', value: 'ft' },
 ];
 export const verticalDatums = ['NAVD88', 'NGVD29'];
