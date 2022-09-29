@@ -54,10 +54,6 @@ body {
   }
 }
 
-.react-tabs {
-  @apply flex flex-1 flex-col overflow-hidden;
-  -webkit-tap-highlight-color: transparent;
-}
 .u {
   fill: #331c38;
 }
@@ -78,38 +74,6 @@ body {
 }
 .s {
   fill: #f7ea99;
-}
-
-.react-tabs__tab-list {
-  @apply mb-4 flex justify-evenly p-0;
-}
-
-.react-tabs__tab {
-  @apply relative inline-block w-full cursor-pointer list-none whitespace-nowrap border-b-2 border-gray-100 px-4 pt-2 font-bold;
-}
-
-.react-tabs__tab--selected {
-  @apply border-b-2 border-indigo-300 font-bold;
-}
-
-.react-tabs__tab:focus {
-  outline: none;
-}
-
-.react-tabs__tab-panel {
-  @apply hidden;
-}
-
-.react-tabs__tab-panel--selected {
-  @apply block overflow-y-auto;
-}
-
-.toggle-checkbox:checked {
-  @apply right-0 border-indigo-400;
-}
-
-.toggle-checkbox:checked + .toggle-label {
-  @apply bg-indigo-400;
 }
 
 .esri-view .esri-view-surface--inset-outline:focus::after {
