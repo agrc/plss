@@ -37,9 +37,9 @@ import {
 import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers/index.mjs';
 
-const formats = { Grid: grid, Geographic: geographic };
+const formats = { Geographic: geographic, Grid: grid };
 
-const defaultTabIndex = 1;
+const defaultTabIndex = 0;
 
 const getOpenTabIndex = (datum) => {
   if (!datum) {
@@ -52,7 +52,7 @@ const getOpenTabIndex = (datum) => {
 
   datum = datum.split('-')[0];
 
-  const index = datum === 'grid' ? 0 : 1;
+  const index = datum === 'grid' ? 1 : 0;
 
   return index;
 };
