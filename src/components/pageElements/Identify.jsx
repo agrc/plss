@@ -166,14 +166,14 @@ const SubmissionPicker = ({ authenticated, blmPointId }) => {
                 navigate(`/submission/${blmPointId}`);
               }}
             >
-              new
+              new sheet
             </Button>
             <Button
               onClick={() => {
                 navigate(`/upload/${blmPointId}`);
               }}
             >
-              existing
+              existing sheet
             </Button>
           </>
         ) : (
