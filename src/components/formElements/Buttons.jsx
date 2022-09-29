@@ -7,7 +7,7 @@ export const LogInButton = () => {
   const auth = useAuth();
 
   const handleClick = () => {
-    const provider = new OAuthProvider('oidc.utahid2');
+    const provider = new OAuthProvider('oidc.utahid');
     provider.addScope('profile');
     provider.addScope('email');
 
