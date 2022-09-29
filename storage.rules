@@ -1,8 +1,10 @@
 rules_version = '2';
-// rules cascade. If any rule passes the action is allowed
 service firebase.storage {
+  function isAuthenticated() {
+    return request.auth != null;
+  }
   function isCurrentUser(uid) {
-    return request.auth != null && request.auth.uid == uid;
+    return request.auth.uid == uid;
   }
   function lessThan(megabytes) {
     return request.resource != null && request.resource.size < (megabytes * 1024 * 1024);
@@ -10,17 +12,15 @@ service firebase.storage {
   function isImage() {
     return request.resource.contentType.matches('image/.*');
   }
-  function noDeletes() {
+  function hasAttachment() {
     return request.resource != null;
   }
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if false;
-    }
 
+  match /b/{bucket}/o {
     match /submitters/{uid}/{allPaths=**} {
-      allow read: if isCurrentUser(uid);
-      allow write: if isCurrentUser(uid) && lessThan(5) && noDeletes() && isImage();
+      allow list, delete: if false;
+      allow get: if isAuthenticated() && isCurrentUser(uid);
+      allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
     }
   }
 }
