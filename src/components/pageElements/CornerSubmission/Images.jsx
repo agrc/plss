@@ -8,9 +8,14 @@ import {
 } from 'reactfire';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
+import { useStateMachine } from 'little-state-machine';
+import { useForm } from 'react-hook-form';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { updateAction, getStateForId } from './CornerSubmission.jsx';
+import Spacer from '../../formElements/Spacer.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Wizard from './Wizard.jsx';
+
 const UploadProgress = ({ uploadTask, storageRef }) => {
   const { status, data: uploadProgress } = useStorageTask(
     uploadTask,
@@ -58,7 +63,7 @@ ImagePreview.propTypes = {
   storagePath: PropTypes.string.isRequired,
 };
 
-function Image() {
+function ImageUpload({ defaultFileName }) {
   const { id } = useParams();
   const { data: user } = useUser();
   const storage = useStorage();
@@ -70,7 +75,13 @@ function Image() {
   const onChange = (event) => {
     const fileList = event.target.files;
     const fileToUpload = fileList[0];
-    const fileName = fileToUpload.name;
+    let fileName = fileToUpload.name;
+
+    if (defaultFileName) {
+      const [, ext] = fileName.split('.');
+      fileName = `${defaultFileName}.${ext}`;
+    }
+
     const path = `submitters/${user.uid})/${id}/${fileName}`;
     const fileRef = ref(storage, path);
 
@@ -128,7 +139,7 @@ function Image() {
       <input
         type="file"
         onChange={onChange}
-        className="text-center text-slate-300 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
+        className="text-center text-sm text-slate-300 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
         file:border-solid file:border-indigo-600 file:bg-indigo-500 file:px-7 file:py-1 file:text-sm
         file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-indigo-600
         file:focus:border-indigo-500 file:focus:outline-none file:focus:ring-2 file:focus:ring-indigo-600 file:focus:ring-opacity-50
@@ -150,29 +161,64 @@ function Image() {
     </>
   );
 }
+ImageUpload.propTypes = {
+  defaultFileName: PropTypes.string,
+};
 
+const limit = 10;
 export default function MonumentImages() {
+  let { id } = useParams();
   const navigate = useNavigate();
+  const { state, actions } = useStateMachine({ updateAction });
+  const [extraPageCount, setExtraPageCount] = useState(1);
+
+  let defaultValues = getStateForId(state, id);
+
+  const { handleSubmit } = useForm({
+    defaultValues,
+  });
+
+  const onSubmit = (data) => {
+    actions.updateAction(data);
+    navigate(`/submission/${id}/coordinates`);
+  };
 
   return (
     <>
-      <h3 className="mb-4 text-2xl font-semibold">Monument Images</h3>
-      <NumberedForm>
+      <h3 className="text-2xl font-semibold">Monument Images</h3>
+      <p className="text-sm leading-none">All images are optional</p>
+      <Spacer className="my-4" />
+      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Map view or sketch">
-          <Image />
+          <ImageUpload defaultFileName="map" />
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Monument area">
-          <Image />
+          <ImageUpload defaultFileName="monument" />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
-          <Image />
+          <ImageUpload defaultFileName="close-up" />
         </NumberedFormSection>
         <NumberedFormSection number={4} title="Extra pages">
-          <Image />
-          10 extra pages are allowed
-          <Button style="alternate">Add more images</Button>
+          {new Array(extraPageCount).fill().map((_, i) => (
+            <ImageUpload key={i} />
+          ))}
+          {limit - extraPageCount} extra pages are allowed
+          <Button
+            style="alternate"
+            state={extraPageCount >= limit ? 'disabled' : 'idle'}
+            onClick={() => {
+              const nextPage = extraPageCount + 1;
+              if (nextPage > limit) {
+                return;
+              }
+
+              setExtraPageCount(nextPage);
+            }}
+          >
+            Add another image
+          </Button>
         </NumberedFormSection>
-        <NumberedFormSection number={5} title="">
+        <NumberedFormSection number={0}>
           <Wizard back={() => navigate(-1)} next={true} clear={() => {}} />
         </NumberedFormSection>
       </NumberedForm>
