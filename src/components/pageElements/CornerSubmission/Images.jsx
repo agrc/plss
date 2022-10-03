@@ -82,7 +82,7 @@ function ImageUpload({ defaultFileName }) {
       fileName = `${defaultFileName}.${ext}`;
     }
 
-    const path = `submitters/${user.uid})/${id}/${fileName}`;
+    const path = `submitters/${user.uid}/${id}/${fileName}`;
     const fileRef = ref(storage, path);
 
     setFileReference(fileRef);
