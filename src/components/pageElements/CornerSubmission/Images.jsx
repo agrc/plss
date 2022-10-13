@@ -9,7 +9,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
 import { useStateMachine } from 'little-state-machine';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { updateAction, getStateForId } from './CornerSubmission.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
@@ -31,7 +31,6 @@ const UploadProgress = ({ uploadTask, storageRef }) => {
 
     const percentComplete =
       Math.round(100 * (bytesTransferred / totalBytes)) + '%';
-    console.log(`Uploading image: ${percentComplete} complete`);
     return <span>{percentComplete}</span>;
   }
 };
@@ -63,7 +62,7 @@ ImagePreview.propTypes = {
   storagePath: PropTypes.string.isRequired,
 };
 
-function ImageUpload({ defaultFileName }) {
+function ImageUpload({ defaultFileName, onChange }) {
   const { id } = useParams();
   const { data: user } = useUser();
   const storage = useStorage();
@@ -72,7 +71,7 @@ function ImageUpload({ defaultFileName }) {
   const [status, setStatus] = useState('idle');
   const message = useRef();
 
-  const onChange = (event) => {
+  const uploadImage = (event) => {
     const fileList = event.target.files;
     const fileToUpload = fileList[0];
     let fileName = fileToUpload.name;
@@ -88,8 +87,6 @@ function ImageUpload({ defaultFileName }) {
     setFileReference(fileRef);
     setStatus('loading');
 
-    console.log(fileRef);
-
     const task = uploadBytesResumable(fileRef, fileToUpload, {
       contentType: fileToUpload.type,
     });
@@ -98,11 +95,9 @@ function ImageUpload({ defaultFileName }) {
       .then(() => {
         setUploadTask(undefined);
         setStatus('success');
+        onChange(fileRef.fullPath);
       })
-      .catch((e) => {
-        console.log('caught the error again', e);
-        console.log('task', task);
-
+      .catch(() => {
         try {
           if (uploadTask.snapshot.totalBytes > 5 * 1024 * 1024) {
             setStatus('error');
@@ -138,7 +133,7 @@ function ImageUpload({ defaultFileName }) {
     <>
       <input
         type="file"
-        onChange={onChange}
+        onChange={uploadImage}
         className="text-center text-sm text-slate-300 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
         file:border-solid file:border-indigo-600 file:bg-indigo-500 file:px-7 file:py-1 file:text-sm
         file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-indigo-600
@@ -163,6 +158,7 @@ function ImageUpload({ defaultFileName }) {
 }
 ImageUpload.propTypes = {
   defaultFileName: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 const limit = 10;
@@ -174,13 +170,13 @@ export default function MonumentImages() {
 
   let defaultValues = getStateForId(state, id);
 
-  const { handleSubmit } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues,
   });
 
   const onSubmit = (data) => {
     actions.updateAction(data);
-    navigate(`/submission/${id}/coordinates`);
+    navigate(`/submission/${id}/review`);
   };
 
   return (
@@ -190,17 +186,45 @@ export default function MonumentImages() {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Map view or sketch">
-          <ImageUpload defaultFileName="map" />
+          <Controller
+            name="images.map"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="map" onChange={onChange} />
+            )}
+          />
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Monument area">
-          <ImageUpload defaultFileName="monument" />
+          <Controller
+            name="images.monument"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="monument" onChange={onChange} />
+            )}
+          />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
-          <ImageUpload defaultFileName="close-up" />
+          <Controller
+            name="images.close-up"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="close-up" onChange={onChange} />
+            )}
+          />
         </NumberedFormSection>
         <NumberedFormSection number={4} title="Extra pages">
           {new Array(extraPageCount).fill().map((_, i) => (
-            <ImageUpload key={i} />
+            <Controller
+              name={`images.extra-${i}`}
+              control={control}
+              key={i}
+              render={({ field: { onChange } }) => (
+                <ImageUpload
+                  defaultFileName={`extra-${i}`}
+                  onChange={onChange}
+                />
+              )}
+            />
           ))}
           {limit - extraPageCount} extra pages are allowed
           <Button
@@ -219,7 +243,7 @@ export default function MonumentImages() {
           </Button>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => navigate(-1)} next={true} clear={() => {}} />
+          <Wizard back={() => navigate(-1)} next={true} clear={false} />
         </NumberedFormSection>
       </NumberedForm>
     </>
