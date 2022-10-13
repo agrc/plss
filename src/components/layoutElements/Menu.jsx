@@ -7,6 +7,7 @@ import {
   PlusCircleIcon,
   UserCircleIcon,
   SwatchIcon,
+  HomeModernIcon,
 } from '@heroicons/react/24/outline';
 import { useUser } from 'reactfire';
 
@@ -46,6 +47,9 @@ export default function Menu() {
           </MenuItem>
         </>
       )}
+      <MenuItem Icon={HomeModernIcon} route="/home">
+        Home
+      </MenuItem>
       <MenuItem Icon={SwatchIcon} route="/legend">
         Map Legend
       </MenuItem>
