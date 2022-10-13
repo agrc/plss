@@ -17,33 +17,38 @@ function Toggle({
   const [value, setValue] = useState(currentValue);
 
   return (
-    <Switch
-      name={name}
-      checked={value}
-      onChange={(newValue) => {
-        setValue(newValue);
-        onUpdate(newValue);
-      }}
-      className={clsx(
-        {
-          'bg-indigo-200': value,
-          'bg-white': !value,
-        },
-        switchCss
-      )}
-    >
-      <span className="sr-only">{screenReader}</span>
-      <span
-        aria-hidden="true"
+    <div className="inline-flex">
+      <Switch
+        name={name}
+        checked={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+          onUpdate(newValue);
+        }}
         className={clsx(
           {
-            'translate-x-8': value,
-            'translate-x-0': !value,
+            'bg-indigo-200': value,
+            'bg-white': !value,
           },
-          ringCss
+          switchCss
         )}
-      />
-    </Switch>
+      >
+        <span className="sr-only">{screenReader}</span>
+        <span
+          aria-hidden="true"
+          className={clsx(
+            {
+              'translate-x-8': value,
+              'translate-x-0': !value,
+            },
+            ringCss
+          )}
+        />
+      </Switch>
+      <span className="mt-1 self-center pl-2 text-sm text-slate-300">
+        {value ? 'Yes' : 'No'}
+      </span>
+    </div>
   );
 }
 
