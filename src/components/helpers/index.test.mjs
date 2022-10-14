@@ -42,6 +42,6 @@ describe('formatDatum', () => {
 
   test('it formats datum', () => {
     expect(formatDatum('geographic-nad83')).toBe('NAD83 Geographic');
-    expect(formatDatum('grid-nad83')).toBe('NAD83 State Plane');
+    expect(formatDatum('grid-nad83')).toBe('NAD83 2011 State Plane');
   });
 });

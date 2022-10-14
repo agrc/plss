@@ -21,7 +21,7 @@ export const geographic = [
   },
 ];
 export const grid = [
-  { label: 'NAD83 State Plane', value: 'grid-nad83' },
+  { label: 'NAD83 2011 State Plane', value: 'grid-nad83' },
   { label: 'NATRF2022 (coming in 2025)', value: 'grid-natrf', disabled: true },
 ];
 export const units = [
