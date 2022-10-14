@@ -13,6 +13,7 @@ const MyContent = lazy(() => import('../pageElements/MyContent.jsx'));
 const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
+const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Metadata = lazy(() =>
   import('../pageElements/CornerSubmission/Metadata.jsx')
 );
@@ -153,6 +154,7 @@ export default function Drawer({
                 <Login dispatch={dispatch} authenticated={authenticated} />
               }
             />
+            <Route path="home" element={<Welcome />} />
             <Route path="legend" element={<Legend />} />
             <Route path="identify" element={<Identify graphic={graphic} />} />
             <Route path="*" element={<>404</>} />
@@ -173,7 +175,7 @@ Drawer.propTypes = {
 
 export const useDrawerOpen = () => {
   const location = useLocation();
-  const [drawOpen, setDrawerOpen] = useState(false);
+  const [drawOpen, setDrawerOpen] = useState(true);
 
   useEffect(() => {
     setDrawerOpen(location?.pathname !== '/');
