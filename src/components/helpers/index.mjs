@@ -3,7 +3,6 @@ import {
   status,
   grid,
   units,
-  adjustments,
   geographic,
   statePlaneZones,
 } from '../pageElements/CornerSubmission/Options.mjs';
@@ -45,7 +44,6 @@ export const keyMap = {
   northing: (value) => formatDegrees(value),
   easting: (value) => formatDegrees(value),
   unit: (value) => reverseLookup(units, value),
-  adjustment: (value) => reverseLookup(adjustments, value),
   height: (value) => value,
   zone: (value) => reverseLookup(statePlaneZones, value),
 };

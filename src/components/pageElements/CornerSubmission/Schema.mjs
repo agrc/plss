@@ -108,11 +108,6 @@ export const geographicHeightSchema = yup.object().shape({
       })
       .required()
       .label('Ellipsoid Height'),
-    adjustment: yup
-      .string()
-      .required()
-      .oneOf(['1996', '2007', '2011'])
-      .label('NGS Adjustment'),
     unit: yup
       .string()
       .required()
@@ -133,11 +128,6 @@ export const gridCoordinatesSchema = yup.object().shape({
       .required()
       .oneOf(options.units.map((x) => x.value))
       .label('The unit'),
-    adjustment: yup
-      .string()
-      .required()
-      .oneOf(options.adjustments.map((x) => x.value))
-      .label('The adjustment'),
     northing: yup.number().min(0).required().label('northing'),
     easting: yup.number().min(0).required().label('easting'),
     elevation: yup

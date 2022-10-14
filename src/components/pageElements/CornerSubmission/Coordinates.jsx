@@ -22,7 +22,6 @@ import {
   getStateValue,
 } from './CornerSubmission.jsx';
 import {
-  adjustments,
   geographic,
   grid,
   units,
@@ -333,7 +332,6 @@ const geographicHeightDefaults = {
   geographic: {
     elevation: '',
     units: 'm',
-    adjustment: '',
   },
 };
 export const GeographicHeight = () => {
@@ -440,28 +438,6 @@ export const GeographicHeight = () => {
             name="geographic.unit"
             as={ErrorMessageTag}
           />
-          <div>
-            <Controller
-              control={control}
-              name="geographic.adjustment"
-              render={({ field: { onChange, name } }) => (
-                <Select
-                  name={name}
-                  options={adjustments}
-                  label="NGS Adjustment"
-                  required={true}
-                  placeholder="Select the year"
-                  currentValue={getStateValue(state, id, name)}
-                  onUpdate={onChange}
-                />
-              )}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="geographic.adjustment"
-              as={ErrorMessageTag}
-            />
-          </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard back={() => navigate(-1)} next={true} clear={reset} />
@@ -474,7 +450,6 @@ export const GeographicHeight = () => {
 const gridDefaults = {
   grid: {
     'grid.zone': '',
-    'grid.adjustment': '',
     'grid.unit': '',
     'grid.northing': '',
     'grid.easting': '',
@@ -548,28 +523,6 @@ export const GridCoordinates = () => {
             <ErrorMessage
               errors={formState.errors}
               name="grid.unit"
-              as={ErrorMessageTag}
-            />
-          </div>
-          <div>
-            <Controller
-              control={control}
-              name="grid.adjustment"
-              render={({ field: { onChange, name } }) => (
-                <Select
-                  name={name}
-                  options={adjustments}
-                  label="NGS Adjustment"
-                  required={true}
-                  placeholder="What is the zone"
-                  currentValue={getStateValue(state, id, name)}
-                  onUpdate={onChange}
-                />
-              )}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="grid.adjustment"
               as={ErrorMessageTag}
             />
           </div>
@@ -766,7 +719,6 @@ CoordinateReview.propTypes = {
     easting: PropTypes.number,
     elevation: PropTypes.number,
     unit: PropTypes.string,
-    adjustment: PropTypes.string,
   }),
   geographic: PropTypes.shape({
     northing: PropTypes.shape({
@@ -781,7 +733,6 @@ CoordinateReview.propTypes = {
     }),
     elevation: PropTypes.number,
     unit: PropTypes.string,
-    adjustment: PropTypes.string,
   }),
 };
 
@@ -790,10 +741,6 @@ const GridCoordinateReview = ({ grid }) => (
     <div className="flex justify-between">
       <span className="font-semibold">Zone</span>
       <span>{keyMap.zone(grid?.zone)}</span>
-    </div>
-    <div className="flex justify-between">
-      <span className="font-semibold">Adjustment</span>
-      <span>{keyMap.adjustment(grid?.adjustment)}</span>
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Unit</span>
@@ -818,17 +765,12 @@ GridCoordinateReview.propTypes = {
     easting: PropTypes.number,
     elevation: PropTypes.number,
     unit: PropTypes.string,
-    adjustment: PropTypes.string,
     verticalDatum: PropTypes.string,
   }),
 };
 
 const GeographicCoordinateReview = ({ geographic }) => (
   <>
-    <div className="flex justify-between">
-      <span className="font-semibold">Adjustment</span>
-      <span>{keyMap.adjustment(geographic?.adjustment)}</span>
-    </div>
     <div className="flex justify-between">
       <span className="font-semibold">Coordinates</span>
       <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
@@ -854,6 +796,5 @@ GeographicCoordinateReview.propTypes = {
     }),
     elevation: PropTypes.number,
     unit: PropTypes.string,
-    adjustment: PropTypes.string,
   }),
 };
