@@ -1,16 +1,14 @@
-import { info, warn, error as logError } from 'firebase-functions/logger';
-import { onCall } from 'firebase-functions/v1/https';
-import { HttpsError } from 'firebase-functions/v1/auth';
+import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import * as schemas from '../../components/pageElements/CornerSubmission/Schema.mjs';
 
-const postCorner = onCall(async (data, context) => {
+const postCorner = https.onCall(async (data, context) => {
   if (!context.auth) {
-    warn('unauthenticated request', {
+    logger.warn('unauthenticated request', {
       structuredData: true,
     });
 
-    throw new HttpsError('unauthenticated', 'You must log in');
+    throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
 
   // validation
@@ -33,11 +31,11 @@ const postCorner = onCall(async (data, context) => {
       await schemas.gridCoordinatesSchema.validate(data, options);
     }
   } catch (error) {
-    logError('validation error', error, {
+    logger.error('validation error', error, {
       structuredData: true,
     });
 
-    throw new HttpsError(
+    throw new auth.HttpsError(
       'invalid-argument',
       'form submission data is invalid',
       error
@@ -59,18 +57,18 @@ const postCorner = onCall(async (data, context) => {
     ref: db.collection('submitters').doc(context.auth.uid),
   };
 
-  info('saving corner submission', data, context.auth.uid, {
+  logger.info('saving corner submission', data, context.auth.uid, {
     structuredData: true,
   });
 
   try {
     await db.collection('submissions').add(data);
   } catch (error) {
-    logError('error saving corner', error, context.auth, {
+    logger.error('error saving corner', error, context.auth, {
       structuredData: true,
     });
 
-    throw new HttpsError('internal', 'The corner was not saved');
+    throw new auth.HttpsError('internal', 'The corner was not saved');
   }
 
   return 1;

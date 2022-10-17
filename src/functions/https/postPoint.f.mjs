@@ -1,17 +1,15 @@
-import { warn, info, error as logError } from 'firebase-functions/logger';
-import { onCall } from 'firebase-functions/v1/https';
-import { HttpsError } from 'firebase-functions/v1/auth';
+import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 
-const postPoint = onCall(async (data, context) => {
+const postPoint = https.onCall(async (data, context) => {
   if (!context.auth) {
-    warn('unauthenticated request', { structuredData: true });
+    logger.warn('unauthenticated request', { structuredData: true });
 
-    throw new HttpsError('unauthenticated', 'You must log in');
+    throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
 
   data.created_at = new Date();
-  info('creating point', data, context.auth.uid, {
+  logger.info('creating point', data, context.auth.uid, {
     structuredData: true,
   });
 
@@ -24,11 +22,11 @@ const postPoint = onCall(async (data, context) => {
       .collection('points')
       .add(data);
   } catch (error) {
-    logError('error adding point', error, context.auth, {
+    logger.error('error adding point', error, context.auth, {
       structuredData: true,
     });
 
-    throw new HttpsError('internal', 'Your point was not saved');
+    throw new auth.HttpsError('internal', 'Your point was not saved');
   }
 
   return 1;

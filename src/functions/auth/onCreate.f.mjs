@@ -1,9 +1,8 @@
-import { error as logError } from 'firebase-functions/logger';
-import { auth } from 'firebase-functions';
+import { auth, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const onCreate = auth.user().onCreate(async (user) => {
-  info('creating user', user, { structuredData: true });
+  logger.info('creating user', user, { structuredData: true });
 
   const data = {
     email: user.email,
@@ -14,12 +13,12 @@ const onCreate = auth.user().onCreate(async (user) => {
   try {
     await getFirestore().collection('submitters').doc(user.uid).set(data);
   } catch (error) {
-    logError('error creating user', error, user, {
+    logger.error('error creating user', error, user, {
       structuredData: true,
     });
   }
 
-  info('created user', { structuredData: true });
+  logger.info('created user', { structuredData: true });
 
   return true;
 });

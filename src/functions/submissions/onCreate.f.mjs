@@ -1,6 +1,7 @@
+import { logger, firestore } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
-import { document } from 'firebase-functions/v1/firestore';
 import got from 'got';
+
 const client = got.extend({
   prefixUrl:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services',
@@ -19,6 +20,9 @@ const getCountyFromId = async (id) => {
       },
     })
     .json();
+
+  logger.debug('featureSet', featureSet, { structuredData: true });
+
   // query county for name
   const countyFeatureSet = await client
     .get('UtahCountyBoundaries/FeatureServer/0/query', {
@@ -34,22 +38,32 @@ const getCountyFromId = async (id) => {
     })
     .json();
 
+  logger.debug('countyFeatureSet', countyFeatureSet, { structuredData: true });
+
   return countyFeatureSet.features[0].attributes['NAME'];
 };
 
-const onCreateUpdateCounty = document('/submissions/{docId}').onCreate(
-  async (snap, context) => {
+const onCreateUpdateCounty = firestore
+  .document('/submissions/{docId}')
+  .onCreate(async (snap, context) => {
     const blmPointId = snap.data().blmPointId;
+
+    logger.info('getting county for new document', blmPointId, {
+      structuredData: true,
+    });
 
     const db = getFirestore();
     const doc = await db.collection('submissions').doc(context.params.docId);
 
     const county = await getCountyFromId(blmPointId);
 
+    logger.info('setting county', county, {
+      structuredData: true,
+    });
+
     const result = await doc.update({ county });
 
     return result;
-  }
-);
+  });
 
 export default onCreateUpdateCounty;
