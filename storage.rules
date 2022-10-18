@@ -17,10 +17,15 @@ service firebase.storage {
   }
 
   match /b/{bucket}/o {
-    match /submitters/{uid}/{allPaths=**} {
+    match /submitters/{uid}/new/{allPaths=**} {
       allow list, delete: if false;
       allow get: if isAuthenticated() && isCurrentUser(uid);
       allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
+    }
+    match /submitters/{uid}/existing/{allPaths=**} {
+      allow list, delete: if false;
+      allow get: if isAuthenticated() && isCurrentUser(uid);
+      allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
     }
   }
 }
