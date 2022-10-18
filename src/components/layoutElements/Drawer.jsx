@@ -14,6 +14,9 @@ const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
+const MonumentPdf = lazy(() =>
+  import('../pageElements/CornerSubmission/Pdf.jsx')
+);
 const Metadata = lazy(() =>
   import('../pageElements/CornerSubmission/Metadata.jsx')
 );
@@ -108,6 +111,30 @@ export default function Drawer({
             {signInCheckResult?.signedIn && (
               <>
                 <Route path="submission" element={<CornerSubmission />}>
+                  <Route path=":existing">
+                    <Route path=":id" element={<MonumentPdf />} />
+                    <Route
+                      path=":id/coordinates"
+                      element={<CoordinatePicker />}
+                    />
+                    <Route
+                      path=":id/coordinates/geographic/:system/northing"
+                      element={<Latitude />}
+                    />
+                    <Route
+                      path=":id/coordinates/geographic/:system/easting"
+                      element={<Longitude />}
+                    />
+                    <Route
+                      path=":id/coordinates/geographic/:system/height"
+                      element={<GeographicHeight />}
+                    />
+                    <Route
+                      path=":id/coordinates/grid/:system"
+                      element={<GridCoordinates />}
+                    />
+                    <Route path=":id/review" element={<Review />} />
+                  </Route>
                   <Route path=":id" element={<Metadata />} />
                   <Route
                     path=":id/coordinates"
