@@ -10,7 +10,13 @@ service firebase.storage {
     return request.resource != null && request.resource.size < (megabytes * 1024 * 1024);
   }
   function isImage() {
-    return request.resource.contentType.matches('image/.*');
+    return request.resource.contentType.matches('image/png') ||
+        request.resource.contentType.matches('image/jpeg') ||
+        request.resource.contentType.matches('image/jpg') ||
+        request.resource.contentType.matches('image/gif');
+  }
+  function isPdf() {
+    return request.resource.contentType.matches('application/pdf');
   }
   function hasAttachment() {
     return request.resource != null;
