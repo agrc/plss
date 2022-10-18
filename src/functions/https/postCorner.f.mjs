@@ -11,6 +11,8 @@ const postCorner = https.onCall(async (data, context) => {
     throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
 
+  const newSheet = !data?.existing?.pdf;
+
   // validation
   try {
     const options = {
@@ -18,7 +20,10 @@ const postCorner = https.onCall(async (data, context) => {
       abortEarly: false,
     };
 
-    await schemas.metadataSchema.validate(data, options);
+    if (newSheet) {
+      await schemas.metadataSchema.validate(data, options);
+    }
+
     await schemas.coordinatePickerSchema.validate(data, options);
 
     const [datum] = data.datum.split('-');
