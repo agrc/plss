@@ -99,20 +99,18 @@ function ImageUpload({ defaultFileName, onChange }) {
       })
       .catch(() => {
         try {
-          if (uploadTask.snapshot.totalBytes > 5 * 1024 * 1024) {
+          if (task.snapshot.totalBytes > 5 * 1024 * 1024) {
             setStatus('error');
             message.current = `You can only upload images smaller than 5MB. That image was ${(
-              uploadTask.snapshot.totalBytes /
+              task.snapshot.totalBytes /
               1024 /
               1024
             ).toFixed(2)}MB.`;
-          } else if (
-            !uploadTask.snapshot.metadata.contentType.match(/image.*/)
-          ) {
+          } else if (!task.snapshot.metadata.contentType.match(/image.*/)) {
             setStatus('error');
             message.current = `You can only upload images. That was a ${
-              uploadTask.snapshot.metadata.contentType
-                ? uploadTask.snapshot.metadata.contentType
+              task.snapshot.metadata.contentType
+                ? task.snapshot.metadata.contentType
                 : 'unknown type'
             }.`;
           } else {
