@@ -359,7 +359,14 @@ export const GeographicHeight = () => {
   const [selected, setSelected] = useState(selectedUnit);
 
   const onSubmit = (data) => {
+    data.grid = null;
     actions.updateAction(data);
+    if (defaultValues?.existing?.pdf) {
+      navigate(`/submission/${id}/review`);
+
+      return;
+    }
+
     navigate(`/submission/${id}/images`);
   };
 
@@ -462,14 +469,21 @@ export const GridCoordinates = () => {
   const { id } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
+
+  let defaultValues = getStateForId(state, id);
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
+    defaultValues,
     resolver: yupResolver(gridCoordinatesSchema),
   });
 
   const onSubmit = (data) => {
     data.geographic = null;
     actions.updateAction(data);
+    if (defaultValues?.existing?.pdf) {
+      navigate(`/submission/${id}/review`);
+
+      return;
+    }
     navigate(`/submission/${id}/images`);
   };
 
@@ -611,7 +625,7 @@ export const GridCoordinates = () => {
 };
 
 export const Review = () => {
-  const { id } = useParams();
+  const { id, existing } = useParams();
   const { state, actions } = useStateMachine({ updateAction });
   const navigate = useNavigate();
   const data = getStateForId(state, id);
@@ -633,10 +647,14 @@ export const Review = () => {
     }
   );
 
+  console.log('existing', existing);
+
   return (
     <>
       <div className="grid gap-2">
-        <MetadataReview blmPointId={data.blmPointId} {...data.metadata} />
+        {existing !== 'existing' && (
+          <MetadataReview blmPointId={data.blmPointId} {...data.metadata} />
+        )}
         <CoordinateReview
           datum={data.datum}
           grid={data.grid}
