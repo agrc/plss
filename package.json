@@ -37,6 +37,7 @@
     "@tanstack/react-query-devtools": "^4.12.0",
     "@ugrc/layer-selector": "^6.1.1",
     "@ugrc/utilities": "^2.2.1",
+    "@xstate/react": "^3.0.1",
     "camelcase": "^7.0.0",
     "clsx": "^1.2.1",
     "contrast-color": "^1.0.1",
@@ -57,6 +58,7 @@
     "react-router-dom": "^6.4.2",
     "reactfire": "^4.2.2",
     "use-immer": "^0.7.0",
+    "xstate": "^4.33.6",
     "yup": "^0.32.11"
   },
   "devDependencies": {
