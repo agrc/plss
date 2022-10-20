@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
-import { useStateMachine } from 'little-state-machine';
+// import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
-import { useNavigate, useParams } from 'react-router-dom';
+// import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { RadioGroup, Tab } from '@headlessui/react';
 import { httpsCallable } from 'firebase/functions';
@@ -16,11 +16,12 @@ import { Select } from '../../formElements/Select.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import {
-  updateAction,
-  getStateForId,
-  getStateValue,
-} from './CornerSubmission.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+// import {
+//   updateAction,
+//   getStateForId,
+//   getStateValue,
+// } from './CornerSubmission.jsx';
 import {
   geographic,
   grid,
@@ -59,27 +60,28 @@ const getOpenTabIndex = (datum) => {
 };
 
 export const CoordinatePicker = () => {
-  let { id } = useParams();
-  const navigate = useNavigate();
-  const { state, actions } = useStateMachine({ updateAction });
+  const [state, send] = useContext(SubmissionContext);
+
   const { control, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
     resolver: yupResolver(coordinatePickerSchema),
   });
   const [selectedTab, setSelectedTab] = useState(defaultTabIndex);
 
   useEffect(() => {
-    setSelectedTab(getOpenTabIndex(getStateValue(state, id, 'datum')));
-  }, [state, id]);
+    setSelectedTab(getOpenTabIndex());
+  }, [state]);
 
-  const onSubmit = (data) => {
-    actions.updateAction(data);
-    const [datum, system] = data.datum.split('-');
-    navigate(
-      `/submission/${id}/coordinates/${datum}/${system}/${
-        datum === 'geographic' ? 'northing' : ''
-      }`
-    );
+  const onSubmit = (payload) => {
+    // actions.updateAction(data);
+    send({ type: 'NEXT', meta: 'datum', payload: payload.datum });
+
+    // actions.updateAction(data);
+    // const [datum, system] = data.datum.split('-');
+    // navigate(
+    //   `/submission/${id}/coordinates/${datum}/${system}/${
+    //     datum === 'geographic' ? 'northing' : ''
+    //   }`
+    // );
   };
 
   return (
@@ -119,7 +121,7 @@ export const CoordinatePicker = () => {
                         label={false}
                         options={options}
                         placeholder="Coordinate System"
-                        currentValue={getStateValue(state, id, name)}
+                        currentValue={state.datum}
                         onUpdate={onChange}
                         required={true}
                       />
@@ -137,7 +139,7 @@ export const CoordinatePicker = () => {
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard
-            back={() => navigate(-1)}
+            back={() => send('BACK')}
             next={true}
             clear={() => {
               reset({ datum: '' });
@@ -151,85 +153,90 @@ export const CoordinatePicker = () => {
 };
 
 export const Latitude = () => {
-  const { id, system } = useParams();
-  const { state, actions } = useStateMachine({ updateAction });
-  const navigate = useNavigate();
+  // const { id, system } = useParams();
+  // const { state, actions } = useStateMachine({ updateAction });
+  // const navigate = useNavigate();
+  const [state, send] = useContext(SubmissionContext);
+
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
+    // defaultValues: getStateForId(state, id),
     resolver: yupResolver(latitudeSchema),
   });
 
-  const onSubmit = (data) => {
-    data.grid = null;
-    actions.updateAction(data);
-    navigate(`/submission/${id}/coordinates/geographic/${system}/easting`);
+  const onSubmit = (payload) => {
+    // actions.updateAction(data);
+    // data.grid = null;
+    // TODO! nullify grid coordinate context data
+    send({ type: 'NEXT', meta: 'geographic', payload });
+    // actions.updateAction(data);
+    // navigate(`/submission/${id}/coordinates/geographic/${system}/easting`);
   };
 
   return (
     <>
       <h3 className="text-2xl font-semibold">Location Information</h3>
       <p className="text-sm leading-none">
-        Geographic Northing for {formatDatum(getStateValue(state, id, 'datum'))}
+        Geographic Northing for {formatDatum(state.datum)}
       </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={2} title="Latitude">
           <div>
             <Input
-              value={getStateValue(state, id, 'degrees')}
+              value={state.context.geographic?.degrees}
               placeholder="###"
-              name="geographic.northing.degrees"
+              name="northing.degrees"
               label="Degrees"
               required={true}
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.northing.degrees"
+              name="northing.degrees"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'minutes')}
+              value={state.context.geographic?.minutes}
               label="Minutes"
               required={true}
               placeholder="##"
-              name="geographic.northing.minutes"
+              name="northing.minutes"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.northing.minutes"
+              name="northing.minutes"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'seconds')}
+              value={state.context.geographic?.seconds}
               label="Seconds"
               required={true}
               placeholder="##.00000"
-              name="geographic.northing.seconds"
+              name="northing.seconds"
               inputRef={register}
             />
             <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.northing.seconds"
+              name="northing.seconds"
               as={ErrorMessageTag}
             />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard
-            back={() => navigate(-1)}
+            back={() => send('BACK')}
             next={true}
             clear={() =>
               reset({
-                'geographic.northing.seconds': '',
-                'geographic.northing.minutes': '',
-                'geographic.northing.degrees': '',
+                'northing.seconds': '',
+                'northing.minutes': '',
+                'northing.degrees': '',
               })
             }
           />
@@ -240,85 +247,90 @@ export const Latitude = () => {
 };
 
 export const Longitude = () => {
-  const { id, system } = useParams();
-  const navigate = useNavigate();
-  const { state, actions } = useStateMachine({ updateAction });
+  // const { id, system } = useParams();
+  // const navigate = useNavigate();
+  // const { state, actions } = useStateMachine({ updateAction });
+  const [state, send] = useContext(SubmissionContext);
+
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues: getStateForId(state, id),
+    // defaultValues: getStateForId(state, id),
     resolver: yupResolver(longitudeSchema),
   });
 
-  const onSubmit = (data) => {
-    data.grid = null;
-    actions.updateAction(data);
-    navigate(`/submission/${id}/coordinates/geographic/${system}/height`);
+  const onSubmit = (payload) => {
+    // actions.updateAction(data);
+    // TODO! nullify grid coordinate context data
+    send({ type: 'NEXT', meta: 'geographic', payload });
+    // data.grid = null;
+    // actions.updateAction(data);
+    // navigate(`/submission/${id}/coordinates/geographic/${system}/height`);
   };
 
   return (
     <>
       <h3 className="text-2xl font-semibold">Location Information</h3>
       <p className="text-sm leading-none">
-        Geographic Easting for {formatDatum(getStateValue(state, id, 'datum'))}
+        Geographic Easting for {formatDatum(state.context.datum)}
       </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={3} title="Longitude">
           <div>
             <Input
-              value={getStateValue(state, id, 'degrees')}
+              value={state.context.geographic?.degrees}
               label="Degrees"
               required={true}
               placeholder="###"
-              name="geographic.easting.degrees"
+              name="easting.degrees"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.easting.degrees"
+              name="easting.degrees"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'minutes')}
+              value={state.context.geographic?.minutes}
               label="Minutes"
               required={true}
               placeholder="##"
-              name="geographic.easting.minutes"
+              name="easting.minutes"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.easting.minutes"
+              name="easting.minutes"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'seconds')}
+              value={state.context.geographic?.seconds}
               label="Seconds"
               required={true}
               placeholder="##.00000"
-              name="geographic.easting.seconds"
+              name="easting.seconds"
               inputRef={register}
             />
             <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
             <ErrorMessage
               errors={formState.errors}
-              name="geographic.easting.seconds"
+              name="easting.seconds"
               as={ErrorMessageTag}
             />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard
-            back={() => navigate(-1)}
+            back={() => send('BACK')}
             next={true}
             clear={() => {
               reset({
-                'geographic.easting.seconds': '',
-                'geographic.easting.minutes': '',
-                'geographic.easting.degrees': '',
+                'easting.seconds': '',
+                'easting.minutes': '',
+                'easting.degrees': '',
               });
             }}
           />
@@ -329,74 +341,76 @@ export const Longitude = () => {
 };
 
 const geographicHeightDefaults = {
-  geographic: {
-    elevation: '',
-    units: 'm',
-  },
+  elevation: '',
+  units: 'm',
 };
+
 export const GeographicHeight = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { state, actions } = useStateMachine({ updateAction });
+  // const { id } = useParams();
+  // const navigate = useNavigate();
+  // const { state, actions } = useStateMachine({ updateAction });
 
-  let defaultValues = getStateForId(state, id);
-  if (!defaultValues?.geographic) {
-    defaultValues = geographicHeightDefaults;
-  }
-  if (!defaultValues?.geographic.unit) {
-    defaultValues.geographic.unit = 'm';
-  }
+  // let defaultValues = getStateForId(state, id);
+  // if (!defaultValues?.geographic) {
+  //   defaultValues = geographicHeightDefaults;
+  // }
+  // if (!defaultValues?.geographic.unit) {
+  //   defaultValues.geographic.unit = 'm';
+  // }
+  const [state, send] = useContext(SubmissionContext);
 
-  const selectedUnit = units.find(
-    (x) => x.value === defaultValues.geographic.unit
-  );
+  // const selectedUnit = units.find(
+  //   (x) => x.value === state.context.datum.unit
+  // );
 
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues,
+    defaultValues: geographicHeightDefaults,
     resolver: yupResolver(geographicHeightSchema),
   });
 
-  const [selected, setSelected] = useState(selectedUnit);
+  // const [selected, setSelected] = useState(selectedUnit);
 
-  const onSubmit = (data) => {
-    data.grid = null;
-    actions.updateAction(data);
-    if (defaultValues?.existing?.pdf) {
-      navigate(`/submission/${id}/review`);
+  const onSubmit = (payload) => {
+    // data.grid = null;
+    send({ type: 'NEXT', meta: 'geographic', payload });
 
-      return;
-    }
+    // actions.updateAction(data);
+    // if (defaultValues?.existing?.pdf) {
+    //   navigate(`/submission/${id}/review`);
 
-    navigate(`/submission/${id}/images`);
+    //   return;
+    // }
+
+    // navigate(`/submission/${id}/images`);
   };
 
   return (
     <>
       <h3 className="text-2xl font-semibold">Location Information</h3>
       <p className="text-sm leading-none">
-        Geographic height for {formatDatum(getStateValue(state, id, 'datum'))}
+        Geographic height for {formatDatum(state.context.datum)}
       </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={4} title="Ellipsoid Height">
           <DevTool control={control} />
           <Input
-            value={getStateValue(state, id, 'elevation')}
+            value={state.context.geographic?.elevation}
             label={false}
             required={true}
-            name="geographic.elevation"
+            name="elevation"
             inputRef={register}
           />
           <Controller
             control={control}
-            name="geographic.unit"
+            name="unit"
             render={({ field: { onChange } }) => (
               <RadioGroup
                 className="flex space-x-1 rounded-xl bg-slate-900/20 p-1"
-                value={selected}
+                // value={selected}
                 onChange={(option) => {
                   onChange(option.value);
-                  setSelected(option);
+                  // setSelected(option);
                 }}
               >
                 <RadioGroup.Label className="sr-only">
@@ -437,17 +451,17 @@ export const GeographicHeight = () => {
           />
           <ErrorMessage
             errors={formState.errors}
-            name="geographic.elevation"
+            name="elevation"
             as={ErrorMessageTag}
           />
           <ErrorMessage
             errors={formState.errors}
-            name="geographic.unit"
+            name="unit"
             as={ErrorMessageTag}
           />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => navigate(-1)} next={true} clear={reset} />
+          <Wizard back={() => send('BACK')} next={true} clear={reset} />
         </NumberedFormSection>
       </NumberedForm>
     </>
@@ -455,43 +469,46 @@ export const GeographicHeight = () => {
 };
 
 const gridDefaults = {
-  grid: {
-    'grid.zone': '',
-    'grid.unit': '',
-    'grid.northing': '',
-    'grid.easting': '',
-    'grid.elevation': '',
-    'grid.verticalDatum': '',
-  },
+  zone: '',
+  unit: '',
+  northing: '',
+  easting: '',
+  elevation: '',
+  verticalDatum: '',
 };
 
 export const GridCoordinates = () => {
-  const { id } = useParams();
-  const { state, actions } = useStateMachine({ updateAction });
-  const navigate = useNavigate();
+  // const { id } = useParams();
+  // const { state, actions } = useStateMachine({ updateAction });
+  // const navigate = useNavigate();
+  const [state, send] = useContext(SubmissionContext);
 
-  let defaultValues = getStateForId(state, id);
+  // let defaultValues = getStateForId(state, id);
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues,
+    // defaultValues,
     resolver: yupResolver(gridCoordinatesSchema),
   });
 
-  const onSubmit = (data) => {
-    data.geographic = null;
-    actions.updateAction(data);
-    if (defaultValues?.existing?.pdf) {
-      navigate(`/submission/${id}/review`);
+  const onSubmit = (payload) => {
+    // actions.updateAction(data);
+    send({ type: 'NEXT', meta: 'existing', payload });
 
-      return;
-    }
-    navigate(`/submission/${id}/images`);
+    // TODO! clear geographic coordinates from context
+    // data.geographic = null;
+    // actions.updateAction(data);
+    // if (defaultValues?.existing?.pdf) {
+    //   navigate(`/submission/${id}/review`);
+
+    //   return;
+    // }
+    // navigate(`/submission/${id}/images`);
   };
 
   return (
     <>
       <h3 className="text-2xl font-semibold">Location Information</h3>
       <p className="text-sm leading-none">
-        Grid coordinates for {formatDatum(getStateValue(state, id, 'datum'))}
+        Grid coordinates for {formatDatum(state.context.datum)}
       </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -499,7 +516,7 @@ export const GridCoordinates = () => {
           <div>
             <Controller
               control={control}
-              name="grid.zone"
+              name="zone"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -507,21 +524,21 @@ export const GridCoordinates = () => {
                   label="State Plane Zone"
                   required={true}
                   placeholder="What is the zone"
-                  currentValue={getStateValue(state, id, name)}
+                  currentValue={state.context.grid?.zone}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.zone"
+              name="zone"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Controller
               control={control}
-              name="grid.unit"
+              name="unit"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -529,14 +546,14 @@ export const GridCoordinates = () => {
                   label="Horizontal units"
                   required={true}
                   placeholder="What are the units"
-                  currentValue={getStateValue(state, id, name)}
+                  currentValue={state.context.grid?.unit}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.unit"
+              name="unit"
               as={ErrorMessageTag}
             />
           </div>
@@ -544,31 +561,31 @@ export const GridCoordinates = () => {
         <NumberedFormSection number={3} title="Location">
           <div>
             <Input
-              value={getStateValue(state, id, 'northing')}
+              value={state.context.grid?.northing}
               type="number"
               label="Northing"
               required={true}
-              name="grid.northing"
+              name="northing"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.northing"
+              name="northing"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'easting')}
+              value={state.context.grid?.easting}
               type="number"
               label="Easting"
               required={true}
-              name="grid.easting"
+              name="easting"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.easting"
+              name="easting"
               as={ErrorMessageTag}
             />
           </div>
@@ -577,7 +594,7 @@ export const GridCoordinates = () => {
           <div>
             <Controller
               control={control}
-              name="grid.verticalDatum"
+              name="verticalDatum"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -585,36 +602,36 @@ export const GridCoordinates = () => {
                   label="Vertical datum"
                   required={false}
                   placeholder="What is the vertical datum"
-                  currentValue={getStateValue(state, id, name)}
+                  currentValue={state.context.grid?.verticalDatum}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.verticalDatum"
+              name="verticalDatum"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Input
-              value={getStateValue(state, id, 'grid.elevation')}
+              value={state.context.grid?.elevation}
               type="number"
               label="Elevation"
               required={false}
-              name="grid.elevation"
+              name="elevation"
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="grid.elevation"
+              name="elevation"
               as={ErrorMessageTag}
             />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard
-            back={() => navigate(-1)}
+            back={() => send('BACK')}
             next={true}
             clear={() => reset(gridDefaults)}
           />
@@ -625,21 +642,24 @@ export const GridCoordinates = () => {
 };
 
 export const Review = () => {
-  const { id, existing } = useParams();
-  const { state, actions } = useStateMachine({ updateAction });
-  const navigate = useNavigate();
-  const data = getStateForId(state, id);
+  // const { id, existing } = useParams();
+  // const { state, actions } = useStateMachine({ updateAction });
+  // const navigate = useNavigate();
+  // const data = getStateForId(state, id);
+  const [state, send] = useContext(SubmissionContext);
+
   const functions = useFunctions();
   const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
   const { mutate } = useMutation(
-    ['save-corner', id],
+    ['save-corner', state.context.blmPointId],
     (data) => saveCorner(data),
     {
       onSuccess: (response) => {
         console.log('success', response);
-        delete state[id];
-        actions.updateAction(state);
-        navigate('/', { replace: true });
+        state.context = undefined;
+        // delete state[id];
+        // actions.updateAction(state);
+        // navigate('/', { replace: true });
       },
       onError: (error) => {
         console.log('error', error);
@@ -647,25 +667,26 @@ export const Review = () => {
     }
   );
 
-  console.log('existing', existing);
-
   return (
     <>
       <div className="grid gap-2">
-        {existing !== 'existing' && (
-          <MetadataReview blmPointId={data.blmPointId} {...data.metadata} />
+        {state.context.type !== 'existing' && (
+          <MetadataReview
+            blmPointId={state.context.blmPointId}
+            {...state.context.metadata}
+          />
         )}
         <CoordinateReview
-          datum={data.datum}
-          grid={data.grid}
-          geographic={data.geographic}
+          datum={state.context.datum}
+          grid={state.context.grid}
+          geographic={state.context.geographic}
         />
       </div>
       <div className="mt-8 flex justify-center">
         <Wizard
-          back={() => navigate(-1)}
+          back={() => send('BACK')}
           finish={async () => {
-            await mutate(data);
+            await mutate(state.context);
           }}
         />
       </div>

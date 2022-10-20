@@ -1,19 +1,17 @@
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import { Button } from '../formElements/Buttons.jsx';
 import { getDefault } from '../helpers';
 
-export default function Identify({ graphic }) {
-  const navigate = useNavigate();
+export default function Identify({ graphic, dispatch }) {
   const { data: userSignInCheck } = useSigninCheck();
 
   if (graphic === undefined) {
-    return <InitialIdentify />;
+    return <InitialIdentify dispatch={dispatch} />;
   }
 
   if (graphic === null) {
-    return <EmptyIdentify />;
+    return <EmptyIdentify dispatch={dispatch} />;
   }
 
   return (
@@ -78,6 +76,7 @@ export default function Identify({ graphic }) {
 
         <div className="mt-6 justify-self-center">
           <SubmissionPicker
+            dispatch={dispatch}
             authenticated={userSignInCheck?.signedIn}
             blmPointId={graphic.attributes.POINTID}
           />
@@ -86,7 +85,7 @@ export default function Identify({ graphic }) {
           <Button
             style="alternate"
             onClick={() => {
-              navigate(-1);
+              dispatch({ type: 'menu/toggle', payload: '' });
             }}
           >
             close
@@ -99,10 +98,10 @@ export default function Identify({ graphic }) {
 
 Identify.propTypes = {
   graphic: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
-const InitialIdentify = () => {
-  const navigate = useNavigate();
+const InitialIdentify = ({ dispatch }) => {
   return (
     <>
       <h1 className="text-2xl font-bold">Monument Record</h1>
@@ -114,7 +113,7 @@ const InitialIdentify = () => {
           <Button
             style="alternate"
             onClick={() => {
-              navigate('/');
+              dispatch({ type: 'menu/toggle', payload: '' });
             }}
           >
             close
@@ -124,10 +123,11 @@ const InitialIdentify = () => {
     </>
   );
 };
+InitialIdentify.propTypes = {
+  dispatch: PropTypes.func,
+};
 
-const EmptyIdentify = () => {
-  const navigate = useNavigate();
-
+const EmptyIdentify = ({ dispatch }) => {
   return (
     <>
       <h1 className="text-2xl font-bold">Monument Record</h1>
@@ -137,7 +137,7 @@ const EmptyIdentify = () => {
           <Button
             style="alternate"
             onClick={() => {
-              navigate(-1);
+              dispatch({ type: 'menu/toggle', payload: '' });
             }}
           >
             close
@@ -147,10 +147,11 @@ const EmptyIdentify = () => {
     </>
   );
 };
+EmptyIdentify.propTypes = {
+  dispatch: PropTypes.func,
+};
 
-const SubmissionPicker = ({ authenticated, blmPointId }) => {
-  const navigate = useNavigate();
-
+const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
   return (
     <div className="rounded border bg-slate-100 p-4">
       <p className="font-bold text-slate-800">
@@ -163,14 +164,22 @@ const SubmissionPicker = ({ authenticated, blmPointId }) => {
           <>
             <Button
               onClick={() => {
-                navigate(`/submission/${blmPointId}`);
+                dispatch({
+                  type: 'menu/toggle',
+                  payload: 'submission',
+                  meta: { blmPointId, type: 'new' },
+                });
               }}
             >
               new sheet
             </Button>
             <Button
               onClick={() => {
-                navigate(`/submission/existing/${blmPointId}`);
+                dispatch({
+                  type: 'menu/toggle',
+                  payload: 'submission',
+                  meta: { blmPointId, type: 'existing' },
+                });
               }}
             >
               existing sheet
@@ -179,7 +188,7 @@ const SubmissionPicker = ({ authenticated, blmPointId }) => {
         ) : (
           <Button
             onClick={() => {
-              navigate(`/login`);
+              dispatch({ type: 'menu/toggle', payload: 'login' });
             }}
           >
             login
@@ -191,5 +200,6 @@ const SubmissionPicker = ({ authenticated, blmPointId }) => {
 };
 SubmissionPicker.propTypes = {
   authenticated: PropTypes.bool,
+  dispatch: PropTypes.func,
   blmPointId: PropTypes.string.isRequired,
 };

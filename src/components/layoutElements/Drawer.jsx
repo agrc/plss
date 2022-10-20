@@ -1,11 +1,15 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Route, Routes, useLocation } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSigninCheck } from 'reactfire';
 import Logo from '../pageElements/Logo.jsx';
 
+const SubmissionProvider = lazy(() =>
+  import('../contexts/SubmissionContext.jsx').then((module) => ({
+    default: module.SubmissionProvider,
+  }))
+);
 const CornerSubmission = lazy(() =>
   import('../pageElements/CornerSubmission/CornerSubmission.jsx')
 );
@@ -14,57 +18,20 @@ const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
-const MonumentPdf = lazy(() =>
-  import('../pageElements/CornerSubmission/Pdf.jsx')
-);
-const Metadata = lazy(() =>
-  import('../pageElements/CornerSubmission/Metadata.jsx')
-);
-const CoordinatePicker = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.CoordinatePicker,
-  }))
-);
-const GeographicHeight = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.GeographicHeight,
-  }))
-);
-const GridCoordinates = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.GridCoordinates,
-  }))
-);
-const Latitude = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.Latitude,
-  }))
-);
-const Longitude = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.Longitude,
-  }))
-);
-const Review = lazy(() =>
-  import('../pageElements/CornerSubmission/Coordinates.jsx').then((module) => ({
-    default: module.Review,
-  }))
-);
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
-const Images = lazy(() =>
-  import('../pageElements/CornerSubmission/Images.jsx')
-);
 
-function ErrorFallback({ error }) {
+function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
       <p>{error.message}</p>
+      <button onClick={() => resetErrorBoundary()}>Try again</button>
     </div>
   );
 }
 ErrorFallback.propTypes = {
   error: PropTypes.object.isRequired,
+  resetErrorBoundary: PropTypes.func.isRequired,
 };
 
 export default function Drawer({
@@ -74,8 +41,10 @@ export default function Drawer({
   map,
   addPoint,
   userPoints,
+  activeComponent,
+  drawerOpen,
+  submission,
 }) {
-  const open = useDrawerOpen();
   const { data: signInCheckResult } = useSigninCheck();
 
   const classes = clsx(
@@ -98,16 +67,62 @@ export default function Drawer({
       'z-10',
     ],
     {
-      'drawer--closed': !open,
+      'drawer--closed': !drawerOpen,
     }
   );
+
+  const getComponent = (componentName) => {
+    switch (componentName) {
+      case 'login': {
+        return <Login dispatch={dispatch} authenticated={authenticated} />;
+      }
+      case 'points': {
+        return signInCheckResult?.signedIn ? (
+          <AddPoint
+            {...addPoint}
+            active={map.activeTool === 'add-point'}
+            dispatch={dispatch}
+          />
+        ) : (
+          <Login dispatch={dispatch} authenticated={authenticated} />
+        );
+      }
+      case 'content': {
+        return signInCheckResult?.signedIn ? (
+          <MyContent content={userPoints} />
+        ) : (
+          <Login dispatch={dispatch} authenticated={authenticated} />
+        );
+      }
+      case 'welcome': {
+        return <Welcome />;
+      }
+      case 'legend': {
+        return <Legend />;
+      }
+      case 'identify': {
+        return <Identify graphic={graphic} dispatch={dispatch} />;
+      }
+      case 'submission': {
+        return (
+          <SubmissionProvider context={submission}>
+            <CornerSubmission submission={submission} dispatch={dispatch} />
+          </SubmissionProvider>
+        );
+      }
+    }
+  };
 
   return (
     <aside className={classes}>
       <Logo />
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
+      >
         <Suspense fallback={<div>loading...</div>}>
-          <Routes path="/">
+          {getComponent(activeComponent)}
+          {/* <Routes path="/">
             {signInCheckResult?.signedIn && (
               <>
                 <Route path="submission" element={<CornerSubmission />}>
@@ -175,17 +190,7 @@ export default function Drawer({
                 />
               </>
             )}
-            <Route
-              path="login"
-              element={
-                <Login dispatch={dispatch} authenticated={authenticated} />
-              }
-            />
-            <Route path="home" element={<Welcome />} />
-            <Route path="legend" element={<Legend />} />
-            <Route path="identify" element={<Identify graphic={graphic} />} />
-            <Route path="*" element={<>404</>} />
-          </Routes>
+          */}
         </Suspense>
       </ErrorBoundary>
     </aside>
@@ -198,15 +203,10 @@ Drawer.propTypes = {
   map: PropTypes.object,
   addPoint: PropTypes.object,
   userPoints: PropTypes.array,
-};
-
-export const useDrawerOpen = () => {
-  const location = useLocation();
-  const [drawOpen, setDrawerOpen] = useState(true);
-
-  useEffect(() => {
-    setDrawerOpen(location?.pathname !== '/');
-  }, [location.pathname]);
-
-  return drawOpen;
+  activeComponent: PropTypes.string,
+  drawerOpen: PropTypes.bool,
+  submission: PropTypes.shape({
+    blmPointId: PropTypes.string,
+    type: PropTypes.string,
+  }),
 };
