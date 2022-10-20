@@ -1,11 +1,46 @@
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { createStore, StateMachineProvider } from 'little-state-machine';
-import { Outlet, useParams } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary';
+/* eslint-disable no-unused-vars */
+import { lazy, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import extractTownshipInformation from './blmPointId.mjs';
+import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { createStore, StateMachineProvider } from 'little-state-machine';
+import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
+import extractTownshipInformation from './blmPointId.mjs';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+
+const MonumentPdf = lazy(() => import('./Pdf.jsx'));
+const Metadata = lazy(() => import('./Metadata.jsx'));
+const CoordinatePicker = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.CoordinatePicker,
+  }))
+);
+const GeographicHeight = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.GeographicHeight,
+  }))
+);
+const GridCoordinates = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.GridCoordinates,
+  }))
+);
+const Latitude = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.Latitude,
+  }))
+);
+const Longitude = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.Longitude,
+  }))
+);
+const Images = lazy(() => import('./Images.jsx'));
+const Review = lazy(() =>
+  import('./Coordinates.jsx').then((module) => ({
+    default: module.Review,
+  }))
+);
 
 export const updateAction = (state, payload) => {
   const newState = { ...state };
@@ -43,25 +78,38 @@ export const getStateValue = (state, id, property) => {
   return data[property] ?? '';
 };
 
-function ErrorFallback({ error }) {
+function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
       <p>{error.message}</p>
+      <button
+        onClick={() => {
+          resetErrorBoundary();
+        }}
+      >
+        Try again
+      </button>
     </div>
   );
 }
 ErrorFallback.propTypes = {
   error: PropTypes.object.isRequired,
+  resetErrorBoundary: PropTypes.func.isRequired,
 };
 
-export default function CornerSubmission() {
+export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useState(false);
-  const { id } = useParams();
-
-  const pointId = id;
+  const [state, send] = useContext(SubmissionContext);
+  const pointId = submission.blmPointId;
   const submissions = {};
   submissions[pointId] = {};
+
+  console.log('current context', state.context);
+
+  useEffect(() => {
+    send('start submission');
+  }, [submission.type, send]);
 
   createStore(
     {
@@ -93,6 +141,31 @@ export default function CornerSubmission() {
   };
 
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
+
+  const getFormPart = (state) => {
+    switch (true) {
+      case state.matches('uploading existing pdf'):
+        return <MonumentPdf />;
+      case state.matches('adding metadata'):
+        return <Metadata />;
+      case state.matches('choosing datum'):
+        return <CoordinatePicker />;
+      case state.matches('entering latitude'):
+        return <Latitude />;
+      case state.matches('entering longitude'):
+        return <Longitude />;
+      case state.matches('entering ellipsoid height'):
+        return <GeographicHeight />;
+      case state.matches('entering grid coordinates'):
+        return <GridCoordinates />;
+      case state.matches('uploading photos'):
+        return <Images />;
+      case state.matches('reviewing'):
+        return <Review />;
+      default:
+        return <div>No matching component for {state.value} state</div>;
+    }
+  };
 
   return (
     <StateMachineProvider>
@@ -139,10 +212,20 @@ export default function CornerSubmission() {
         </div>
       )}
       <div className="mb-2 flex-1 overflow-y-auto pb-2">
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Outlet />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
+        >
+          {getFormPart(state)}
         </ErrorBoundary>
       </div>
     </StateMachineProvider>
   );
 }
+CornerSubmission.propTypes = {
+  submission: PropTypes.shape({
+    blmPointId: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+  }),
+  dispatch: PropTypes.func.isRequired,
+};

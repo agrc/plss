@@ -1,10 +1,12 @@
+import { useContext } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DevTool } from '@hookform/devtools';
-import { useStateMachine } from 'little-state-machine';
+// import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+// import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Switch from '../../formElements/Switch.jsx';
@@ -12,50 +14,49 @@ import Spacer from '../../formElements/Spacer.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import {
-  updateAction,
-  getStateForId,
-  getStateValue,
-} from './CornerSubmission.jsx';
+// import {
+// updateAction,
+// getStateForId,
+// getStateValue,
+// } from './CornerSubmission.jsx';
 import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
-import { parseBool } from '../../helpers/index.mjs';
+// import { parseBool } from '../../helpers/index.mjs';
 const defaults = {
-  metadata: {
-    section: '',
-    corner: '',
-    notes: '',
-    description: '',
-    status: '',
-    accuracy: '',
-    mrrc: '',
-  },
+  section: '',
+  corner: '',
+  notes: '',
+  description: '',
+  status: '',
+  accuracy: '',
+  mrrc: false,
 };
 const Metadata = () => {
-  let { id } = useParams();
-  const { state, actions } = useStateMachine({ updateAction });
-  const navigate = useNavigate();
+  // let { id } = useParams();
+  // const { state, actions } = useStateMachine({ updateAction });
+  // const navigate = useNavigate();
 
-  let defaultValues = getStateForId(state, id);
-  if (!defaultValues?.metadata) {
-    defaultValues = defaults;
-  }
-  if (typeof defaultValues?.metadata.mrrc !== 'boolean') {
-    defaultValues.metadata.mrrc = false;
-  }
+  // let defaultValues = getStateForId(state, id);
+  // if (!defaultValues?.metadata) {
+  // defaultValues = defaults;
+  // }
+  // if (typeof defaultValues?.mrrc !== 'boolean') {
+  // defaultValues.mrrc = false;
+  // }
+
+  const [, send] = useContext(SubmissionContext);
 
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues,
+    // defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    actions.updateAction(data);
-    navigate(`/submission/${id}/coordinates`);
+  const onSubmit = (payload) => {
+    send({ type: 'NEXT', meta: 'metadata', payload });
   };
   const onReset = () => {
-    actions.updateAction(defaults);
+    // actions.updateAction(defaults);
     reset(defaults);
   };
 
@@ -65,28 +66,27 @@ const Metadata = () => {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <DevTool control={control} />
-        <input type="hidden" value={id} {...register('blmPointId')} />
         <NumberedFormSection number={1} title="Section Information">
           <div>
             <Input
-              name="metadata.section"
+              name="section"
               label="Section"
               required={true}
               type="number"
               placeholder="What is the section"
-              value={getStateValue(state, id, 'metadata.section')}
+              // value={getStateValue(state, id, 'section')}
               inputRef={register}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="metadata.section"
+              name="section"
               as={ErrorMessageTag}
             />
           </div>
           <div>
             <Controller
               control={control}
-              name="metadata.corner"
+              name="corner"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -94,14 +94,14 @@ const Metadata = () => {
                   required={true}
                   options={corner}
                   placeholder="What is the section corner"
-                  currentValue={getStateValue(state, id, name)}
+                  // currentValue={getStateValue(state, id, name)}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="metadata.corner"
+              name="corner"
               as={ErrorMessageTag}
             />
           </div>
@@ -110,7 +110,7 @@ const Metadata = () => {
           <div>
             <Controller
               control={control}
-              name="metadata.status"
+              name="status"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -118,14 +118,14 @@ const Metadata = () => {
                   required={true}
                   options={status}
                   placeholder="What is the status"
-                  currentValue={getStateValue(state, id, name)}
+                  // currentValue={getStateValue(state, id, name)}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="metadata.status"
+              name="status"
               as={ErrorMessageTag}
             />
           </div>
@@ -134,7 +134,7 @@ const Metadata = () => {
           <div>
             <Controller
               control={control}
-              name="metadata.accuracy"
+              name="accuracy"
               render={({ field: { onChange, name } }) => (
                 <Select
                   name={name}
@@ -142,21 +142,21 @@ const Metadata = () => {
                   required={true}
                   options={accuracy}
                   placeholder="Choose the accuracy"
-                  currentValue={getStateValue(state, id, name)}
+                  // currentValue={getStateValue(state, id, name)}
                   onUpdate={onChange}
                 />
               )}
             />
             <ErrorMessage
               errors={formState.errors}
-              name="metadata.accuracy"
+              name="accuracy"
               as={ErrorMessageTag}
             />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={4} title="MRRC">
           <div>
-            <label htmlFor="metadata.mrrc" className="font-semibold">
+            <label htmlFor="mrrc" className="font-semibold">
               Associated with a{' '}
               <abbr
                 className="cursor-help"
@@ -169,15 +169,15 @@ const Metadata = () => {
             <div className="flex justify-between">
               <Controller
                 control={control}
-                name="metadata.mrrc"
+                name="mrrc"
                 render={({ field: { onChange, name } }) => (
                   <Switch
                     name={name}
                     screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    currentValue={parseBool(
-                      getStateValue(state, id, name),
-                      false
-                    )}
+                    // currentValue={parseBool(
+                    //   getStateValue(state, id, name),
+                    //   false
+                    // )}
                     onUpdate={onChange}
                   />
                 )}
@@ -194,7 +194,7 @@ const Metadata = () => {
             </div>
             <ErrorMessage
               errors={formState.errors}
-              name="metadata.mrrc"
+              name="mrrc"
               as={ErrorMessageTag}
             />
           </div>
@@ -202,7 +202,7 @@ const Metadata = () => {
         <NumberedFormSection number={5} title="Description">
           <div>
             <Label
-              htmlFor="metadata.description"
+              htmlFor="description"
               className="font-semibold"
               required={true}
             >
@@ -210,10 +210,10 @@ const Metadata = () => {
             </Label>
             <Controller
               control={control}
-              name="metadata.description"
+              name="description"
               render={({ field }) => (
                 <LimitedTextarea
-                  value={getStateValue(state, id, field.name)}
+                  // value={getStateValue(state, id, field.name)}
                   placeholder="Notes about the monument"
                   rows="5"
                   maxLength={1000}
@@ -225,19 +225,15 @@ const Metadata = () => {
             />
           </div>
           <div className="mb-6">
-            <Label
-              htmlFor="metadata.notes"
-              className="font-semibold"
-              required={true}
-            >
+            <Label htmlFor="notes" className="font-semibold" required={true}>
               General Notes
             </Label>
             <Controller
               control={control}
-              name="metadata.notes"
+              name="notes"
               render={({ field }) => (
                 <LimitedTextarea
-                  value={getStateValue(state, id, field.name)}
+                  // value={getStateValue(state, id, field.name)}
                   placeholder="Information about the method used to locate the monument (GPS, traditional survey instrument); type of GPS receiver; if TURN GPS network was used; if two hour OPUS solution was taken; weather conditions; etc."
                   rows="5"
                   maxLength={1000}
@@ -250,7 +246,7 @@ const Metadata = () => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={-1}>
-          <Wizard back={() => navigate(-1)} next={true} clear={onReset} />
+          <Wizard back={() => send('BACK')} next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>

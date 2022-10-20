@@ -1,18 +1,25 @@
 const toggleDrawer = (draft, action) => {
   // same component is visible -> toggle it
-  if (draft.trayItem === action.payload) {
+  if (action.payload === '') {
+    draft.drawerOpen = false;
+    draft.activeComponent = action.payload;
+  } else if (
+    draft.activeComponent === action.payload &&
+    action.payload !== 'identify'
+  ) {
     draft.drawerOpen = !draft.drawerOpen;
-    draft.trayItem = null;
+    draft.activeComponent = null;
   } else {
     draft.drawerOpen = true;
-    draft.trayItem = action.payload;
+    draft.activeComponent = action.payload;
   }
 
   return draft;
 };
 
 export const defaults = {
-  trayItem: null,
+  activeComponent: 'welcome',
+  drawerOpen: true,
   activeLayers: ['Parcels'],
   addPoint: {
     color: { hex: '' },
@@ -22,6 +29,7 @@ export const defaults = {
   map: {
     activeTool: null,
   },
+  submission: {},
 };
 
 const reduce = (draft, action) => {
@@ -58,9 +66,16 @@ const reduce = (draft, action) => {
       break;
     }
     case 'map/identify': {
-      draft = toggleDrawer(draft, action);
       draft.graphic = action.payload;
 
+      break;
+    }
+    case 'menu/toggle': {
+      draft = toggleDrawer(draft, action);
+
+      if (action.payload === 'submission') {
+        draft.submission = action.meta;
+      }
       break;
     }
     default:

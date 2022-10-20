@@ -1,13 +1,11 @@
-import { useState, useRef } from 'react';
+import { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useStorage, useUser, useStorageTask } from 'reactfire';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
-import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
 import { DocumentCheckIcon } from '@heroicons/react/24/outline';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import { updateAction, getStateForId } from './CornerSubmission.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import Wizard from './Wizard.jsx';
 
@@ -35,8 +33,7 @@ UploadProgress.propTypes = {
   storageRef: PropTypes.object.isRequired,
 };
 
-function PdfUpload({ defaultFileName, onChange }) {
-  const { id } = useParams();
+function PdfUpload({ defaultFileName, onChange, id }) {
   const { data: user } = useUser();
   const storage = useStorage();
   const [uploadTask, setUploadTask] = useState();
@@ -132,22 +129,23 @@ function PdfUpload({ defaultFileName, onChange }) {
 PdfUpload.propTypes = {
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
+  id: PropTypes.string,
 };
 
 export default function MonumentPdf() {
-  let { id, existing } = useParams();
-  const navigate = useNavigate();
-  const { state, actions } = useStateMachine({ updateAction });
+  // let { id, existing } = useParams();
+  // const { state, actions } = useStateMachine({ updateAction });
+  const [state, send] = useContext(SubmissionContext);
 
-  let defaultValues = getStateForId(state, id);
+  // let defaultValues = getStateForId(state, id);
 
-  const { handleSubmit, control, register } = useForm({
-    defaultValues,
+  const { handleSubmit, control } = useForm({
+    // defaultValues,
   });
 
-  const onSubmit = (data) => {
-    actions.updateAction(data);
-    navigate(`/submission/${existing}/${id}/coordinates`);
+  const onSubmit = (payload) => {
+    // actions.updateAction(data);
+    send({ type: 'NEXT', meta: 'existing', payload });
   };
 
   return (
@@ -155,18 +153,21 @@ export default function MonumentPdf() {
       <h3 className="text-2xl font-semibold">Monument Sheet</h3>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
-        <input type="hidden" value={id} {...register('blmPointId')} />
         <NumberedFormSection number={1} title="Existing sheet">
           <Controller
-            name="existing.pdf"
+            name="pdf"
             control={control}
             render={({ field: { onChange } }) => (
-              <PdfUpload defaultFileName="existing-sheet" onChange={onChange} />
+              <PdfUpload
+                defaultFileName="existing-sheet"
+                id={state.context.blmPointId}
+                onChange={onChange}
+              />
             )}
           />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => navigate(-1)} next={true} clear={false} />
+          <Wizard back={false} next={true} clear={false} />
         </NumberedFormSection>
       </NumberedForm>
     </>

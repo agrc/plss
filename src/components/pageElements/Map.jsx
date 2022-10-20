@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import clsx from 'clsx';
 import { useQuery } from '@tanstack/react-query';
-import { useSigninCheck , useFunctions } from 'reactfire';
+import { useSigninCheck, useFunctions } from 'reactfire';
 import { httpsCallable } from 'firebase/functions';
 
 // import Search from '../Search/Search';
@@ -162,6 +162,7 @@ export default function PlssMap({ state, dispatch, color }) {
             returnFieldName: true,
           });
 
+          // TODO! cache this with react-query
           const response = await identify(
             'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
             parameters
@@ -173,7 +174,7 @@ export default function PlssMap({ state, dispatch, color }) {
           }
 
           dispatch({ type: 'map/identify', payload });
-          navigate('/identify');
+          dispatch({ type: 'menu/toggle', payload: 'identify' });
         }
       }
     });

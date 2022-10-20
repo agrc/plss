@@ -33,5 +33,5 @@ export function NumberedFormSection({ children, number, title }) {
 NumberedFormSection.propTypes = {
   children: PropTypes.node.isRequired,
   number: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };

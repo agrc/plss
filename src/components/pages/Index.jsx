@@ -51,7 +51,9 @@ export default function Index() {
           color={state.addPoint.color}
           dispatch={dispatch}
         />
-        <Menu>menu</Menu>
+        <Menu drawerOpen={state.drawerOpen} dispatch={dispatch}>
+          menu
+        </Menu>
         <Drawer {...state} dispatch={dispatch} />
       </StorageProvider>
     </FunctionsProvider>

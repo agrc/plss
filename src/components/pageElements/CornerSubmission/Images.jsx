@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   useStorage,
@@ -6,12 +6,13 @@ import {
   useStorageDownloadURL,
   useStorageTask,
 } from 'reactfire';
-import { useNavigate, useParams } from 'react-router-dom';
+// import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
-import { useStateMachine } from 'little-state-machine';
+// import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import { updateAction, getStateForId } from './CornerSubmission.jsx';
+// import { updateAction, getStateForId } from './CornerSubmission.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Wizard from './Wizard.jsx';
@@ -63,7 +64,8 @@ ImagePreview.propTypes = {
 };
 
 function ImageUpload({ defaultFileName, onChange }) {
-  const { id } = useParams();
+  // const { id } = useParams();
+  const [state] = useContext(SubmissionContext);
   const { data: user } = useUser();
   const storage = useStorage();
   const [uploadTask, setUploadTask] = useState();
@@ -81,7 +83,7 @@ function ImageUpload({ defaultFileName, onChange }) {
       fileName = `${defaultFileName}.${ext}`;
     }
 
-    const path = `submitters/${user.uid}/new/${id}/${fileName}`;
+    const path = `submitters/${user.uid}/new/${state.context.blmPointId}/${fileName}`;
     const fileRef = ref(storage, path);
 
     setFileReference(fileRef);
@@ -161,20 +163,23 @@ ImageUpload.propTypes = {
 
 const limit = 10;
 export default function MonumentImages() {
-  let { id } = useParams();
-  const navigate = useNavigate();
-  const { state, actions } = useStateMachine({ updateAction });
+  // let { id } = useParams();
+  // const navigate = useNavigate();
+  // const { state, actions } = useStateMachine({ updateAction });
+
+  const [, send] = useContext(SubmissionContext);
   const [extraPageCount, setExtraPageCount] = useState(1);
 
-  let defaultValues = getStateForId(state, id);
+  // let defaultValues = getStateForId(state, id);
 
   const { handleSubmit, control } = useForm({
-    defaultValues,
+    // defaultValues,
   });
 
-  const onSubmit = (data) => {
-    actions.updateAction(data);
-    navigate(`/submission/${id}/review`);
+  const onSubmit = (payload) => {
+    send({ type: 'NEXT', meta: 'images', payload });
+    // actions.updateAction(data);
+    // navigate(`/submission/${state.}/review`);
   };
 
   return (
@@ -241,7 +246,7 @@ export default function MonumentImages() {
           </Button>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => navigate(-1)} next={true} clear={false} />
+          <Wizard back={() => send('BACK')} next={true} clear={false} />
         </NumberedFormSection>
       </NumberedForm>
     </>
