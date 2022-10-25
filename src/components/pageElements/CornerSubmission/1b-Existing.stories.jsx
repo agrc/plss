@@ -2,11 +2,19 @@ import { StorageProvider, FirebaseAppProvider, AuthProvider } from 'reactfire';
 import { getStorage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import Images from './Images.jsx';
+import Pdf from './Pdf.jsx';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
 const story = {
   title: 'Corner/Submission/Parts',
-  component: Images,
+  component: Pdf,
+  decorators: [
+    (Story) => (
+      <SubmissionProvider context={{ blmPointId: 1, type: 'existing' }}>
+        <Story />
+      </SubmissionProvider>
+    ),
+  ],
   parameters: {
     backgrounds: {
       default: 'drawer',
@@ -16,6 +24,15 @@ const story = {
           value: '#4B5563',
         },
       ],
+    },
+    xstate: {
+      submission: {
+        events: { type: 'start submission' },
+      },
+    },
+    xstateInspectOptions: {
+      url: 'https://stately.ai/viz?inspect',
+      serialize: null,
     },
   },
 };
@@ -45,7 +62,7 @@ const Template = (args) => {
             className="relative h-screen overflow-y-auto text-white"
             style={{ width: '450px', maxWidth: '450px' }}
           >
-            <Images {...data} />
+            <Pdf {...data} />
           </div>
         </AuthProvider>
       </StorageProvider>
@@ -53,4 +70,4 @@ const Template = (args) => {
   );
 };
 
-export const Step6Photos = Template.bind({});
+export const Step1BUploadPdf = Template.bind({});
