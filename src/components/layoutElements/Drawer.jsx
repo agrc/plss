@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSigninCheck } from 'reactfire';
 import Logo from '../pageElements/Logo.jsx';
+import { Button } from '../formElements/Buttons.jsx';
 
 const SubmissionProvider = lazy(() =>
   import('../contexts/SubmissionContext.jsx').then((module) => ({
@@ -22,10 +23,12 @@ const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <p>{error.message}</p>
-      <button onClick={() => resetErrorBoundary()}>Try again</button>
+    <div role="alert" data-area="drawer">
+      <h1 className="text-lg font-bold">Something went wrong</h1>
+      <p className="rounded border p-4">{error.message}</p>
+      <div className="mt-4 flex justify-center">
+        <Button onClick={() => resetErrorBoundary()}>Reset</Button>
+      </div>
     </div>
   );
 }
