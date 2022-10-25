@@ -6,6 +6,7 @@ import {
   geographic,
   statePlaneZones,
 } from '../pageElements/CornerSubmission/Options.mjs';
+
 const formatDegrees = (dms) =>
   `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
 
@@ -23,6 +24,7 @@ export const formatDatum = (value) => {
 
   return reverseLookup(options, value);
 };
+
 const reverseLookup = (options, value) => {
   const option = options.find((item) => item.value === value);
 
@@ -67,3 +69,60 @@ export const getDefault = (value, nullReplacement = '-', suffix = '') => {
 export const parseBool = (value, defaultValue) =>
   (['true', 'false', true, false].includes(value) && JSON.parse(value)) ||
   defaultValue;
+
+const getGridInputSpatialReference = (zone, unit) => {
+  const statePlaneZones = {
+    north: {
+      ft: 103166,
+      m: 6620,
+    },
+    central: {
+      ft: 103167,
+      m: 6619,
+    },
+    south: {
+      ft: 103168,
+      m: 6621,
+    },
+  };
+
+  return statePlaneZones[zone][unit];
+};
+
+export const resolveProjectData = ({ type, coordinates }) => {
+  if (type === 'grid') {
+    const { zone, unit } = coordinates;
+
+    return {
+      geometryType: 'esriGeometryPoint',
+      inSR: getGridInputSpatialReference(zone, unit),
+      outSR: 4326,
+      f: 'json',
+      geometries: [
+        {
+          x: coordinates.northing,
+          y: coordinates.easting,
+        },
+      ],
+    };
+  }
+
+  if (type === 'geographic') {
+    // get county to know what state plane zone to use
+    const zone = 'north';
+    const unit = 'm';
+    // convert dms to decimal degrees
+    return {
+      geometryType: 'esriGeometryPoint',
+      inSR: 4326,
+      outSR: getGridInputSpatialReference(zone, unit),
+      f: 'json',
+      geometries: [
+        {
+          x: coordinates.northing,
+          y: coordinates.easting,
+        },
+      ],
+    };
+  }
+};
