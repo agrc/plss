@@ -7,89 +7,34 @@ import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
 import extractTownshipInformation from './blmPointId.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
 
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
-const CoordinatePicker = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
-    default: module.CoordinatePicker,
-  }))
-);
+const CoordinatePicker = lazy(() => import('./Datum.jsx'));
+const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));
+const Images = lazy(() => import('./Images.jsx'));
+const Review = lazy(() => import('./SubmissionReview.jsx'));
 const GeographicHeight = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
+  import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.GeographicHeight,
   }))
 );
-const GridCoordinates = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
-    default: module.GridCoordinates,
-  }))
-);
-const Latitude = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
-    default: module.Latitude,
-  }))
-);
+const Latitude = lazy(() => import('./GeographicCoordinates.jsx'));
 const Longitude = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
+  import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.Longitude,
   }))
 );
-const Images = lazy(() => import('./Images.jsx'));
-const Review = lazy(() =>
-  import('./Coordinates.jsx').then((module) => ({
-    default: module.Review,
-  }))
-);
-
-export const updateAction = (state, payload) => {
-  const newState = { ...state };
-  newState.submissions[payload.blmPointId] = {
-    ...newState.submissions[payload.blmPointId],
-    ...payload,
-  };
-
-  return newState;
-};
-export const getStateForId = (state, id) =>
-  id in (state?.submissions ?? {}) ? state.submissions[id] : {};
-export const getStateValue = (state, id, property) => {
-  const data = getStateForId(state, id);
-  const keys = Object.keys(data);
-
-  if (keys.length === 0) {
-    return '';
-  }
-
-  if (property.indexOf('.') > -1) {
-    const [section, subProperty] = property.split('.');
-
-    if (!(section in data) || data[section] === null) {
-      return '';
-    }
-
-    return data[section][subProperty] ?? '';
-  }
-
-  if (!(property in data)) {
-    return '';
-  }
-
-  return data[property] ?? '';
-};
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <p>{error.message}</p>
-      <button
-        onClick={() => {
-          resetErrorBoundary();
-        }}
-      >
-        Try again
-      </button>
+    <div role="alert" data-area="submission">
+      <h1 className="text-lg font-bold">Something went wrong</h1>
+      <p className="m-4 rounded border p-4 text-sm">{error.message}</p>
+      <div className="mt-4 flex justify-center">
+        <Button onClick={() => resetErrorBoundary()}>Reset</Button>
+      </div>
     </div>
   );
 }
@@ -98,7 +43,7 @@ ErrorFallback.propTypes = {
   resetErrorBoundary: PropTypes.func.isRequired,
 };
 
-export default function CornerSubmission({ submission, dispatch }) {
+export default function CornerSubmission({ submission }) {
   const [hide, setHide] = useState(false);
   const [state, send] = useContext(SubmissionContext);
   const pointId = submission.blmPointId;
@@ -143,6 +88,7 @@ export default function CornerSubmission({ submission, dispatch }) {
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
 
   const getFormPart = (state) => {
+    console.log('state change', state.value);
     switch (true) {
       case state.matches('uploading existing pdf'):
         return <MonumentPdf />;
@@ -151,19 +97,33 @@ export default function CornerSubmission({ submission, dispatch }) {
       case state.matches('choosing datum'):
         return <CoordinatePicker />;
       case state.matches('entering latitude'):
+      case state.matches('entering alternate latitude'):
         return <Latitude />;
       case state.matches('entering longitude'):
+      case state.matches('entering alternate longitude'):
         return <Longitude />;
       case state.matches('entering ellipsoid height'):
+      case state.matches('entering alternate ellipsoid height'):
         return <GeographicHeight />;
       case state.matches('entering grid coordinates'):
+      case state.matches('entering alternate grid coordinates'):
         return <GridCoordinates />;
       case state.matches('uploading photos'):
         return <Images />;
       case state.matches('reviewing'):
         return <Review />;
       default:
-        return <div>No matching component for {state.value} state</div>;
+        return (
+          <div role="alert" data-area="drawer">
+            <h1 className="text-lg font-bold">Something went wrong</h1>
+            <p className="m-4 rounded border p-4">
+              No matching component for {state.value} state.
+            </p>
+            <div className="mt-4 flex justify-center">
+              <Button onClick={() => send('BACK')}>Back</Button>
+            </div>
+          </div>
+        );
     }
   };
 
@@ -214,7 +174,7 @@ export default function CornerSubmission({ submission, dispatch }) {
       <div className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary
           FallbackComponent={ErrorFallback}
-          onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
+          onReset={() => send('BACK')}
         >
           {getFormPart(state)}
         </ErrorBoundary>
