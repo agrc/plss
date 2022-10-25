@@ -3,11 +3,16 @@ import PropTypes from 'prop-types';
 import { useStorage, useUser, useStorageTask } from 'reactfire';
 import { ref, uploadBytesResumable } from 'firebase/storage';
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ErrorMessage } from '@hookform/error-message';
 import { DocumentCheckIcon } from '@heroicons/react/24/outline';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
+import { existingSheetSchema } from './Schema';
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
   const { status, data: uploadProgress } = useStorageTask(
@@ -132,21 +137,39 @@ PdfUpload.propTypes = {
   id: PropTypes.string,
 };
 
+function Attachment({ name }) {
+  return (
+    <div className="flex justify-between">
+      <div>{name}</div>
+      <Button style="secondary">Remove</Button>
+    </div>
+  );
+}
+Attachment.propTypes = {
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  id: PropTypes.string,
+};
+
 export default function MonumentPdf() {
   // let { id, existing } = useParams();
   // const { state, actions } = useStateMachine({ updateAction });
   const [state, send] = useContext(SubmissionContext);
+  const defaultValues = state.context.existing;
 
   // let defaultValues = getStateForId(state, id);
 
-  const { handleSubmit, control } = useForm({
-    // defaultValues,
+  const { handleSubmit, control, formState } = useForm({
+    defaultValues,
+    resolver: yupResolver(existingSheetSchema),
   });
 
   const onSubmit = (payload) => {
     // actions.updateAction(data);
     send({ type: 'NEXT', meta: 'existing', payload });
   };
+
+  const deleteAttachment = () => {};
 
   return (
     <>
@@ -157,17 +180,31 @@ export default function MonumentPdf() {
           <Controller
             name="pdf"
             control={control}
-            render={({ field: { onChange } }) => (
-              <PdfUpload
-                defaultFileName="existing-sheet"
-                id={state.context.blmPointId}
-                onChange={onChange}
-              />
-            )}
+            render={({ field: { onChange } }) =>
+              defaultValues?.pdf ? (
+                <Attachment
+                  name="existing-sheet.pdf"
+                  document={defaultValues.pdf}
+                  id={state.context.blmPointId}
+                  onChange={onChange}
+                />
+              ) : (
+                <PdfUpload
+                  defaultFileName="existing-sheet"
+                  id={state.context.blmPointId}
+                  onChange={onChange}
+                />
+              )
+            }
+          />
+          <ErrorMessage
+            errors={formState.errors}
+            name="pdf"
+            as={ErrorMessageTag}
           />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={false} next={true} clear={false} />
+          <Wizard clear={deleteAttachment} next={true} />
         </NumberedFormSection>
       </NumberedForm>
     </>
