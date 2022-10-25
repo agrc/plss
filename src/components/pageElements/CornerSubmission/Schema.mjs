@@ -150,7 +150,12 @@ export const gridCoordinatesSchema = yup.object().shape({
         .notRequired(),
     })
     .label('elevation'),
-  verticalDatum: yup.string().oneOf(options.verticalDatums).label('The datum'),
+  verticalDatum: yup
+    .string()
+    .optional()
+    .oneOf([...options.verticalDatums, ''])
+    .label('The datum'),
+});
 
 export const existingSheetSchema = yup.object().shape({
   pdf: yup.string().required().label('The sheet'),
