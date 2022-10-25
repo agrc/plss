@@ -95,10 +95,6 @@ export const geographicHeightSchema = yup.object().shape({
       is: 'm',
       then: yup.number().required().min(600).max(4300),
     })
-    .when('unit', {
-      is: 'ft.survey',
-      then: yup.number().required().min(2000).max(14000),
-    })
     .required()
     .label('Ellipsoid Height'),
   unit: yup
@@ -129,22 +125,6 @@ export const gridCoordinatesSchema = yup.object().shape({
       then: yup
         .number()
         .typeError('Only number are acceptable')
-        .min(2000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
-        .max(14000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
-        .nullable()
-        .transform((value, originalValue) =>
-          typeof originalValue === 'string' && originalValue.trim() === ''
-            ? null
-            : value
-        )
-        .notRequired(),
-    })
-    .when('unit', {
-      is: 'ft.survey',
-      then: yup
-        .number()
-        .typeError('Only number are acceptable')
-
         .min(2000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
         .max(14000, 'Please enter a valid value for Utah (2,000-14,000 ft)')
         .nullable()
