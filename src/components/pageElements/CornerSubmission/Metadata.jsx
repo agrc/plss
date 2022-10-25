@@ -2,9 +2,7 @@ import { useContext } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DevTool } from '@hookform/devtools';
-// import { useStateMachine } from 'little-state-machine';
 import { Controller, useForm } from 'react-hook-form';
-// import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
@@ -14,15 +12,10 @@ import Spacer from '../../formElements/Spacer.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-// import {
-// updateAction,
-// getStateForId,
-// getStateValue,
-// } from './CornerSubmission.jsx';
 import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
-// import { parseBool } from '../../helpers/index.mjs';
+import { parseBool } from '../../helpers/index.mjs';
 const defaults = {
   section: '',
   corner: '',
@@ -33,30 +26,29 @@ const defaults = {
   mrrc: false,
 };
 const Metadata = () => {
-  // let { id } = useParams();
-  // const { state, actions } = useStateMachine({ updateAction });
-  // const navigate = useNavigate();
+  const meta = 'metadata';
+  const [state, send] = useContext(SubmissionContext);
 
-  // let defaultValues = getStateForId(state, id);
-  // if (!defaultValues?.metadata) {
-  // defaultValues = defaults;
-  // }
-  // if (typeof defaultValues?.mrrc !== 'boolean') {
-  // defaultValues.mrrc = false;
-  // }
+  let defaultValues = state.context?.metadata;
+  if (!defaultValues) {
+    defaultValues = defaults;
+  }
 
-  const [, send] = useContext(SubmissionContext);
+  if (typeof defaultValues?.mrrc !== 'boolean') {
+    defaultValues.mrrc = false;
+  }
 
   const { register, control, handleSubmit, reset, formState } = useForm({
-    // defaultValues,
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (payload) => {
-    send({ type: 'NEXT', meta: 'metadata', payload });
+    send({ type: 'NEXT', meta, payload });
   };
+
   const onReset = () => {
-    // actions.updateAction(defaults);
+    send({ type: 'RESET', meta, payload: defaults });
     reset(defaults);
   };
 
@@ -74,7 +66,7 @@ const Metadata = () => {
               required={true}
               type="number"
               placeholder="What is the section"
-              // value={getStateValue(state, id, 'section')}
+              value={defaultValues.section}
               inputRef={register}
             />
             <ErrorMessage
@@ -94,7 +86,7 @@ const Metadata = () => {
                   required={true}
                   options={corner}
                   placeholder="What is the section corner"
-                  // currentValue={getStateValue(state, id, name)}
+                  currentValue={defaultValues[name]}
                   onUpdate={onChange}
                 />
               )}
@@ -118,7 +110,7 @@ const Metadata = () => {
                   required={true}
                   options={status}
                   placeholder="What is the status"
-                  // currentValue={getStateValue(state, id, name)}
+                  currentValue={defaultValues[name]}
                   onUpdate={onChange}
                 />
               )}
@@ -142,7 +134,7 @@ const Metadata = () => {
                   required={true}
                   options={accuracy}
                   placeholder="Choose the accuracy"
-                  // currentValue={getStateValue(state, id, name)}
+                  currentValue={defaultValues[name]}
                   onUpdate={onChange}
                 />
               )}
@@ -174,10 +166,7 @@ const Metadata = () => {
                   <Switch
                     name={name}
                     screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    // currentValue={parseBool(
-                    //   getStateValue(state, id, name),
-                    //   false
-                    // )}
+                    currentValue={parseBool(defaultValues[name], false)}
                     onUpdate={onChange}
                   />
                 )}
@@ -213,7 +202,7 @@ const Metadata = () => {
               name="description"
               render={({ field }) => (
                 <LimitedTextarea
-                  // value={getStateValue(state, id, field.name)}
+                  value={defaultValues[field.name]}
                   placeholder="Notes about the monument"
                   rows="5"
                   maxLength={1000}
@@ -233,7 +222,7 @@ const Metadata = () => {
               name="notes"
               render={({ field }) => (
                 <LimitedTextarea
-                  // value={getStateValue(state, id, field.name)}
+                  value={defaultValues[field.name]}
                   placeholder="Information about the method used to locate the monument (GPS, traditional survey instrument); type of GPS receiver; if TURN GPS network was used; if two hour OPUS solution was taken; weather conditions; etc."
                   rows="5"
                   maxLength={1000}
@@ -246,7 +235,7 @@ const Metadata = () => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={-1}>
-          <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+          <Wizard next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>
