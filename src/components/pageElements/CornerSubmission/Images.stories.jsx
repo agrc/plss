@@ -43,7 +43,7 @@ const Template = (args) => {
         <AuthProvider sdk={auth}>
           <div
             className="relative h-screen overflow-y-auto text-white"
-            style={{ width: '320px', maxWidth: '320px' }}
+            style={{ width: '450px', maxWidth: '450px' }}
           >
             <Images {...data} />
           </div>

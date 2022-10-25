@@ -1,12 +1,14 @@
-import Metadata from './Metadata.jsx';
+import { Longitude } from './GeographicCoordinates.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
-  component: Metadata,
+  component: Longitude,
   decorators: [
     (Story) => (
-      <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
+      <SubmissionProvider
+        context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}
+      >
         <Story />
       </SubmissionProvider>
     ),
@@ -35,14 +37,15 @@ export default {
 
 const Template = (args) => {
   const data = { ...args };
+
   return (
     <div
       className="relative h-screen overflow-y-auto text-white"
       style={{ width: '450px', maxWidth: '450px' }}
     >
-      <Metadata {...data} />
+      <Longitude {...data} />
     </div>
   );
 };
 
-export const Step1Metadata = Template.bind({});
+export const Step3BLongitude = Template.bind({});

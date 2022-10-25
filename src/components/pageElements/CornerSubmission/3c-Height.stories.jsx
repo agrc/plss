@@ -1,9 +1,9 @@
-import Metadata from './Metadata.jsx';
+import { GeographicHeight } from './GeographicCoordinates.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
-  component: Metadata,
+  component: GeographicHeight,
   decorators: [
     (Story) => (
       <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
@@ -21,28 +21,32 @@ export default {
         },
       ],
     },
-    xstate: {
-      submission: {
-        events: { type: 'start submission' },
-      },
+  },
+  xstate: {
+    submission: {
+      events: { type: 'start submission' },
     },
-    xstateInspectOptions: {
-      url: 'https://stately.ai/viz?inspect',
-      serialize: null,
-    },
+  },
+  xstateInspectOptions: {
+    url: 'https://stately.ai/viz?inspect',
+    serialize: null,
   },
 };
 
 const Template = (args) => {
   const data = { ...args };
+
   return (
     <div
       className="relative h-screen overflow-y-auto text-white"
       style={{ width: '450px', maxWidth: '450px' }}
     >
-      <Metadata {...data} />
+      <GeographicHeight {...data} />
     </div>
   );
 };
 
-export const Step1Metadata = Template.bind({});
+export const Step3CGeographicHeight = Template.bind({});
+Step3CGeographicHeight.args = {
+  system: 'wgs84',
+};

@@ -1,26 +1,14 @@
-import { createStore, StateMachineProvider } from 'little-state-machine';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { Latitude } from './Coordinates.jsx';
+import { Latitude } from './GeographicCoordinates.jsx';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Latitude,
   decorators: [
     (Story) => (
-      <StateMachineProvider>
-        <MemoryRouter
-          initialEntries={[
-            '/submission/1/coordinates/geographic/nad83/northing',
-          ]}
-        >
-          <Routes>
-            <Route
-              path="/submission/:id/coordinates/geographic/:system/northing"
-              element={<Story />}
-            />
-          </Routes>
-        </MemoryRouter>
-      </StateMachineProvider>
+      <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
+        <Story />
+      </SubmissionProvider>
     ),
   ],
   parameters: {
@@ -33,32 +21,29 @@ export default {
         },
       ],
     },
+    xstate: {
+      submission: {
+        events: { type: 'start submission' },
+      },
+    },
+    xstateInspectOptions: {
+      url: 'https://stately.ai/viz?inspect',
+      serialize: null,
+    },
   },
 };
 
 const Template = (args) => {
   const data = { ...args };
-  createStore({
-    name: 'submissions',
-    submissions: {
-      1: {
-        blmPointId: 1,
-        notes: 'hi there',
-        status: 'existing',
-        accuracy: 'survey',
-        datum: 'geographic-nad83',
-      },
-    },
-  });
 
   return (
     <div
       className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '320px', maxWidth: '320px' }}
+      style={{ width: '450px', maxWidth: '450px' }}
     >
       <Latitude {...data} />
     </div>
   );
 };
 
-export const StepThreeGeographicNorthing = Template.bind({});
+export const Step3ALatitude = Template.bind({});
