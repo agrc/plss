@@ -7,8 +7,8 @@ import {
   statePlaneZones,
 } from '../pageElements/CornerSubmission/Options.mjs';
 
-const formatDegrees = (dms) =>
-  `${dms.degrees}° ${dms.minutes}' ${dms.seconds}"`;
+export const formatDegrees = (dms) =>
+  `${dms.degrees}°${dms.minutes}′${dms.seconds}″`;
 
 export const formatDatum = (value) => {
   if ((value?.length ?? 0) < 1) {
@@ -89,40 +89,88 @@ const getGridInputSpatialReference = (zone, unit) => {
   return statePlaneZones[zone][unit];
 };
 
-export const resolveProjectData = ({ type, coordinates }) => {
-  if (type === 'grid') {
-    const { zone, unit } = coordinates;
+export const countiesInZone = {
+  north: [
+    'box elder',
+    'cache',
+    'daggett',
+    'davis',
+    'morgan',
+    'rich',
+    'summit',
+    'weber',
+  ],
+  central: [
+    'carbon',
+    'duchesne',
+    'emery',
+    'grand',
+    'juab',
+    'millard',
+    'salt lake',
+    'sanpete',
+    'sevier',
+    'tooele',
+    'uintah',
+    'utah',
+    'wasatch',
+  ],
+  south: [
+    'beaver',
+    'garfield',
+    'iron',
+    'kane',
+    'piute',
+    'san juan',
+    'washington',
+    'wayne',
+  ],
+};
 
-    return {
+const nad832011 = 6318;
+export const createProjectFormData = ({ type, coordinates }) => {
+  const formData = {
+    f: 'json',
+  };
+
+  if (type === 'grid') {
+    let { zone, unit } = coordinates;
+
+    formData.inSr = getGridInputSpatialReference(zone, unit);
+    formData.outSr = nad832011;
+    formData.geometries = JSON.stringify({
       geometryType: 'esriGeometryPoint',
-      inSR: getGridInputSpatialReference(zone, unit),
-      outSR: 4326,
-      f: 'json',
       geometries: [
         {
           x: coordinates.northing,
           y: coordinates.easting,
         },
       ],
-    };
+    });
+
+    return formData;
   }
 
   if (type === 'geographic') {
-    // get county to know what state plane zone to use
-    const zone = 'north';
-    const unit = 'm';
-    // convert dms to decimal degrees
-    return {
+    const { zone } = coordinates;
+
+    formData.inSr = nad832011;
+    formData.outSr = getGridInputSpatialReference(zone, 'm');
+    formData.geometries = JSON.stringify({
       geometryType: 'esriGeometryPoint',
-      inSR: 4326,
-      outSR: getGridInputSpatialReference(zone, unit),
-      f: 'json',
       geometries: [
         {
           x: coordinates.northing,
           y: coordinates.easting,
         },
       ],
-    };
+    });
+
+    return formData;
   }
+
+  return null;
 };
+
+export const roundAccurately = (number, decimalPlaces) =>
+  Number(Math.round(number + 'e' + decimalPlaces) + 'e-' + decimalPlaces);
