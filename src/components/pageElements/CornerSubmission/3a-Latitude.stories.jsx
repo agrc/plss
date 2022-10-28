@@ -6,7 +6,19 @@ export default {
   component: Latitude,
   decorators: [
     (Story) => (
-      <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
+      <SubmissionProvider
+        context={{
+          blmPointId: 'UT260060S0020E0_240400',
+          type: 'new',
+          datum: 'grid-nad83',
+          grid: {
+            zone: 'north',
+            unit: 'm',
+            northing: 1155931.412,
+            easting: 471992.726,
+          },
+        }}
+      >
         <Story />
       </SubmissionProvider>
     ),
@@ -23,7 +35,15 @@ export default {
     },
     xstate: {
       submission: {
-        events: { type: 'start submission' },
+        events: [
+          { type: 'start submission' },
+          { type: 'NEXT' },
+          { type: 'NEXT' },
+          { type: 'NEXT' },
+        ],
+      },
+      project: {
+        events: { type: 'SET_COORDINATES' },
       },
     },
     xstateInspectOptions: {
