@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
@@ -11,7 +10,6 @@ import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../ErrorMessage.jsx';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import LoadingComponent from '../Loading.jsx';
 import { units } from './Options.mjs';
 import {
   latitudeSchema,
@@ -19,30 +17,24 @@ import {
   geographicHeightSchema,
 } from './Schema.mjs';
 import Wizard from './Wizard.jsx';
-import useProjection from '../../hooks/useProjection.js';
 import { formatDatum } from '../../helpers/index.mjs';
 
-const latitudeDefaults = {
-  northing: {
-    seconds: '',
-    minutes: '',
-    degrees: '',
-  },
+const defaults = {
+  seconds: '',
+  minutes: '',
+  degrees: '',
 };
 
-const LatitudeBase = ({ setLoadingState }) => {
+export const Latitude = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
-  const { data, status } = useProjection(setLoadingState, state.context);
 
-  let defaultValues = state.context?.geographic?.northing;
+  let defaultValues = {
+    northing: state.context?.geographic?.northing ?? {},
+  };
 
-  if (!defaultValues) {
-    defaultValues = latitudeDefaults;
-  }
-
-  if (data) {
-    console.log(data);
+  if (!defaultValues?.northing) {
+    defaultValues = { northing: defaults };
   }
 
   const { register, handleSubmit, reset, formState } = useForm({
@@ -50,13 +42,17 @@ const LatitudeBase = ({ setLoadingState }) => {
     defaultValues,
   });
 
+  if (state.matches('form.entering alternate latitude')) {
+    send('SET_COORDINATES');
+  }
+
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta, payload });
   };
 
   const onReset = () => {
-    send({ type: 'RESET', meta, payload: latitudeDefaults });
-    reset(latitudeDefaults);
+    send({ type: 'RESET', meta, payload: { northing: defaults } });
+    reset({ northing: defaults });
   };
 
   return (
@@ -66,8 +62,8 @@ const LatitudeBase = ({ setLoadingState }) => {
         Geographic Northing for {formatDatum(state.context.datum)}
       </p>
       <Spacer className="my-4" />
-      {status === 'loading' ? (
-        <div>calculating coordinates ...</div>
+      {!state.matches('projecting.done') ? (
+        <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
           <NumberedFormSection number={2} title="Latitude">
@@ -119,24 +115,19 @@ const LatitudeBase = ({ setLoadingState }) => {
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={0}>
-            <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+            <Wizard
+              back={() => {
+                send('RESTART');
+                send('BACK');
+              }}
+              next={true}
+              clear={onReset}
+            />
           </NumberedFormSection>
         </NumberedForm>
       )}
     </>
   );
-};
-LatitudeBase.propTypes = {
-  setLoadingState: PropTypes.func,
-};
-export default LoadingComponent(LatitudeBase);
-
-const longitudeDefaults = {
-  easting: {
-    seconds: '',
-    minutes: '',
-    degrees: '',
-  },
 };
 
 export const Longitude = () => {
@@ -146,7 +137,7 @@ export const Longitude = () => {
   let defaultValues = state.context?.geographic?.easting;
 
   if (!defaultValues) {
-    defaultValues = longitudeDefaults;
+    defaultValues = defaults;
   }
 
   const { register, handleSubmit, reset, formState } = useForm({
@@ -159,8 +150,8 @@ export const Longitude = () => {
   };
 
   const onReset = () => {
-    send({ type: 'RESET', meta, payload: longitudeDefaults });
-    reset(longitudeDefaults);
+    send({ type: 'RESET', meta, payload: defaults });
+    reset(defaults);
   };
 
   return (

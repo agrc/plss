@@ -1,222 +1,513 @@
 import { assign, createMachine } from 'xstate';
+import DmsCoordinates, { parseDms } from 'dms-conversion';
+import {
+  countiesInZone,
+  createProjectFormData,
+  formatDegrees,
+  roundAccurately,
+} from '../helpers/index.mjs';
+import ky from 'ky';
 
 export const submissionMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SwK4CMC2BLWssHsA7AOiwgBswBiWAFwEMAnWgAlUxzyIG0AGAXUSgADvjy0ChISAAeiAEzyArMQCMANgDMygCzqlmpQE5NAdgA0IAJ6JTADh3FTvO3d6nlS3up2qAvn6W7Ni4kqQU1HRMrMGcktyqgkggouKS0nIIALSavJpOdkaq8jpKJV5FmpY2CKbqvMS8vEbyqkZK+nq8SgFB6CFcJPQQEFiEUCwYYAwQ9AxUAHIAogAaACp8SSJiWBJEGYhe8o2qdko6rrw6ZjoW1oiqvKqO6q-qbvUXeka9ILGhRGIw1G40m02Gc3oVAASksAMpLDYCaSpXbpZKZdTyIxOTRGdSmbTYlqqaqIBx2NRFHT4+R5PGmX7-QbEADGAAt8DtQbNaCgMItVkitikdnspBjEFkjDj5JpNIVHppVLlTqT7ghimZiO8DIT7K9tEz+nFARyuXgeXN+YL1gkRajxQcEF5GpoaaoDBp9EZTEoyZrlaYnPJXB86YUCcaOACSObuRNeTaAEIAQQAwgBpTYosXo0CZNU6nwegmVeXqAMmBp1dQmOyqQkdYzRgZheOWxPWgVprP23NpfaS7J1YjXByvanjnwB1yqRr1OV2OoRluBP4m2NszkJlhJgVwzMASQACjnko787Ipc5g6HfdjOiqlP6NSVHsRCu4ZTpf+cDK2ppxjunZ7t2MLwoi57bIOEoFogMrEPKdS+kopievYVQaqoKr5A4v72I+MqmIy67Mu2IFjF2fICgAqieAAiqZrEsAD66YAPILCxdrIheeZDvB2Qqg0nraJOTQ6IoCpVrkTivIUZSKviPxkZuLJgIQtBgIwVEsPQ5DaYwhBzGALBQLpEAsKyXKMCCpmwLawoDmignXggNLqI0TSmEYbiaIuJQBm0o6mL47gBa82KkX0MYaVpOl6QZRkmdp5mWdZtn2dpjnLHaiQuU6w5KB+752HSfmnHYWE1CUtxjoabQ4cUNI9GpcVhJpRlJYZOmpWZFlkJl+B2WMDlUL22Z8TBrlwe5bQvL+jw0rw0ltDVDyEvOnqnC4JRyi4gFbl1iWgslfWmelQ02SN2VwBNGbZgV-Gwc6JQ6uVdRPFopQykYwVmMcrhaCY5x6GUbWxW2gInbpZ29cZl2DVZN2jf1jmwgizkvbNzpYjihL4oSigyq06o1I2ypqCVRQlbkuR6Ed8XdfDKWXeQcy7CgEDUHl2MzUVQlZDhKjVSqJjvMqq1tMFxj5KcBgXPYeSlJoTOdQlcMTOdiNpRzEh8jzD19tNoqvcOWRep+YW+cYdJ6PYwUXJSaEeFJhpmMu6sw5rPVs3rnOG9QmNQabl5uZkwu+p+eLKm4BguNclbYb4OIaBceIlXVAHtdDJCw37F160QUBc0bfPQWbuMWyLMfPvKFxNC0ycU+hwbeGYeTLoo9QxRuHU+yz2sI-1LDkCXZfUJNlfh3NkdW8utwvkoZw3P92H1CooPeFJ1Jyt7+e+6zRdmeP4yTxBWMzwJc9SiFMcmLtCcOAFsseMQJglPYrW+CUB-EAXY+uszJgHIOQLAwhYD4CGuyMAWAoDsloE5a+5shYqm2sUbwzQjBXF8uvWqnovIGFJh4JoTx5D-0AcPf2ICwEQKgTAuBCCkHTzDjfZ0lsqaLxIo2BaxRgptwXAqR4X1lAeEoUfahJ8WCgPAZA6BVlYHwMQZfUODp2E12jtVR+8dcgvxbptKmO03DlSkno-+KBhDj2GHpYQnJaBiGQWw1B7ko6OBVBcHBBJ-LvADHKC4xBsTO3rHWC4FirH4BsaCOx+AHGOVYeolxkcNCBIfKcQwvCnjPGCiSMc2J3SKAMF4FU4TrEggmDEuJxsnqJOrkJRQ20SiSVvGYnJrQ8ktEKA2ew8dSmRPKSwSpjiQ78yroLeaxhAmenaFnc49RyYKFaA0NCyp2gkgrGrXOQFiCMDAAANywGAAA7lRapKC6nuTpPOHQiczAeJfOoBZCA5RoQau6EwQYV6-n-rsg5xzTnT2egLK8kccGUhFnYAkzRlS3AMc83uDVriNhfM0d4fSokTDADIHAEhokQAAGZONqeMyO0UqQ0jCqtDwPhXw1HxC7HwoZDA3Ckn3cigJLFlL0linFtiCWqNGbPDhPcnAdEMPYX0Ny-IBl8sGVZq1ujKm0C0CRQ8rooyymNHKRLCogrvp6OuwiV5iOuLSh4rViDFKJo8rw7g2XqQ1mq5Gw00bjQSbqiOUp3QND8k8d0no0Khh0MFZ4Xk97yC0C+EWmyobbKoeql1d0MaQUFRotBWjY4RswY8bEZrNStHyHiHCzRWg4O0DoVVp0Jhn1LkHHVOMSW2ANViMSdRbh5FaLLHwY48gtDpHkcWMb+55wAZIseE863uobXq55fkdQuHqAqPyPgYVOzaGoHwRg9A3KuL4SGw641jv1hfCuziLmZHQioFteofDOG0BtTUqcN00m3ZJXw9qB6HzVceydj1zmNoQNoBly0fCFFKA2YK3gcTKneMUVwvkV2Vq1mPQO3Ng4pv-TO-GuIiZElJk84oKokJFG6N4-1zwkPcrofIxhyikGnuJTOy9OpWg3vbdoAjW1qZNTpnkXdlHQSyPoQolgSjmFnLPQBhmlqt10gjSUNw7Qu2OBuUakWzxQwCcxdRhhiimEqJGZhz1CBsOEwJHhkkBGXzHBIvWEKLgFR2ACOuQg+AebwGSOykgZBKAetvh5ecCpShoR2ivP0kKAxvDUGYDoTQFQJ33V5oEIw9JTBmJCPzzpfxpybHKPEHwOhVm8DqFUEay0mCKP4LZW4Ox6X3JlmuwZ9BNXKqVgKEZIOrWi7eMKNKfJaf0iPJGGVUZJoa0JBkxZ8Q7qTg7YKbgbM22UM8JoygnPVeZlWwbNCUMGzQ+N1xvh8jRUhViPI5wPBO0hWoMKOEcHPhKh+kd8adajxrZPA7kcpINGxHFso33IX4mCloSkQYPS4NaOoAbr3LpCZo3pujn2pRLUCUU5wxhdrujzbtRbtxls7uUFDjbYROX9NsfYsQSPsjvSXNcVankGxrb8dibafl8TuHKvJxLDrAS-MOSc8YVOsg2dY0E6qtxtBuz8WYpCxQ7ZlCuBoJ72zScYpkdiugfL8VC53Z+OsndfzIUbLOF8SF5B+iKBLG1qlY3HTHc60bWq4A64Ck4T0DZHlYi-tj0MlJbNga8PqIdSX43vaDlT38NZXg3OKAaJV2Pt15ICgtEi5n1u2828hn9+3p3GakpSbxfo46+TxPIYKvunB4O+LvX0A24e6dE-p2gEfDBJ69GYH07hg0bwVLLi3GOJzXAPkL9oXkIVQsfrCgMrsbt4kqJCwpzm-BAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SwK4CMC2BLWssHsA7AOgDN8AnDYrCAGzAGJYAXAQwpYAJVMc8iAbQAMAXUSgADvjwsChCSAAeiAKwAWAOzFVmgJzrDwgByqTe4wBoQAT0QBGAGwBmZ8QBM61e-eP793WF-AF9g615sXHkySmpaBmZ2Th50SIFCQXtxJBBpWXlFFQQNbV0DI1NzK1sHdT13YmFVM013Y01HL2dQ8NT+aPIqYjYICCxCKC4MMHYINnZGADkAUQANABURbKkZLDkiQsRjd3tiPWd1Y2MvDvV3C+s7BCdjNx9hZ3fjx19HHpAIv0iDEhiMxhMpjMRvM2IwAErLADKy02YkUeT2BRyRT0rTO6mEHUcFlUjkc+keDj8DQ0vncJlUej0AWM-0BUWBg2oAGMABb4XYQuYsFAYJZrVHbXK7fYKbFqLQ6fSGAmVYwWSkITQaYjXbV0-zOVT2dRsvockhc4h8gV4IXzUXijaZKUY2WHYqKsoqhlVTU+E7EJz2c72T5OdSOVRmvgWkE8-mCybCx0AIQAggBhADSW3RMqxoCKJSV5VVZnV1Se9k0Ro8wkJ9iuhLMwncMbSA1i1sTduTDrFGZzLvz+QO8s9pWVFQrGpqz1xxiDxhN7gszmE5OcrLCAPN6XjPdt437IrFiOzAEkAAp5nJuwvKBVTsu+yuasN+XUm46aTRNFdXg7IFLW7G0ky4FMxQRZFJVHTFxyLRAfD0INOlrVR1T0Ct3H9ewPh0BthAJfD3F0Zw-l3dkDytcC+0ggdGAAVWvAARdN1mWAB9TMAHlFk4500XvAtEKfZ5TGIdQNyZMlnG1VRnD0f0mlOY09E6Vw-00YC4ytMBCBYMAKBPLg2DoIyKEIeYwC4KATIgLhuQFChwRs2AnTgkSxzlJDJ1LH01TnJ4mW0X96jXCifDqXSaO7AzLNM8zLOsoy7IcpyXLcoyPJWZ0sng90JxLb0Zz9ecw2EVDXkMGTjCqwwdKo-cuyGBLjKSizjNS2z7NoTLKGyuBGCHXNhJ2HyPRK6dy3Kp57lOeptMU9x-0CHdeljOK2sMjqIWS7qbPS-rnMG8Z3JGrNcwK7yEN88TptfIKq0QKNhF1Ywt1WvxHGI9tmq21rqHakz9q6qyjr6xzTtc86cvhJEUTvCa7o9GttHQ+qyRcCwNJe54Q0cHQw0+85IzqTxYqB4gQc6lKjroeY9hQCAmDyryUaKvyTQJM4-2uOoG0+7dNTqVC9DbI0fE6V5ySpzl4t20HJgOiG0sZuQRVZy7h3G6VJonE0lOIYkNE3bCww0VRNUca562wy5PjJY4Nr3QGFZ2xKwfp9Wma1pgYKRvWHzEoonE+INCS8XFyW8Gsbc3DwLmZCWAMUprNs7D3gaVunDvVogoGZ7X2eR-XUeKr0ZrfYKHBDbQ1zaD4GzIgkM7drPQM9vaVfBnquDoQvi6YUay5D+7iyrp7Z3x+Sl3UewTkUiX7lk9vqOp2nvfz2zB4mYeEdgsfRIn5C20aS4Vw3Qx6Ql-GTS-ReLEX9pLnueWu5zr3e592ywDoOgWBJCwHwP1XkYAsBQF5CwTyx8Dbc3uKUQk+hsKrU+NbCqwYTYEhcK0I0GhXYb2zjTXO281Z-wAUAkBYCIFQJgaPYOJ8PTHHelGe4NwF7ESCB+E0qhiDOEXjg1aRJ14tWIVvH+O8uD-0AcA0BjlwGQOgYfIOromGGzbKcIIxIazeA3KtZSmCQz8KbIvJ+n0-CiPdp-YgKBJCDxGKZSQ-IWAyFgYw+B4kebvVxJoAWqdhb3wEaUQCq1OEvCsZ3Q8diHHgkmM4-AriPIMLUZ4sOAi+Ho1IqtTCYYPwnDcD8fCrgNJ-QCB-aJ9j8COIhAkpJOtrqpIrgg6SuoPjGl8IpTcxFNTtCJlpVoNw54rgqVaGJ1S4lcDqW4wOHNy5cy8X4Rast6qaC0EpTQPDXBBnJoEaWdxTQAyiVaCgYAABuWAwAAHcTwNLgc0rxiDCJ-iZN4WsZF8lRhNkEaSm5TBrmjEckCh5TkXOubc0eN1OaPjDk8loKC3noI-BRVCpIAwLyNH9f6mdgVjKqTUyYYAlA4DkLUiApB3FNIWWHIwfM-GGACS4e+pgiY6M0ecX6FFCFiJseMgl0jiWsCceSlRczx5oz8EuMMbRdAmnwlfD8f4iYnBcASe4S8-GjMVt-Y60Mspw2GqXDxDzYXyWeQitBHz5y1iJiGBsdQVwdDRVq7uytdUDVhj1ZJV17nUqOPSE2eiOH4RIpqf8DRPqaCfpcdCmqgV6W1T3d1MMhoeVmb6mFDg2zvXwuSH4C8FIGBtoGJSZEzA-FaBhF1X8k17yLv7SlhVM3PFpb4-xQsmUfgsMQP8ZsW5+M6IvatJCdV1oPikptocHD1T4Z0Rk9wdHtE8F2pcvaCT9s+gvbFHdcWJrdRrA+RqqXNqbIneopgo01iNIBf0Zge3NAlgEJsrw404oTa60yB6G0Ttun6iSTRsHzpRU2QZKkmQmyjUG1aQQmjDokQPP2LMA6IzFeo7mFh56NxvtcRcmz5z0hMPWKqHwRF-jg6QwllC5E0KUTAo9k7T4IGOItC4VwbidHYYq8W6yB2aNeICt920a1upkVQ+RXBFF0Lucav9i8zXwteZajB8072FqCMaK4c9yM6tE9RhRtDlHppkyezRjQnDMn1PoikFVFJnC6RyhafjNwVMkBQfAAArMA3JSVQBoPQJgsEeK8V4nCVil5FgcSRBmqdzxfBhQsJGdGvg2z+ijETV+1wKKRlcNy6xxBXMea8z5vzCRAt8RC2FiLnFEQjl-SeuLuoEuWNaL9XC+HtRLleJuctWX5Iubc557zJ58sDaK6ZKGHqhqMAgEQMANBCBnPwAAazmwVwb3AobRcYw-JcS0wz4X5roNrKmAO-WZGRTljIyT9cK0NiYI3bs+eTfqnqjBjJuYoPljWVo1tFd1Vtj09JtxSU3G0OdDZFL2Fvd4QiFFBkqpljd9bw3ft3cmBNlNBrGCZnTIsTMywAAyAPDbL0DS4CHSlIy1lS8RRr0k7gBEUnOpHY37vOQW8ZJ7mOvVcFcZBLzWAMDmX5-ZMAw0ZuEDm+MRbK3rREDOZzzML33LrHwKxAXQu6Dq9F3AYnfkgfz1B5u1skP-T1VQrm9CpIDB-RZ2juXHPOCmW5+5Xn+B+fckF8L1mOuPLvcoF9+YtF5eK+VzlVX6vPea+16c3XxmYsG5Bz8Y3FOoftcI8aW2LIzHdHjQeVHxX2cK6dxCF3OU3ce693QEXsePI47x4TvXXjSdpY3E0SnW5-T-nS2YE0zIvDZYEzuuMBfhus0stgQgpkABes3puzfmzLubABHFAxkbAADFKBK5QIZGwTeignAMLqbcmFlRRo+P6Up-C8FpbMV4Signoij-u+P4yk+Z9z-959+xQfuyr-Xy3woB3z3wP2Qj8HUBB3VBMFtiuFtjN1s17xDGklfkGTt2KzfyoHGE-0l2x1x3xyJ3j0YxQmqmuCcHLRjj-Cv0IyUibEHROBrG3SIRIBf181QG5G5DgFgFIBQAARsC4AAJMkgC4EGEyl3xYBsHn0l0X2WzmxgBYAAC1ZswCEA4dGgo0IDU4KZlNkIzBZ0qpF5SR2kNJH9h989Rt7d2DODcAeC+CBC18hDHJRDnJxDJDv9A8WArR5ClDJcVC1DGxND7V6gdDVCn40JawBEF5rhVp0DhsrCuDbC6B+DBDLknDKAxC988CG9CDj0Yt-CNC+8girV5oBYpJSlGxWh-lYj7suR5guBTlUALIPIJcpcFtZD4x5g4Q4BeCWBYAVD-wpUQxXhtxXg5M095pY4e0YMMUyRAhIlgVWCOjuAGiei-cKAPsPCrRaiWAujGjej+jCN-B1wRiBEFp-RtxID-Arg1lTAVwGpqjfMWipC5tWAbJiBmCHtkdX9lCiC0ZiJlU-xtxPBVlyZUtwMjQSkrgNINJtRQhdxCB8BWZ4AcgPirR4gwAGNAdu0zAlINwutPhjgPwfgiZCQLNk8yIr5h0wRTJphZgYRMSJx6g3Bzd6gmgmR7UiTiQdB7gggOstB1RDkn9iE6JTIoIGTuZ6pGgctMItBil-x1A8JfopJ6ppJbYwktBtMk1VZ+4Mcw84BxTxIqCKoyI3A6g7gyRGwKIfhNS3VtSGZENWYDSw40VdRvBmwmSVRjtXoXAPAAg7hiI8YwkbS85yEB4h5-YnSHAyI2l6RyQTAKJeSFSbMmwgwQ0Qx9t1RbZgyyF+5dNqF9NaNIyEAmS2kmR6RGQtCeEOgPALBK1mhyIh9UTuw+VJlplkToUYsAgfhXS2hzd2Eb4eEJYgxfBTB5ItBM9h1QVLkbkJgiz8J-BlwqpgiVxyQ6hkUfBdQKSNBVVIxmhh0WzTIiUSVhVSA5yXT-l3T+y7gPxhigxoTyZ1QFpc8hSbF4NdSzovUiylopI9DOF6R2hXgbY-Eb81x1k45ZTszJgx0Iy6tOzMJ3otBsYgT5IDB8YCkpJXBGRjQ5VjRaxIKENNYkM5zmROsPhfoo0NInATgVIvlTE286hyCPh8K8zxNJNoEvzMJhyBE-TPgmRPg8IfFMKLYcKr1q0iy1wbZICY5tyVwWQJZGyeVPjWdfN0S5yXhNzQLTAaxrhNwu9CR+Fe8GKB8XAFK8tFjWDnsPybI5z-w3g5Imx+y-Tb01xGgqoNBo5T09AHiHdi8uc9TYAK9WYo9vcwBfc5zVz1DbZiQLh9ANAwTUJbYF5xzCRtwvK89n8LCMCZh39sCIRZ9JdxL6d+FiIIiAKy0zcNxXLu8oxdBLFvL4ibDeCkj7COphDnD8BXCizWgKrTh9B2hmgAJNwNT0rgRFjtj6juimiiyzYL4PhRjTiF1b0AMOgMIukMVcsolFiWivzjEnAUFSSBF2hxjwDwTvAUr-wbjYMRqWDMrhtTl1tIBxKjqTEZZs19A2w8N5olIEq5NtR8F5yHjCr-QAUdl1UVS2FnNrqiyABaZdecWGtwJkJG5G5GpqUIIAA */
   createMachine(
     {
       preserveActionOrder: true,
       predictableActionArguments: true,
       id: 'submission',
-      initial: 'idle',
+      type: 'parallel',
       states: {
-        idle: {
-          on: {
-            'start submission': [
-              {
-                target: 'adding metadata',
-                cond: 'is new submission',
+        form: {
+          initial: 'idle',
+          states: {
+            idle: {
+              on: {
+                'start submission': [
+                  {
+                    target: 'adding metadata',
+                    cond: 'is new submission',
+                  },
+                  {
+                    target: 'uploading existing pdf',
+                    cond: 'is existing submission',
+                  },
+                ],
               },
-              {
-                target: 'uploading existing pdf',
-                cond: 'is existing submission',
+            },
+            'adding metadata': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'choosing datum',
+                },
+                RESET: {},
               },
-            ],
+            },
+            'choosing datum': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: [
+                  {
+                    target: 'entering grid coordinates',
+                    cond: 'is grid datum',
+                  },
+                  {
+                    target: 'entering latitude',
+                    cond: 'is geographic datum',
+                  },
+                ],
+                BACK: [
+                  {
+                    target: 'adding metadata',
+                    cond: 'is new submission',
+                  },
+                  {
+                    target: 'uploading existing pdf',
+                    cond: 'is existing submission',
+                  },
+                ],
+                SKIP: {
+                  target: 'reviewing',
+                  cond: 'is existing submission',
+                },
+                RESET: {},
+                UPDATE_CONTEXT: {
+                  target: 'choosing datum',
+                  internal: false,
+                },
+              },
+            },
+            'entering alternate grid coordinates': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: [
+                  {
+                    target: 'uploading photos',
+                    cond: 'is new submission',
+                  },
+                  {
+                    target: 'reviewing',
+                    cond: 'is existing submission',
+                  },
+                ],
+                BACK: [
+                  {
+                    target: 'entering ellipsoid height',
+                    cond: 'is geographic datum',
+                  },
+                  {
+                    target: 'entering grid coordinates',
+                    cond: 'is grid datum',
+                  },
+                ],
+                RESET: {},
+              },
+            },
+            'entering alternate latitude': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'entering alternate longitude',
+                },
+                BACK: {
+                  target: 'entering grid coordinates',
+                },
+                RESET: {},
+              },
+            },
+            'entering alternate longitude': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'entering alternate ellipsoid height',
+                },
+                BACK: {
+                  target: 'entering alternate latitude',
+                },
+                RESET: {},
+              },
+            },
+            'entering alternate ellipsoid height': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'uploading photos',
+                  cond: 'is new submission',
+                },
+                BACK: {
+                  target: 'entering alternate longitude',
+                },
+                RESET: {},
+              },
+            },
+            'uploading photos': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'reviewing',
+                },
+                BACK: [
+                  {
+                    target: 'entering alternate ellipsoid height',
+                    cond: 'is grid datum',
+                  },
+                  {
+                    target: 'entering alternate grid coordinates',
+                    cond: 'is geographic datum',
+                  },
+                ],
+                RESET: {},
+              },
+            },
+            reviewing: {
+              exit: 'submit',
+              on: {
+                BACK: [
+                  {
+                    target: 'uploading photos',
+                    cond: 'is new submission',
+                  },
+                  {
+                    target: 'uploading existing pdf',
+                    cond: 'is existing submission',
+                  },
+                ],
+              },
+            },
+            'uploading existing pdf': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'choosing datum',
+                },
+                RESET: {},
+              },
+            },
+            'entering grid coordinates': {
+              exit: ['saveToContext', 'clearGeographicCoordinates'],
+              on: {
+                NEXT: {
+                  target: 'entering alternate latitude',
+                },
+                BACK: {
+                  target: 'choosing datum',
+                },
+                RESET: {},
+              },
+            },
+            'entering longitude': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'entering ellipsoid height',
+                },
+                BACK: {
+                  target: 'entering latitude',
+                },
+              },
+            },
+            'entering latitude': {
+              exit: ['saveToContext', 'clearGridCoordinates'],
+              on: {
+                NEXT: {
+                  target: 'entering longitude',
+                },
+                BACK: {
+                  target: 'choosing datum',
+                },
+                RESET: {},
+              },
+            },
+            'entering ellipsoid height': {
+              exit: 'saveToContext',
+              on: {
+                NEXT: {
+                  target: 'entering alternate grid coordinates',
+                },
+                BACK: {
+                  target: 'entering longitude',
+                },
+                RESET: {},
+              },
+            },
           },
         },
-        'adding metadata': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'choosing datum',
-            },
-            RESET: {},
-          },
-        },
-        'choosing datum': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: [
-              {
-                target: 'entering grid coordinates',
-                cond: 'is grid datum',
+        projecting: {
+          initial: 'idle',
+          states: {
+            idle: {
+              on: {
+                SET_COORDINATES: [
+                  {
+                    target: 'projecting grid coordinate',
+                    cond: 'is grid datum',
+                  },
+                  {
+                    target: 'converting coordinates to decimal degrees',
+                    cond: 'is geographic datum',
+                  },
+                ],
               },
-              {
-                target: 'entering latitude',
-                cond: 'is geographic datum',
+            },
+            'projecting grid coordinate': {
+              invoke: {
+                src: (context) => {
+                  const formData = new FormData();
+
+                  Object.entries(
+                    createProjectFormData({
+                      type: 'grid',
+                      coordinates: context.grid,
+                    })
+                  ).forEach(([key, value]) => {
+                    formData.append(key, value);
+                  });
+
+                  return ky
+                    .post('project', {
+                      body: formData,
+                      prefixUrl:
+                        'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+                    })
+                    .json();
+                },
+                id: 'project grid',
+                onDone: [
+                  {
+                    target: 'format grid results',
+                    actions: assign({
+                      decimalDegrees: (context, event) => {
+                        console.log(
+                          'project to grid',
+                          event,
+                          event.data.geometries[0]
+                        );
+                        console.log('context', context);
+                        return event.data.geometries[0];
+                      },
+                    }),
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'rejected',
+                  },
+                ],
               },
-            ],
-            BACK: [
-              {
-                target: 'adding metadata',
-                cond: 'is new submission',
+              on: {
+                CANCEL: {
+                  target: 'idle',
+                },
               },
-              {
-                target: 'uploading existing pdf',
-                cond: 'is existing submission',
+            },
+            'converting coordinates to decimal degrees': {
+              invoke: {
+                src: (context) => {
+                  const dms = `${formatDegrees(
+                    context.geography.northing
+                  )} N, ${formatDegrees(context.geography.easting)} W`;
+                  return { data: parseDms(dms) };
+                },
+                id: 'convertCoordinatesToDecimalDegrees',
+                onDone: [
+                  {
+                    target: 'determining zone',
+                    actions: assign({
+                      decimalDegrees: (_, event) => event.data,
+                    }),
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'rejected',
+                  },
+                ],
               },
-            ],
-            SKIP: {
-              target: 'reviewing',
-              cond: 'is existing submission',
-            },
-            RESET: {},
-            UPDATE_CONTEXT: {
-              target: 'choosing datum',
-              internal: false,
-            },
-          },
-        },
-        'entering alternate grid coordinates': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: [
-              {
-                target: 'uploading photos',
-                cond: 'is new submission',
+              on: {
+                CANCEL: {
+                  target: 'idle',
+                },
               },
-              {
-                target: 'reviewing',
-                cond: 'is existing submission',
+            },
+            'determining zone': {
+              invoke: {
+                src: (context) => {
+                  const formData = new FormData();
+                  formData.append('f', 'json');
+                  formData.append('inSR', '6318');
+                  formData.append('geometry', context.decimalDegrees);
+                  formData.append('geometryType', 'esriGeometryPoint');
+                  formData.append('spatialRel', 'esriSpatialRelIntersects');
+                  formData.append('returnGeometry', false);
+
+                  ky.post('query', {
+                    body: formData,
+                    prefixUrl:
+                      'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
+                  }).json();
+                },
+                id: 'queryForCounty',
+                onDone: [
+                  {
+                    target: 'successfully queried for county',
+                    actions: assign({
+                      zone: (_, event) => {
+                        if ((event.data?.features?.length ?? 0) < 1) {
+                          return '';
+                        }
+
+                        const county =
+                          event.data.features[0].attributes[
+                            'NAME'
+                          ]?.toLowerCase();
+
+                        let zone;
+
+                        Object.keys(countiesInZone).forEach((key) => {
+                          if (countiesInZone[key].includes(county)) {
+                            zone = key;
+                          }
+                        });
+
+                        return zone;
+                      },
+                    }),
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'rejected',
+                  },
+                ],
               },
-            ],
-            BACK: [
-              {
-                target: 'entering ellipsoid height',
-                cond: 'is geographic datum',
+              on: {
+                CANCEL: {
+                  target: 'idle',
+                },
               },
-              {
-                target: 'entering grid coordinates',
-                cond: 'is grid datum',
+            },
+            'successfully queried for county': {
+              invoke: {
+                src: (context) => {
+                  const formData = new FormData();
+
+                  Object.entries(
+                    createProjectFormData({
+                      type: 'geographic',
+                      coordinates: {
+                        zone: context.zone,
+                        y: context.decimalDegrees.y,
+                        x: context.decimalDegrees.x,
+                      },
+                    })
+                  ).forEach(([key, value]) => {
+                    formData.append(key, value);
+                  });
+
+                  return ky
+                    .post('project', {
+                      body: formData,
+                      prefixUrl:
+                        'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+                    })
+                    .json();
+                },
+                id: 'getZone',
+                onDone: [
+                  {
+                    target: 'format geographic results',
+                    actions: assign({
+                      statePlane: (_, event) => event.data.geometries[0],
+                    }),
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'rejected',
+                  },
+                ],
               },
-            ],
-            RESET: {},
-          },
-        },
-        'entering alternate latitude': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'entering alternate longitude',
-            },
-            BACK: {
-              target: 'entering grid coordinates',
-            },
-            RESET: {},
-          },
-        },
-        'entering alternate longitude': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'entering alternate ellipsoid height',
-            },
-            BACK: {
-              target: 'entering alternate latitude',
-            },
-            RESET: {},
-          },
-        },
-        'entering alternate ellipsoid height': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'uploading photos',
-              cond: 'is new submission',
-            },
-            BACK: {
-              target: 'entering alternate longitude',
-            },
-            RESET: {},
-          },
-        },
-        'uploading photos': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'reviewing',
-            },
-            BACK: [
-              {
-                target: 'entering alternate ellipsoid height',
-                cond: 'is grid datum',
+              on: {
+                CANCEL: {
+                  target: 'idle',
+                },
               },
-              {
-                target: 'entering alternate grid coordinates',
-                cond: 'is geographic datum',
+            },
+            'format grid results': {
+              invoke: {
+                src: (context) =>
+                  new Promise((resolve) => {
+                    const dmsCoords = new DmsCoordinates(
+                      context.decimalDegrees.y,
+                      context.decimalDegrees.x
+                    );
+
+                    resolve(dmsCoords.dmsArrays);
+                  }),
+                id: 'formatResults',
+                onDone: [
+                  {
+                    target: 'done',
+                    actions: assign((context, event) => {
+                      context.geographic = { northing: {}, easting: {} };
+                      const { longitude, latitude } = event.data;
+
+                      delete context.decimalDegrees;
+
+                      context.geographic.northing = {
+                        degrees: latitude[0].toString(),
+                        minutes: latitude[1].toString(),
+                        seconds: roundAccurately(latitude[2], 5).toString(),
+                      };
+                      context.geographic.easting = {
+                        degrees: longitude[0].toString(),
+                        minutes: longitude[1].toString(),
+                        seconds: roundAccurately(longitude[2], 5).toString(),
+                      };
+
+                      console.log('updateContext', context);
+                      return context;
+                    }),
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'rejected',
+                  },
+                ],
               },
-            ],
-            RESET: {},
-          },
-        },
-        reviewing: {
-          exit: 'submit',
-          on: {
-            BACK: [
-              {
-                target: 'uploading photos',
-                cond: 'is new submission',
+            },
+            'format geographic results': {
+              on: {
+                '': {
+                  target: 'done',
+                  actions: assign((context, event) => {
+                    const { x, y } = event.data;
+                    context.grid = {
+                      zone: context.zone,
+                      unit: 'm',
+                      northing: x.toString(),
+                      easting: y.toString(),
+                    };
+
+                    delete context.decimalDegrees;
+                    delete context.statePlane;
+                    delete context.zone;
+
+                    return context;
+                  }),
+                },
               },
-              {
-                target: 'uploading existing pdf',
-                cond: 'is existing submission',
+            },
+            done: {
+              type: 'final',
+              on: {
+                RESTART: {
+                  target: 'idle',
+                },
               },
-            ],
-          },
-        },
-        'uploading existing pdf': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'choosing datum',
             },
-            RESET: {},
-          },
-        },
-        'entering grid coordinates': {
-          exit: ['saveToContext', 'clearGeographicCoordinates'],
-          on: {
-            NEXT: {
-              target: 'entering alternate latitude',
-            },
-            BACK: {
-              target: 'choosing datum',
-            },
-            RESET: {},
-          },
-        },
-        'entering longitude': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'entering ellipsoid height',
-            },
-            BACK: {
-              target: 'entering latitude',
-            },
-          },
-        },
-        'entering latitude': {
-          exit: ['saveToContext', 'clearGridCoordinates'],
-          on: {
-            NEXT: {
-              target: 'entering longitude',
-            },
-            BACK: {
-              target: 'choosing datum',
-            },
-            RESET: {},
-          },
-        },
-        'entering ellipsoid height': {
-          exit: 'saveToContext',
-          on: {
-            NEXT: {
-              target: 'entering alternate grid coordinates',
-            },
-            BACK: {
-              target: 'entering longitude',
-            },
-            RESET: {},
+            rejected: {},
           },
         },
       },

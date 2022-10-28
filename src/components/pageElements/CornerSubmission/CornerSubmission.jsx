@@ -20,7 +20,11 @@ const GeographicHeight = lazy(() =>
     default: module.GeographicHeight,
   }))
 );
-const Latitude = lazy(() => import('./GeographicCoordinates.jsx'));
+const Latitude = lazy(() =>
+  import('./GeographicCoordinates.jsx').then((module) => ({
+    default: module.Latitude,
+  }))
+);
 const Longitude = lazy(() =>
   import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.Longitude,
@@ -90,34 +94,35 @@ export default function CornerSubmission({ submission }) {
   const getFormPart = (state) => {
     console.log('state change', state.value);
     switch (true) {
-      case state.matches('uploading existing pdf'):
+      case state.matches('form.uploading existing pdf'):
         return <MonumentPdf />;
-      case state.matches('adding metadata'):
+      case state.matches('form.adding metadata'):
         return <Metadata />;
-      case state.matches('choosing datum'):
+      case state.matches('form.choosing datum'):
         return <CoordinatePicker />;
-      case state.matches('entering latitude'):
-      case state.matches('entering alternate latitude'):
+      case state.matches('form.entering latitude'):
+      case state.matches('form.entering alternate latitude'):
         return <Latitude />;
-      case state.matches('entering longitude'):
-      case state.matches('entering alternate longitude'):
+      case state.matches('form.entering longitude'):
+      case state.matches('form.entering alternate longitude'):
         return <Longitude />;
-      case state.matches('entering ellipsoid height'):
-      case state.matches('entering alternate ellipsoid height'):
+      case state.matches('form.entering ellipsoid height'):
+      case state.matches('form.entering alternate ellipsoid height'):
         return <GeographicHeight />;
-      case state.matches('entering grid coordinates'):
-      case state.matches('entering alternate grid coordinates'):
+      case state.matches('form.entering grid coordinates'):
+      case state.matches('form.entering alternate grid coordinates'):
         return <GridCoordinates />;
-      case state.matches('uploading photos'):
+      case state.matches('form.uploading photos'):
         return <Images />;
-      case state.matches('reviewing'):
+      case state.matches('form.reviewing'):
         return <Review />;
       default:
         return (
           <div role="alert" data-area="drawer">
             <h1 className="text-lg font-bold">Something went wrong</h1>
             <p className="m-4 rounded border p-4">
-              No matching component for {state.value} state.
+              No matching component for {JSON.stringify(state.value, null, 2)}{' '}
+              state.
             </p>
             <div className="mt-4 flex justify-center">
               <Button onClick={() => send('BACK')}>Back</Button>
