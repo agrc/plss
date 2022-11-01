@@ -2,7 +2,6 @@
 import { lazy, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { createStore, StateMachineProvider } from 'little-state-machine';
 import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
 import extractTownshipInformation from './blmPointId.mjs';
@@ -60,22 +59,6 @@ export default function CornerSubmission({ submission }) {
     send('start submission');
   }, [submission.type, send]);
 
-  createStore(
-    {
-      submissions: submissions,
-    },
-    {
-      name: 'submissions',
-      middleWares: [
-        (store) => {
-          console.log(store);
-          return store;
-        },
-      ],
-      storageType: window.localStorage,
-    }
-  );
-
   const user = {
     name: 'Test Person',
     license: 1123123,
@@ -132,7 +115,7 @@ export default function CornerSubmission({ submission }) {
   };
 
   return (
-    <StateMachineProvider>
+    <>
       <div className="relative text-indigo-200 opacity-60">
         <Icon
           className={clsx('h-6 w-6', {
@@ -183,7 +166,7 @@ export default function CornerSubmission({ submission }) {
           {getFormPart(state)}
         </ErrorBoundary>
       </div>
-    </StateMachineProvider>
+    </>
   );
 }
 CornerSubmission.propTypes = {
