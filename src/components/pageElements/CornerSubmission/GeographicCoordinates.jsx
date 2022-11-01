@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
@@ -30,21 +30,29 @@ export const Latitude = () => {
   const [state, send] = useContext(SubmissionContext);
 
   let defaultValues = {
-    northing: state.context?.geographic?.northing ?? {},
+    northing: state.context?.geographic?.northing ?? defaults,
   };
-
-  if (!defaultValues?.northing) {
-    defaultValues = { northing: defaults };
-  }
 
   const { register, handleSubmit, reset, formState } = useForm({
     resolver: yupResolver(latitudeSchema),
     defaultValues,
   });
 
-  if (state.matches('form.entering alternate latitude')) {
-    send('SET_COORDINATES');
-  }
+  useEffect(() => {
+    if (state.matches('form.entering alternate latitude')) {
+      send('SET_COORDINATES');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (
+      state.matches('form.entering alternate latitude') &&
+      state.matches('projecting.done')
+    ) {
+      reset({ northing: state.context?.geographic?.northing });
+    }
+  }, [state, reset]);
 
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta, payload });
@@ -62,7 +70,8 @@ export const Latitude = () => {
         Geographic Northing for {formatDatum(state.context.datum)}
       </p>
       <Spacer className="my-4" />
-      {!state.matches('projecting.done') ? (
+      {state.matches('form.entering alternate latitude') &&
+      !state.matches('projecting.done') ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -134,15 +143,13 @@ export const Longitude = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
 
-  let defaultValues = state.context?.geographic?.easting;
-
-  if (!defaultValues) {
-    defaultValues = defaults;
-  }
+  let defaultValues = {
+    easting: state.context?.geographic?.easting ?? defaults,
+  };
 
   const { register, handleSubmit, reset, formState } = useForm({
-    defaultValues,
     resolver: yupResolver(longitudeSchema),
+    defaultValues,
   });
 
   const onSubmit = (payload) => {
@@ -150,8 +157,8 @@ export const Longitude = () => {
   };
 
   const onReset = () => {
-    send({ type: 'RESET', meta, payload: defaults });
-    reset(defaults);
+    send({ type: 'RESET', meta, payload: { easting: defaults } });
+    reset({ easting: defaults });
   };
 
   return (
@@ -220,7 +227,7 @@ export const Longitude = () => {
 
 const geographicHeightDefaults = {
   elevation: '',
-  units: 'm',
+  unit: 'm',
 };
 
 export const GeographicHeight = () => {
@@ -238,8 +245,8 @@ export const GeographicHeight = () => {
   const selectedUnit = units.find((x) => x.value === defaultValues.unit);
 
   const { control, register, handleSubmit, reset, formState } = useForm({
-    defaultValues: geographicHeightDefaults,
     resolver: yupResolver(geographicHeightSchema),
+    defaultValues: geographicHeightDefaults,
   });
 
   const [selected, setSelected] = useState(selectedUnit);
