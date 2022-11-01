@@ -16,6 +16,7 @@ import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 import { parseBool } from '../../helpers/index.mjs';
+
 const defaults = {
   section: '',
   corner: '',
@@ -25,6 +26,7 @@ const defaults = {
   accuracy: '',
   mrrc: false,
 };
+
 const Metadata = () => {
   const meta = 'metadata';
   const [state, send] = useContext(SubmissionContext);
@@ -39,8 +41,8 @@ const Metadata = () => {
   }
 
   const { register, control, handleSubmit, reset, formState } = useForm({
-    defaultValues,
     resolver: yupResolver(schema),
+    defaultValues,
   });
 
   const onSubmit = (payload) => {

@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Listbox, Switch, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { useImmerReducer } from 'use-immer';
-import PropTypes from 'prop-types';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {

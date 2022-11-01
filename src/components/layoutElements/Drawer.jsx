@@ -98,7 +98,7 @@ export default function Drawer({
         );
       }
       case 'welcome': {
-        return <Welcome />;
+        return <Welcome dispatch={dispatch} />;
       }
       case 'legend': {
         return <Legend />;

@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
-
-export default function Welcome() {
+import PropTypes from 'prop-types';
+export default function Welcome({ dispatch }) {
   return (
     <main className="mt-3 inline-grid gap-4 text-slate-50">
-      <h1 className="text-2xl font-semibold">What is PLSS</h1>
+      <h1 className="text-2xl font-semibold">What is the PLSS</h1>
       <p className="ml-3">
         Section corners in the Public Land Survey System (PLSS) form the
         foundation for all descriptions of private property and public land
@@ -28,12 +27,12 @@ export default function Welcome() {
         information about them. Navigate around the map and click on the PLSS
         points to see more information or to submit a monument record for that
         location. You will need to{' '}
-        <Link
-          to="/login"
+        <button
+          onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
           className="under italic text-amber-300 underline visited:text-amber-500 hover:text-white"
         >
           log in
-        </Link>{' '}
+        </button>{' '}
         to submit a monument record.
       </p>
       <p className="ml-3"></p>
@@ -62,3 +61,6 @@ export default function Welcome() {
     </main>
   );
 }
+Welcome.propTypes = {
+  dispatch: PropTypes.func,
+};

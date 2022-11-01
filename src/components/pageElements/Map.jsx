@@ -1,7 +1,9 @@
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
+import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import esriConfig from '@arcgis/core/config';
-import '@ugrc/layer-selector/src/LayerSelector.css';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
@@ -11,13 +13,10 @@ import MapView from '@arcgis/core/views/MapView';
 import { identify } from '@arcgis/core/rest/identify';
 import IdentifyParameters from '@arcgis/core/rest/support/IdentifyParameters';
 import { contrastColor } from 'contrast-color';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import clsx from 'clsx';
-import { useQuery } from '@tanstack/react-query';
 import { useSigninCheck, useFunctions } from 'reactfire';
 import { httpsCallable } from 'firebase/functions';
+import '@ugrc/layer-selector/src/LayerSelector.css';
 
 // import Search from '../Search/Search';
 
@@ -43,7 +42,6 @@ export default function PlssMap({ state, dispatch, color }) {
   const [mapState, setMapState] = useState('idle');
 
   const { data: signInCheckResult } = useSigninCheck();
-  const navigate = useNavigate();
 
   const isLoading = useViewLoading(mapView.current);
   const { graphic, setGraphic } = useGraphicManager(mapView);
@@ -180,7 +178,7 @@ export default function PlssMap({ state, dispatch, color }) {
     });
 
     return () => clickHandler?.remove();
-  }, [state, dispatch, navigate, color, setGraphic]);
+  }, [state, dispatch, color, setGraphic]);
 
   // update graphic on color change
   useEffect(() => {

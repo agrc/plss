@@ -1,4 +1,5 @@
 import { assign, createMachine } from 'xstate';
+import ky from 'ky';
 import DmsCoordinates, { parseDms } from 'dms-conversion';
 import {
   countiesInZone,
@@ -6,7 +7,6 @@ import {
   formatDegrees,
   roundAccurately,
 } from '../helpers/index.mjs';
-import ky from 'ky';
 
 export const updateContext = (context, field, value) => {
   if (!field) {

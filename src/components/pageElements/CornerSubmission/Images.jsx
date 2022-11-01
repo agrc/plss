@@ -6,13 +6,10 @@ import {
   useStorageDownloadURL,
   useStorageTask,
 } from 'reactfire';
-// import { useNavigate, useParams } from 'react-router-dom';
 import { ref, uploadBytesResumable } from 'firebase/storage';
-// import { useStateMachine } from 'little-state-machine';
 import { useForm, Controller } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-// import { updateAction, getStateForId } from './CornerSubmission.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Wizard from './Wizard.jsx';
