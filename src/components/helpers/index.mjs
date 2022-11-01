@@ -152,7 +152,7 @@ export const createProjectFormData = ({ type, coordinates }) => {
   }
 
   if (type === 'geographic') {
-    const { zone } = coordinates;
+    const { zone, x, y } = coordinates;
 
     formData.inSr = nad832011;
     formData.outSr = getGridInputSpatialReference(zone, 'm');
@@ -160,8 +160,8 @@ export const createProjectFormData = ({ type, coordinates }) => {
       geometryType: 'esriGeometryPoint',
       geometries: [
         {
-          x: coordinates.northing,
-          y: coordinates.easting,
+          x,
+          y,
         },
       ],
     });

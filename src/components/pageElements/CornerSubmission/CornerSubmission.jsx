@@ -92,7 +92,6 @@ export default function CornerSubmission({ submission }) {
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
 
   const getFormPart = (state) => {
-    console.log('state change', state.value);
     switch (true) {
       case state.matches('form.uploading existing pdf'):
         return <MonumentPdf />;
