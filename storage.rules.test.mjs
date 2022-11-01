@@ -16,14 +16,14 @@ const loadImage = () => readFileSync('./tests/image.png');
 const createMBImage = (mb) => Buffer.alloc(mb * 1024 * 1024);
 const getPaths = (storage) => {
   return {
-    submitterImage: storage.ref(`submitters`).child('submitterFolder.png'),
-    submitter: storage.ref(`submitters`),
-    userImage: storage.ref(`submitters/${userId}`).child('userFolder.png'),
-    user: storage.ref(`submitters/${userId}`),
+    submitterImage: storage.ref(`submitters/new`).child('submitterFolder.png'),
+    submitter: storage.ref(`submitters/new`),
+    userImage: storage.ref(`submitters/${userId}/new`).child('userFolder.png'),
+    user: storage.ref(`submitters/${userId}/new`),
     pointImage: storage
-      .ref(`submitters/${userId}/${blmPoint}`)
+      .ref(`submitters/${userId}/new/${blmPoint}`)
       .child('pointFolder.png'),
-    point: storage.ref(`submitters/${userId}/${blmPoint}`),
+    point: storage.ref(`submitters/${userId}/new/${blmPoint}`),
   };
 };
 
