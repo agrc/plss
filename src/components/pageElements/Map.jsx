@@ -1,17 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
+import ky from 'ky';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import esriConfig from '@arcgis/core/config';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
-import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
-import { identify } from '@arcgis/core/rest/identify';
-import IdentifyParameters from '@arcgis/core/rest/support/IdentifyParameters';
 import { contrastColor } from 'contrast-color';
 import clsx from 'clsx';
 import { useSigninCheck, useFunctions } from 'reactfire';
@@ -29,7 +27,8 @@ const urls = {
   parcels:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer',
   plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
-  points: 'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
+  points:
+    'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
 };
 
 const loadingCss =
@@ -49,6 +48,7 @@ export default function PlssMap({ state, dispatch, color }) {
 
   const functions = useFunctions();
   const myPoints = httpsCallable(functions, 'functions-httpsGetPoints');
+
   const { data: thePoints, status } = useQuery(['myPoints'], myPoints, {
     enabled: signInCheckResult?.signedIn === true,
   });
@@ -106,11 +106,11 @@ export default function PlssMap({ state, dispatch, color }) {
           minScale: 2000000,
         },
         {
-          Factory: MapImageLayer,
+          Factory: FeatureLayer,
           url: urls.points,
           id: 'PLSS Points',
           selected: true,
-          minScale: 2000000,
+          minScale: 500000,
         },
       ],
       position: 'top-right',
@@ -150,25 +150,46 @@ export default function PlssMap({ state, dispatch, color }) {
           break;
         }
         default: {
-          const parameters = new IdentifyParameters({
-            returnGeometry: true,
-            tolerance: 3,
-            geometry: event.mapPoint,
-            mapExtent: mapView.current.extent,
-            layerIds: [0],
-            layerOption: 'all',
-            returnFieldName: true,
-          });
+          const outFields = [
+            'point_id',
+            'plss_id',
+            'label',
+            'control',
+            'longitude',
+            'latitude',
+            'elevation',
+            'steward',
+            'managed_by',
+            'mrrc',
+            'monument',
+            'control',
+            'point_category',
+          ];
 
-          // TODO! cache this with react-query
-          const response = await identify(
-            'https://mapserv.utah.gov/arcgis/rest/services/PLSS/MapServer',
-            parameters
-          );
+          const query = {
+            geometry: `${event.mapPoint.x},${event.mapPoint.y}`,
+            geometryType: 'esriGeometryPoint',
+            inSr: event.mapPoint.spatialReference.wkid,
+            distance: mapView.current.resolution * 7,
+            resultRecordCount: 1,
+            spatialRelationship: 'intersects',
+            outFields,
+            returnGeometry: false,
+            f: 'json',
+          };
+
+          const response = await ky
+            .get(
+              'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0/query',
+              {
+                searchParams: query,
+              }
+            )
+            .json();
 
           let payload = null;
-          if (response?.results?.length > 0) {
-            payload = response.results[0].feature;
+          if (response?.features?.length > 0) {
+            payload = response.features[0];
           }
 
           dispatch({ type: 'map/identify', payload });

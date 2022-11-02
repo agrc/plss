@@ -19,58 +19,71 @@ export default function Identify({ graphic, dispatch }) {
       <h1 className="text-2xl font-bold">Monument Record</h1>
       <main className="mt-3 inline-grid gap-1 text-sm">
         <section className="flex w-full">
-          <span className="mr-2">{graphic.attributes.XCOORD}</span>
-          <span>{graphic.attributes.YCOORD}</span>
+          <span className="mr-2">{graphic.attributes.latitude}</span>
+          <span>{graphic.attributes.longitude}</span>
         </section>
 
         <section className="flex w-full">
           <span className="mr-2 font-bold">Elevation</span>
-          <span>{getDefault(graphic.attributes.ELEV, 'unknown', ' ft')}</span>
+          <span>
+            {getDefault(graphic.attributes.elevation, 'unknown', ' ft')}
+          </span>
         </section>
 
         <section className="mt-4">
-          <a
-            href="/404"
-            className="font-semibold text-indigo-300 hover:text-indigo-400"
-          >
+          <button className="font-semibold text-indigo-300 hover:text-indigo-400">
             Tie Sheet Document(s)
-          </a>
+          </button>
         </section>
 
         <span className="my-2 inline-block h-1 w-full rounded bg-indigo-400 sm:my-6"></span>
 
         <section className="flex w-full flex-col sm:gap-3">
           <div className="flex w-2/3 justify-between border-b border-slate-500 pb-1 sm:w-full">
-            <span className="font-semibold">Corner Id</span>
-            <span>{graphic.attributes.POINTID}</span>
+            <span className="font-semibold">Corner id</span>
+            <span>{graphic.attributes.point_id}</span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">PLSS Id</span>
-            <span>{graphic.attributes.PLSSID}</span>
+            <span className="font-semibold">PLSS id</span>
+            <span>{graphic.attributes.plss_id}</span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">Point Label</span>
-            <span>{graphic.attributes.POINTLAB}</span>
+            <span className="font-semibold">Point label</span>
+            <span>{graphic.attributes.label}</span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">Error North</span>
-            <span>{getDefault(graphic.attributes.ERRORY)}</span>
+            <span className="font-semibold">Steward</span>
+            <span>{getDefault(graphic.attributes.steward)}</span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">Error East</span>
-            <span>{getDefault(graphic.attributes.ERRORX)}</span>
+            <span className="font-semibold">Managed by</span>
+            <span>{getDefault(graphic.attributes.managed_by)}</span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">Is Control</span>
-            <span>{getDefault(graphic.attributes.isControl)}</span>
+            <span className="font-semibold">Control point</span>
+            <span>
+              {getDefault(graphic.attributes.control, 'No') === '1'
+                ? 'Yes'
+                : 'No'}
+            </span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
-            <span className="font-semibold">Is Monument</span>
-            <span>{getDefault(graphic.attributes.isMonument)}</span>
+            <span className="font-semibold">MRRC project</span>
+            <span>
+              {getDefault(graphic.attributes.mrrc, 'No') === '1' ? 'Yes' : 'No'}
+            </span>
+          </div>
+          <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
+            <span className="font-semibold">Has Monument</span>
+            <span>
+              {getDefault(graphic.attributes.monument, 'No') === '1'
+                ? 'Yes'
+                : 'No'}
+            </span>
           </div>
           <div className="flex w-2/3 justify-between border-b border-slate-500 py-1 sm:w-full">
             <span className="font-semibold">Category</span>
-            <span>{getDefault(graphic.attributes.Point_Category)}</span>
+            <span>{getDefault(graphic.attributes.point_category)}</span>
           </div>
         </section>
 
@@ -78,7 +91,7 @@ export default function Identify({ graphic, dispatch }) {
           <SubmissionPicker
             dispatch={dispatch}
             authenticated={userSignInCheck?.signedIn}
-            blmPointId={graphic.attributes.POINTID}
+            blmPointId={graphic.attributes.point_id}
           />
         </div>
         <div className="mt-6 justify-self-center">
