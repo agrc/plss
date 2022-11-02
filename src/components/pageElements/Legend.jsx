@@ -80,4 +80,10 @@ const layers = [
     about:
       'Enim nec dui nunc mattis enim. Condimentum vitae sapien pellentesque habitant morbi tristique. Massa id neque aliquam vestibulum morbi blandit cursus risus. Ut placerat orci nulla pellentesque. Quis enim lobortis scelerisque fermentum dui faucibus in.',
   },
+  {
+    name: 'MRRC Monument Record',
+    color: '#73B2FF',
+    about:
+      'Enim nec dui nunc mattis enim. Condimentum vitae sapien pellentesque habitant morbi tristique. Massa id neque aliquam vestibulum morbi blandit cursus risus. Ut placerat orci nulla pellentesque. Quis enim lobortis scelerisque fermentum dui faucibus in.',
+  },
 ];
