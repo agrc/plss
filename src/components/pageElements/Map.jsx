@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import ky from 'ky';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import esriConfig from '@arcgis/core/config';
@@ -110,6 +109,21 @@ export default function PlssMap({ state, dispatch, color }) {
           url: urls.points,
           id: 'PLSS Points',
           selected: true,
+          outFields: [
+            'point_id',
+            'plss_id',
+            'label',
+            'control',
+            'longitude',
+            'latitude',
+            'elevation',
+            'steward',
+            'managed_by',
+            'mrrc',
+            'monument',
+            'control',
+            'point_category',
+          ],
           minScale: 500000,
         },
       ],
@@ -150,46 +164,11 @@ export default function PlssMap({ state, dispatch, color }) {
           break;
         }
         default: {
-          const outFields = [
-            'point_id',
-            'plss_id',
-            'label',
-            'control',
-            'longitude',
-            'latitude',
-            'elevation',
-            'steward',
-            'managed_by',
-            'mrrc',
-            'monument',
-            'control',
-            'point_category',
-          ];
-
-          const query = {
-            geometry: `${event.mapPoint.x},${event.mapPoint.y}`,
-            geometryType: 'esriGeometryPoint',
-            inSr: event.mapPoint.spatialReference.wkid,
-            distance: mapView.current.resolution * 7,
-            resultRecordCount: 1,
-            spatialRelationship: 'intersects',
-            outFields,
-            returnGeometry: false,
-            f: 'json',
-          };
-
-          const response = await ky
-            .get(
-              'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0/query',
-              {
-                searchParams: query,
-              }
-            )
-            .json();
+          const response = await mapView.current.hitTest(event);
 
           let payload = null;
-          if (response?.features?.length > 0) {
-            payload = response.features[0];
+          if (response?.results?.length > 0) {
+            payload = response.results[0].graphic;
           }
 
           dispatch({ type: 'map/identify', payload });
