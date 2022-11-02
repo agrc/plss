@@ -24,7 +24,7 @@
     "build-storybook": "build-storybook",
     "start": "npm run dev",
     "test": "vitest",
-    "test:ci": "firebase emulators:exec --only storage 'vitest'",
+    "test:ci": "firebase emulators:exec --only storage 'FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 npm run test'",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
