@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useSigninCheck } from 'reactfire';
 import { Button } from '../formElements/Buttons.jsx';
 import { getDefault } from '../helpers';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 export default function Identify({ graphic, dispatch }) {
   const { data: userSignInCheck } = useSigninCheck();
@@ -113,9 +114,18 @@ Identify.propTypes = {
 const EmptyIdentify = ({ dispatch }) => {
   return (
     <>
-      <h1 className="text-2xl font-bold">Monument Record</h1>
-      <main className="mt-3 inline-grid gap-1 text-sm">
-        <p className="text-white">No PLSS Points found at this location</p>
+      <h3 className="text-2xl font-semibold">Monument Record Lookup</h3>
+      <main className="mt-6 inline-grid gap-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-800 shadow-xl">
+        <div className="flex justify-center">
+          <ExclamationCircleIcon className="h-14 w-14 text-indigo-600" />
+        </div>
+        <h4 className="text-xl ">
+          No corner point was found at this location.
+        </h4>
+        <p className="">
+          If you do not see any points, try zooming in and click on the point
+          again. Otherwise try clicking on the corner point again.
+        </p>
         <div className="mt-6 flex justify-center">
           <Button
             style="alternate"
