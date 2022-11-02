@@ -29,8 +29,6 @@ const reverseLookup = (options, value) => {
   const option = options.find((item) => item.value === value);
 
   if (!option) {
-    console.log('option is null', options, value);
-
     return '-';
   }
 
