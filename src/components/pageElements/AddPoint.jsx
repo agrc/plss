@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { contrastColor } from 'contrast-color';
 import { CirclePicker } from 'react-color';
 import { Controller, useForm } from 'react-hook-form';
-import { DevTool } from '@hookform/devtools';
 import { useImmer } from 'use-immer';
 import { httpsCallable } from 'firebase/functions';
 import { useFunctions } from 'reactfire';
@@ -88,7 +87,6 @@ export default function AddPoint({
 
   return (
     <form onSubmit={handleSubmit(savePoint)}>
-      <DevTool control={control} />
       <h1 className="text-2xl font-bold">Add a Point</h1>
       <p className="my-3 text-sm leading-tight text-white">
         Saving points are available to help you remember points of interest when

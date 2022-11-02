@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { DevTool } from '@hookform/devtools';
 import { Controller, useForm } from 'react-hook-form';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
@@ -59,7 +58,6 @@ const Metadata = () => {
       <h3 className="text-2xl font-semibold">Monument Metadata</h3>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
-        <DevTool control={control} />
         <NumberedFormSection number={1} title="Section Information">
           <div>
             <Input

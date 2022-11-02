@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { DevTool } from '@hookform/devtools';
 import { Tab } from '@headlessui/react';
 import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
@@ -131,7 +130,6 @@ const CoordinatePicker = () => {
         <NumberedFormSection number={0}>
           <Wizard back={() => send('BACK')} next={true} clear={onReset} />
         </NumberedFormSection>
-        <DevTool control={control} />
       </NumberedForm>
     </>
   );

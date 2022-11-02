@@ -3,7 +3,6 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
-import { DevTool } from '@hookform/devtools';
 import { RadioGroup } from '@headlessui/react';
 import { Input } from '../../formElements/Inputs.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
@@ -269,7 +268,6 @@ export const GeographicHeight = () => {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={4} title="Ellipsoid Height">
-          <DevTool control={control} />
           <Input
             value={defaultValues.elevation}
             label={false}
