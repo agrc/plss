@@ -17,7 +17,7 @@ jobs:
       - name: ⬇️ Set up code
         uses: actions/checkout@v3
 
-      - name: Cache firebase emulators
+      - name: 💾 Cache firebase emulators
         uses: actions/cache@v3
         with:
           path: /home/runner/.cache/firebase/emulators
