@@ -33,5 +33,10 @@ service firebase.storage {
       allow get: if isAuthenticated() && isCurrentUser(uid);
       allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
     }
+    match /tiesheets/{allPaths=**} {
+      allow list: if true;
+      allow get: if true;
+      allow create, update, delete: if false;
+    }
   }
 }

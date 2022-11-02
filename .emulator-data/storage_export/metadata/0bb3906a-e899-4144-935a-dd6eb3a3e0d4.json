@@ -1,0 +1,19 @@
+{
+  "name": "tiesheets/UT260020N0020E0_300500/UT260060S0050W0_200640.pdf",
+  "bucket": "localhost",
+  "metageneration": 1,
+  "generation": 1667421162121,
+  "contentType": "application/pdf",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "5fe4457b-ccc1-45a4-9ab5-546609ed446d"
+  ],
+  "etag": "P6kuSHaU5xPta/KzeAZ/CMRQUpM",
+  "customMetadata": {},
+  "timeCreated": "2022-11-02T20:32:42.121Z",
+  "updated": "2022-11-02T20:32:42.121Z",
+  "size": 757848,
+  "md5Hash": "QBOLL5obX14wy6+u3ds3YA==",
+  "crc32c": "2449787819"
+}

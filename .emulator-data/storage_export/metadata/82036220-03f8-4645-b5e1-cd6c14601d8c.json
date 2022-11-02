@@ -1,0 +1,19 @@
+{
+  "name": "tiesheets/UT260020N0020E0_300500/MRRC_ UT260060S0050W0_200640.pdf",
+  "bucket": "localhost",
+  "metageneration": 1,
+  "generation": 1667421162131,
+  "contentType": "application/pdf",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "77113dc0-d3e9-4af6-83ec-13157aeaba9b"
+  ],
+  "etag": "B/SmyVBavfRG6WwiwH9OSmVexbY",
+  "customMetadata": {},
+  "timeCreated": "2022-11-02T20:32:42.131Z",
+  "updated": "2022-11-02T20:32:42.131Z",
+  "size": 503496,
+  "md5Hash": "K++ACzNFFnEL2+8SLqX88A==",
+  "crc32c": "1871572294"
+}
