@@ -6,10 +6,6 @@ import { getDefault } from '../helpers';
 export default function Identify({ graphic, dispatch }) {
   const { data: userSignInCheck } = useSigninCheck();
 
-  if (graphic === undefined) {
-    return <InitialIdentify dispatch={dispatch} />;
-  }
-
   if (graphic === null) {
     return <EmptyIdentify dispatch={dispatch} />;
   }
@@ -111,32 +107,6 @@ export default function Identify({ graphic, dispatch }) {
 
 Identify.propTypes = {
   graphic: PropTypes.object,
-  dispatch: PropTypes.func,
-};
-
-const InitialIdentify = ({ dispatch }) => {
-  return (
-    <>
-      <h1 className="text-2xl font-bold">Monument Record</h1>
-      <main className="mt-3 inline-grid gap-1 text-sm">
-        <p className="text-white">
-          Click on the map to view monument information
-        </p>
-        <div className="mt-6 flex justify-center">
-          <Button
-            style="alternate"
-            onClick={() => {
-              dispatch({ type: 'menu/toggle', payload: '' });
-            }}
-          >
-            close
-          </Button>
-        </div>
-      </main>
-    </>
-  );
-};
-InitialIdentify.propTypes = {
   dispatch: PropTypes.func,
 };
 
