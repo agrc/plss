@@ -28,6 +28,7 @@ export const defaults = {
   userPoints: [],
   map: {
     activeTool: null,
+    graphic: null,
   },
   submission: {},
 };
@@ -66,7 +67,7 @@ const reduce = (draft, action) => {
       break;
     }
     case 'map/identify': {
-      draft.graphic = action.payload;
+      draft.map.graphic = action.payload;
 
       break;
     }
@@ -76,6 +77,11 @@ const reduce = (draft, action) => {
       if (action.payload === 'submission') {
         draft.submission = action.meta;
       }
+
+      if (action.payload === '' && draft.map.graphic) {
+        draft.map.graphic = null;
+      }
+
       break;
     }
     default:

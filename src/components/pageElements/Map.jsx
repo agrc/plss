@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
-import esriConfig from '@arcgis/core/config';
-import Graphic from '@arcgis/core/Graphic';
-import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
+import Graphic from '@arcgis/core/Graphic';
+import Viewpoint from '@arcgis/core/Viewpoint';
+import esriConfig from '@arcgis/core/config';
 import { contrastColor } from 'contrast-color';
 import clsx from 'clsx';
 import { useSigninCheck, useFunctions } from 'reactfire';
@@ -51,6 +52,8 @@ export default function PlssMap({ state, dispatch, color }) {
   const { data: thePoints, status } = useQuery(['myPoints'], myPoints, {
     enabled: signInCheckResult?.signedIn === true,
   });
+
+  const { graphic: identifyGraphic } = state;
 
   // create map
   useEffect(() => {
@@ -135,6 +138,37 @@ export default function PlssMap({ state, dispatch, color }) {
       esriMap.destroy();
     };
   }, []);
+
+  // manage highlighted graphic
+  useEffect(() => {
+    if (!mapView.current.ready) {
+      return;
+    }
+
+    if (!identifyGraphic) {
+      const plssPoints = mapView.current.map.findLayerById('PLSS Points');
+      plssPoints.featureEffect = null;
+
+      return;
+    }
+
+    mapView.current.goTo(
+      new Viewpoint({
+        targetGeometry: identifyGraphic.geometry,
+        scale: 4500,
+      }),
+      { duration: 1000 }
+    );
+
+    identifyGraphic.layer.featureEffect = {
+      filter: {
+        objectIds: [identifyGraphic.attributes.OBJECTID],
+      },
+      includedEffect:
+        'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
+      excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
+    };
+  }, [identifyGraphic]);
 
   // handle clicks
   useEffect(() => {

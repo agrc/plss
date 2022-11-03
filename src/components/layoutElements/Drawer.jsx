@@ -40,7 +40,6 @@ ErrorFallback.propTypes = {
 export default function Drawer({
   dispatch,
   authenticated,
-  graphic,
   map,
   addPoint,
   userPoints,
@@ -104,7 +103,7 @@ export default function Drawer({
         return <Legend />;
       }
       case 'identify': {
-        return <Identify graphic={graphic} dispatch={dispatch} />;
+        return <Identify graphic={map.graphic} dispatch={dispatch} />;
       }
       case 'submission': {
         return (
