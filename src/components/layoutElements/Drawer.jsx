@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useSigninCheck } from 'reactfire';
 import Logo from '../pageElements/Logo.jsx';
 import { Button } from '../formElements/Buttons.jsx';
+import { XCircleIcon } from '@heroicons/react/24/outline';
 
 const SubmissionProvider = lazy(() =>
   import('../contexts/SubmissionContext.jsx').then((module) => ({
@@ -118,6 +119,10 @@ export default function Drawer({
   return (
     <aside className={classes}>
       <Logo />
+      <XCircleIcon
+        className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-slate-200 hover:text-indigo-300"
+        onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}
+      />
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
