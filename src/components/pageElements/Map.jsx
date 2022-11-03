@@ -203,6 +203,16 @@ export default function PlssMap({ state, dispatch, color }) {
           let payload = null;
           if (response?.results?.length > 0) {
             payload = response.results[0].graphic;
+          } else {
+            if (mapView.current.scale > 200000) {
+              mapView.current.goTo(
+                new Viewpoint({
+                  targetGeometry: event.mapPoint,
+                  scale: 200000,
+                }),
+                { duration: 1000 }
+              );
+            }
           }
 
           dispatch({ type: 'map/identify', payload });
