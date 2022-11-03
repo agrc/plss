@@ -39,6 +39,7 @@ export default function PlssMap({ state, dispatch, color }) {
   const mapView = useRef();
   const [selectorOptions, setSelectorOptions] = useState();
   const [mapState, setMapState] = useState('idle');
+  const [windowDimensions, setWindowDimensions] = useState();
 
   const { data: signInCheckResult } = useSigninCheck();
 
@@ -52,6 +53,13 @@ export default function PlssMap({ state, dispatch, color }) {
   const { data: thePoints, status } = useQuery(['myPoints'], myPoints, {
     enabled: signInCheckResult?.signedIn === true,
   });
+
+  const handleResize = () => {
+    setWindowDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
 
   const { graphic: identifyGraphic } = state;
 
@@ -133,11 +141,39 @@ export default function PlssMap({ state, dispatch, color }) {
       position: 'top-right',
     });
 
+    setWindowDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
     return () => {
       mapView.current.destroy();
       esriMap.destroy();
     };
   }, []);
+
+  // set view padding depending on screen size
+  useEffect(() => {
+    if (!windowDimensions) {
+      return;
+    }
+
+    mapView.current.when(() => {
+      if (windowDimensions.width > 640) {
+        console.log('desktop padding');
+        mapView.current.padding.left = 400;
+        mapView.current.padding.bottom = 0;
+      } else {
+        console.log('mobile padding');
+        mapView.current.padding.left = 0;
+        mapView.current.padding.bottom = 450;
+      }
+    });
+
+    window.addEventListener('resize', handleResize, false);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [windowDimensions]);
 
   // manage highlighted graphic
   useEffect(() => {
