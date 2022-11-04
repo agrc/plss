@@ -152,12 +152,8 @@ Attachment.propTypes = {
 };
 
 export default function MonumentPdf() {
-  // let { id, existing } = useParams();
-  // const { state, actions } = useStateMachine({ updateAction });
   const [state, send] = useContext(SubmissionContext);
   const defaultValues = state.context.existing;
-
-  // let defaultValues = getStateForId(state, id);
 
   const { handleSubmit, control, formState } = useForm({
     defaultValues,
@@ -165,7 +161,6 @@ export default function MonumentPdf() {
   });
 
   const onSubmit = (payload) => {
-    // actions.updateAction(data);
     send({ type: 'NEXT', meta: 'existing', payload });
   };
 

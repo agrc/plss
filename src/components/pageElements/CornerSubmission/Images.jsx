@@ -61,7 +61,6 @@ ImagePreview.propTypes = {
 };
 
 function ImageUpload({ defaultFileName, onChange }) {
-  // const { id } = useParams();
   const [state] = useContext(SubmissionContext);
   const { data: user } = useUser();
   const storage = useStorage();
@@ -160,14 +159,8 @@ ImageUpload.propTypes = {
 
 const limit = 10;
 export default function MonumentImages() {
-  // let { id } = useParams();
-  // const navigate = useNavigate();
-  // const { state, actions } = useStateMachine({ updateAction });
-
   const [, send] = useContext(SubmissionContext);
   const [extraPageCount, setExtraPageCount] = useState(1);
-
-  // let defaultValues = getStateForId(state, id);
 
   const { handleSubmit, control } = useForm({
     // defaultValues,
@@ -175,8 +168,6 @@ export default function MonumentImages() {
 
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta: 'images', payload });
-    // actions.updateAction(data);
-    // navigate(`/submission/${state.}/review`);
   };
 
   return (
