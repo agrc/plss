@@ -15,6 +15,18 @@ import { Button } from '../formElements/Buttons.jsx';
 import { getDefault } from '../helpers';
 import Spacer from '../formElements/Spacer.jsx';
 
+const managed_counties = {
+  UTAH: 'https://maps.utahcounty.gov/TieSheets/TieSheet.htm',
+  WASATCH:
+    'https://wasatch.maps.arcgis.com/apps/webappviewer/index.html?id=103db0251a5342f7bbd1462eb7a47440',
+  DAVIS: 'http://www.co.davis.ut.us/surveyor/default.cfm',
+  'SALT LAKE': 'https://slco.org/surveyor/apps/surveymonument/map.html',
+  WEBER: 'https://www3.co.weber.ut.us/gis/maps/survey/index.html',
+  DUCHESNE: 'https://duchesne.utah.gov/surveyor/base&meridian.html',
+  UINTAH: 'https://www.co.uintah.ut.us/surveyor/UCTieSheet.htm',
+  CACHE: 'http://66.232.67.238/websites/surveyviewer/',
+};
+
 export default function Identify({ authenticated, graphic, dispatch }) {
   if (!graphic) {
     return <EmptyIdentify dispatch={dispatch} />;
@@ -118,10 +130,22 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             <span className="font-semibold">Alternate</span>
             <span>{getDefault(graphic.attributes.steward_second)}</span>
           </section>
-          <section className="flex w-full justify-between">
-            <span className="font-semibold">Managed by</span>
-            <span>{getDefault(graphic.attributes.managed_by)}</span>
-          </section>
+          {graphic.attributes.managed_by && (
+            <section className="flex w-full justify-between">
+              <span className="font-semibold">County managed</span>
+              <span>
+                <a
+                  href={managed_counties[graphic.attributes.managed_by]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="under italic text-amber-500 underline visited:text-amber-600 hover:text-amber-700"
+                >
+                  {getDefault(graphic.attributes.managed_by)} county surveyor
+                  website
+                </a>
+              </span>
+            </section>
+          )}
         </section>
 
         <div className="mt-6 justify-self-center">
