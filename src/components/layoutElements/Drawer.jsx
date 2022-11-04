@@ -104,7 +104,13 @@ export default function Drawer({
         return <Legend />;
       }
       case 'identify': {
-        return <Identify graphic={map.graphic} dispatch={dispatch} />;
+        return (
+          <Identify
+            authenticated={signInCheckResult.signedIn}
+            graphic={map.graphic}
+            dispatch={dispatch}
+          />
+        );
       }
       case 'submission': {
         return (
