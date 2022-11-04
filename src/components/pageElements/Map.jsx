@@ -151,7 +151,7 @@ export default function PlssMap({ state, dispatch, color }) {
               symbol: {
                 type: 'text',
                 color: '#1e293b',
-                haloColor: [255, 255, 255, 0.7],
+                haloColor: [255, 255, 255, 0.8],
                 haloSize: 3,
               },
             },
