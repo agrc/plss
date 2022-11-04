@@ -136,6 +136,26 @@ export default function PlssMap({ state, dispatch, color }) {
             'control',
             'point_category',
           ],
+          labelingInfo: [
+            {
+              labelPlacement: 'above-right',
+              minScale: 50000,
+              labelExpressionInfo: {
+                expression: '$feature.point_id',
+              },
+              font: {
+                family: 'Helvetica',
+                size: 14,
+                weight: 'bold',
+              },
+              symbol: {
+                type: 'text',
+                color: '#1e293b',
+                haloColor: [255, 255, 255, 0.7],
+                haloSize: 3,
+              },
+            },
+          ],
           minScale: 500000,
         },
       ],
