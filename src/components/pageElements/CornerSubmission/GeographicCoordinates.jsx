@@ -253,8 +253,14 @@ export const GeographicHeight = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
 
-  let defaultValues = state.context?.geographic;
-  if (!defaultValues) {
+  let geographic = state.context?.geographic;
+
+  let defaultValues = {
+    unit: geographic.unit,
+    elevation: geographic.elevation,
+  };
+
+  if (!defaultValues.unit) {
     defaultValues = geographicHeightDefaults;
   }
   if (!defaultValues.unit) {
@@ -265,7 +271,7 @@ export const GeographicHeight = () => {
 
   const { control, register, handleSubmit, reset, formState } = useForm({
     resolver: yupResolver(geographicHeightSchema),
-    defaultValues: geographicHeightDefaults,
+    defaultValues,
   });
 
   const [selected, setSelected] = useState(selectedUnit);
@@ -311,7 +317,6 @@ export const GeographicHeight = () => {
                   Elevation unit
                 </RadioGroup.Label>
                 {units
-                  .filter((x) => x.value !== 'ft.survey')
                   .map((option) => (
                     <RadioGroup.Option
                       key={option.value}
