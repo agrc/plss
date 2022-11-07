@@ -65,6 +65,8 @@ const Metadata = () => {
               label="Section"
               required={true}
               type="number"
+              min={1}
+              max={36}
               placeholder="What is the section"
               value={defaultValues.section}
               inputRef={register}

@@ -11,6 +11,9 @@ export const Input = ({
   inputRef,
   left,
   className,
+  step,
+  min,
+  max,
 }) => {
   const classes = clsx(
     'border border-slate-400 bg-white py-2 px-3 text-slate-800 placeholder-slate-600 shadow-sm transition-all duration-200 ease-in-out focus:border-indigo-500 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
@@ -32,7 +35,9 @@ export const Input = ({
         name={name}
         id={name}
         type={type}
-        step={type === 'number' ? '0.000001' : null}
+        step={type === 'number' ? step : null}
+        min={type === 'number' ? min : null}
+        max={type === 'number' ? max : null}
         defaultValue={value}
         placeholder={placeholder}
         {...inputRef(name)}
@@ -85,6 +90,9 @@ Input.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   touched: PropTypes.bool,
+  step: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number,
 };
 
 Input.defaultProps = {
@@ -98,6 +106,7 @@ Input.defaultProps = {
   left: false,
   className: null,
   touched: false,
+  step: 1,
 };
 
 export const Label = ({ children, htmlFor, required, className }) => {
