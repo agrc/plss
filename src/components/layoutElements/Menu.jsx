@@ -32,10 +32,16 @@ export default function Menu({ dispatch, drawerOpen }) {
   return (
     <nav className={classes}>
       <MenuItem
-        Icon={UserCircleIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
+        Icon={HomeModernIcon}
+        onClick={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
       >
-        {user !== null ? 'Logout' : 'Login/Register'}
+        Home
+      </MenuItem>
+      <MenuItem
+        Icon={SwatchIcon}
+        onClick={() => dispatch({ type: 'menu/toggle', payload: 'legend' })}
+      >
+        Map Legend
       </MenuItem>
       {user !== null && (
         <>
@@ -56,16 +62,10 @@ export default function Menu({ dispatch, drawerOpen }) {
         </>
       )}
       <MenuItem
-        Icon={HomeModernIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
+        Icon={UserCircleIcon}
+        onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
       >
-        Home
-      </MenuItem>
-      <MenuItem
-        Icon={SwatchIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'legend' })}
-      >
-        Map Legend
+        {user !== null ? 'Logout' : 'Login/Register'}
       </MenuItem>
     </nav>
   );
