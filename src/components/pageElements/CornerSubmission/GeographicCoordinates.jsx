@@ -78,9 +78,12 @@ export const Latitude = () => {
             <div>
               <Input
                 value={defaultValues.degrees}
-                placeholder="###"
+                type="number"
                 name="northing.degrees"
                 label="Degrees"
+                placeholder="###"
+                min={0}
+                max={42}
                 required={true}
                 inputRef={register}
               />
@@ -93,10 +96,13 @@ export const Latitude = () => {
             <div>
               <Input
                 value={defaultValues.minutes}
-                label="Minutes"
-                required={true}
-                placeholder="##"
+                type="number"
                 name="northing.minutes"
+                label="Minutes"
+                placeholder="##"
+                min={0}
+                max={59}
+                required={true}
                 inputRef={register}
               />
               <ErrorMessage
@@ -108,10 +114,14 @@ export const Latitude = () => {
             <div>
               <Input
                 value={defaultValues.seconds}
-                label="Seconds"
-                required={true}
-                placeholder="##.00000"
+                type="number"
                 name="northing.seconds"
+                label="Seconds"
+                placeholder="##.00000"
+                step="0.00001"
+                min={0}
+                max={59.99999}
+                required={true}
                 inputRef={register}
               />
               <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
@@ -172,10 +182,13 @@ export const Longitude = () => {
           <div>
             <Input
               value={defaultValues.degrees}
-              label="Degrees"
-              required={true}
-              placeholder="###"
+              type="number"
               name="easting.degrees"
+              label="Degrees"
+              placeholder="###"
+              min={0}
+              max={59}
+              required={true}
               inputRef={register}
             />
             <ErrorMessage
@@ -187,10 +200,13 @@ export const Longitude = () => {
           <div>
             <Input
               value={defaultValues.minutes}
+              type="number"
               label="Minutes"
-              required={true}
-              placeholder="##"
               name="easting.minutes"
+              placeholder="##"
+              min={0}
+              max={59}
+              required={true}
               inputRef={register}
             />
             <ErrorMessage
@@ -202,10 +218,14 @@ export const Longitude = () => {
           <div>
             <Input
               value={defaultValues.seconds}
-              label="Seconds"
-              required={true}
-              placeholder="##.00000"
+              type="number"
               name="easting.seconds"
+              label="Seconds"
+              placeholder="##.00000"
+              step="0.000001"
+              min={0}
+              max={59.99999}
+              required={true}
               inputRef={register}
             />
             <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
