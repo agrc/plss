@@ -82,7 +82,7 @@ export const Latitude = () => {
                 name="northing.degrees"
                 label="Degrees"
                 placeholder="###"
-                min={0}
+                min={37}
                 max={42}
                 required={true}
                 inputRef={register}
@@ -186,8 +186,8 @@ export const Longitude = () => {
               name="easting.degrees"
               label="Degrees"
               placeholder="###"
-              min={0}
-              max={59}
+              min={109}
+              max={114}
               required={true}
               inputRef={register}
             />
