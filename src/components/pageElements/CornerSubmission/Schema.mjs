@@ -9,6 +9,7 @@ const metadataMessages = {
   description: 'Description is a required field.',
   notes: 'Notes is a required field.',
 };
+const datumMessage = 'Datum is a required field.';
 export const metadataSchema = yup.object().shape({
   status: yup
     .string()
@@ -54,13 +55,14 @@ export const metadataSchema = yup.object().shape({
 export const coordinatePickerSchema = yup.object().shape({
   datum: yup
     .string()
-    .required()
+    .typeError(datumMessage)
+    .required(datumMessage)
     .oneOf(
       [].concat(
         options.geographic.map((x) => x.value),
         options.grid.map((x) => x.value)
       ),
-      'A valid selection must be made'
+      datumMessage
     ),
 });
 

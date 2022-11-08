@@ -224,7 +224,7 @@ describe('schema tests', () => {
         let result;
 
         try {
-          schemas.locationInformationSchema.validateSync({
+          schemas.coordinatePickerSchema.validateSync({
             datum,
           });
         } catch (error) {
