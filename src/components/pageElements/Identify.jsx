@@ -59,11 +59,15 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             <span className="mr-2">{graphic.attributes.latitude}</span>
             <span>{graphic.attributes.longitude}</span>
           </section>
-          <section className="flex w-full">
+          <section className="flex w-full justify-between">
             <span className="mr-2 font-bold">Elevation</span>
             <span>
               {getDefault(graphic.attributes.elevation, 'unknown', ' ft')}
             </span>
+          </section>
+          <section className="flex w-full justify-between">
+            <span className="mr-2 font-bold">County</span>
+            <span>{getDefault(graphic.attributes.county, 'unknown')}</span>
           </section>
         </Card>
 

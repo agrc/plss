@@ -63,7 +63,7 @@ export default function CornerSubmission({ submission, dispatch }) {
 
   const townshipInformation = extractTownshipInformation(pointId);
   const location = {
-    county: 'Beaver',
+    county: submission.county,
     meridian: townshipInformation.meridian.abbr,
     township: townshipInformation.township,
     range: townshipInformation.range,
@@ -174,6 +174,7 @@ CornerSubmission.propTypes = {
   submission: PropTypes.shape({
     blmPointId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    county: PropTypes.string,
   }),
   dispatch: PropTypes.func.isRequired,
 };

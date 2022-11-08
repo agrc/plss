@@ -127,6 +127,7 @@ export default function PlssMap({ state, dispatch, color }) {
             'control',
             'longitude',
             'latitude',
+            'county',
             'elevation',
             'steward',
             'steward_second',
