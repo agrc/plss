@@ -1,29 +1,54 @@
 import * as yup from 'yup';
 import * as options from './Options.mjs';
 
+const metadataMessages = {
+  section: 'Section must be a whole number from 1 to 36.',
+  corner: 'Corner is a required field.',
+  status: 'Status is a required field.',
+  accuracy: 'Accuracy is a required field.',
+  description: 'Description is a required field.',
+  notes: 'Notes is a required field.',
+};
 export const metadataSchema = yup.object().shape({
   status: yup
     .string()
-    .required()
+    .typeError(metadataMessages.status)
+    .required(metadataMessages.status)
     .oneOf(
       options.status.map((x) => x.value),
-      'A valid selection must be made'
+      metadataMessages.status
     ),
   accuracy: yup
     .string()
-    .required()
+    .typeError(metadataMessages.accuracy)
+    .required(metadataMessages.accuracy)
     .oneOf(
       options.accuracy.map((x) => x.value),
-      'A valid selection must be made'
+      metadataMessages.accuracy
     ),
-  description: yup.string().max(1000).required(),
-  notes: yup.string().max(1000).required(),
+  description: yup
+    .string()
+    .typeError(metadataMessages.description)
+    .max(1000, 'Description must be at most 1000 characters.')
+    .required(metadataMessages.description)
+    .label('Description'),
+  notes: yup
+    .string()
+    .typeError(metadataMessages.notes)
+    .max(1000, 'Notes must be at most 1000 characters.')
+    .required(metadataMessages.notes),
   mrrc: yup.boolean().required(),
-  section: yup.number().min(1).max(36).required(),
+  section: yup
+    .number()
+    .typeError(metadataMessages.section)
+    .min(1, metadataMessages.section)
+    .max(36, metadataMessages.section)
+    .required(metadataMessages.section),
   corner: yup
     .string()
-    .required()
-    .oneOf(options.corner, 'A valid selection must be made'),
+    .typeError(metadataMessages.corner)
+    .required(metadataMessages.corner)
+    .oneOf(options.corner, metadataMessages.corner),
 });
 
 export const coordinatePickerSchema = yup.object().shape({
