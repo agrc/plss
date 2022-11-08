@@ -14,30 +14,67 @@ import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
 import { existingSheetSchema } from './Schema';
 
-const UploadProgress = ({ uploadTask, storageRef }) => {
-  const { status, data: uploadProgress } = useStorageTask(
-    uploadTask,
-    storageRef
+export default function MonumentPdf({ dispatch }) {
+  const [state, send] = useContext(SubmissionContext);
+  const defaultValues = state.context.existing;
+
+  const { handleSubmit, control, formState } = useForm({
+    defaultValues,
+    resolver: yupResolver(existingSheetSchema),
+  });
+
+  const onSubmit = (payload) => {
+    send({ type: 'NEXT', meta: 'existing', payload });
+  };
+
+  const deleteAttachment = () => {};
+
+  return (
+    <>
+      <h3 className="text-2xl font-semibold">Monument Sheet</h3>
+      <Spacer className="my-4" />
+      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
+        <NumberedFormSection number={1} title="Existing sheet">
+          <Controller
+            name="pdf"
+            control={control}
+            render={({ field: { onChange } }) =>
+              defaultValues?.pdf ? (
+                <Attachment
+                  name="existing-sheet.pdf"
+                  document={defaultValues.pdf}
+                  id={state.context.blmPointId}
+                  onChange={onChange}
+                />
+              ) : (
+                <PdfUpload
+                  defaultFileName="existing-sheet"
+                  id={state.context.blmPointId}
+                  onChange={onChange}
+                />
+              )
+            }
+          />
+          <ErrorMessage
+            errors={formState.errors}
+            name="pdf"
+            as={ErrorMessageTag}
+          />
+        </NumberedFormSection>
+        <NumberedFormSection number={0}>
+          <Wizard
+            next={true}
+            back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
+            clear={deleteAttachment}
+          />
+        </NumberedFormSection>
+      </NumberedForm>
+    </>
   );
-
-  if (status === 'loading') {
-    return <>loading</>;
-  }
-
-  if (uploadProgress) {
-    const { bytesTransferred, totalBytes } = uploadProgress;
-
-    const percentComplete =
-      Math.round(100 * (bytesTransferred / totalBytes)) + '%';
-    return <span>{percentComplete}</span>;
-  }
+}
+MonumentPdf.propTypes = {
+  dispatch: PropTypes.func,
 };
-
-UploadProgress.propTypes = {
-  uploadTask: PropTypes.object.isRequired,
-  storageRef: PropTypes.object.isRequired,
-};
-
 function PdfUpload({ defaultFileName, onChange, id }) {
   const { data: user } = useUser();
   const storage = useStorage();
@@ -137,6 +174,29 @@ PdfUpload.propTypes = {
   id: PropTypes.string,
 };
 
+const UploadProgress = ({ uploadTask, storageRef }) => {
+  const { status, data: uploadProgress } = useStorageTask(
+    uploadTask,
+    storageRef
+  );
+
+  if (status === 'loading') {
+    return <>loading</>;
+  }
+
+  if (uploadProgress) {
+    const { bytesTransferred, totalBytes } = uploadProgress;
+
+    const percentComplete =
+      Math.round(100 * (bytesTransferred / totalBytes)) + '%';
+    return <span>{percentComplete}</span>;
+  }
+};
+UploadProgress.propTypes = {
+  uploadTask: PropTypes.object.isRequired,
+  storageRef: PropTypes.object.isRequired,
+};
+
 function Attachment({ name }) {
   return (
     <div className="flex justify-between">
@@ -150,58 +210,3 @@ Attachment.propTypes = {
   onChange: PropTypes.func,
   id: PropTypes.string,
 };
-
-export default function MonumentPdf() {
-  const [state, send] = useContext(SubmissionContext);
-  const defaultValues = state.context.existing;
-
-  const { handleSubmit, control, formState } = useForm({
-    defaultValues,
-    resolver: yupResolver(existingSheetSchema),
-  });
-
-  const onSubmit = (payload) => {
-    send({ type: 'NEXT', meta: 'existing', payload });
-  };
-
-  const deleteAttachment = () => {};
-
-  return (
-    <>
-      <h3 className="text-2xl font-semibold">Monument Sheet</h3>
-      <Spacer className="my-4" />
-      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
-        <NumberedFormSection number={1} title="Existing sheet">
-          <Controller
-            name="pdf"
-            control={control}
-            render={({ field: { onChange } }) =>
-              defaultValues?.pdf ? (
-                <Attachment
-                  name="existing-sheet.pdf"
-                  document={defaultValues.pdf}
-                  id={state.context.blmPointId}
-                  onChange={onChange}
-                />
-              ) : (
-                <PdfUpload
-                  defaultFileName="existing-sheet"
-                  id={state.context.blmPointId}
-                  onChange={onChange}
-                />
-              )
-            }
-          />
-          <ErrorMessage
-            errors={formState.errors}
-            name="pdf"
-            as={ErrorMessageTag}
-          />
-        </NumberedFormSection>
-        <NumberedFormSection number={0}>
-          <Wizard clear={deleteAttachment} next={true} />
-        </NumberedFormSection>
-      </NumberedForm>
-    </>
-  );
-}

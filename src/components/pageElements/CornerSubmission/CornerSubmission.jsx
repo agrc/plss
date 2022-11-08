@@ -47,7 +47,7 @@ ErrorFallback.propTypes = {
   resetErrorBoundary: PropTypes.func.isRequired,
 };
 
-export default function CornerSubmission({ submission }) {
+export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useState(false);
   const [state, send] = useContext(SubmissionContext);
   const { data: user } = useUser();
@@ -74,9 +74,9 @@ export default function CornerSubmission({ submission }) {
   const getFormPart = (state) => {
     switch (true) {
       case state.matches('form.uploading existing pdf'):
-        return <MonumentPdf />;
+        return <MonumentPdf dispatch={dispatch} />;
       case state.matches('form.adding metadata'):
-        return <Metadata />;
+        return <Metadata dispatch={dispatch} />;
       case state.matches('form.choosing datum'):
         return <CoordinatePicker />;
       case state.matches('form.entering latitude'):

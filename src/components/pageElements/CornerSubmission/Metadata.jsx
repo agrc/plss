@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -27,7 +28,7 @@ const defaults = {
   mrrc: false,
 };
 
-const Metadata = () => {
+const Metadata = ({ dispatch }) => {
   const meta = 'metadata';
   const [state, send] = useContext(SubmissionContext);
 
@@ -237,7 +238,11 @@ const Metadata = () => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={-1}>
-          <Wizard next={true} clear={onReset} />
+          <Wizard
+            next={true}
+            back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
+            clear={onReset}
+          />
         </NumberedFormSection>
       </NumberedForm>
     </>
@@ -245,3 +250,7 @@ const Metadata = () => {
 };
 
 export default Metadata;
+
+Metadata.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
