@@ -81,17 +81,17 @@ const CoordinatePicker = () => {
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Coordinate system">
           <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-            <Tab.List className="flex space-x-1 rounded-xl bg-slate-900/20 p-1">
+            <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
               {Object.keys(formats).map((category) => (
                 <Tab
                   key={category}
                   className={({ selected }) =>
                     clsx(
                       'w-full rounded-lg py-2.5 font-medium leading-5',
-                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
+                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
                       selected
-                        ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
-                        : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
+                        ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                        : 'text-sky-700 hover:bg-sky-600/20'
                     )
                   }
                 >

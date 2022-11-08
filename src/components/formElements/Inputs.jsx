@@ -16,7 +16,7 @@ export const Input = ({
   max,
 }) => {
   const classes = clsx(
-    'border border-slate-400 bg-white py-2 px-3 text-slate-800 placeholder-slate-600 shadow-sm transition-all duration-200 ease-in-out focus:border-indigo-500 focus:outline-none focus:ring focus:ring-indigo-600 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
+    'border border-slate-400 bg-white py-2 px-3 text-slate-800 placeholder:text-slate-600 shadow-sm transition-all duration-200 ease-in-out focus:border-sky-500 focus:outline-none focus:ring focus:ring-sky-600 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
     {
       'rounded-md': !left,
       'rounded-l-md': left,

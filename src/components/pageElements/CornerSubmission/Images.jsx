@@ -44,7 +44,7 @@ const ImagePreview = ({ storagePath }) => {
   const { data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
 
   return (
-    <div className="flex flex-col rounded border bg-slate-800 text-white/50 shadow">
+    <div className="flex flex-col rounded border border-slate-400 bg-white px-2 text-slate-400 shadow">
       <img
         src={imageURL}
         alt="demo download"
@@ -130,11 +130,11 @@ function ImageUpload({ defaultFileName, onChange }) {
       <input
         type="file"
         onChange={uploadImage}
-        className="text-center text-sm text-slate-300 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
-        file:border-solid file:border-indigo-600 file:bg-indigo-500 file:px-7 file:py-1 file:text-sm
-        file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-indigo-600
-        file:focus:border-indigo-500 file:focus:outline-none file:focus:ring-2 file:focus:ring-indigo-600 file:focus:ring-opacity-50
-        file:active:bg-indigo-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
+        className="text-center text-sm text-slate-400 file:flex file:min-h-[2rem] file:w-fit file:cursor-pointer file:rounded-full file:border-2
+        file:border-solid file:border-sky-600 file:bg-sky-500 file:px-7 file:py-1 file:text-sm
+        file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-sky-600
+        file:focus:border-sky-500 file:focus:outline-none file:focus:ring-2 file:focus:ring-sky-600 file:focus:ring-opacity-50
+        file:active:bg-sky-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
       />
       {uploadTask && (
         <UploadProgress uploadTask={uploadTask} storageRef={fileReference} />

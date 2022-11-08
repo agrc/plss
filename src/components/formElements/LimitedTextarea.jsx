@@ -28,7 +28,7 @@ export const LimitedTextarea = ({
         maxLength={limit}
         placeholder={placeholder}
         className={clsx(
-          'rounded px-2 text-slate-800 placeholder:text-sm placeholder:text-slate-600',
+          'rounded border border-slate-400 px-2 text-sm text-slate-800 placeholder:text-sm placeholder:text-slate-600',
           className
         )}
         {...field}

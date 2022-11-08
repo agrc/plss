@@ -1,9 +1,9 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Listbox, Switch, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { useImmerReducer } from 'use-immer';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
+import { Select } from '../formElements/Select.jsx';
+import Switch from '../formElements/Switch.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -86,7 +86,11 @@ SelectedItem.propTypes = {
 
 const ContentList = ({ content, dispatch }) => (
   <div className="flex w-full flex-1 flex-col overflow-hidden">
-    <SortOrder></SortOrder>
+    <Select
+      label="Sort order"
+      options={sortOrders}
+      currentValue={sortOrders[0]}
+    ></Select>
     <MapFilterToggle></MapFilterToggle>
     <ListCounter items={content}></ListCounter>
     <ItemList dispatch={dispatch} items={content}></ItemList>
@@ -104,85 +108,17 @@ const sortOrders = [
   'Descending (Z-A 0-9)',
 ];
 
-const SortOrder = () => {
-  const [selected, setSelected] = useState(sortOrders[0]);
-
-  return (
-    <Listbox value={selected} onChange={setSelected}>
-      <div className="relative z-10 mt-1">
-        <Listbox.Label>Sort order</Listbox.Label>
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-          <span className="block truncate text-slate-800">{selected}</span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon
-              className="h-5 w-5 text-slate-400"
-              aria-hidden="true"
-            />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {sortOrders.map((option, id) => (
-              <Listbox.Option
-                key={id}
-                className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-indigo-100 text-indigo-900' : 'text-gray-900'
-                  }`
-                }
-                value={option}
-              >
-                {({ selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${
-                        selected ? 'font-medium' : 'font-normal'
-                      }`}
-                    >
-                      {option}
-                    </span>
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    ) : null}
-                  </>
-                )}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-        </Transition>
-      </div>
-    </Listbox>
-  );
-};
-
 const MapFilterToggle = () => {
   const [enabled, setEnabled] = useState(false);
 
   return (
-    <div className="mt-2">
+    <div className="flex items-center">
       <Switch
-        checked={enabled}
-        onChange={setEnabled}
-        className={`${enabled ? 'bg-slate-500' : 'bg-slate-300'}
-          relative inline-flex h-[20px] w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-      >
-        <span className="sr-only">Use setting</span>
-        <span
-          aria-hidden="true"
-          className={`${enabled ? 'translate-x-4' : 'translate-x-0'}
-            pointer-events-none inline-block h-4 w-4 transform rounded-full bg-indigo-400 shadow-lg ring-2 ring-indigo-900 transition duration-200 ease-in-out`}
-        />
-      </Switch>
-      <div htmlFor="toggle" className="text-xs text-white">
-        Only show content visible on the map
-      </div>
+        currentValue={enabled}
+        onUpdate={() => setEnabled(!enabled)}
+        hideLabel={true}
+      />
+      <span className="pl-2 text-sm">Only show content visible on the map</span>
     </div>
   );
 };
@@ -207,25 +143,11 @@ ItemList.propTypes = {
 };
 
 const Item = ({ item, dispatch }) => {
-  const [enabled, setEnabled] = useState(false);
-
   return (
     <>
       <div className="flex w-full flex-col">
-        <div>
-          <Switch
-            checked={enabled}
-            onChange={setEnabled}
-            className={`${enabled ? 'bg-slate-500' : 'bg-slate-300'}
-          relative inline-flex h-[16px] w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-          >
-            <span className="sr-only">Use setting</span>
-            <span
-              aria-hidden="true"
-              className={`${enabled ? 'translate-x-3' : 'translate-x-0'}
-            pointer-events-none inline-block h-3 w-3 transform rounded-full bg-indigo-400 shadow-lg ring-2 ring-indigo-900 transition duration-200 ease-in-out`}
-            />
-          </Switch>
+        <div className="flex flex-row">
+          <Switch hideLabel={true} />
           <button
             onClick={() => dispatch({ payload: item, type: 'set_selection' })}
             className="inline-block pl-2 text-left"
@@ -233,12 +155,12 @@ const Item = ({ item, dispatch }) => {
             {item.attributes.name}
           </button>
         </div>
-        <p className="pl-5 text-xs text-slate-400">
+        <p className="pl-16 text-xs text-slate-400">
           {dateFormatter.format(Date.parse(item.attributes.when))}
         </p>
-        <p className="pl-5 text-xs text-slate-400">{item.attributes.notes}</p>
+        <p className="pl-16 text-xs text-slate-400">{item.attributes.notes}</p>
       </div>
-      <span className="mx-auto inline-block h-1 w-2/3 rounded bg-slate-500"></span>
+      <span className="mx-auto inline-block h-px w-2/3 rounded bg-sky-800"></span>
     </>
   );
 };

@@ -14,6 +14,7 @@ import {
 import { Button } from '../formElements/Buttons.jsx';
 import { getDefault } from '../helpers';
 import Spacer from '../formElements/Spacer.jsx';
+import Card from '../formElements/Card.jsx';
 
 const managed_counties = {
   UTAH: 'https://maps.utahcounty.gov/TieSheets/TieSheet.htm',
@@ -39,19 +40,21 @@ export default function Identify({ authenticated, graphic, dispatch }) {
         {graphic.attributes.point_id}
       </h2>
 
-      <main className="inline-grid gap-5 text-sm">
+      <main className="inline-grid gap-3 text-sm">
         {graphic?.attributes?.point_id && (
-          <TieSheetList blmPointId={graphic.attributes.point_id}>
-            <SubmissionPicker
-              dispatch={dispatch}
-              authenticated={authenticated}
-              blmPointId={graphic.attributes.point_id}
-            />
-          </TieSheetList>
+          <div className="mt-4 inline-grid">
+            <TieSheetList blmPointId={graphic.attributes.point_id}>
+              <SubmissionPicker
+                dispatch={dispatch}
+                authenticated={authenticated}
+                blmPointId={graphic.attributes.point_id}
+              />
+            </TieSheetList>
+          </div>
         )}
 
-        <section className="flex flex-col gap-2 rounded-lg bg-slate-50 py-2 px-6 text-sm text-slate-800 shadow-lg">
-          <h3 className="mb-2 text-xl font-medium text-slate-800">Location</h3>
+        <Card>
+          <h3 className="mb-1 text-xl font-medium">Location</h3>
           <section className="flex w-full">
             <span className="mr-2">{graphic.attributes.latitude}</span>
             <span>{graphic.attributes.longitude}</span>
@@ -62,12 +65,10 @@ export default function Identify({ authenticated, graphic, dispatch }) {
               {getDefault(graphic.attributes.elevation, 'unknown', ' ft')}
             </span>
           </section>
-        </section>
+        </Card>
 
-        <section className="flex flex-col gap-2 rounded-lg bg-slate-50 py-2 px-6 text-sm text-slate-800 shadow-lg">
-          <h3 className="mb-2 text-xl font-medium text-slate-800">
-            Identification
-          </h3>
+        <Card>
+          <h3 className="mb-1 text-xl font-medium">Identification</h3>
           <section className="flex w-full justify-between">
             <span className="font-semibold">Corner Id</span>
             <span>{graphic.attributes.point_id}</span>
@@ -80,12 +81,10 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             <span className="font-semibold">Point label</span>
             <span>{graphic.attributes.label}</span>
           </section>
-        </section>
+        </Card>
 
-        <section className="flex flex-col gap-2 rounded-lg bg-slate-50 py-2 px-6 text-sm text-slate-800 shadow-lg">
-          <h3 className="mb-2 text-xl font-medium text-slate-800">
-            Categories
-          </h3>
+        <Card>
+          <h3 className="mb-1 text-xl font-medium">Categories</h3>
           <div className="grid grid-cols-2 gap-2">
             <section className="flex flex-col items-center">
               <span className="font-semibold">Control point</span>
@@ -118,10 +117,10 @@ export default function Identify({ authenticated, graphic, dispatch }) {
               </span>
             </section>
           </div>
-        </section>
+        </Card>
 
-        <section className="flex flex-col gap-2 rounded-lg bg-slate-50 py-2 px-6 text-sm text-slate-800 shadow-lg">
-          <h3 className="mb-2 text-xl font-medium text-slate-800">Stewards</h3>
+        <Card>
+          <h3 className="mb-1 text-xl font-medium">Stewards</h3>
           <section className="flex w-full justify-between">
             <span className="font-semibold">Primary</span>
             <span>{getDefault(graphic.attributes.steward)}</span>
@@ -146,7 +145,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
               </span>
             </section>
           )}
-        </section>
+        </Card>
 
         <div className="mt-6 justify-self-center">
           <Button
@@ -172,9 +171,9 @@ const EmptyIdentify = ({ dispatch }) => {
   return (
     <>
       <h3 className="text-2xl font-semibold">Monument Record Lookup</h3>
-      <main className="mt-6 inline-grid gap-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-800 shadow-xl">
+      <Card>
         <div className="flex justify-center">
-          <ExclamationCircleIcon className="h-14 w-14 text-indigo-600" />
+          <ExclamationCircleIcon className="h-14 w-14 text-sky-600" />
         </div>
         <h4 className="text-xl ">
           No corner point was found at this location.
@@ -193,7 +192,7 @@ const EmptyIdentify = ({ dispatch }) => {
             close
           </Button>
         </div>
-      </main>
+      </Card>
     </>
   );
 };
@@ -203,13 +202,13 @@ EmptyIdentify.propTypes = {
 
 const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
   return (
-    <div className="mb-4 rounded-b-lg px-6">
+    <div className="rounded-b-lg px-6">
       {authenticated ? (
         <>
           <h3 className="flex items-center justify-center font-light uppercase">
-            <ArrowDownCircleIcon className="mr-1 h-4 w-4 items-center text-indigo-400 motion-safe:animate-bounce" />
+            <ArrowDownCircleIcon className="mr-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
             <span className=" text-slate-700">Submit your tiesheet</span>
-            <ArrowDownCircleIcon className="ml-1 h-4 w-4 items-center text-indigo-400 motion-safe:animate-bounce" />
+            <ArrowDownCircleIcon className="ml-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
           </h3>
           <Spacer />
           <div className="space-between flex w-full justify-around">
@@ -291,11 +290,9 @@ const TieSheetList = ({ blmPointId, children }) => {
   );
 
   return (
-    <section className="mt-4 flex flex-col gap-1 rounded-lg bg-slate-50 text-sm text-slate-800 shadow-lg">
-      <div className="px-6 py-2">
-        <h3 className="mb-2 text-xl font-medium text-slate-800">
-          Tiesheet Documents
-        </h3>
+    <Card>
+      <div>
+        <h3 className="text-xl font-medium">Tiesheet Documents</h3>
         {status === 'loading' && <div>Loading...</div>}
         {status === 'error' && (
           <div>The tiesheets are currently not available</div>
@@ -311,7 +308,7 @@ const TieSheetList = ({ blmPointId, children }) => {
                 className="group hover:rounded hover:bg-slate-100"
               >
                 <span className="inline-flex align-middle">
-                  <ArrowDownOnSquareIcon className="mr-2 inline-block h-4 w-4 text-indigo-600 group-hover:text-indigo-800" />
+                  <ArrowDownOnSquareIcon className="mr-2 inline-block h-4 w-4 text-sky-600 group-hover:text-sky-800" />
                   <a href={x.url} target="_blank" rel="noopener noreferrer">
                     {x.name}
                   </a>
@@ -322,7 +319,7 @@ const TieSheetList = ({ blmPointId, children }) => {
         )}
       </div>
       <div className="mt-4">{children}</div>
-    </section>
+    </Card>
   );
 };
 TieSheetList.propTypes = {

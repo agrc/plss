@@ -44,3 +44,9 @@ Alternate.args = {
   style: 'alternate',
   children: 'Alternate',
 };
+
+export const Text = Template.bind({});
+Text.args = {
+  style: 'text',
+  children: 'text',
+};

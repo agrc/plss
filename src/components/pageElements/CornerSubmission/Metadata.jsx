@@ -9,6 +9,7 @@ import { Select } from '../../formElements/Select.jsx';
 import Switch from '../../formElements/Switch.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
+import { A } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { accuracy, status, corner } from './Options.mjs';
@@ -173,15 +174,14 @@ const Metadata = () => {
                   />
                 )}
               />
-              <a
+              <A
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
-                className="under flex text-sm font-normal italic text-amber-300 underline visited:text-amber-500 hover:text-white"
               >
                 Help
                 <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
-              </a>
+              </A>
             </div>
             <ErrorMessage
               errors={formState.errors}
@@ -205,7 +205,7 @@ const Metadata = () => {
               render={({ field }) => (
                 <LimitedTextarea
                   value={defaultValues[field.name]}
-                  placeholder="Notes about the monument"
+                  placeholder="Describe the monument"
                   rows="5"
                   maxLength={1000}
                   field={field}
