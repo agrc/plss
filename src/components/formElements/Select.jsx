@@ -59,7 +59,7 @@ export const Select = ({
       <div className="relative mt-1">
         <Listbox.Button
           aria-required={required}
-          className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+          className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
         >
           <span className="block h-5 truncate text-slate-600">
             {getDefaultValue(value, placeholder, options)}
@@ -77,7 +77,7 @@ export const Select = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute z-10 mt-1 max-h-60 min-h-full w-full overflow-auto rounded-md border-2 border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Listbox.Options className="absolute z-10 mt-1 max-h-60 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {(options?.length ?? 0) > 0 ? (
               options?.map((option, id) => (
                 <Listbox.Option
@@ -86,8 +86,8 @@ export const Select = ({
                     clsx(
                       'relative cursor-default select-none py-2 pl-10 pr-4',
                       {
-                        'bg-indigo-100 text-indigo-900': active,
-                        'text-slate-900': !active,
+                        'bg-sky-100 text-sky-900': active,
+                        'text-sky-900': !active && !option?.disabled,
                         'cursor-not-allowed text-slate-400':
                           option?.disabled ?? false,
                       }
@@ -107,7 +107,7 @@ export const Select = ({
                         {option?.label ?? option}
                       </span>
                       {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
                       ) : null}

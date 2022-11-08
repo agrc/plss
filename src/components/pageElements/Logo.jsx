@@ -1,10 +1,10 @@
 export default function Logo() {
   return (
-    <div className="mb-2 flex">
+    <div className="mb-6 flex">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 400.9 523.07"
-        className="mr-2 flex w-12 rounded-lg border-y-4 border-x-8 border-slate-700 bg-slate-700"
+        className="mr-2 flex w-12 rounded-lg"
       >
         <g id="wavy_gravy">
           <path
@@ -37,7 +37,7 @@ export default function Logo() {
           />
         </g>
       </svg>
-      <div className="self-center text-4xl font-black text-white">
+      <div className="self-center text-6xl font-black text-sky-900/80">
         Utah PLSS
       </div>
     </div>

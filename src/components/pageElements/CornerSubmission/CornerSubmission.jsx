@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { lazy, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { useUser } from 'reactfire';
 import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
+import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import extractTownshipInformation from './blmPointId.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
-
+import Card from '../../formElements/Card.jsx';
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
@@ -49,6 +50,7 @@ ErrorFallback.propTypes = {
 export default function CornerSubmission({ submission }) {
   const [hide, setHide] = useState(false);
   const [state, send] = useContext(SubmissionContext);
+  const { data: user } = useUser();
   const pointId = submission.blmPointId;
   const submissions = {};
   submissions[pointId] = {};
@@ -58,11 +60,6 @@ export default function CornerSubmission({ submission }) {
   useEffect(() => {
     send('start submission');
   }, [submission.type, send]);
-
-  const user = {
-    name: 'Test Person',
-    license: 1123123,
-  };
 
   const townshipInformation = extractTownshipInformation(pointId);
   const location = {
@@ -116,46 +113,50 @@ export default function CornerSubmission({ submission }) {
 
   return (
     <>
-      <div className="relative text-indigo-200 opacity-60">
+      <div className="relative">
         <Icon
-          className={clsx('h-6 w-6', {
-            'absolute -right-2 -top-2': !hide,
+          className={clsx('h-6 w-6 cursor-pointer', {
+            hidden: !hide,
           })}
           onClick={() => setHide(!hide)}
         />
       </div>
       {!hide && (
-        <p className="mb-4 rounded-lg bg-slate-800 p-3 text-justify text-xs leading-tight text-indigo-300">
-          This monument record information will be reviewed by the county
-          surveyor under stewardship of this corner to satisfy the requirements
-          of state code 17-23-17-7a.
-        </p>
-      )}
-      {!hide && (
-        <div className="inline-grid w-full text-xs">
-          <div className="flex justify-between">
-            <span className="font-semibold">Submitted By</span>
-            <span>{user.name}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Surveyor License</span>
-            <span>{user.license}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">BLM Point #</span>
-            <span>{pointId}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">County</span>
-            <span>{location.county}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-semibold">Township</span>
-            <span>
-              {location.meridian}T{location.township}R{location.range}
-            </span>
-          </div>
-          <span className="mx-auto my-4 inline-block h-1 w-2/3 rounded bg-slate-500"></span>
+        <div className="mb-4 inline-grid">
+          <Card>
+            <p className="border bg-slate-50 p-3 text-justify text-xs leading-tight">
+              This monument record information will be reviewed by the county
+              surveyor under stewardship of this corner to satisfy the
+              requirements of state code 17-23-17-7a.
+            </p>
+            <div className="flex justify-between">
+              <span className="font-semibold">Submitted By</span>
+              <span>{user.displayName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold">Surveyor License</span>
+              <span>{user.license}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold">BLM Point #</span>
+              <span>{pointId}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold">County</span>
+              <span>{location.county}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold">Township</span>
+              <span>
+                {location.meridian}T{location.township}R{location.range}
+              </span>
+            </div>
+            <div className="mt-2 flex justify-center">
+              <Button style="alternate" onClick={() => setHide(!hide)}>
+                close
+              </Button>
+            </div>
+          </Card>
         </div>
       )}
       <div className="mb-2 flex-1 overflow-y-auto pb-2">

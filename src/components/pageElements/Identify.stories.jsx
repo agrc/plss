@@ -25,7 +25,7 @@ export default {
       const auth = getAuth(app);
 
       return (
-        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl border border-indigo-700 bg-slate-600 px-4 py-4 text-white shadow-2xl sm:rounded-t-none md:pb-12 ">
+        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl border border-sky-700 bg-slate-600 px-4 py-4 text-white shadow-2xl sm:rounded-t-none md:pb-12 ">
           <QueryClientProvider client={new QueryClient()}>
             <FirebaseAppProvider firebaseConfig={config}>
               <AuthProvider sdk={auth}>

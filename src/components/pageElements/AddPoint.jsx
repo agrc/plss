@@ -86,103 +86,108 @@ export default function AddPoint({
   };
 
   return (
-    <form onSubmit={handleSubmit(savePoint)}>
-      <h1 className="text-2xl font-bold">Add a Point</h1>
-      <p className="my-3 text-sm leading-tight text-white">
-        Saving points are available to help you remember points of interest when
-        out in the field collection information.
-      </p>
-      <section className="mt-3 mb-4 inline-grid gap-3 overflow-x-auto">
-        <h2 className="text-lg font-bold">Name the point</h2>
-        <Input
-          name="name"
-          type="text"
-          placeholder="Point Name"
-          value={`Point (${dateFormatter.format(new Date())})`}
-          inputRef={register}
-        />
-        <h2 className="text-lg font-bold">Pick a point color</h2>
-        <div className="flex justify-center">
-          <CirclePicker
-            onChangeComplete={(color) =>
-              dispatch({
-                type: 'add-point/color',
-                payload: color,
-              })
-            }
-          ></CirclePicker>
-        </div>
-        <h2 className="text-lg font-bold">Notes</h2>
-        <Controller
-          control={control}
-          name="notes"
-          render={({ field }) => (
-            <LimitedTextarea
-              value={notes}
-              placeholder="start typing to remember why you are creating this point..."
-              rows="5"
-              maxLength={450}
-              field={field}
-              className="w-full text-xs"
-              errors={formState.errors}
-            />
-          )}
-        />
-        <div>
-          <h2 className="mb-2 text-lg font-bold">Place the point</h2>
-          <Button
-            name="draw-point"
-            style={active ? 'secondary' : 'primary'}
-            type="button"
-            onClick={() => dispatch({ type: 'add-point/activate' })}
-          >
-            {active ? 'ready' : 'click to draw'}
-          </Button>
-          {geometry?.x && (
-            <>
-              <div className="mt-2">Point Coordinates</div>
+    <form
+      onSubmit={handleSubmit(savePoint)}
+      className="mb-10 flex w-full flex-col items-center justify-center"
+    >
+      <div className="relative flex w-full flex-col gap-4 ">
+        <h1 className="text-2xl font-bold">Add a Point</h1>
+        <p className="text-sm leading-tight">
+          Saving points are available to help you remember points of interest
+          when out in the field collection information.
+        </p>
+        <section className="mt-3 mb-4 inline-grid gap-3 overflow-x-auto">
+          <h2 className="text-lg font-bold">Name the point</h2>
+          <Input
+            name="name"
+            type="text"
+            placeholder="Point Name"
+            value={`Point (${dateFormatter.format(new Date())})`}
+            inputRef={register}
+          />
+          <h2 className="text-lg font-bold">Pick a point color</h2>
+          <div className="flex justify-center">
+            <CirclePicker
+              onChangeComplete={(color) =>
+                dispatch({
+                  type: 'add-point/color',
+                  payload: color,
+                })
+              }
+            ></CirclePicker>
+          </div>
+          <h2 className="text-lg font-bold">Notes</h2>
+          <Controller
+            control={control}
+            name="notes"
+            render={({ field }) => (
+              <LimitedTextarea
+                value={notes}
+                placeholder="start typing to remember why you are creating this point..."
+                rows="5"
+                maxLength={450}
+                field={field}
+                className="w-full text-xs"
+                errors={formState.errors}
+              />
+            )}
+          />
+          <div>
+            <h2 className="mb-2 text-lg font-bold">Place the point</h2>
+            <Button
+              name="draw-point"
+              style={active ? 'secondary' : 'primary'}
+              type="button"
+              onClick={() => dispatch({ type: 'add-point/activate' })}
+            >
+              {active ? 'ready' : 'click to draw'}
+            </Button>
+            {geometry?.x && (
+              <>
+                <div className="mt-2">Point Coordinates</div>
+                <div
+                  className="mx-auto flex w-min whitespace-nowrap rounded px-3"
+                  style={pointStyle}
+                >
+                  <span className="text-sm">
+                    ({numberFormatter.format(geometry?.x || 0)},{' '}
+                    {numberFormatter.format(geometry?.y || 0)})
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="flex flex-row justify-between">
+            <h2 className="text-lg font-bold">Photos</h2>
+            <button
+              type="button"
+              className="ripple w-min self-center whitespace-nowrap rounded border border-white bg-transparent px-3 py-1 text-xs uppercase transition hover:bg-sky-300 hover:text-black focus:outline-none"
+              onClick={addImage}
+            >
+              + Add
+            </button>
+          </div>
+
+          <div className="flex flex-wrap justify-evenly gap-3 self-center">
+            {images.map((_, key) => (
               <div
-                className="mx-auto flex w-min whitespace-nowrap rounded px-3"
-                style={pointStyle}
-              >
-                <span className="text-sm">
-                  ({numberFormatter.format(geometry?.x || 0)},{' '}
-                  {numberFormatter.format(geometry?.y || 0)})
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="flex flex-row justify-between">
-          <h2 className="text-lg font-bold">Photos</h2>
-          <button
-            type="button"
-            className="ripple w-min self-center whitespace-nowrap rounded border border-white bg-transparent px-3 py-1 text-xs uppercase transition hover:bg-indigo-300 hover:text-black focus:outline-none"
-            onClick={addImage}
-          >
-            + Add
-          </button>
-        </div>
-
-        <div className="flex flex-wrap justify-evenly gap-3 self-center">
-          {images.map((_, key) => (
-            <div
-              key={key}
-              className="h-20 w-20 rounded border border-slate-800 bg-slate-400"
-            ></div>
-          ))}
-        </div>
-        <div className="flex items-end justify-center">
-          <Button
-            className="ripple inline-block w-min rounded border-2 border-green-500 bg-transparent px-6 py-2 text-center text-xs font-medium uppercase text-white transition hover:bg-green-300 hover:text-black focus:outline-none disabled:cursor-not-allowed disabled:border-red-500 disabled:opacity-50"
-            type="submit"
-            state={status}
-          >
-            Save
-          </Button>
-        </div>
-      </section>
+                key={key}
+                className="h-20 w-20 rounded border border-slate-800 bg-slate-400"
+              ></div>
+            ))}
+          </div>
+          <div className="flex items-end justify-center">
+            <Button
+              className="ripple inline-block w-min rounded border-2 border-green-500 bg-transparent px-6 py-2 text-center text-xs font-medium uppercase text-white transition hover:bg-green-300 hover:text-black focus:outline-none disabled:cursor-not-allowed disabled:border-red-500 disabled:opacity-50"
+              type="submit"
+              state={status}
+            >
+              Save
+            </Button>
+          </div>
+        </section>
+      </div>
     </form>
   );
 }

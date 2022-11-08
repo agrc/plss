@@ -306,7 +306,7 @@ export const GeographicHeight = () => {
             name="unit"
             render={({ field: { onChange } }) => (
               <RadioGroup
-                className="flex space-x-1 rounded-xl bg-slate-900/20 p-1"
+                className="flex space-x-1 rounded-xl bg-sky-500/20 p-1"
                 value={selected}
                 onChange={(option) => {
                   onChange(option.value);
@@ -316,35 +316,34 @@ export const GeographicHeight = () => {
                 <RadioGroup.Label className="sr-only">
                   Elevation unit
                 </RadioGroup.Label>
-                {units
-                  .map((option) => (
-                    <RadioGroup.Option
-                      key={option.value}
-                      value={option}
-                      className={({ checked }) =>
-                        clsx(
-                          'flex h-10 w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
-                          'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
-                          checked
-                            ? 'border border-indigo-600 bg-indigo-500 text-white shadow hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700'
-                            : 'text-indigo-100 hover:bg-white/[0.12] hover:text-white'
-                        )
-                      }
-                    >
-                      {({ checked }) => (
-                        <div className="text-sm">
-                          <RadioGroup.Label
-                            as="p"
-                            className={`font-medium ${
-                              checked ? 'text-white' : 'text-indigo-100'
-                            }`}
-                          >
-                            {option.label}
-                          </RadioGroup.Label>
-                        </div>
-                      )}
-                    </RadioGroup.Option>
-                  ))}
+                {units.map((option) => (
+                  <RadioGroup.Option
+                    key={option.value}
+                    value={option}
+                    className={({ checked }) =>
+                      clsx(
+                        'flex h-10 w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
+                        'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                        checked
+                          ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                          : 'text-sky-700 hover:bg-sky-600/20'
+                      )
+                    }
+                  >
+                    {({ checked }) => (
+                      <div className="text-sm">
+                        <RadioGroup.Label
+                          as="p"
+                          className={`font-medium ${
+                            checked ? 'text-white' : 'text-sky-700'
+                          }`}
+                        >
+                          {option.label}
+                        </RadioGroup.Label>
+                      </div>
+                    )}
+                  </RadioGroup.Option>
+                ))}
               </RadioGroup>
             )}
           />

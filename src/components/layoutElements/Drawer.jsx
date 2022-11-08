@@ -55,12 +55,10 @@ export default function Drawer({
       'flex',
       'flex-col',
       'drawer',
-      'bg-slate-600',
-      'text-white',
+      'bg-slate-50',
+      'text-sky-900',
       'max-w-screen',
       'shadow-2xl',
-      'border',
-      'border-indigo-700',
       'rounded-t-2xl',
       'sm:rounded-t-none',
       'px-4',
@@ -126,7 +124,7 @@ export default function Drawer({
     <aside className={classes}>
       <Logo />
       <XCircleIcon
-        className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-slate-200 hover:text-indigo-300"
+        className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
         onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}
       />
       <ErrorBoundary

@@ -43,11 +43,13 @@ LogOutButton.propTypes = {
 };
 
 const primaryClasses =
-  'h-8 border-indigo-600 bg-indigo-500 text-white hover:border-indigo-700 hover:bg-indigo-600 focus:border-indigo-500 focus:ring-indigo-600 active:bg-indigo-700';
+  'h-8 border-sky-600 bg-sky-500 text-white hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700';
 const secondaryClasses =
   'h-8 border-yellow-500 bg-yellow-400 text-black hover:border-yellow-600 hover:bg-yellow-500 focus:border-yellow-400 focus:ring-yellow-500 active:bg-yellow-600';
 const alternateClasses =
   'h-8 border-slate-400 bg-slate-100 text-slate-900 hover:text-white hover:border-slate-500 hover:bg-slate-400 focus:border-slate-500 focus:ring-slate-500 active:bg-slate-600 active:text-white';
+const linkClasses =
+  'text-amber-900 italic font-medium active:text-amber-500 focus:outline-none underline underline-offset-2 hover:underline-offset-4 decoration-amber-500 active:underline-offset-8 active:decoration-amber-600 hover:decoration-2 transition-all';
 
 const noButtonGroup = 'rounded-full';
 const buttonGroupLeft = 'border-r-0 rounded-l-full';
@@ -72,10 +74,12 @@ export const Button = ({
       disabled={state === 'disabled'}
       onClick={onClick}
       className={clsx(
-        'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
+        style !== 'link' &&
+          'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
         style === 'primary' && primaryClasses,
         style === 'secondary' && secondaryClasses,
         style === 'alternate' && alternateClasses,
+        style === 'link' && linkClasses,
         !buttonGroup && noButtonGroup,
         buttonGroup?.left && buttonGroupLeft,
         buttonGroup?.middle && buttonGroupMiddle,
@@ -121,7 +125,7 @@ Button.propTypes = {
   /**
    * The style of button
    */
-  style: PropTypes.oneOf(['primary', 'secondary', 'alternate']),
+  style: PropTypes.oneOf(['primary', 'secondary', 'alternate', 'link']),
   /**
    * The state of button
    */
@@ -149,4 +153,18 @@ Button.defaultProps = {
   inputRef: null,
   onClick: undefined,
   buttonGroup: undefined,
+};
+
+export const A = ({ href, children, target, rel }) => {
+  return (
+    <a href={href} target={target} rel={rel} className={linkClasses}>
+      {children}
+    </a>
+  );
+};
+A.propTypes = {
+  href: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  target: PropTypes.string,
+  rel: PropTypes.string,
 };

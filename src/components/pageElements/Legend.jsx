@@ -2,11 +2,12 @@ import { Fragment } from 'react';
 import { contrastColor } from 'contrast-color';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Popover, Transition } from '@headlessui/react';
+import Card from '../formElements/Card.jsx';
 
 export default function Legend() {
   return (
-    <main>
-      <h1 className="mb-6 text-2xl font-bold">Map Layer Legend</h1>
+    <Card>
+      <h1 className="mb-4 text-2xl font-bold">Map Layer Legend</h1>
       <Popover.Group
         as="section"
         className="flex flex-wrap justify-around gap-3"
@@ -45,7 +46,7 @@ export default function Legend() {
           </Popover>
         ))}
       </Popover.Group>
-    </main>
+    </Card>
   );
 }
 
