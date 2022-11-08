@@ -94,7 +94,7 @@ export default function AddPoint({
         <h1 className="text-2xl font-bold">Add a Point</h1>
         <p className="text-sm leading-tight">
           Saving points are available to help you remember points of interest
-          when out in the field collection information.
+          when out in the field collecting information.
         </p>
         <section className="mt-3 mb-4 inline-grid gap-3 overflow-x-auto">
           <h2 className="text-lg font-bold">Name the point</h2>
