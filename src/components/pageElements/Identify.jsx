@@ -11,7 +11,7 @@ import {
   ArrowDownOnSquareIcon,
   ArrowDownCircleIcon,
 } from '@heroicons/react/20/solid';
-import { Button } from '../formElements/Buttons.jsx';
+import { Button, A } from '../formElements/Buttons.jsx';
 import { getDefault } from '../helpers';
 import Spacer from '../formElements/Spacer.jsx';
 import Card from '../formElements/Card.jsx';
@@ -133,15 +133,14 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             <section className="flex w-full justify-between">
               <span className="font-semibold">County managed</span>
               <span>
-                <a
+                <A
                   href={managed_counties[graphic.attributes.managed_by]}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="under italic text-amber-500 underline visited:text-amber-600 hover:text-amber-700"
                 >
                   {getDefault(graphic.attributes.managed_by)} county surveyor
                   website
-                </a>
+                </A>
               </span>
             </section>
           )}
