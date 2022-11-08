@@ -235,12 +235,12 @@ describe('schema tests', () => {
       }
     );
   });
-  describe('geographic coordinates', () => {
-    describe('latitude', () => {});
-    describe('longitude', () => {});
-    describe('ellipsoid height', () => {});
-  });
-  describe('grid coordinates', () => {});
-  describe('images', () => {});
-  describe('existing', () => {});
+  // describe('geographic coordinates', () => {
+  //   describe('latitude', () => {});
+  //   describe('longitude', () => {});
+  //   describe('ellipsoid height', () => {});
+  // });
+  // describe('grid coordinates', () => {});
+  // describe('images', () => {});
+  // describe('existing', () => {});
 });
