@@ -232,7 +232,13 @@ export const gridCoordinatesSchema = yup.object().shape({
           scaleAndPrecision(number, { scale: 7, precision: 3 })
         ),
     })
-    .label('northing'),
+    .when('unit', {
+      is: '',
+      then: yup
+        .number()
+        .typeError('Northing is a required field.')
+        .required('Northing is a required field.'),
+    }),
   easting: yup
     .number()
     .when('unit', {
@@ -255,7 +261,13 @@ export const gridCoordinatesSchema = yup.object().shape({
           scaleAndPrecision(number, { scale: 6, precision: 3 })
         ),
     })
-    .label('easting'),
+    .when('unit', {
+      is: '',
+      then: yup
+        .number()
+        .typeError('Easting is a required field.')
+        .required('Easting is a required field.'),
+    }),
   elevation: yup
     .mixed()
     .notRequired()
