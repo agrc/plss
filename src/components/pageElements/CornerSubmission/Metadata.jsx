@@ -67,8 +67,8 @@ const Metadata = ({ dispatch }) => {
               label="Section"
               required={true}
               type="number"
-              min={1}
-              max={36}
+              min="1"
+              max="36"
               placeholder="What is the section"
               value={defaultValues.section}
               inputRef={register}

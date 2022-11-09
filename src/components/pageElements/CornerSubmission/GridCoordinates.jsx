@@ -125,31 +125,33 @@ const GridCoordinates = () => {
           <NumberedFormSection number={3} title="Location">
             <div>
               <Input
-                value={defaultValues.northing}
+                name="easting"
+                label="Easting"
                 type="number"
-                label="Northing"
+                step="0.001"
+                value={defaultValues.easting}
                 required={true}
-                name="northing"
                 inputRef={register}
               />
               <ErrorMessage
                 errors={formState.errors}
-                name="northing"
+                name="easting"
                 as={ErrorMessageTag}
               />
             </div>
             <div>
               <Input
-                value={defaultValues.easting}
+                name="northing"
+                label="Northing"
                 type="number"
-                label="Easting"
+                step="0.001"
+                value={defaultValues.northing}
                 required={true}
-                name="easting"
                 inputRef={register}
               />
               <ErrorMessage
                 errors={formState.errors}
-                name="easting"
+                name="northing"
                 as={ErrorMessageTag}
               />
             </div>

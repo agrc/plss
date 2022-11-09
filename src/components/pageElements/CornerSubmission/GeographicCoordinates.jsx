@@ -82,8 +82,8 @@ export const Latitude = () => {
                 name="northing.degrees"
                 label="Degrees"
                 placeholder="###"
-                min={37}
-                max={42}
+                min="37"
+                max="42"
                 required={true}
                 inputRef={register}
               />
@@ -100,8 +100,8 @@ export const Latitude = () => {
                 name="northing.minutes"
                 label="Minutes"
                 placeholder="##"
-                min={0}
-                max={59}
+                min="0"
+                max="59"
                 required={true}
                 inputRef={register}
               />
@@ -119,8 +119,8 @@ export const Latitude = () => {
                 label="Seconds"
                 placeholder="##.00000"
                 step="0.00001"
-                min={0}
-                max={59.99999}
+                min="0"
+                max="59.99999"
                 required={true}
                 inputRef={register}
               />
@@ -186,8 +186,8 @@ export const Longitude = () => {
               name="easting.degrees"
               label="Degrees"
               placeholder="###"
-              min={109}
-              max={114}
+              min="109"
+              max="114"
               required={true}
               inputRef={register}
             />
@@ -204,8 +204,8 @@ export const Longitude = () => {
               label="Minutes"
               name="easting.minutes"
               placeholder="##"
-              min={0}
-              max={59}
+              min="0"
+              max="59"
               required={true}
               inputRef={register}
             />
@@ -223,8 +223,8 @@ export const Longitude = () => {
               label="Seconds"
               placeholder="##.00000"
               step="0.000001"
-              min={0}
-              max={59.99999}
+              min="0"
+              max="59.99999"
               required={true}
               inputRef={register}
             />

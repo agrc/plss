@@ -90,9 +90,9 @@ Input.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   touched: PropTypes.bool,
-  step: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
+  step: PropTypes.string,
+  min: PropTypes.string,
+  max: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -106,7 +106,7 @@ Input.defaultProps = {
   left: false,
   className: null,
   touched: false,
-  step: 1,
+  step: '1',
 };
 
 export const Label = ({ children, htmlFor, required, className }) => {
