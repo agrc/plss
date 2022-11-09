@@ -38,7 +38,10 @@ const CoordinatePicker = () => {
   const meta = 'datum';
   const [state, send] = useContext(SubmissionContext);
 
-  const { datum } = state.context;
+  let { datum } = state.context;
+  if (!datum) {
+    datum = '';
+  }
 
   const { control, handleSubmit, reset, formState } = useForm({
     resolver: yupResolver(coordinatePickerSchema),
