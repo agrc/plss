@@ -140,8 +140,8 @@ export const createProjectFormData = ({ type, coordinates }) => {
       geometryType: 'esriGeometryPoint',
       geometries: [
         {
-          x: coordinates.northing,
-          y: coordinates.easting,
+          x: coordinates.easting,
+          y: coordinates.northing,
         },
       ],
     });

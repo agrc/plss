@@ -516,8 +516,8 @@ export const submissionMachine =
                     context.grid = {
                       zone: context.zone,
                       unit: 'm',
-                      northing: x,
-                      easting: y,
+                      easting: roundAccurately(x, 3),
+                      northing: roundAccurately(y, 3),
                     };
 
                     delete context.decimalDegrees;
