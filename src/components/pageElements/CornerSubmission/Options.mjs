@@ -26,7 +26,7 @@ export const grid = [
 ];
 export const units = [
   { label: 'Meters', value: 'm' },
-  { label: 'Feet', value: 'ft' },
+  { label: 'International Feet', value: 'ft' },
 ];
 export const verticalDatums = ['NAVD88', 'NGVD29'];
 export const statePlaneZones = [

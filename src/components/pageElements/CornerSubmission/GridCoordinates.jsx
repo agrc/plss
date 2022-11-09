@@ -107,7 +107,7 @@ const GridCoordinates = () => {
                   <Select
                     name={name}
                     options={units}
-                    label="Horizontal units"
+                    label="Units"
                     required={true}
                     placeholder="What are the units"
                     currentValue={defaultValues.unit}
