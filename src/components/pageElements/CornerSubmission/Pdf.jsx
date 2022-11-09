@@ -19,8 +19,8 @@ export default function MonumentPdf({ dispatch }) {
   const defaultValues = state.context.existing;
 
   const { handleSubmit, control, formState } = useForm({
-    defaultValues,
     resolver: yupResolver(existingSheetSchema),
+    defaultValues,
   });
 
   const onSubmit = (payload) => {

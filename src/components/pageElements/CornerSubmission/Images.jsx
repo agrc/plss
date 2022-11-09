@@ -8,11 +8,117 @@ import {
 } from 'reactfire';
 import { ref, uploadBytesResumable } from 'firebase/storage';
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { imagesSchema as schema } from './Schema';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Wizard from './Wizard.jsx';
+
+const limit = 10;
+const defaults = {
+  map: '',
+  monument: '',
+  'close-up': '',
+  'extra-1': '',
+  'extra-2': '',
+  'extra-3': '',
+  'extra-4': '',
+  'extra-5': '',
+  'extra-6': '',
+  'extra-7': '',
+  'extra-8': '',
+  'extra-9': '',
+  'extra-10': '',
+};
+export default function MonumentImages() {
+  const [state, send] = useContext(SubmissionContext);
+  const [extraPageCount, setExtraPageCount] = useState(1);
+
+  let defaultValues = state.context?.images;
+  if (!defaultValues) {
+    defaultValues = defaults;
+  }
+  const { handleSubmit, control } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
+
+  const onSubmit = (payload) => {
+    send({ type: 'NEXT', meta: 'images', payload });
+  };
+
+  return (
+    <>
+      <h3 className="text-2xl font-semibold">Monument Images</h3>
+      <p className="text-sm leading-none">All images are optional</p>
+      <Spacer className="my-4" />
+      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
+        <NumberedFormSection number={1} title="Map view or sketch">
+          <Controller
+            name="map"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="map" onChange={onChange} />
+            )}
+          />
+        </NumberedFormSection>
+        <NumberedFormSection number={2} title="Monument area">
+          <Controller
+            name="monument"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="monument" onChange={onChange} />
+            )}
+          />
+        </NumberedFormSection>
+        <NumberedFormSection number={3} title="Monument close-up">
+          <Controller
+            name="close-up"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <ImageUpload defaultFileName="close-up" onChange={onChange} />
+            )}
+          />
+        </NumberedFormSection>
+        <NumberedFormSection number={4} title="Extra pages">
+          {new Array(extraPageCount).fill().map((_, i) => (
+            <Controller
+              name={`extra-${i}`}
+              control={control}
+              key={i}
+              render={({ field: { onChange } }) => (
+                <ImageUpload
+                  defaultFileName={`extra-${i}`}
+                  onChange={onChange}
+                />
+              )}
+            />
+          ))}
+          {limit - extraPageCount} extra pages are allowed
+          <Button
+            style="alternate"
+            state={extraPageCount >= limit ? 'disabled' : 'idle'}
+            onClick={() => {
+              const nextPage = extraPageCount + 1;
+              if (nextPage > limit) {
+                return;
+              }
+
+              setExtraPageCount(nextPage);
+            }}
+          >
+            Add another image
+          </Button>
+        </NumberedFormSection>
+        <NumberedFormSection number={0}>
+          <Wizard back={() => send('BACK')} next={true} clear={false} />
+        </NumberedFormSection>
+      </NumberedForm>
+    </>
+  );
+}
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
   const { status, data: uploadProgress } = useStorageTask(
@@ -156,87 +262,3 @@ ImageUpload.propTypes = {
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
 };
-
-const limit = 10;
-export default function MonumentImages() {
-  const [, send] = useContext(SubmissionContext);
-  const [extraPageCount, setExtraPageCount] = useState(1);
-
-  const { handleSubmit, control } = useForm({
-    // defaultValues,
-  });
-
-  const onSubmit = (payload) => {
-    send({ type: 'NEXT', meta: 'images', payload });
-  };
-
-  return (
-    <>
-      <h3 className="text-2xl font-semibold">Monument Images</h3>
-      <p className="text-sm leading-none">All images are optional</p>
-      <Spacer className="my-4" />
-      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
-        <NumberedFormSection number={1} title="Map view or sketch">
-          <Controller
-            name="images.map"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="map" onChange={onChange} />
-            )}
-          />
-        </NumberedFormSection>
-        <NumberedFormSection number={2} title="Monument area">
-          <Controller
-            name="images.monument"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="monument" onChange={onChange} />
-            )}
-          />
-        </NumberedFormSection>
-        <NumberedFormSection number={3} title="Monument close-up">
-          <Controller
-            name="images.close-up"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="close-up" onChange={onChange} />
-            )}
-          />
-        </NumberedFormSection>
-        <NumberedFormSection number={4} title="Extra pages">
-          {new Array(extraPageCount).fill().map((_, i) => (
-            <Controller
-              name={`images.extra-${i}`}
-              control={control}
-              key={i}
-              render={({ field: { onChange } }) => (
-                <ImageUpload
-                  defaultFileName={`extra-${i}`}
-                  onChange={onChange}
-                />
-              )}
-            />
-          ))}
-          {limit - extraPageCount} extra pages are allowed
-          <Button
-            style="alternate"
-            state={extraPageCount >= limit ? 'disabled' : 'idle'}
-            onClick={() => {
-              const nextPage = extraPageCount + 1;
-              if (nextPage > limit) {
-                return;
-              }
-
-              setExtraPageCount(nextPage);
-            }}
-          >
-            Add another image
-          </Button>
-        </NumberedFormSection>
-        <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} clear={false} />
-        </NumberedFormSection>
-      </NumberedForm>
-    </>
-  );
-}
