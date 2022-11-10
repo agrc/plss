@@ -182,11 +182,9 @@ export default function PlssMap({ state, dispatch, color }) {
 
     mapView.current.when(() => {
       if (windowDimensions.width > 640) {
-        console.log('desktop padding');
         mapView.current.padding.left = 400;
         mapView.current.padding.bottom = 0;
       } else {
-        console.log('mobile padding');
         mapView.current.padding.left = 0;
         mapView.current.padding.bottom = 450;
       }
