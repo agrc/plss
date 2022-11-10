@@ -1,17 +1,17 @@
 import { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useStorage, useUser, useStorageTask } from 'reactfire';
-import { ref, uploadBytesResumable } from 'firebase/storage';
-import { useForm, Controller } from 'react-hook-form';
+import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
 import { DocumentCheckIcon } from '@heroicons/react/24/outline';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import { Button } from '../../formElements/Buttons.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
+import { Attachment } from './Images.jsx';
 import { existingSheetSchema } from './Schema';
 
 export default function MonumentPdf({ dispatch }) {
@@ -22,6 +22,8 @@ export default function MonumentPdf({ dispatch }) {
     resolver: yupResolver(existingSheetSchema),
     defaultValues,
   });
+
+  const value = useWatch({ control, name: 'pdf' });
 
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta: 'existing', payload });
@@ -36,22 +38,14 @@ export default function MonumentPdf({ dispatch }) {
           <Controller
             name="pdf"
             control={control}
-            render={({ field: { onChange } }) =>
-              defaultValues?.pdf ? (
-                <Attachment
-                  name="existing-sheet.pdf"
-                  document={defaultValues.pdf}
-                  id={state.context.blmPointId}
-                  onChange={onChange}
-                />
-              ) : (
-                <PdfUpload
-                  defaultFileName="existing-sheet"
-                  id={state.context.blmPointId}
-                  onChange={onChange}
-                />
-              )
-            }
+            render={({ field: { onChange } }) => (
+              <PdfUpload
+                defaultFileName="existing-sheet"
+                value={value}
+                id={state.context.blmPointId}
+                onChange={onChange}
+              />
+            )}
           />
           <ErrorMessage
             errors={formState.errors}
@@ -72,7 +66,7 @@ export default function MonumentPdf({ dispatch }) {
 MonumentPdf.propTypes = {
   dispatch: PropTypes.func,
 };
-function PdfUpload({ defaultFileName, onChange, id }) {
+function PdfUpload({ defaultFileName, onChange, id, value }) {
   const { data: user } = useUser();
   const storage = useStorage();
   const [uploadTask, setUploadTask] = useState();
@@ -136,7 +130,7 @@ function PdfUpload({ defaultFileName, onChange, id }) {
     setUploadTask(task);
   };
 
-  return (
+  return !value && status !== 'success' ? (
     <>
       <input
         type="file"
@@ -163,12 +157,38 @@ function PdfUpload({ defaultFileName, onChange, id }) {
         </div>
       )}
     </>
+  ) : (
+    <>
+      {(status === 'success' || status === 'error') && (
+        <div className="flex flex-col gap-2">
+          <Attachment
+            onClick={async () => {
+              try {
+                await deleteObject(fileReference);
+                onChange('');
+                setStatus('idle');
+                message.current = '';
+              } catch {
+                setStatus('error');
+                message.current = 'This file could not be deleted.';
+              }
+            }}
+          />
+          {message.current && (
+            <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
+              {message.current}
+            </p>
+          )}
+        </div>
+      )}
+    </>
   );
 }
 PdfUpload.propTypes = {
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
   id: PropTypes.string,
+  value: PropTypes.string,
 };
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
@@ -192,18 +212,4 @@ const UploadProgress = ({ uploadTask, storageRef }) => {
 UploadProgress.propTypes = {
   uploadTask: PropTypes.object.isRequired,
   storageRef: PropTypes.object.isRequired,
-};
-
-function Attachment({ name }) {
-  return (
-    <div className="flex justify-between">
-      <div>{name}</div>
-      <Button style="secondary">Remove</Button>
-    </div>
-  );
-}
-Attachment.propTypes = {
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  id: PropTypes.string,
 };

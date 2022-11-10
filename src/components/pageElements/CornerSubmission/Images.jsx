@@ -61,10 +61,11 @@ export default function MonumentImages() {
           <Controller
             name="map"
             control={control}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, name } }) => (
               <ImageUpload
-                value={fields.map}
-                defaultFileName="map"
+                defaultFileName={name}
+                value={fields[name]}
+                id={state.context.blmPointId}
                 onChange={onChange}
               />
             )}
@@ -74,8 +75,13 @@ export default function MonumentImages() {
           <Controller
             name="monument"
             control={control}
-            render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="monument" onChange={onChange} />
+            render={({ field: { onChange, name } }) => (
+              <ImageUpload
+                defaultFileName={name}
+                value={fields[name]}
+                id={state.context.blmPointId}
+                onChange={onChange}
+              />
             )}
           />
         </NumberedFormSection>
@@ -83,8 +89,13 @@ export default function MonumentImages() {
           <Controller
             name="close-up"
             control={control}
-            render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="close-up" onChange={onChange} />
+            render={({ field: { onChange, name } }) => (
+              <ImageUpload
+                defaultFileName={name}
+                value={fields[name]}
+                id={state.context.blmPointId}
+                onChange={onChange}
+              />
             )}
           />
         </NumberedFormSection>
@@ -94,9 +105,11 @@ export default function MonumentImages() {
               name={`extra-${i}`}
               control={control}
               key={i}
-              render={({ field: { onChange } }) => (
+              render={({ field: { onChange, name } }) => (
                 <ImageUpload
-                  defaultFileName={`extra-${i}`}
+                  defaultFileName={name}
+                  value={fields[name]}
+                  id={state.context.blmPointId}
                   onChange={onChange}
                 />
               )}
@@ -172,8 +185,7 @@ ImagePreview.propTypes = {
   storagePath: PropTypes.string.isRequired,
 };
 
-function ImageUpload({ defaultFileName, onChange, value }) {
-  const [state] = useContext(SubmissionContext);
+function ImageUpload({ defaultFileName, onChange, id, value }) {
   const { data: user } = useUser();
   const storage = useStorage();
   const [uploadTask, setUploadTask] = useState();
@@ -191,7 +203,7 @@ function ImageUpload({ defaultFileName, onChange, value }) {
       fileName = `${defaultFileName}.${ext}`;
     }
 
-    const path = `submitters/${user.uid}/new/${state.context.blmPointId}/${fileName}`;
+    const path = `submitters/${user.uid}/new/${id}/${fileName}`;
     const fileRef = ref(storage, path);
 
     setFileReference(fileRef);
@@ -294,17 +306,16 @@ ImageUpload.propTypes = {
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
   value: PropTypes.string,
+  id: PropTypes.string,
 };
 
-function Attachment({ onClick }) {
-  return (
-    <div className="flex justify-between">
-      <Button style="secondary" onClick={onClick}>
-        Remove
-      </Button>
-    </div>
-  );
-}
+export const Attachment = ({ onClick }) => (
+  <div className="flex justify-between">
+    <Button style="secondary" onClick={onClick}>
+      Remove
+    </Button>
+  </div>
+);
 Attachment.propTypes = {
   onClick: PropTypes.func,
 };

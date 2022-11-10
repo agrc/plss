@@ -29,8 +29,8 @@ service firebase.storage {
       allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
     }
     match /submitters/{uid}/existing/{allPaths=**} {
-      allow list, delete: if false;
-      allow get: if isAuthenticated() && isCurrentUser(uid);
+      allow list: if false;
+      allow delete, get: if isAuthenticated() && isCurrentUser(uid);
       allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
     }
     match /tiesheets/{allPaths=**} {
