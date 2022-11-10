@@ -1,11 +1,10 @@
-import { useContext, useState, useRef } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStorage, useUser, useStorageTask } from 'reactfire';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
-import { DocumentCheckIcon } from '@heroicons/react/24/outline';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
@@ -72,7 +71,7 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
   const [uploadTask, setUploadTask] = useState();
   const [fileReference, setFileReference] = useState();
   const [status, setStatus] = useState('idle');
-  const message = useRef();
+  const [error, setError] = useState('');
 
   const uploadImage = (event) => {
     const fileList = event.target.files;
@@ -89,6 +88,7 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
 
     setFileReference(fileRef);
     setStatus('loading');
+    setError('');
 
     const task = uploadBytesResumable(fileRef, fileToUpload, {
       contentType: fileToUpload.type,
@@ -104,25 +104,29 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
         try {
           if (task.snapshot.totalBytes > 5 * 1024 * 1024) {
             setStatus('error');
-            message.current = `You can only upload pdf's smaller than 5MB. That image was ${(
-              task.snapshot.totalBytes /
-              1024 /
-              1024
-            ).toFixed(2)}MB.`;
+            setError(
+              `You can only upload pdf's smaller than 5MB. That image was ${(
+                task.snapshot.totalBytes /
+                1024 /
+                1024
+              ).toFixed(2)}MB.`
+            );
           } else if (task.snapshot.metadata.contentType !== 'application/pdf') {
             setStatus('error');
-            message.current = `You can only upload pdf's. That was a ${
-              task.snapshot.metadata.contentType
-                ? task.snapshot.metadata.contentType
-                : 'unknown type'
-            }.`;
+            setError(
+              `You can only upload pdf's. That was a ${
+                task.snapshot.metadata.contentType
+                  ? task.snapshot.metadata.contentType
+                  : 'unknown type'
+              }.`
+            );
           } else {
             setStatus('error');
-            message.current = 'Permission denied. Please try again.';
+            setError('Permission denied. Please try again.');
           }
         } catch {
           setStatus('error');
-          message.current = 'Permission denied. Please try again.';
+          setError('Permission denied. Please try again.');
         }
         setUploadTask(undefined);
       });
@@ -146,15 +150,8 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
       )}
       {status === 'error' && (
         <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
-          {message.current}
+          {error}
         </p>
-      )}
-      {status === 'success' && (
-        <div className="inline-flex items-center justify-center">
-          <span className="h-8 w-8 text-green-300">
-            <DocumentCheckIcon />
-          </span>
-        </div>
       )}
     </>
   ) : (
@@ -167,16 +164,16 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
                 await deleteObject(fileReference);
                 onChange('');
                 setStatus('idle');
-                message.current = '';
+                setError('');
               } catch {
                 setStatus('error');
-                message.current = 'This file could not be deleted.';
+                setError('This file could not be deleted.');
               }
             }}
           />
-          {message.current && (
+          {error && (
             <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
-              {message.current}
+              {error}
             </p>
           )}
         </div>
