@@ -282,7 +282,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Degrees must be a whole number from 37 to 42.'
+            'Degrees must be a whole number from 36 to 42.'
           );
         });
       });

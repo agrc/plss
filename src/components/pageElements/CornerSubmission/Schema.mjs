@@ -154,7 +154,7 @@ export const latitudeSchema = yup.object().shape({
   northing: yup
     .object()
     .shape({
-      degrees: degrees(37, 42),
+      degrees: degrees(36, 42),
       minutes,
       seconds,
     })

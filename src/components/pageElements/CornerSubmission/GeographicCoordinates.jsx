@@ -82,7 +82,7 @@ export const Latitude = () => {
                 name="northing.degrees"
                 label="Degrees"
                 placeholder="###"
-                min="37"
+                min="36"
                 max="42"
                 required={true}
                 inputRef={register}
