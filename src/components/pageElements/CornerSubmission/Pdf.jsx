@@ -27,8 +27,6 @@ export default function MonumentPdf({ dispatch }) {
     send({ type: 'NEXT', meta: 'existing', payload });
   };
 
-  const deleteAttachment = () => {};
-
   return (
     <>
       <h3 className="text-2xl font-semibold">Monument Sheet</h3>
@@ -65,7 +63,6 @@ export default function MonumentPdf({ dispatch }) {
           <Wizard
             next={true}
             back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
-            clear={deleteAttachment}
           />
         </NumberedFormSection>
       </NumberedForm>
