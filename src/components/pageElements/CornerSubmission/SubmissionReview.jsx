@@ -6,6 +6,13 @@ import { useFunctions } from 'reactfire';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers/index.mjs';
+import Card from '../../formElements/Card.jsx';
+import {
+  geographic as geographicOptions,
+  grid as gridOptions,
+} from './Options.mjs';
+import { ImagePreview } from './Images.jsx';
+import { A } from '../../formElements/Buttons.jsx';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);
@@ -41,6 +48,11 @@ const Review = () => {
           grid={state.context.grid}
           geographic={state.context.geographic}
         />
+        {state.context.type === 'existing' ? (
+          <AttachmentReview pdf={state.context.existing.pdf} />
+        ) : (
+          <ImagesReview images={state.context.images} />
+        )}
       </div>
       <div className="mt-8 flex justify-center">
         <Wizard
@@ -63,26 +75,31 @@ const MetadataReview = ({
 }) => {
   return (
     <>
-      <div className="mb-4 flex flex-col text-center">
-        <h2 className="text-xl font-bold uppercase">Corner submission for</h2>
-        <p className="text-lg font-bold">{blmPointId}</p>
+      <div className="mb-1 flex flex-col text-center">
+        <h1 className="text-2xl font-bold uppercase">
+          Corner Submission Review
+        </h1>
+        <h2 className="ml-2 text-xl font-light">{blmPointId}</h2>
       </div>
-      <div className="flex flex-col">
-        <span className="font-semibold">Monument Status</span>
-        <span className="ml-4">{keyMap.status(status)}</span>
-      </div>
-      <div className="flex flex-col">
-        <span className="font-semibold">Accuracy</span>
-        <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
-      </div>
-      <div className="flex flex-col">
-        <span className="font-semibold">Monument Description</span>
-        <span className="ml-4">{description}</span>
-      </div>
-      <div className="flex flex-col">
-        <span className="font-semibold">General Notes</span>
-        <span className="ml-4">{notes}</span>
-      </div>
+      <Card>
+        <h3 className="-mt-2 text-lg font-bold">Metadata</h3>
+        <div className="flex justify-between">
+          <span className="font-semibold">Monument Status</span>
+          <span className="ml-4">{keyMap.status(status)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="font-semibold">Accuracy</span>
+          <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="font-semibold">Monument Description</span>
+          <span className="ml-4">{description}</span>
+        </div>
+        <div className="flex flex-col">
+          <span className="font-semibold">General Notes</span>
+          <span className="ml-4">{notes}</span>
+        </div>
+      </Card>
     </>
   );
 };
@@ -99,18 +116,40 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
     return null;
   }
 
+  let calculated = geographicOptions[0].label;
   const [type] = datum.split('-');
+
+  if (type === 'geographic') {
+    calculated = gridOptions[0].label;
+  }
+
+  const coordinates = [];
+  if (type === 'grid') {
+    coordinates[0] = <GridCoordinateReview grid={grid} />;
+    coordinates[1] = <GeographicCoordinateReview geographic={geographic} />;
+  } else {
+    coordinates[0] = <GridCoordinateReview grid={grid} />;
+    coordinates[1] = <GeographicCoordinateReview geographic={geographic} />;
+  }
 
   return (
     <>
-      <div className="flex justify-between">
-        <span className="font-semibold">Datum</span>
-        <span>{formatDatum(datum)}</span>
-      </div>
-      {type === 'grid' && <GridCoordinateReview grid={grid} />}
-      {type === 'geographic' && (
-        <GeographicCoordinateReview geographic={geographic} />
-      )}
+      <Card>
+        <h3 className="-mt-2 text-lg font-bold">Primary Coordinates</h3>
+        <div className="flex justify-between">
+          <span className="font-semibold">Datum</span>
+          <span>{formatDatum(datum)}</span>
+        </div>
+        {coordinates[0]}
+        <h3 className="py-2 text-lg font-bold text-slate-400">
+          Calculated Coordinates
+        </h3>
+        <div className="flex justify-between">
+          <span className="font-semibold">Datum</span>
+          <span>{calculated}</span>
+        </div>
+        {coordinates[1]}
+      </Card>
     </>
   );
 };
@@ -176,8 +215,10 @@ const GeographicCoordinateReview = ({ geographic }) => (
   <>
     <div className="flex justify-between">
       <span className="font-semibold">Coordinates</span>
-      <span>{`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}</span>
-      <span>{`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}</span>
+      <span>
+        {`${geographic?.northing?.degrees}° ${geographic?.northing?.minutes}' ${geographic?.northing?.seconds}", `}
+        {`${geographic?.easting?.degrees}° ${geographic?.easting?.minutes}' ${geographic?.easting?.seconds}"`}
+      </span>
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Ellipsoid Height</span>
@@ -200,6 +241,49 @@ GeographicCoordinateReview.propTypes = {
     elevation: PropTypes.number,
     unit: PropTypes.string,
   }),
+};
+
+const ImagesReview = ({ images }) => {
+  return (
+    <Card>
+      <h3 className="-mt-2 text-lg font-bold">Images</h3>
+      {Object.values(images).filter((x) => x).length > 0 ? (
+        Object.entries(images).map((image) => {
+          const [key, value] = image;
+          if (!value) {
+            return;
+          }
+
+          return (
+            <div key={key} className="flex flex-col items-center">
+              <ImagePreview storagePath={value} />
+            </div>
+          );
+        })
+      ) : (
+        <p className="text-center">This submission contains no images.</p>
+      )}
+    </Card>
+  );
+};
+ImagesReview.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string),
+};
+
+const AttachmentReview = ({ pdf }) => {
+  return (
+    <Card>
+      <h3 className="-mt-2 text-lg font-bold">Tiesheet</h3>
+      {pdf && (
+        <A href={pdf} target="_blank" rel="noopener noreferrer">
+          Uploaded Tiesheet
+        </A>
+      )}
+    </Card>
+  );
+};
+AttachmentReview.propTypes = {
+  pdf: PropTypes.string,
 };
 
 export default Review;

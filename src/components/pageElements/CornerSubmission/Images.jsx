@@ -144,7 +144,7 @@ UploadProgress.propTypes = {
   storageRef: PropTypes.object.isRequired,
 };
 
-const ImagePreview = ({ storagePath }) => {
+export const ImagePreview = ({ storagePath }) => {
   const storage = useStorage();
 
   const { data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
@@ -153,7 +153,7 @@ const ImagePreview = ({ storagePath }) => {
     <div className="flex flex-col rounded border border-slate-400 bg-white px-2 text-slate-400 shadow">
       <img
         src={imageURL}
-        alt="demo download"
+        alt="upload preview"
         className="max-w-[200px] rounded-t"
       />
       <span className="w-full flex-1 select-none border-t py-1 text-center text-sm italic">
