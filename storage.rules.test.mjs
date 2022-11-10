@@ -126,15 +126,6 @@ describe('storage', () => {
     );
   });
 
-  it('disallows deletes for authorized users to their folders', async () => {
-    const storage = testEnv.authenticatedContext(userId).storage();
-    const { submitter, user, point } = getPaths(storage);
-
-    await assertFails(submitter.delete());
-    await assertFails(user.delete());
-    await assertFails(point.delete());
-  });
-
   it('disallows files greater than 5MB', async () => {
     const storage = testEnv.authenticatedContext(userId).storage();
 
