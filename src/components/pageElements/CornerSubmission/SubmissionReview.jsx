@@ -267,7 +267,7 @@ const ImagesReview = ({ images }) => {
   );
 };
 ImagesReview.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string),
+  images: PropTypes.object,
 };
 
 const AttachmentReview = ({ pdf }) => {
