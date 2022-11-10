@@ -151,7 +151,7 @@ function PdfUpload({ defaultFileName, onChange, id }) {
         <UploadProgress uploadTask={uploadTask} storageRef={fileReference} />
       )}
       {status === 'error' && (
-        <p className="m-4 rounded border p-4 text-center text-amber-300">
+        <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
           {message.current}
         </p>
       )}
