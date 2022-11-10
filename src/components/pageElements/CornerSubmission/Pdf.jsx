@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStorage, useUser, useStorageTask } from 'reactfire';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
@@ -72,6 +72,12 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
   const [fileReference, setFileReference] = useState();
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setFileReference(ref(storage, value));
+    }
+  }, [value, storage]);
 
   const uploadImage = (event) => {
     const fileList = event.target.files;
@@ -156,7 +162,7 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
     </>
   ) : (
     <>
-      {(status === 'success' || status === 'error') && (
+      {value && (
         <div className="flex flex-col gap-2">
           <Attachment
             onClick={async () => {

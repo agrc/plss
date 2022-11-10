@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   useStorage,
@@ -40,6 +40,7 @@ export default function MonumentImages() {
   if (!defaultValues) {
     defaultValues = defaults;
   }
+
   const { handleSubmit, control } = useForm({
     resolver: yupResolver(schema),
     defaultValues,
@@ -165,7 +166,6 @@ UploadProgress.propTypes = {
 
 export const ImagePreview = ({ storagePath }) => {
   const storage = useStorage();
-
   const { data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
 
   return (
@@ -192,6 +192,12 @@ function ImageUpload({ defaultFileName, onChange, id, value }) {
   const [fileReference, setFileReference] = useState();
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      setFileReference(ref(storage, value));
+    }
+  }, [value, storage]);
 
   const uploadImage = (event) => {
     const fileList = event.target.files;
@@ -276,9 +282,11 @@ function ImageUpload({ defaultFileName, onChange, id, value }) {
     </>
   ) : (
     <>
-      {(status === 'success' || status === 'error') && (
+      {value && (
         <div className="flex flex-col items-center gap-2">
-          <ImagePreview storagePath={fileReference.fullPath} />
+          {fileReference?.fullPath && (
+            <ImagePreview storagePath={fileReference.fullPath} />
+          )}
           <Attachment
             onClick={async () => {
               try {
