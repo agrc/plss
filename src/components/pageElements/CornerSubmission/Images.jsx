@@ -6,8 +6,8 @@ import {
   useStorageDownloadURL,
   useStorageTask,
 } from 'reactfire';
-import { ref, uploadBytesResumable } from 'firebase/storage';
-import { useForm, Controller } from 'react-hook-form';
+import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { imagesSchema as schema } from './Schema';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
@@ -45,6 +45,8 @@ export default function MonumentImages() {
     defaultValues,
   });
 
+  const fields = useWatch({ control });
+
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta: 'images', payload });
   };
@@ -60,7 +62,11 @@ export default function MonumentImages() {
             name="map"
             control={control}
             render={({ field: { onChange } }) => (
-              <ImageUpload defaultFileName="map" onChange={onChange} />
+              <ImageUpload
+                value={fields.map}
+                defaultFileName="map"
+                onChange={onChange}
+              />
             )}
           />
         </NumberedFormSection>
@@ -113,7 +119,7 @@ export default function MonumentImages() {
           </Button>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} clear={false} />
+          <Wizard back={() => send('BACK')} next={true} />
         </NumberedFormSection>
       </NumberedForm>
     </>
@@ -166,7 +172,7 @@ ImagePreview.propTypes = {
   storagePath: PropTypes.string.isRequired,
 };
 
-function ImageUpload({ defaultFileName, onChange }) {
+function ImageUpload({ defaultFileName, onChange, value }) {
   const [state] = useContext(SubmissionContext);
   const { data: user } = useUser();
   const storage = useStorage();
@@ -231,7 +237,7 @@ function ImageUpload({ defaultFileName, onChange }) {
     setUploadTask(task);
   };
 
-  return (
+  return !value && status !== 'success' ? (
     <>
       <input
         type="file"
@@ -246,7 +252,7 @@ function ImageUpload({ defaultFileName, onChange }) {
         <UploadProgress uploadTask={uploadTask} storageRef={fileReference} />
       )}
       {status === 'error' && (
-        <p className="m-4 rounded border p-4 text-center text-amber-300">
+        <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
           {message.current}
         </p>
       )}
@@ -256,9 +262,49 @@ function ImageUpload({ defaultFileName, onChange }) {
         </div>
       )}
     </>
+  ) : (
+    <>
+      {(status === 'success' || status === 'error') && (
+        <div className="flex flex-col items-center gap-2">
+          <ImagePreview storagePath={fileReference.fullPath} />
+          <Attachment
+            onClick={async () => {
+              try {
+                await deleteObject(fileReference);
+                onChange('');
+                setStatus('idle');
+                message.current = '';
+              } catch {
+                setStatus('error');
+                message.current = 'This file could not be deleted.';
+              }
+            }}
+          />
+          {message.current && (
+            <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
+              {message.current}
+            </p>
+          )}
+        </div>
+      )}
+    </>
   );
 }
 ImageUpload.propTypes = {
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
+  value: PropTypes.string,
+};
+
+function Attachment({ onClick }) {
+  return (
+    <div className="flex justify-between">
+      <Button style="secondary" onClick={onClick}>
+        Remove
+      </Button>
+    </div>
+  );
+}
+Attachment.propTypes = {
+  onClick: PropTypes.func,
 };
