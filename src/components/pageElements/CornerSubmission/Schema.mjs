@@ -51,7 +51,7 @@ const gridMessages = {
   datum: 'Vertical datum is a required field.',
 };
 const imageMessage =
-  'Images must be one of the following types: jpeg, jpg, png, tiff.';
+  'Images must be jpeg or png.';
 const pdfMessage = 'An existing tiesheet PDF is required.';
 
 export const metadataSchema = yup.object().shape({
