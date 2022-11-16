@@ -192,7 +192,7 @@ export const ImagePreview = ({ storagePath }) => {
   const { data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
 
   return (
-    <div className="flex flex-col rounded border border-slate-400 bg-white px-2 text-slate-400 shadow">
+    <div className="flex flex-col rounded border border-slate-400 bg-white text-slate-400 shadow">
       <img
         src={imageURL}
         alt="upload preview"
