@@ -8,11 +8,13 @@ import {
 } from 'reactfire';
 import { deleteObject, ref, uploadBytesResumable } from 'firebase/storage';
 import { useForm, useWatch, Controller } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { imagesSchema as schema } from './Schema';
+import { imagesSchema as schema } from './Schema.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Wizard from './Wizard.jsx';
 
@@ -41,7 +43,7 @@ export default function MonumentImages() {
     defaultValues = defaults;
   }
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, formState } = useForm({
     resolver: yupResolver(schema),
     defaultValues,
   });
@@ -71,6 +73,11 @@ export default function MonumentImages() {
               />
             )}
           />
+          <ErrorMessage
+            errors={formState.errors}
+            name="map"
+            as={ErrorMessageTag}
+          />
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Monument area">
           <Controller
@@ -84,6 +91,11 @@ export default function MonumentImages() {
                 onChange={onChange}
               />
             )}
+          />
+          <ErrorMessage
+            errors={formState.errors}
+            name="monument"
+            as={ErrorMessageTag}
           />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
@@ -99,22 +111,33 @@ export default function MonumentImages() {
               />
             )}
           />
+          <ErrorMessage
+            errors={formState.errors}
+            name="close-up"
+            as={ErrorMessageTag}
+          />
         </NumberedFormSection>
         <NumberedFormSection number={4} title="Extra pages">
           {new Array(extraPageCount).fill().map((_, i) => (
-            <Controller
-              name={`extra-${i}`}
-              control={control}
-              key={i}
-              render={({ field: { onChange, name } }) => (
-                <ImageUpload
-                  defaultFileName={name}
-                  value={fields[name]}
-                  id={state.context.blmPointId}
-                  onChange={onChange}
-                />
-              )}
-            />
+            <span key={i}>
+              <Controller
+                name={`extra-${i}`}
+                control={control}
+                render={({ field: { onChange, name } }) => (
+                  <ImageUpload
+                    defaultFileName={name}
+                    value={fields[name]}
+                    id={state.context.blmPointId}
+                    onChange={onChange}
+                  />
+                )}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name={`extra-${i}`}
+                as={ErrorMessageTag}
+              />
+            </span>
           ))}
           {limit - extraPageCount} extra pages are allowed
           <Button
