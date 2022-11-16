@@ -81,7 +81,7 @@ export const Latitude = () => {
                 type="number"
                 name="northing.degrees"
                 label="Degrees"
-                placeholder="###"
+                placeholder="##"
                 min="36"
                 max="42"
                 required={true}
