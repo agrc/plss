@@ -11,9 +11,7 @@ service firebase.storage {
   }
   function isImage() {
     return request.resource.contentType.matches('image/png') ||
-        request.resource.contentType.matches('image/jpeg') ||
-        request.resource.contentType.matches('image/jpg') ||
-        request.resource.contentType.matches('image/gif');
+        request.resource.contentType.matches('image/jpeg');
   }
   function isPdf() {
     return request.resource.contentType.matches('application/pdf');
