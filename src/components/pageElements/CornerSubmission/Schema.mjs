@@ -50,8 +50,7 @@ const gridMessages = {
   elevationMeters: 'Elevation (meters) must be a number from 600 to 4300.',
   datum: 'Vertical datum is a required field.',
 };
-const imageMessage =
-  'Images must be one of the following types: jpeg, jpg, png, tiff.';
+const imageMessage = 'Images must be jpeg or png.';
 const pdfMessage = 'An existing tiesheet PDF is required.';
 
 export const metadataSchema = yup.object().shape({
@@ -313,7 +312,7 @@ export const existingSheetSchema = yup.object().shape({
   pdf: yup
     .string()
     .typeError(pdfMessage)
-    .matches(/submitters\/.+\/existing\/.+\/existing-sheet.pdf/, {
+    .matches(/\/submitters\/.+\/existing\/.+\/existing-sheet\.pdf$/, {
       message: pdfMessage,
     })
     .required(pdfMessage),
@@ -323,91 +322,91 @@ export const imagesSchema = yup.object().shape({
   map: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/map.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/map\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   monument: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/monument.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/monument\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'close-up': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/close-up.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/close-up\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-1': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-1.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-1\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-2': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-2.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-2\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-3': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-3.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-3\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-4': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-4.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-4\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-5': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-5.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-5\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-6': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-6.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-6\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-7': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-7.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-7\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-8': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-8.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-8\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-9': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-9.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-9\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-10': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-10.png/, {
+    .matches(/\/submitters\/.+\/new\/.+\/extra-10\.(png|jpeg)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),

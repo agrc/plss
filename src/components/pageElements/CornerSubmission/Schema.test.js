@@ -794,29 +794,43 @@ describe('schema tests', () => {
     });
   });
   describe('images', () => {
-    test.each([
-      ['garbage'],
-      ['/submitters/abc/existing/cdf/map.png'],
-      ['/submitters/abc/new/cdf/maps.pdf'],
-      ['/submitters/new/cdf/map.pdf'],
-      ['/submitters/new/map.pdf'],
-      [0],
-      [100],
-      [10.1],
-    ])('%j is not a valid image', (map) => {
-      let result;
+    describe('new', () => {
+      test.each([
+        ['garbage'],
+        ['/submitters/abc/existing/cdf/map.png'],
+        ['/submitters/abc/new/cdf/maps.pdf'],
+        ['/submitters/abc/new/cdf/maps.tiff'],
+        ['/submitters/abc/new/cdf/maps.gif'],
+        ['/submitters/new/cdf/map.pdf'],
+        ['/submitters/new/map.pdf'],
+        [0],
+        [100],
+        [10.1],
+      ])('%j is not a valid image', (map) => {
+        let result;
 
-      try {
-        schemas.imagesSchema.validateSync({
+        try {
+          schemas.imagesSchema.validateSync({
+            map,
+          });
+        } catch (error) {
+          result = error;
+        }
+
+        expect(result.errors[0]).toBe('Images must be jpeg or png.');
+      });
+      test.each([
+        '/submitters/abc/new/cdf/map.png',
+        '/submitters/abc/new/cdf/map.jpeg',
+      ])('accepts a valid image', (map) => {
+        const result = schemas.imagesSchema.validateSync({
           map,
         });
-      } catch (error) {
-        result = error;
-      }
 
-      expect(result.errors[0]).toBe(
-        'Images must be one of the following types: jpeg, jpg, png, tiff.'
-      );
+        expect(result).toEqual({
+          map,
+        });
+      });
     });
   });
   describe('existing', () => {
