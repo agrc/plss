@@ -50,11 +50,16 @@ const Review = () => {
   return (
     <>
       <div className="grid gap-2">
+        <div className="mb-1 flex flex-col text-center">
+          <h1 className="text-2xl font-bold uppercase">
+            Corner Submission Review
+          </h1>
+          <h2 className="ml-2 text-xl font-light">
+            {state.context.blmPointId}
+          </h2>
+        </div>
         {state.context.type !== 'existing' && (
-          <MetadataReview
-            blmPointId={state.context.blmPointId}
-            {...state.context.metadata}
-          />
+          <MetadataReview {...state.context.metadata} />
         )}
         <CoordinateReview
           datum={state.context.datum}
@@ -84,45 +89,30 @@ const Review = () => {
   );
 };
 
-const MetadataReview = ({
-  blmPointId,
-  status,
-  notes,
-  description,
-  accuracy,
-}) => {
+const MetadataReview = ({ status, notes, description, accuracy }) => {
   return (
-    <>
-      <div className="mb-1 flex flex-col text-center">
-        <h1 className="text-2xl font-bold uppercase">
-          Corner Submission Review
-        </h1>
-        <h2 className="ml-2 text-xl font-light">{blmPointId}</h2>
+    <Card>
+      <h3 className="-mt-2 text-lg font-bold">Metadata</h3>
+      <div className="flex justify-between">
+        <span className="font-semibold">Monument Status</span>
+        <span className="ml-4">{keyMap.status(status)}</span>
       </div>
-      <Card>
-        <h3 className="-mt-2 text-lg font-bold">Metadata</h3>
-        <div className="flex justify-between">
-          <span className="font-semibold">Monument Status</span>
-          <span className="ml-4">{keyMap.status(status)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-semibold">Accuracy</span>
-          <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-semibold">Monument Description</span>
-          <span className="ml-4">{description}</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-semibold">General Notes</span>
-          <span className="ml-4">{notes}</span>
-        </div>
-      </Card>
-    </>
+      <div className="flex justify-between">
+        <span className="font-semibold">Accuracy</span>
+        <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">Monument Description</span>
+        <span className="ml-4">{description}</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-semibold">General Notes</span>
+        <span className="ml-4">{notes}</span>
+      </div>
+    </Card>
   );
 };
 MetadataReview.propTypes = {
-  blmPointId: PropTypes.string,
   status: PropTypes.string,
   notes: PropTypes.string,
   description: PropTypes.string,
@@ -131,7 +121,12 @@ MetadataReview.propTypes = {
 
 const CoordinateReview = ({ datum, grid, geographic }) => {
   if (!datum) {
-    return null;
+    return (
+      <Card>
+        <h3 className="-mt-2 text-lg font-bold">Primary Coordinates</h3>
+        <div>No coordinates were specified with this submission</div>
+      </Card>
+    );
   }
 
   let calculated = geographicOptions[0].label;
@@ -172,7 +167,7 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
   );
 };
 CoordinateReview.propTypes = {
-  datum: PropTypes.string.isRequired,
+  datum: PropTypes.string,
   grid: PropTypes.shape({
     zone: PropTypes.string,
     northing: PropTypes.number,
@@ -294,17 +289,19 @@ const AttachmentReview = ({ path }) => {
 
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">Tiesheet</h3>
-      <A href={data} target="_blank" rel="noopener noreferrer">
-        Uploaded Tiesheet
-      </A>
-      {path && (
-        <div className="h-[400px] max-w-[300px] justify-self-center">
-          <object data={data} type="application/pdf" width="300" height="400">
+      <h3 className="-mt-2 text-lg font-bold">
+        Existing Monument Record Sheet
+      </h3>
+      <div className="h-[400px] max-w-[300px] justify-self-center">
+        <A href={data} target="_blank" rel="noopener noreferrer">
+          Uploaded Tiesheet
+        </A>
+        {path && (
+          <object data={data} type="application/pdf" width="300" height="375">
             PDF preview
           </object>
-        </div>
-      )}
+        )}
+      </div>
     </Card>
   );
 };
