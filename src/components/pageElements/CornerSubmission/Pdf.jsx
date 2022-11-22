@@ -98,6 +98,7 @@ function PdfUpload({ defaultFileName, onChange, id, value }) {
 
     const task = uploadBytesResumable(fileRef, fileToUpload, {
       contentType: fileToUpload.type,
+      contentDisposition: 'inline',
     });
 
     task
