@@ -322,91 +322,91 @@ export const imagesSchema = yup.object().shape({
   map: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/map\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/map\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   monument: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/monument\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/monument\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'close-up': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/close-up\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/close-up\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-1': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-1\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-1\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-2': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-2\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-2\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-3': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-3\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-3\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-4': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-4\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-4\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-5': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-5\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-5\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-6': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-6\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-6\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-7': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-7\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-7\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-8': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-8\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-8\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-9': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-9\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-9\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   'extra-10': yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra-10\.(png|jpeg)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra-10\.(png|jpe?g)$/, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
