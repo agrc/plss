@@ -1,11 +1,16 @@
-import { https, logger } from 'firebase-functions';
-import admin from 'firebase-admin';
+import { auth, https, logger } from 'firebase-functions/v1';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 import PdfPrinter from 'pdfmake';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const bucket = getStorage().bucket();
+const db = getFirestore();
+const oneDay = 1000 * 60 * 60 * 24;
 
 const printer = new PdfPrinter({
   Roboto: {
@@ -41,31 +46,35 @@ const span = (int) => {
   return Array(int).fill(empty);
 };
 
-const generatePdfDraft = https.onRequest(async (request, response) => {
-  if (request.method !== 'POST') {
-    return response.send().status(404);
-  }
+const createPdfDocument = (definition) => {
+  const promise = new Promise((resolve, reject) => {
+    const chunks = [];
+    const pdf = printer.createPdfKitDocument(definition);
 
-  const authorization = request.get('Authorization') ?? '';
-  let tokenId;
-  if (authorization.includes('Bearer')) {
-    tokenId = authorization.split('Bearer ')[1].trim();
-  }
+    pdf.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
 
-  let token;
-  try {
-    token = await admin.auth().verifyIdToken(tokenId);
-  } catch (error) {
+    pdf.on('end', () => {
+      resolve(Buffer.concat(chunks));
+    });
+
+    pdf.on('error', (error) => {
+      reject(error);
+    });
+
+    pdf.end();
+  });
+
+  return promise;
+};
+
+const postGeneratePreview = https.onCall(async (data, context) => {
+  if (!context.auth) {
     logger.warn('unauthenticated request', { structuredData: true });
 
-    return response.status(401).json('You must log in');
+    throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
-
-  const data = request.body.data;
-
-  logger.info('creating pdf preview for', token.email, data, {
-    structuredData: true,
-  });
 
   var definition = {
     info: {
@@ -119,7 +128,7 @@ const generatePdfDraft = https.onRequest(async (request, response) => {
                 style: vars.value,
               },
               {
-                text: token.name,
+                text: context.auth.token.name,
                 style: vars.value,
                 colSpan: 2,
               },
@@ -518,30 +527,52 @@ const generatePdfDraft = https.onRequest(async (request, response) => {
     },
   };
 
-  response.setHeader('Content-Type', 'application/pdf');
-  response.setHeader(
-    'Content-disposition',
-    `attachment; filename=${data.blmPointId}_preview.pdf`
-  );
+  const fileName = `submitters/${context.auth.uid}/new/${data.blmPointId}/preview.pdf`;
+  const file = bucket.file(fileName);
 
-  const pdf = printer.createPdfKitDocument(definition);
+  try {
+    const pdf = await createPdfDocument(definition, file);
+    await file.save(pdf);
+    await file.setMetadata({
+      contentType: 'application/pdf',
+      contentDisposition: 'inline',
+    });
+  } catch (error) {
+    logger.error('error generating preview', error, data, {
+      structuredData: true,
+    });
 
-  pdf.on('data', (chunk) => {
-    // Write the data to the response
-    response.write(chunk);
-  });
+    throw new auth.HttpsError(
+      'internal',
+      'There was a problem creating the pdf'
+    );
+  }
 
-  pdf.on('end', () => {
-    response.end();
-  });
+  const record = {
+    created_at: new Date(),
+    id: data.blmPointId,
+    preview: fileName,
+    ttl: new Date(Date.now() + oneDay),
+  };
 
-  pdf.on('error', (err) => {
-    // Send error code and error as response
-    response.status(501).send(err);
-  });
+  try {
+    await db
+      .collection('previews')
+      .doc(context.auth.uid)
+      .collection('documents')
+      .add(record);
+  } catch (error) {
+    logger.error(
+      'error storing preview record. you will need to clean up the storage',
+      fileName,
+      error,
+      {
+        structuredData: true,
+      }
+    );
+  }
 
-  // End the creation process
-  pdf.end();
+  return fileName;
 });
 
-export default generatePdfDraft;
+export default postGeneratePreview;
