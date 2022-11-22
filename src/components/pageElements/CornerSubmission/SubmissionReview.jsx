@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
-import { useFunctions } from 'reactfire';
+import { ref } from 'firebase/storage';
+import { useFunctions, useStorage, useStorageDownloadURL } from 'reactfire';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers/index.mjs';
@@ -19,6 +20,17 @@ const Review = () => {
 
   const functions = useFunctions();
   const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
+  const generatePreview = httpsCallable(
+    functions,
+    'functions-httpsPostGeneratePreview'
+  );
+  const { data, status } = useQuery(
+    ['preview', state.context.blmPointId],
+    () => generatePreview(state.context),
+    {
+      enabled: state.context.type === 'new',
+    }
+  );
   const { mutate } = useMutation(
     ['save-corner', state.context.blmPointId],
     (data) => saveCorner(data),
@@ -49,9 +61,12 @@ const Review = () => {
           geographic={state.context.geographic}
         />
         {state.context.type === 'existing' ? (
-          <AttachmentReview pdf={state.context.existing.pdf} />
+          <AttachmentReview path={state.context.existing.pdf} />
         ) : (
           <ImagesReview images={state.context.images} />
+        )}
+        {status === 'success' && state.context.type === 'new' && (
+          <PdfPreview path={data.data} />
         )}
       </div>
       <div className="mt-8 flex justify-center">
@@ -270,20 +285,51 @@ ImagesReview.propTypes = {
   images: PropTypes.object,
 };
 
-const AttachmentReview = ({ pdf }) => {
+const AttachmentReview = ({ path }) => {
+  const storage = useStorage();
+  const { data } = useStorageDownloadURL(ref(storage, path));
+
   return (
     <Card>
       <h3 className="-mt-2 text-lg font-bold">Tiesheet</h3>
-      {pdf && (
-        <A href={pdf} target="_blank" rel="noopener noreferrer">
-          Uploaded Tiesheet
-        </A>
+      <A href={data} target="_blank" rel="noopener noreferrer">
+        Uploaded Tiesheet
+      </A>
+      {path && (
+        <div className="h-[400px] max-w-[300px] justify-self-center">
+          <object data={data} type="application/pdf" width="300" height="400">
+            PDF preview
+          </object>
+        </div>
       )}
     </Card>
   );
 };
 AttachmentReview.propTypes = {
-  pdf: PropTypes.string,
+  path: PropTypes.string,
+};
+
+const PdfPreview = ({ path }) => {
+  const storage = useStorage();
+  const { data } = useStorageDownloadURL(ref(storage, path));
+
+  return (
+    <Card>
+      <h3 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h3>
+      <div className="h-[400px] max-w-[300px] justify-self-center border">
+        {path ? (
+          <object data={data} type="application/pdf" width="300" height="400">
+            {data}
+          </object>
+        ) : (
+          'loading...'
+        )}
+      </div>
+    </Card>
+  );
+};
+PdfPreview.propTypes = {
+  path: PropTypes.string,
 };
 
 export default Review;
