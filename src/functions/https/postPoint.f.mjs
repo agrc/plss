@@ -1,5 +1,7 @@
-import { auth, https, logger } from 'firebase-functions/v1';
+import { auth, https, logger } from 'firebase-functions';
 import { getFirestore } from 'firebase-admin/firestore';
+
+const db = getFirestore();
 
 const postPoint = https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -14,8 +16,6 @@ const postPoint = https.onCall(async (data, context) => {
   });
 
   try {
-    const db = getFirestore();
-
     await db
       .collection('submitters')
       .doc(context.auth.uid)
