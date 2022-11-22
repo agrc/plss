@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const bucket = getStorage().bucket();
+const bucket = getStorage().bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET);
 const db = getFirestore();
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -42,9 +42,7 @@ const vars = {
 };
 
 const empty = {};
-const span = (int) => {
-  return Array(int).fill(empty);
-};
+const span = (int) => Array(int).fill(empty);
 
 const createPdfDocument = (definition) => {
   const promise = new Promise((resolve, reject) => {

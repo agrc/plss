@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
 import { ref } from 'firebase/storage';
@@ -65,8 +66,10 @@ const Review = () => {
         ) : (
           <ImagesReview images={state.context.images} />
         )}
-        {status === 'success' && state.context.type === 'new' && (
-          <PdfPreview path={data.data} />
+        {state.context.type === 'new' && (
+          <MonumentPreview status={status}>
+            <PdfPreview path={data?.data} />
+          </MonumentPreview>
         )}
       </div>
       <div className="mt-8 flex justify-center">
@@ -309,23 +312,39 @@ AttachmentReview.propTypes = {
   path: PropTypes.string,
 };
 
+const MonumentPreview = ({ status, children }) => {
+  return (
+    <Card>
+      <h3 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h3>
+      {status === 'loading' && 'generating preview...'}
+      {status === 'success' && (
+        <div className="h-[400px] max-w-[300px] justify-self-center border">
+          <ErrorBoundary
+            fallback={<div>The preview could not be accessed.</div>}
+          >
+            {children}
+          </ErrorBoundary>
+        </div>
+      )}
+      {status === 'error' && 'error generating preview'}
+    </Card>
+  );
+};
+MonumentPreview.propTypes = {
+  status: PropTypes.string,
+  children: PropTypes.node,
+};
+
 const PdfPreview = ({ path }) => {
   const storage = useStorage();
   const { data } = useStorageDownloadURL(ref(storage, path));
 
-  return (
-    <Card>
-      <h3 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h3>
-      <div className="h-[400px] max-w-[300px] justify-self-center border">
-        {path ? (
-          <object data={data} type="application/pdf" width="300" height="400">
-            {data}
-          </object>
-        ) : (
-          'loading...'
-        )}
-      </div>
-    </Card>
+  return path ? (
+    <object data={data} type="application/pdf" width="300" height="400">
+      {data}
+    </object>
+  ) : (
+    'loading...'
   );
 };
 PdfPreview.propTypes = {
