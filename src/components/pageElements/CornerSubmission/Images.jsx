@@ -22,17 +22,17 @@ const limit = 10;
 const defaults = {
   map: '',
   monument: '',
-  'close-up': '',
-  'extra-1': '',
-  'extra-2': '',
-  'extra-3': '',
-  'extra-4': '',
-  'extra-5': '',
-  'extra-6': '',
-  'extra-7': '',
-  'extra-8': '',
-  'extra-9': '',
-  'extra-10': '',
+  closeUp: '',
+  extra1: '',
+  extra2: '',
+  extra3: '',
+  extra4: '',
+  extra5: '',
+  extra6: '',
+  extra7: '',
+  extra8: '',
+  extra9: '',
+  extra10: '',
 };
 export default function MonumentImages() {
   const [state, send] = useContext(SubmissionContext);
@@ -100,7 +100,7 @@ export default function MonumentImages() {
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
           <Controller
-            name="close-up"
+            name="closeUp"
             control={control}
             render={({ field: { onChange, name } }) => (
               <ImageUpload
@@ -113,7 +113,7 @@ export default function MonumentImages() {
           />
           <ErrorMessage
             errors={formState.errors}
-            name="close-up"
+            name="closeUp"
             as={ErrorMessageTag}
           />
         </NumberedFormSection>
@@ -121,7 +121,7 @@ export default function MonumentImages() {
           {new Array(extraPageCount).fill().map((_, i) => (
             <span key={i}>
               <Controller
-                name={`extra-${i}`}
+                name={`extra${i}`}
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <ImageUpload
@@ -134,7 +134,7 @@ export default function MonumentImages() {
               />
               <ErrorMessage
                 errors={formState.errors}
-                name={`extra-${i}`}
+                name={`extra${i}`}
                 as={ErrorMessageTag}
               />
             </span>

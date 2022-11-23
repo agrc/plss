@@ -1,6 +1,14 @@
 import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
+import { parseDms } from 'dms-conversion';
 import * as schemas from '../../components/pageElements/CornerSubmission/Schema.mjs';
+import { formatDegrees } from '../../components/helpers/index.mjs';
+
+const db = getFirestore();
+const options = {
+  stripUnknown: true,
+  abortEarly: false,
+};
 
 const postCorner = https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -11,30 +19,26 @@ const postCorner = https.onCall(async (data, context) => {
     throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
 
-  const newSheet = !data?.existing?.pdf;
+  if (!data) {
+    logger.warn('submission data empty', {
+      structuredData: true,
+    });
 
-  // validation
+    throw new https.HttpsError(
+      'invalid-argument',
+      'The submission data is missing'
+    );
+  }
+
+  logger.info('validating corner submission', data, context.auth.uid, {
+    structuredData: true,
+  });
+
   try {
-    const options = {
-      stripUnknown: true,
-      abortEarly: false,
-    };
-
-    if (newSheet) {
-      await schemas.metadataSchema.validate(data, options);
-    }
-
-    await schemas.coordinatePickerSchema.validate(data, options);
-
-    const [datum] = data.datum.split('-');
-
-    if (datum !== 'grid') {
-      await schemas.geographicHeightSchema.validate(data, options);
-      await schemas.longitudeSchema.validate(data, options);
-      await schemas.latitudeSchema.validate(data, options);
-    } else {
-      await schemas.gridCoordinatesSchema.validate(data, options);
-    }
+    const result = await validateSubmission(data);
+    logger.debug('validation result', result, {
+      structuredData: true,
+    });
   } catch (error) {
     logger.error('validation error', error, {
       structuredData: true,
@@ -47,29 +51,20 @@ const postCorner = https.onCall(async (data, context) => {
     );
   }
 
-  // supplementals
-  // county from point id or TRS or input coordinates
-  // project coordinates to what I believe we want them in Geographic Lat Long Height in NAD83 (2011)
-  // Grid coordinates should be meters state plane NAD83
-  // blm point id extractions
+  logger.debug('formatting document', data.type, {
+    structuredData: true,
+  });
 
-  const db = getFirestore();
-  data.created_at = new Date();
-  // data.location = new GeoPoint(data.northing.degrees, data.easting.degrees);
-  data.submittedBy = {
-    id: context.auth.uid,
-    name: context.auth.token.name,
-    ref: db.collection('submitters').doc(context.auth.uid),
-  };
+  const doc = formatDataForFirestore(data, context.auth.uid);
 
-  logger.info('saving corner submission', data, context.auth.uid, {
+  logger.info('saving corner submission', doc, context.auth.uid, {
     structuredData: true,
   });
 
   try {
-    await db.collection('submissions').add(data);
+    await db.collection('submissions').add(doc);
   } catch (error) {
-    logger.error('error saving corner', error, context.auth, {
+    logger.error('error saving corner', error, doc, {
       structuredData: true,
     });
 
@@ -78,5 +73,168 @@ const postCorner = https.onCall(async (data, context) => {
 
   return 1;
 });
+
+export const validateSubmission = async (data) => {
+  if (data.type === 'new') {
+    return await validateNewSubmission(data);
+  } else if (data.type === 'existing') {
+    return await validateExistingSubmission(data);
+  }
+
+  throw Error('Invalid submission type');
+};
+
+export const validateNewSubmission = async (data) => {
+  await schemas.metadataSchema.validate(data?.metadata, options);
+  await schemas.coordinatePickerSchema.validate(data, options);
+  await schemas.geographicHeightSchema.validate(data?.geographic, options);
+  await schemas.longitudeSchema.validate(data?.geographic, options);
+  await schemas.latitudeSchema.validate(data?.geographic, options);
+  await schemas.gridCoordinatesSchema.validate(data?.grid, options);
+  await schemas.imagesSchema.validate(data?.images, options);
+
+  return true;
+};
+
+export const validateExistingSubmission = async (data) => {
+  await schemas.existingSheetSchema.validate(data?.existing, options);
+
+  // coordinates are not required for existing corners
+  if (data.datum) {
+    await schemas.coordinatePickerSchema.validate(data, options);
+    await schemas.geographicHeightSchema.validate(data?.geographic, options);
+    await schemas.longitudeSchema.validate(data?.geographic, options);
+    await schemas.latitudeSchema.validate(data?.geographic, options);
+    await schemas.gridCoordinatesSchema.validate(data?.grid, options);
+  }
+
+  return true;
+};
+
+export const formatDataForFirestore = (data, user) => {
+  const metadata = {
+    created_at: new Date(),
+    blm_point_id: data.blmPointId,
+    submitted_by: {
+      id: user.uid,
+      name: user.displayName,
+      ref: db.collection('submitters').doc(user.uid),
+    },
+  };
+
+  if (data.type === 'new') {
+    return formatNewCorner(data, metadata);
+  } else if (data.type === 'existing') {
+    return formatExistingCorner(data, metadata);
+  }
+
+  throw Error('Invalid submission type');
+};
+
+export const formatNewCorner = (data, metadata) => {
+  const [y, x] = getLatLon(data.geographic);
+
+  return {
+    ...metadata,
+    location: new GeoPoint(y, x),
+    metadata: {
+      status: data.metadata.status,
+      accuracy: data.metadata.accuracy,
+      description: data.metadata.description,
+      notes: data.metadata.notes,
+      mrrc: data.metadata.mrrc,
+      section: data.metadata.section,
+      corner: data.metadata.corner,
+    },
+    datum: data.datum,
+    grid: {
+      northing: data.grid.northing,
+      easting: data.grid.easting,
+      zone: data.grid.zone,
+      unit: data.grid.unit,
+      elevation: data.grid.elevation,
+      verticalDatum: data.grid.verticalDatum,
+    },
+    geographic: {
+      northing: {
+        degrees: data.geographic.northing.degrees,
+        minutes: data.geographic.northing.minutes,
+        seconds: data.geographic.northing.seconds,
+      },
+      easting: {
+        degrees: data.geographic.easting.degrees,
+        minutes: data.geographic.easting.minutes,
+        seconds: data.geographic.easting.seconds,
+      },
+      unit: data.geographic.unit,
+      elevation: data.geographic.elevation,
+    },
+    images: {
+      map: data.images.map,
+      monument: data.images.monument,
+      closeUp: data.images.closeUp,
+      extra1: data.images.extra1,
+      extra2: data.images.extra2,
+      extra3: data.images.extra3,
+      extra4: data.images.extra4,
+      extra5: data.images.extra5,
+      extra6: data.images.extra6,
+      extra7: data.images.extra7,
+      extra8: data.images.extra8,
+      extra9: data.images.extra9,
+      extra10: data.images.extra10,
+    },
+  };
+};
+
+export const formatExistingCorner = (data, metadata) => {
+  let record = { ...metadata, pdf: data.existing.pdf };
+
+  if (data.datum) {
+    const [y, x] = getLatLon(data.geographic);
+
+    record = Object.assign(record, {
+      datum: data.datum,
+      location: new GeoPoint(y, x),
+      grid: {
+        northing: data.grid.northing,
+        easting: data.grid.easting,
+        zone: data.grid.zone,
+        unit: data.grid.unit,
+        elevation: data.grid.elevation,
+        verticalDatum: data.grid.verticalDatum,
+      },
+      geographic: {
+        northing: {
+          degrees: data.geographic.northing.degrees,
+          minutes: data.geographic.northing.minutes,
+          seconds: data.geographic.northing.seconds,
+        },
+        easting: {
+          degrees: data.geographic.easting.degrees,
+          minutes: data.geographic.easting.minutes,
+          seconds: data.geographic.easting.seconds,
+        },
+        unit: data.geographic.unit,
+        elevation: data.geographic.elevation,
+      },
+    });
+  }
+
+  return record;
+};
+
+export const getLatLon = (data) => {
+  if (!data || !data.northing || !data.easting) {
+    return null;
+  }
+
+  const dms = [
+    `${formatDegrees(data.northing)} N`,
+    `${formatDegrees(data.easting)} W`,
+  ];
+
+  return dms.map(parseDms);
+};
 
 export default postCorner;
