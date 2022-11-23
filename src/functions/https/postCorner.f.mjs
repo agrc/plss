@@ -55,9 +55,9 @@ const postCorner = https.onCall(async (data, context) => {
     structuredData: true,
   });
 
-  const doc = formatDataForFirestore(data, context.auth.uid);
+  const doc = formatDataForFirestore(data, context.auth);
 
-  logger.info('saving corner submission', doc, context.auth.uid, {
+  logger.info('saving corner submission', doc, context.auth, {
     structuredData: true,
   });
 
@@ -117,7 +117,7 @@ export const formatDataForFirestore = (data, user) => {
     blm_point_id: data.blmPointId,
     submitted_by: {
       id: user.uid,
-      name: user.displayName,
+      name: user.token?.name || user.displayName,
       ref: db.collection('submitters').doc(user.uid),
     },
   };
