@@ -89,10 +89,25 @@ const Review = () => {
   );
 };
 
-const MetadataReview = ({ status, notes, description, accuracy }) => {
+const MetadataReview = ({
+  accuracy,
+  corner,
+  description,
+  mrrc,
+  notes,
+  section,
+  status,
+}) => {
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">Metadata</h3>
+      <h3 className="relative -mt-2 text-lg font-bold">
+        Metadata
+        {mrrc && (
+          <div className="absolute top-0 right-0 rounded border border-sky-800 bg-sky-300 px-2 text-sm uppercase text-sky-800 shadow">
+            MRRC
+          </div>
+        )}
+      </h3>
       <div className="flex justify-between">
         <span className="font-semibold">Monument Status</span>
         <span className="ml-4">{keyMap.status(status)}</span>
@@ -100,6 +115,10 @@ const MetadataReview = ({ status, notes, description, accuracy }) => {
       <div className="flex justify-between">
         <span className="font-semibold">Accuracy</span>
         <span className="ml-4">{keyMap.accuracy(accuracy)}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">Section</span>
+        <span className="ml-4">{`${corner} corner of section ${section}`}</span>
       </div>
       <div className="flex flex-col">
         <span className="font-semibold">Monument Description</span>
@@ -117,6 +136,9 @@ MetadataReview.propTypes = {
   notes: PropTypes.string,
   description: PropTypes.string,
   accuracy: PropTypes.string,
+  section: PropTypes.number,
+  corner: PropTypes.string,
+  mrrc: PropTypes.bool,
 };
 
 const CoordinateReview = ({ datum, grid, geographic }) => {
