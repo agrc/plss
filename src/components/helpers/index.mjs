@@ -172,3 +172,39 @@ export const createProjectFormData = ({ type, coordinates }) => {
 
 export const roundAccurately = (number, decimalPlaces) =>
   Number(Math.round(number + 'e' + decimalPlaces) + 'e-' + decimalPlaces);
+
+export const getStatus = (status) => {
+  if (!status) {
+    return 'Unknown';
+  }
+
+  if (status.sgid.approved) {
+    return 'Data is live';
+  }
+
+  if (status.county.approved && !status.sgid.approved) {
+    return 'Pending PLSS data updates';
+  }
+
+  if (status.county.rejected && !status.sgid.approved) {
+    return `The county rejected the submission. ${status.county.comments}`;
+  }
+
+  if (
+    !(status.county.approved || status.county.rejected) &&
+    status.ugrc.rejected
+  ) {
+    return `UGRC rejected submission. ${status.ugrc.comments}`;
+  }
+
+  if (
+    !(status.county.approved || status.county.rejected) &&
+    status.ugrc.approved
+  ) {
+    return 'Pending county review';
+  }
+
+  if (!(status.ugrc.approved || status.ugrc.rejected)) {
+    return 'Pending UGRC review';
+  }
+};

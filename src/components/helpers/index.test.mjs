@@ -4,6 +4,7 @@ import {
   formatDatum,
   createProjectFormData,
   roundAccurately,
+  getStatus,
 } from './index.mjs';
 import { describe, expect, test } from 'vitest';
 
@@ -225,5 +226,127 @@ describe('createProjectFormData', () => {
 
       expect(formData).toStrictEqual(expected);
     });
+  });
+});
+
+describe('get submission status', () => {
+  test.each([
+    {
+      state: 'initial submission',
+      values: {
+        ugrc: {
+          approved: null,
+          rejected: null,
+          comments: null,
+        },
+        county: {
+          received: null,
+          approved: null,
+          rejected: null,
+          comments: null,
+        },
+        sgid: {
+          approved: null,
+        },
+      },
+      result: 'Pending UGRC review',
+    },
+    {
+      state: 'ugrc approved',
+      values: {
+        ugrc: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        county: {
+          approved: null,
+          rejected: null,
+          comments: null,
+        },
+        sgid: {
+          approved: null,
+        },
+      },
+      result: 'Pending county review',
+    },
+    {
+      state: 'ugrc rejected',
+      values: {
+        ugrc: {
+          approved: null,
+          rejected: new Date(),
+          comments: 'ugrc comment',
+        },
+        county: {
+          approved: null,
+          rejected: null,
+          comments: null,
+        },
+        sgid: {
+          approved: null,
+        },
+      },
+      result: 'UGRC rejected submission. ugrc comment',
+    },
+    {
+      state: 'county approved',
+      values: {
+        ugrc: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        county: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        sgid: {
+          approved: null,
+        },
+      },
+      result: 'Pending PLSS data updates',
+    },
+    {
+      state: 'county approved',
+      values: {
+        ugrc: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        county: {
+          approved: null,
+          rejected: new Date(),
+          comments: 'county comment',
+        },
+        sgid: {
+          approved: null,
+        },
+      },
+      result: 'The county rejected the submission. county comment',
+    },
+    {
+      state: 'data updates complete',
+      values: {
+        ugrc: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        county: {
+          approved: new Date(),
+          rejected: null,
+          comments: null,
+        },
+        sgid: {
+          approved: new Date(),
+        },
+      },
+      result: 'Data is live',
+    },
+  ])('getStatus returns $result on $state', ({ values, result }) => {
+    expect(getStatus(values)).toBe(result);
   });
 });
