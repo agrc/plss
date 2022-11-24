@@ -71,7 +71,7 @@ export const Button = ({
       type={type}
       name={name}
       ref={inputRef}
-      disabled={state === 'disabled'}
+      disabled={state === 'disabled' || state === 'loading'}
       onClick={onClick}
       className={clsx(
         style !== 'link' &&
