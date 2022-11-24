@@ -36,15 +36,15 @@ const reverseLookup = (options, value) => {
 };
 
 export const keyMap = {
-  status: (value) => reverseLookup(status, value),
   accuracy: (value) => reverseLookup(accuracy, value),
-  description: (value) => value,
-  notes: (value) => value,
   datum: (value) => formatDatum(value),
-  northing: (value) => formatDegrees(value),
+  description: (value) => value,
   easting: (value) => formatDegrees(value),
-  unit: (value) => reverseLookup(units, value),
   height: (value) => value,
+  northing: (value) => formatDegrees(value),
+  notes: (value) => value,
+  status: (value) => reverseLookup(status, value),
+  unit: (value) => reverseLookup(units, value),
   zone: (value) => reverseLookup(statePlaneZones, value),
 };
 
