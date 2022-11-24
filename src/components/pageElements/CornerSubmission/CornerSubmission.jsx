@@ -15,6 +15,7 @@ const CoordinatePicker = lazy(() => import('./Datum.jsx'));
 const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));
 const Images = lazy(() => import('./Images.jsx'));
 const Review = lazy(() => import('./SubmissionReview.jsx'));
+const SubmissionSuccess = lazy(() => import('./SubmissionSuccess.jsx'));
 const GeographicHeight = lazy(() =>
   import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.GeographicHeight,
@@ -95,6 +96,8 @@ export default function CornerSubmission({ submission, dispatch }) {
         return <Images />;
       case state.matches('form.reviewing'):
         return <Review />;
+      case state.matches('form.idle'):
+        return <SubmissionSuccess dispatch={dispatch} />;
       default:
         return (
           <div role="alert" data-area="drawer">

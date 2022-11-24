@@ -32,17 +32,18 @@ const Review = () => {
       enabled: state.context.type === 'new',
     }
   );
-  const { mutate } = useMutation(
+  const { mutate, status: mutationStatus } = useMutation(
     ['save-corner', state.context.blmPointId],
     (data) => saveCorner(data),
     {
       onSuccess: (response) => {
         console.log('success', response);
-        state.context = undefined;
         send({ type: 'NEXT' });
+        state.context = undefined;
       },
       onError: (error) => {
         console.log('error', error);
+        send({ type: 'NEXT' });
       },
     }
   );
@@ -80,9 +81,8 @@ const Review = () => {
       <div className="mt-8 flex justify-center">
         <Wizard
           back={() => send('BACK')}
-          finish={async () => {
-            await mutate(state.context);
-          }}
+          status={mutationStatus}
+          finish={() => mutate(state.context)}
         />
       </div>
     </>
