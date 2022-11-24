@@ -1,7 +1,7 @@
 import { Button } from '../../formElements/Buttons.jsx';
 import PropTypes from 'prop-types';
 
-export default function Wizard({ back, next, finish, clear }) {
+export default function Wizard({ back, next, finish, clear, status }) {
   return (
     <div className="flex justify-center">
       {back && (
@@ -27,8 +27,13 @@ export default function Wizard({ back, next, finish, clear }) {
         </Button>
       )}
       {finish && (
-        <Button buttonGroup={{ right: true }} type="submit" onClick={finish}>
-          Submit
+        <Button
+          buttonGroup={{ right: true }}
+          type="submit"
+          state={status}
+          onClick={finish}
+        >
+          {getButtonText(status)}
         </Button>
       )}
     </div>
@@ -40,9 +45,23 @@ Wizard.propTypes = {
   next: PropTypes.bool,
   finish: PropTypes.func,
   clear: PropTypes.func,
+  status: PropTypes.string,
 };
 
 Wizard.defaultProps = {
   back: false,
   next: false,
+};
+
+const getButtonText = (status) => {
+  switch (status) {
+    case 'loading':
+      return 'Submitting...';
+    case 'success':
+      return 'Submitted!';
+    case 'error':
+      return 'Error';
+    default:
+      return 'Submit';
+  }
 };
