@@ -115,6 +115,21 @@ export const formatDataForFirestore = (data, user) => {
   const metadata = {
     created_at: new Date(),
     blm_point_id: data.blmPointId,
+    status: {
+      ugrc: {
+        approved: null,
+        rejected: null,
+        comments: null,
+      },
+      county: {
+        approved: null,
+        rejected: null,
+        comments: null,
+      },
+      sgid: {
+        approved: null,
+      },
+    },
     submitted_by: {
       id: user.uid,
       name: user.token?.name || user.displayName,
