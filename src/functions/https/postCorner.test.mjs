@@ -28,6 +28,21 @@ describe('postCorner', () => {
       name: user.displayName,
       ref: 'ref',
     },
+    status: {
+      ugrc: {
+        approved: null,
+        rejected: null,
+        comments: null,
+      },
+      county: {
+        approved: null,
+        rejected: null,
+        comments: null,
+      },
+      sgid: {
+        approved: null,
+      },
+    },
   };
 
   beforeAll(() => {
