@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from 'firebase-admin/app';
 
 const setupFirebase = () => {
   try {
