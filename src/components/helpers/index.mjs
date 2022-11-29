@@ -43,6 +43,7 @@ export const keyMap = {
   height: (value) => value,
   northing: (value) => formatDegrees(value),
   notes: (value) => value,
+  status: (value) => reverseLookup(status, value),
   unit: (value) => reverseLookup(units, value),
   zone: (value) => reverseLookup(statePlaneZones, value),
 };
