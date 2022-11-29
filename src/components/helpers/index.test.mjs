@@ -249,7 +249,12 @@ describe('get submission status', () => {
           approved: null,
         },
       },
-      result: 'Pending UGRC review',
+      result: {
+        label: 'Pending UGRC review',
+        received: 'yes',
+        reviewed: 'waiting',
+        published: 'pending',
+      },
     },
     {
       state: 'ugrc approved',
@@ -268,7 +273,12 @@ describe('get submission status', () => {
           approved: null,
         },
       },
-      result: 'Pending county review',
+      result: {
+        label: 'Pending county review',
+        received: 'yes',
+        reviewed: 'waiting',
+        published: 'pending',
+      },
     },
     {
       state: 'ugrc rejected',
@@ -287,7 +297,12 @@ describe('get submission status', () => {
           approved: null,
         },
       },
-      result: 'UGRC rejected submission. ugrc comment',
+      result: {
+        label: 'UGRC rejected submission. ugrc comment',
+        received: 'yes',
+        reviewed: 'rejected',
+        published: 'pending',
+      },
     },
     {
       state: 'county approved',
@@ -306,10 +321,15 @@ describe('get submission status', () => {
           approved: null,
         },
       },
-      result: 'Pending PLSS data updates',
+      result: {
+        label: 'Pending PLSS data updates',
+        received: 'yes',
+        reviewed: 'approved',
+        published: 'waiting',
+      },
     },
     {
-      state: 'county approved',
+      state: 'county rejected',
       values: {
         ugrc: {
           approved: new Date(),
@@ -325,7 +345,12 @@ describe('get submission status', () => {
           approved: null,
         },
       },
-      result: 'The county rejected the submission. county comment',
+      result: {
+        label: 'The county rejected the submission. county comment',
+        received: 'yes',
+        reviewed: 'rejected',
+        published: 'pending',
+      },
     },
     {
       state: 'data updates complete',
@@ -344,9 +369,14 @@ describe('get submission status', () => {
           approved: new Date(),
         },
       },
-      result: 'Data is live',
+      result: {
+        label: 'Data is live',
+        received: 'yes',
+        reviewed: 'approved',
+        published: 'yes',
+      },
     },
-  ])('getStatus returns $result on $state', ({ values, result }) => {
-    expect(getStatus(values)).toBe(result);
+  ])('getStatus returns $result.label on $state', ({ values, result }) => {
+    expect(getStatus(values)).toEqual(result);
   });
 });

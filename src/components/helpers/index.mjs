@@ -43,7 +43,6 @@ export const keyMap = {
   height: (value) => value,
   northing: (value) => formatDegrees(value),
   notes: (value) => value,
-  status: (value) => reverseLookup(status, value),
   unit: (value) => reverseLookup(units, value),
   zone: (value) => reverseLookup(statePlaneZones, value),
 };
@@ -175,36 +174,71 @@ export const roundAccurately = (number, decimalPlaces) =>
 
 export const getStatus = (status) => {
   if (!status) {
-    return 'Unknown';
+    return {
+      label: 'Unknown',
+      received: 'pending',
+      reviewed: 'pending',
+      published: 'pending',
+    };
   }
 
   if (status.sgid.approved) {
-    return 'Data is live';
+    return {
+      label: 'Data is live',
+      received: 'yes',
+      reviewed: 'approved',
+      published: 'yes',
+    };
   }
 
   if (status.county.approved && !status.sgid.approved) {
-    return 'Pending PLSS data updates';
+    return {
+      label: 'Pending PLSS data updates',
+      received: 'yes',
+      reviewed: 'approved',
+      published: 'waiting',
+    };
   }
 
   if (status.county.rejected && !status.sgid.approved) {
-    return `The county rejected the submission. ${status.county.comments}`;
+    return {
+      label: `The county rejected the submission. ${status.county.comments}`,
+      received: 'yes',
+      reviewed: 'rejected',
+      published: 'pending',
+    };
   }
 
   if (
     !(status.county.approved || status.county.rejected) &&
     status.ugrc.rejected
   ) {
-    return `UGRC rejected submission. ${status.ugrc.comments}`;
+    return {
+      label: `UGRC rejected submission. ${status.ugrc.comments}`,
+      received: 'yes',
+      reviewed: 'rejected',
+      published: 'pending',
+    };
   }
 
   if (
     !(status.county.approved || status.county.rejected) &&
     status.ugrc.approved
   ) {
-    return 'Pending county review';
+    return {
+      label: 'Pending county review',
+      received: 'yes',
+      reviewed: 'waiting',
+      published: 'pending',
+    };
   }
 
   if (!(status.ugrc.approved || status.ugrc.rejected)) {
-    return 'Pending UGRC review';
+    return {
+      label: 'Pending UGRC review',
+      received: 'yes',
+      reviewed: 'waiting',
+      published: 'pending',
+    };
   }
 };
