@@ -12,9 +12,7 @@ const options = {
 
 const postCorner = https.onCall(async (data, context) => {
   if (!context.auth) {
-    logger.warn('unauthenticated request', {
-      structuredData: true,
-    });
+    logger.warn('unauthenticated request', { structuredData: true });
 
     throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
