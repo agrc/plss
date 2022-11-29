@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useImmerReducer } from 'use-immer';
+import { Tab } from '@headlessui/react';
+import clsx from 'clsx';
+import { useQuery } from '@tanstack/react-query';
+import { useSigninCheck, useFunctions } from 'reactfire';
+import { httpsCallable } from 'firebase/functions';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Select } from '../formElements/Select.jsx';
 import Switch from '../formElements/Switch.jsx';
+import Card from '../formElements/Card.jsx';
+import { timeSince } from '../helpers/index.mjs';
+import { Button } from '../formElements/Buttons.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -14,37 +22,201 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: 'MST',
 });
 
-const reducer = (draft, action) => {
-  console.log(action);
-  switch (action.type) {
-    case 'set_selection': {
-      draft.selectedItem = action.payload;
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-};
+const tabs = ['Submissions', 'Reference Points'];
 
-const MyContent = ({ content }) => {
-  const [state, dispatch] = useImmerReducer(reducer, {
-    selectedItem: null,
-    items: content,
+const MyContent = ({ dispatch }) => {
+  const { data: signInCheckResult } = useSigninCheck();
+  const [selectedTab, setSelectedTab] = useState();
+
+  const functions = useFunctions();
+  const myPoints = httpsCallable(functions, 'functions-httpsGetMyContent');
+
+  const { data, status } = useQuery(['my content'], myPoints, {
+    enabled: signInCheckResult?.signedIn === true,
   });
 
-  return state.selectedItem ? (
-    <SelectedItem dispatch={dispatch} item={state.selectedItem}></SelectedItem>
-  ) : (
+  return (
     <>
-      <h1 className="pb-6 text-2xl font-bold">My Content</h1>
-      <ContentList dispatch={dispatch} content={content}></ContentList>
+      <h1 className="mb-2 text-2xl font-bold">My Content</h1>
+      <section className="grid gap-2">
+        <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
+          <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+            {tabs.map((name) => (
+              <Tab
+                key={name}
+                className={({ selected }) =>
+                  clsx(
+                    'w-full rounded-lg py-2.5 font-medium leading-5',
+                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                    selected
+                      ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                      : 'text-sky-700 hover:bg-sky-600/20'
+                  )
+                }
+              >
+                {name}
+              </Tab>
+            ))}
+          </Tab.List>
+          <Tab.Panels>
+            {tabs.map((name) => (
+              <Tab.Panel key={name}>
+                {status !== 'success' && 'loading'}
+                {status === 'success' && name === 'Submissions' && (
+                  <Submissions
+                    items={data.data.submissions}
+                    dispatch={dispatch}
+                  />
+                )}
+                {status === 'success' && name === 'Reference Points' && (
+                  <ReferencePoints
+                    items={data.data.points}
+                    dispatch={dispatch}
+                  />
+                )}
+              </Tab.Panel>
+            ))}
+          </Tab.Panels>
+        </Tab.Group>
+      </section>
     </>
   );
 };
-
 MyContent.propTypes = {
-  content: PropTypes.array,
+  dispatch: PropTypes.func,
+};
+
+const ReferencePoints = ({ items, dispatch }) => (
+  <section className="inline-grid w-full gap-2">
+    <Card>
+      <Select
+        label="Sort order"
+        options={sortOrders}
+        currentValue={sortOrders[0]}
+      ></Select>
+      <MapFilterToggle></MapFilterToggle>
+    </Card>
+    <Card>
+      <ListCounter items={items}></ListCounter>
+      <ItemList dispatch={dispatch} items={items}></ItemList>
+    </Card>
+  </section>
+);
+ReferencePoints.propTypes = {
+  items: PropTypes.array,
+  dispatch: PropTypes.func,
+};
+
+const Submissions = ({ items, dispatch }) => {
+  if (items?.length < 1) {
+    return (
+      <Card>
+        <h4 className="text-xl">Your submission list is empty</h4>
+        <p>
+          You haven&apos;t submitted any monument record sheets yet. Start a
+          submission by clicking on the corner points. Get out and survey!
+        </p>
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <ul className="divide-y divide-slate-200">
+        {items.map((item) => (
+          <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+            <Submission item={item} dispatch={dispatch} />
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+};
+Submissions.propTypes = {
+  items: PropTypes.array,
+  dispatch: PropTypes.func,
+};
+
+const Submission = ({ item, dispatch }) => {
+  const { label, submitted, id, status } = item;
+  const submission = Date.parse(submitted);
+
+  return (
+    <div className="relative flex flex-col text-base">
+      <span className="font-semibold">{id}</span>
+      <div className="absolute top-0 right-0">
+        <span
+          className="flex select-none flex-col items-center text-xs text-slate-500"
+          alt={dateFormatter.format(submission)}
+        >
+          <span>submitted</span>
+          <span>{timeSince(submission)}</span>
+        </span>
+      </div>
+      <SubmissionStatus status={status} label={label} />
+      <div className="mt-3 flex justify-between">
+        <Button style="alternate" onClick={() => dispatch()}>
+          Zoom
+        </Button>
+        <Button style="alternate" onClick={() => dispatch()}>
+          Download
+        </Button>
+        <Button style="secondary" onClick={() => dispatch()}>
+          Cancel
+        </Button>
+      </div>
+    </div>
+  );
+};
+Submission.propTypes = {
+  item: PropTypes.object,
+  dispatch: PropTypes.func,
+};
+
+const getClassesForStatus = (status) => {
+  switch (status) {
+    case 'yes':
+    case 'Approved':
+      return 'font-bold text-emerald-500';
+    case 'Rejected':
+      return 'font-bold text-red-500';
+    case 'waiting':
+      return 'font-bold text-sky-500';
+    case 'pending':
+      return 'text-slate-500';
+    default:
+      return 'text-slate-500';
+  }
+};
+
+const getReviewStatus = (status) => {
+  switch (status) {
+    case 'pending':
+    case 'waiting':
+      return 'Under Review';
+    case 'approved':
+      return 'Approved';
+    case 'rejected':
+      return 'Rejected';
+  }
+};
+
+const SubmissionStatus = ({ status, label }) => (
+  <>
+    <span className="text-sm">{label}</span>
+    <div className="grid auto-cols-max grid-flow-col items-center text-sm">
+      <span className={getClassesForStatus(status.received)}>Received</span>
+      <ChevronRightIcon className="h-4 w-4 text-slate-500" />
+      <span className={getClassesForStatus(status.reviewed)}>
+        {getReviewStatus(status.reviewed)}
+      </span>
+      <ChevronRightIcon className="h-4 w-4 text-slate-500" />
+      <span className={getClassesForStatus(status.published)}>Published</span>
+    </div>
+  </>
+);
+SubmissionStatus.propTypes = {
+  status: PropTypes.object,
+  label: PropTypes.string,
 };
 
 const SelectedItem = ({ item, dispatch }) => (
@@ -78,26 +250,8 @@ const SelectedItem = ({ item, dispatch }) => (
     <div>photo1</div>
   </>
 );
-
 SelectedItem.propTypes = {
   item: PropTypes.object,
-  dispatch: PropTypes.func,
-};
-
-const ContentList = ({ content, dispatch }) => (
-  <div className="flex w-full flex-1 flex-col overflow-hidden">
-    <Select
-      label="Sort order"
-      options={sortOrders}
-      currentValue={sortOrders[0]}
-    ></Select>
-    <MapFilterToggle></MapFilterToggle>
-    <ListCounter items={content}></ListCounter>
-    <ItemList dispatch={dispatch} items={content}></ItemList>
-  </div>
-);
-ContentList.propTypes = {
-  content: PropTypes.array,
   dispatch: PropTypes.func,
 };
 
@@ -124,18 +278,22 @@ const MapFilterToggle = () => {
 };
 
 const ListCounter = ({ items }) => (
-  <label className="mt-6 mb-3">Showing 3 of {items.length}</label>
+  <label className="mb-3">
+    Showing {items.length} of {items.length}
+  </label>
 );
 ListCounter.propTypes = {
   items: PropTypes.array,
 };
 
 const ItemList = ({ items, dispatch }) => (
-  <section className="mb-4 inline-grid w-full gap-2 overflow-y-auto">
+  <ul className="divide-y divide-slate-200">
     {items.map((item) => (
-      <Item dispatch={dispatch} key={item.attributes.id} item={item}></Item>
+      <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+        <Item dispatch={dispatch} key={item.attributes.id} item={item}></Item>
+      </li>
     ))}
-  </section>
+  </ul>
 );
 ItemList.propTypes = {
   items: PropTypes.array,
@@ -143,28 +301,35 @@ ItemList.propTypes = {
 };
 
 const Item = ({ item, dispatch }) => {
+  const date = Date.parse(item.attributes.when);
+
   return (
-    <>
-      <div className="flex w-full flex-col">
-        <div className="flex flex-row">
-          <Switch hideLabel={true} />
-          <button
-            onClick={() => dispatch({ payload: item, type: 'set_selection' })}
-            className="inline-block pl-2 text-left"
-          >
-            {item.attributes.name}
-          </button>
-        </div>
-        <p className="pl-16 text-xs text-slate-400">
-          {dateFormatter.format(Date.parse(item.attributes.when))}
-        </p>
-        <p className="pl-16 text-xs text-slate-400">{item.attributes.notes}</p>
+    <div className="relative flex flex-col text-base">
+      <span className="font-semibold">{item.attributes.name}</span>
+      <div className="absolute top-0 right-0">
+        <span
+          className="flex select-none flex-col items-center text-xs text-slate-500"
+          alt={dateFormatter.format(date)}
+        >
+          <span>created</span>
+          <span>{timeSince(date)}</span>
+        </span>
       </div>
-      <span className="mx-auto inline-block h-px w-2/3 rounded bg-sky-800"></span>
-    </>
+      <span className="text-sm">{item.attributes.notes}</span>
+      <div className="mt-3 flex justify-between">
+        <Button style="alternate" onClick={() => dispatch()}>
+          Zoom
+        </Button>
+        <Button style="alternate" onClick={() => dispatch()}>
+          Hide
+        </Button>
+        <Button style="secondary" onClick={() => dispatch()}>
+          Delete
+        </Button>
+      </div>
+    </div>
   );
 };
-
 Item.propTypes = {
   item: PropTypes.object,
   dispatch: PropTypes.func,
