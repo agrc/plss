@@ -48,9 +48,9 @@ export default function PlssMap({ state, dispatch, color }) {
   const { setGraphic: setUserGraphics } = useGraphicManager(mapView);
 
   const functions = useFunctions();
-  const myPoints = httpsCallable(functions, 'functions-httpsGetPoints');
+  const myContent = httpsCallable(functions, 'functions-httpsGetMyContent');
 
-  const { data: thePoints, status } = useQuery(['myPoints'], myPoints, {
+  const { data: content, status } = useQuery(['my content'], myContent, {
     enabled: signInCheckResult?.signedIn === true,
   });
 
@@ -314,21 +314,15 @@ export default function PlssMap({ state, dispatch, color }) {
     setMapState(status);
 
     if (signInCheckResult?.signedIn === true && status === 'success') {
-      setUserGraphics(thePoints.data);
-      dispatch({ type: 'map/userPoints', payload: thePoints.data });
+      setUserGraphics(content.data.points);
+      dispatch({ type: 'map/userPoints', payload: content.data.points });
     }
 
     if (signInCheckResult?.signedIn === false) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [
-    dispatch,
-    setUserGraphics,
-    thePoints,
-    status,
-    signInCheckResult?.signedIn,
-  ]);
+  }, [dispatch, setUserGraphics, content, status, signInCheckResult?.signedIn]);
 
   return (
     <section className="ugrc__map">
