@@ -178,10 +178,8 @@ const EmptyIdentify = ({ dispatch }) => {
         <div className="flex justify-center">
           <ExclamationCircleIcon className="h-14 w-14 text-sky-600" />
         </div>
-        <h4 className="text-xl ">
-          No corner point was found at this location.
-        </h4>
-        <p className="">
+        <h4 className="text-xl">No corner point was found at this location.</h4>
+        <p>
           If you do not see any points, try zooming in and click on the point
           again. Otherwise try clicking on the corner point again.
         </p>
