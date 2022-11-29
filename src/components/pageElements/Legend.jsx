@@ -55,25 +55,24 @@ const layers = [
     name: 'County Managed',
     color: '#7BE144',
     about:
-      'Sed nisi lacus sed viverra tellus in. Odio ut enim blandit volutpat. Sed felis eget velit aliquet sagittis id consectetur. Dui faucibus in ornare quam viverra orci sagittis. Tortor pretium viverra suspendisse potenti nullam. Malesuada proin libero nunc consequat interdum varius. Sit amet aliquam id diam maecenas ultricies mi.',
+      'PLSS points whose monument record sheets and information are managed on a county website.',
   },
   {
     name: 'Monument Record',
     color: '#B433F6',
-    about:
-      'Fermentum dui faucibus in ornare quam viverra orci sagittis. Nisl condimentum id venenatis a condimentum vitae sapien. In mollis nunc sed id semper risus in hendrerit. Cursus euismod quis viverra nibh cras pulvinar mattis nunc.',
+    about: 'PLSS points with an available monument record sheet.',
   },
   {
     name: 'Control',
     color: '#1A1A1A',
     about:
-      'At consectetur lorem donec massa sapien faucibus et molestie. Elit sed vulputate mi sit amet mauris commodo quis imperdiet. Purus gravida quis blandit turpis cursus in hac habitasse platea. Vitae elementum curabitur vitae nunc sed.',
+      'PLSS points that have been incorporated into the PLSS Fabric as control points.',
   },
   {
     name: 'Calculated',
     color: '#F3AC3D',
     about:
-      'Commodo viverra maecenas accumsan lacus vel facilisis volutpat est. Risus nullam eget felis eget nunc. Vitae turpis massa sed elementum. Sit amet nulla facilisi morbi tempus iaculis. Nulla porttitor massa id neque aliquam vestibulum.',
+      'PLSS points without monument record sheets whose location has been calculated from the PLSS Fabric and surrounding points.',
   },
   {
     name: 'MRRC Monument Record',
