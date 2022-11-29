@@ -70,19 +70,11 @@ export const myContentConverter = {
       data.color = colors.Unknown;
     }
 
-    return {
+    const result = {
       id: data.blm_point_id,
       submitted: data.created_at.toDate().toISOString(),
       label: status.label,
       status,
-      geometry: {
-        type: 'point',
-        x: data.location.longitude,
-        y: data.location.latitude,
-        spatialReference: {
-          wkid: 4326,
-        },
-      },
       symbol: {
         type: 'simple-marker',
         style: 'circle',
@@ -99,5 +91,18 @@ export const myContentConverter = {
         when: data.created_at.toDate().toISOString(),
       },
     };
+
+    if (data.location) {
+      result.geometry = {
+        type: 'point',
+        x: data.location.longitude,
+        y: data.location.latitude,
+        spatialReference: {
+          wkid: 4326,
+        },
+      };
+    }
+
+    return result;
   },
 };
