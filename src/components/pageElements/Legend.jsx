@@ -76,12 +76,6 @@ const layers = [
       'Commodo viverra maecenas accumsan lacus vel facilisis volutpat est. Risus nullam eget felis eget nunc. Vitae turpis massa sed elementum. Sit amet nulla facilisi morbi tempus iaculis. Nulla porttitor massa id neque aliquam vestibulum.',
   },
   {
-    name: 'Pending',
-    color: '#1922E4',
-    about:
-      'Enim nec dui nunc mattis enim. Condimentum vitae sapien pellentesque habitant morbi tristique. Massa id neque aliquam vestibulum morbi blandit cursus risus. Ut placerat orci nulla pellentesque. Quis enim lobortis scelerisque fermentum dui faucibus in.',
-  },
-  {
     name: 'MRRC Monument Record',
     color: '#73B2FF',
     about:
