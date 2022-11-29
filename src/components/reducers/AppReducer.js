@@ -34,7 +34,30 @@ export const defaults = {
 };
 
 const reduce = (draft, action) => {
-  console.log(`reducing ${action.type}`);
+  if (!action) {
+    console.error(
+      `dispatch event is empty
+
+expected
+
+{type: 'action', payload: 'data', meta: 'extra data'}`
+    );
+    return;
+  }
+
+  const keys = Object.keys(action);
+  if (keys.length < 1) {
+    console.error(
+      `incorrect dispatch shape sent
+
+${action}
+
+expected
+
+{type: 'action', payload: 'data', meta: 'extra data'}`
+    );
+    return;
+  }
 
   switch (action.type) {
     case 'add-point/color': {
