@@ -78,6 +78,6 @@ const layers = [
     name: 'MRRC Monument Record',
     color: '#73B2FF',
     about:
-      'Enim nec dui nunc mattis enim. Condimentum vitae sapien pellentesque habitant morbi tristique. Massa id neque aliquam vestibulum morbi blandit cursus risus. Ut placerat orci nulla pellentesque. Quis enim lobortis scelerisque fermentum dui faucibus in.',
+      'PLSS points with an available monument record sheet that was collected as part of the Monument Replacement and Restoration Committee (MRRC) grant program.',
   },
 ];
