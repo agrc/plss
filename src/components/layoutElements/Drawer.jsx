@@ -43,7 +43,6 @@ export default function Drawer({
   authenticated,
   map,
   addPoint,
-  userPoints,
   activeComponent,
   drawerOpen,
   submission,
@@ -90,7 +89,7 @@ export default function Drawer({
       }
       case 'content': {
         return signInCheckResult?.signedIn ? (
-          <MyContent content={userPoints} />
+          <MyContent dispatch={dispatch} />
         ) : (
           <Login dispatch={dispatch} authenticated={authenticated} />
         );
@@ -150,7 +149,6 @@ Drawer.propTypes = {
   graphic: PropTypes.object,
   map: PropTypes.object,
   addPoint: PropTypes.object,
-  userPoints: PropTypes.array,
   activeComponent: PropTypes.string,
   drawerOpen: PropTypes.bool,
   submission: PropTypes.shape({
