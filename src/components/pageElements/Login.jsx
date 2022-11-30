@@ -22,8 +22,20 @@ export default function Login({ dispatch }) {
           <h2 className="text-3xl font-semibold lg:text-2xl">
             Welcome back, {user.displayName}
           </h2>
-          <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100">
-            <img src={gravatar} alt="Gravatar" />
+
+          <span className="relative">
+            <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100 shadow-lg">
+              <img src={gravatar} alt="Gravatar" />
+            </span>
+            <svg
+              className="absolute bottom-1 right-3 h-6 w-6 fill-current text-slate-800/20"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 27 27"
+              role="presentation"
+              aria-hidden="true"
+            >
+              <path d="M10.8 2.699v9.45a2.699 2.699 0 005.398 0V5.862a8.101 8.101 0 11-8.423 1.913 2.702 2.702 0 00-3.821-3.821A13.5 13.5 0 1013.499 0 2.699 2.699 0 0010.8 2.699z"></path>
+            </svg>
           </span>
           <div className="flex w-full justify-around">
             <LogOutButton />
