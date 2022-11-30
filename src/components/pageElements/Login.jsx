@@ -2,9 +2,17 @@ import { useUser } from 'reactfire';
 import PropTypes from 'prop-types';
 import { LogInButton, LogOutButton, Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
+import md5 from 'md5';
+
+const size = 160;
+const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
 
 export default function Login({ dispatch }) {
   const { data: user } = useUser();
+
+  const gravatar = `https://www.gravatar.com/avatar/${md5(
+    user.email.toLowerCase()
+  )}?s=${size}&default=${fallback}`;
 
   return (
     <Card>
@@ -13,11 +21,9 @@ export default function Login({ dispatch }) {
           <h2 className="text-3xl font-semibold lg:text-2xl">
             Welcome back, {user.displayName}
           </h2>
-          <img
-            className="h-40 w-40 max-w-xs self-center rounded-full border-2 border-sky-900 bg-sky-800 text-sm shadow-lg"
-            src="https://source.unsplash.com/random/256x256?face"
-            alt="profile"
-          />
+          <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100">
+            <img src={gravatar} alt="Gravatar" />
+          </span>
           <div className="flex w-full justify-around">
             <LogOutButton />
             <Button
