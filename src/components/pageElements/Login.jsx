@@ -10,8 +10,9 @@ const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
 export default function Login({ dispatch }) {
   const { data: user } = useUser();
 
+  const email = user?.email ?? '';
   const gravatar = `https://www.gravatar.com/avatar/${md5(
-    user.email.toLowerCase()
+    email.toLowerCase()
   )}?s=${size}&default=${fallback}`;
 
   return (
