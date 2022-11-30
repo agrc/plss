@@ -19,6 +19,7 @@ const MyContent = lazy(() => import('../pageElements/MyContent.jsx'));
 const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
+const Profile = lazy(() => import('../pageElements/Profile.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
@@ -75,6 +76,9 @@ export default function Drawer({
     switch (componentName) {
       case 'login': {
         return <Login dispatch={dispatch} authenticated={authenticated} />;
+      }
+      case 'profile': {
+        return <Profile dispatch={dispatch} />;
       }
       case 'points': {
         return signInCheckResult?.signedIn ? (

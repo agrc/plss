@@ -1,8 +1,9 @@
 import { useUser } from 'reactfire';
+import PropTypes from 'prop-types';
 import { LogInButton, LogOutButton, Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 
-export default function Login() {
+export default function Login({ dispatch }) {
   const { data: user } = useUser();
 
   return (
@@ -19,7 +20,13 @@ export default function Login() {
           />
           <div className="flex w-full justify-around">
             <LogOutButton />
-            <Button>My Profile</Button>
+            <Button
+              onClick={() =>
+                dispatch({ type: 'menu/toggle', payload: 'profile' })
+              }
+            >
+              My Profile
+            </Button>
           </div>
         </div>
       ) : (
@@ -33,3 +40,6 @@ export default function Login() {
     </Card>
   );
 }
+Login.propTypes = {
+  dispatch: PropTypes.func,
+};
