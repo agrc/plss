@@ -28,7 +28,7 @@ export default function Profile() {
     <div className="mt-5">
       <form action="#" method="POST">
         <Card>
-          <h1 className="mb-4 text-2xl font-bold">My Profile</h1>
+          <h1 className="mb-4 text-2xl font-bold">Personal Information</h1>
           <div className="space-y-6 bg-white px-4">
             <Input
               name="name"
@@ -84,6 +84,11 @@ export default function Profile() {
               </div>
             </div>
           </div>
+          <p>
+            Your surveyor license and seal will be displayed publicly on
+            monument record sheets. No other personal information will be shared
+            or made public.
+          </p>
           <div className="flex justify-end">
             <Button type="submit">Save</Button>
           </div>
