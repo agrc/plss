@@ -49,11 +49,27 @@ export default function Login({ dispatch }) {
           </div>
         </div>
       ) : (
-        <div className="flex w-full flex-col items-center gap-6">
-          <h2 className="mb-6 text-3xl font-semibold lg:text-4xl">
-            Log in with
-          </h2>
-          <LogInButton />
+        <div className="grid flex-1 gap-4">
+          <h2 className="text-2xl font-bold">Sign in to your account</h2>
+          <p>
+            This app requires a UtahId account to submit monument record sheets.
+            Your name and email address will be shared with this application.
+          </p>
+          <p>
+            A surveyor license and seal will be displayed publicly on monument
+            record sheets if you choose to add them on your profile. Otherwise,
+            no other personal information will be shared or made public.
+          </p>
+          <div className="flex items-center text-slate-500">
+            <span className="h-px flex-1 bg-slate-200"></span>
+            <span className="mx-3 text-xs uppercase tracking-wide">
+              continue with
+            </span>
+            <span className="h-px flex-1 bg-slate-200"></span>
+          </div>
+          <div className="flex justify-center">
+            <LogInButton />
+          </div>
         </div>
       )}
     </Card>
