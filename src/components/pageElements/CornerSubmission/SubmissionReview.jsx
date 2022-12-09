@@ -42,7 +42,7 @@ const Review = () => {
         state.context = undefined;
       },
       onError: (error) => {
-        console.log('error', error);
+        console.warn('error', error);
         send({ type: 'NEXT' });
       },
     }
