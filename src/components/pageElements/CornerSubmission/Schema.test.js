@@ -857,4 +857,200 @@ describe('schema tests', () => {
       expect(result.errors[0]).toBe('An existing tiesheet PDF is required.');
     });
   });
+  describe('profile', () => {
+    const options = {
+      stripUnknown: true,
+      abortEarly: false,
+    };
+    describe('displayName', () => {
+      const validProfile = {
+        email: 'test@email.com',
+        license: '123456',
+        seal: 'submitters/abc/profile/seal.png',
+      };
+      test.each([[null], [undefined], ['']])(
+        '%j is not a valid display name',
+        (displayName) => {
+          let result;
+
+          try {
+            schemas.profileSchema.validateSync(
+              {
+                ...validProfile,
+                displayName,
+              },
+              options
+            );
+          } catch (error) {
+            result = error;
+          }
+
+          expect(result?.errors[0]).toBe('Name is a required field.');
+        }
+      );
+
+      test.each([['name'], [1], [createText(250)]])(
+        '%j is a valid display name',
+        (displayName) => {
+          let result;
+
+          try {
+            schemas.profileSchema.validateSync(
+              {
+                ...validProfile,
+                displayName,
+              },
+              options
+            );
+          } catch (error) {
+            result = error;
+          }
+
+          expect(result).toBe(undefined);
+        }
+      );
+    });
+    describe('email', () => {
+      const validProfile = {
+        displayName: 'first last',
+        license: '123456',
+        seal: 'submitters/abc/profile/seal.png',
+      };
+      test.each([[null], [undefined], [''], ['name'], [new Date()]])(
+        '%j is not a valid email',
+        (email) => {
+          let result;
+
+          try {
+            schemas.profileSchema.validateSync(
+              {
+                ...validProfile,
+                email,
+              },
+              options
+            );
+          } catch (error) {
+            result = error;
+          }
+
+          expect(result?.errors[0]).toBe('Email is a required field.');
+        }
+      );
+
+      test.each([['test@test.com']])('%j is a valid display name', (email) => {
+        let result;
+
+        try {
+          schemas.profileSchema.validateSync(
+            {
+              ...validProfile,
+              email,
+            },
+            options
+          );
+        } catch (error) {
+          result = error;
+        }
+
+        expect(result).toBe(undefined);
+      });
+    });
+    describe('license', () => {
+      const validProfile = {
+        displayName: 'first last',
+        email: 'test@email.com',
+        seal: 'submitters/abc/profile/seal.png',
+      };
+      test.each([[createText(251)]])('%j is not a valid license', (license) => {
+        let result;
+
+        try {
+          schemas.profileSchema.validateSync(
+            {
+              ...validProfile,
+              license,
+            },
+            options
+          );
+        } catch (error) {
+          result = error;
+        }
+
+        expect(result?.errors[0]).toBe(
+          'License must be at most 250 characters'
+        );
+      });
+
+      test.each([[null], [undefined], [''], ['name'], [1], [createText(250)]])(
+        '%j is a valid license',
+        (license) => {
+          let result;
+
+          try {
+            schemas.profileSchema.validateSync(
+              {
+                ...validProfile,
+                license,
+              },
+              options
+            );
+          } catch (error) {
+            result = error;
+          }
+
+          expect(result).toBe(undefined);
+        }
+      );
+    });
+    describe('seal', () => {
+      const validProfile = {
+        displayName: 'first last',
+        email: 'test@email.com',
+        license: '123456',
+      };
+      test.each([['garbage'], ['submitters/abc/seal.png'], [0], [10]])(
+        '%j is not a valid seal',
+        (seal) => {
+          let result;
+
+          try {
+            schemas.profileSchema.validateSync(
+              {
+                ...validProfile,
+                seal,
+              },
+              options
+            );
+          } catch (error) {
+            result = error;
+          }
+
+          expect(result?.errors[0]).toBe('Images must be jpeg or png.');
+        }
+      );
+
+      test.each([
+        [null],
+        [undefined],
+        [''],
+        ['submitters/abc/profile/seal.png'],
+      ])('%j is a valid seal', (seal) => {
+        let result;
+
+        try {
+          schemas.profileSchema.validateSync(
+            {
+              ...validProfile,
+              seal,
+            },
+            options
+          );
+        } catch (error) {
+          result = error;
+        }
+
+        expect(result).toBe(undefined);
+      });
+    });
+  });
 });
