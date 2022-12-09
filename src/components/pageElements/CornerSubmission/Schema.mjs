@@ -411,3 +411,35 @@ export const imagesSchema = yup.object().shape({
       message: imageMessage,
     }),
 });
+
+export const profileSchema = yup.object().shape({
+  displayName: yup
+    .string()
+    .required('Name is a required field.')
+    .typeError('Name is a required field.')
+    .max(250)
+    .label('Name'),
+  email: yup
+    .string()
+    .required('Email is a required field.')
+    .email('Email is a required field.')
+    .typeError('Email is a required field.')
+    .max(250)
+    .label('Email'),
+  license: yup
+    .string()
+    .notRequired()
+    .max(250)
+    .nullable()
+    .optional()
+    .label('License'),
+  seal: yup
+    .string()
+    .notRequired()
+    .matches(/submitters\/.+\/profile\/seal\.(png|jpe?g)$/, {
+      excludeEmptyString: true,
+      message: imageMessage,
+    })
+    .nullable()
+    .optional(),
+});
