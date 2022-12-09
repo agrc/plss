@@ -1,99 +1,166 @@
-import { useUser } from 'reactfire';
-import Card from '../formElements/Card.jsx';
-import { Input, Label } from '../formElements/Inputs.jsx';
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+import { httpsCallable } from 'firebase/functions';
+import { useUser, useFunctions } from 'reactfire';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
 import ErrorMessageTag from './ErrorMessage.jsx';
-import { useForm } from 'react-hook-form';
+import { profileSchema as schema } from './CornerSubmission/Schema.mjs';
+import { Input, Label } from '../formElements/Inputs.jsx';
+import Card from '../formElements/Card.jsx';
 import { Button } from '../formElements/Buttons.jsx';
+import { ImageUpload } from '../formElements/ImageUpload.jsx';
+import { DevTool } from '@hookform/devtools';
+import Note from '../formElements/Note.jsx';
 
-const defaults = {
-  name: '',
+const defaultValues = {
+  displayName: '',
   email: '',
   license: '',
   seal: '',
 };
 
-export default function Profile() {
-  const { data: user } = useUser();
+export default function Profile({ dispatch }) {
+  const functions = useFunctions();
+  const { data } = useUser();
 
-  const { email, displayName } = user;
-  defaults.name = displayName;
-  defaults.email = email;
+  const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
+  const updateProfile = httpsCallable(functions, 'functions-httpsPostProfile');
 
-  const { register, formState } = useForm({
-    defaultValues: defaults,
+  const { data: response, status: profileStatus } = useQuery(
+    ['profile', data?.uid],
+    getProfile,
+    {
+      enabled: data?.uid?.length > 0,
+    }
+  );
+
+  const { control, formState, handleSubmit, register, reset } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
   });
+  const fields = useWatch({ control });
+
+  const { mutate, status } = useMutation(
+    ['update profile', data.uid],
+    (data) => updateProfile(data),
+    {
+      onSuccess: (response) => {
+        reset(response.data);
+      },
+      onError: (error) => {
+        console.warn('error', error);
+        reset();
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (profileStatus === 'success') {
+      reset(response.data);
+    }
+  }, [profileStatus, reset, response]);
+
+  const onSubmit = (payload) => {
+    mutate(payload);
+  };
+
+  console.log(fields);
 
   return (
     <div className="mt-5">
-      <form action="#" method="POST">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
           <h1 className="mb-4 text-2xl font-bold">Personal Information</h1>
-          <div className="space-y-6 bg-white px-4">
-            <Input
-              name="name"
-              label="Name"
-              required={true}
-              value={defaults.name}
-              inputRef={register}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="name"
-              as={ErrorMessageTag}
-            />
-            <Input
-              name="email"
-              label="Email"
-              required={true}
-              value={defaults.email}
-              inputRef={register}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="email"
-              as={ErrorMessageTag}
-            />
-            <Input
-              name="license"
-              label="Surveyor License"
-              required={false}
-              value={defaults.license}
-              inputRef={register}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="license"
-              as={ErrorMessageTag}
-            />
-            <div>
-              <Label className="font-semibold">Surveyor Seal Image</Label>
-              <div className="flex items-center p-2">
-                <span className="mr-2 inline-block h-20 w-20 overflow-hidden rounded-full bg-slate-100">
-                  <svg
-                    className="h-full w-full text-slate-300"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </span>
-                <Button type="button" style="alternate">
-                  Change
+          {profileStatus === 'loading' ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <Input
+                name="displayName"
+                label="Name"
+                required={true}
+                value={fields[name]}
+                inputRef={register}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="name"
+                as={ErrorMessageTag}
+              />
+              <Input
+                name="email"
+                label="Email"
+                required={true}
+                value={fields[name]}
+                inputRef={register}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="email"
+                as={ErrorMessageTag}
+              />
+              <Input
+                name="license"
+                label="Surveyor License"
+                required={false}
+                value={fields[name]}
+                inputRef={register}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="license"
+                as={ErrorMessageTag}
+              />
+              <Label htmlFor="seal" className="font-semibold">
+                Surveyor Seal Image
+              </Label>
+              <Controller
+                name="seal"
+                control={control}
+                render={({ field: { onChange, name } }) => (
+                  <ImageUpload
+                    defaultFileName={name}
+                    value={fields[name]}
+                    path={`submitters/${data.uid}/profile`}
+                    onChange={onChange}
+                  />
+                )}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="seal"
+                as={ErrorMessageTag}
+              />
+              <Note>
+                Your surveyor license and seal will be displayed publicly on
+                monument record sheets. No other personal information will be
+                shared or made public.
+              </Note>
+              <div className="mt-4 flex justify-between">
+                <Button
+                  type="button"
+                  style="secondary"
+                  onClick={() =>
+                    dispatch({ type: 'menu/toggle', payload: 'login' })
+                  }
+                >
+                  Back
+                </Button>
+                <Button type="submit" state={status}>
+                  Save
                 </Button>
               </div>
-            </div>
-          </div>
-          <p>
-            Your surveyor license and seal will be displayed publicly on
-            monument record sheets. No other personal information will be shared
-            or made public.
-          </p>
-          <div className="flex justify-end">
-            <Button type="submit">Save</Button>
-          </div>
+            </>
+          )}
         </Card>
       </form>
+      <DevTool control={control} />
     </div>
   );
 }
+Profile.propTypes = {
+  dispatch: PropTypes.func,
+};
