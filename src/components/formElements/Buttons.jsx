@@ -178,7 +178,7 @@ Button.propTypes = {
   /**
    * The children to display on the button
    */
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   /**
    * The style of button
    */
@@ -186,7 +186,7 @@ Button.propTypes = {
   /**
    * The state of button
    */
-  state: PropTypes.oneOf(['idle', 'disabled', 'loading']),
+  state: PropTypes.oneOf(['idle', 'disabled', 'loading', 'success']),
   /**
    * The property name used by react hook form
    */
