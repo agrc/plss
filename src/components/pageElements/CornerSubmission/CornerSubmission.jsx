@@ -9,6 +9,7 @@ import extractTownshipInformation from './blmPointId.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
+import Note from '../../formElements/Note.jsx';
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
@@ -127,11 +128,11 @@ export default function CornerSubmission({ submission, dispatch }) {
       {!hide && (
         <div className="mb-4 inline-grid">
           <Card>
-            <p className="border bg-slate-50 p-3 text-justify text-xs leading-tight">
+            <Note>
               This monument record information will be reviewed by the county
               surveyor under stewardship of this corner to satisfy the
               requirements of state code 17-23-17-7a.
-            </p>
+            </Note>
             <div className="flex justify-between">
               <span className="font-semibold">Submitted By</span>
               <span>{user.displayName}</span>
