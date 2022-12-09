@@ -264,7 +264,7 @@ const TieSheetList = ({ blmPointId, children }) => {
   const fileRef = ref(storage, path);
 
   const { data, status } = useQuery(
-    [blmPointId],
+    ['identify', blmPointId],
     async () => {
       const response = await listAll(fileRef);
 
