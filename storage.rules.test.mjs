@@ -118,9 +118,7 @@ describe('storage', () => {
     await assertFails(
       submitter.child('test.png').put(loadImage(), { contentType })
     );
-    await assertSucceeds(
-      user.child('test.png').put(loadImage(), { contentType })
-    );
+    await assertFails(user.child('test.png').put(loadImage(), { contentType }));
     await assertSucceeds(
       point.child('test.png').put(loadImage(), { contentType })
     );
