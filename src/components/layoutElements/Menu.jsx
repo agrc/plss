@@ -65,7 +65,7 @@ export default function Menu({ dispatch, drawerOpen }) {
         Icon={UserCircleIcon}
         onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
       >
-        {user !== null ? 'Logout' : 'Login/Register'}
+        {user !== null ? 'Profile' : 'Login/Register'}
       </MenuItem>
     </nav>
   );
