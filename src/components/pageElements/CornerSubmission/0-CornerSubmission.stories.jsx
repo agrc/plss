@@ -1,7 +1,7 @@
 import CornerSubmission from './CornerSubmission.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
-const story = {
+export default {
   title: 'Corner/Submission',
   component: CornerSubmission,
   decorators: [
@@ -32,8 +32,6 @@ const story = {
     },
   },
 };
-
-export default story;
 
 const Template = (args) => {
   const data = {

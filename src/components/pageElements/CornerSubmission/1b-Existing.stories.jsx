@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import Pdf from './Pdf.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 
-const story = {
+export default {
   title: 'Corner/Submission/Parts',
   component: Pdf,
   decorators: [
@@ -36,8 +36,6 @@ const story = {
     },
   },
 };
-
-export default story;
 
 const Template = (args) => {
   const data = { ...args };

@@ -87,7 +87,7 @@ LimitedTextarea.defaultProps = {
   disabled: false,
 };
 
-export const useMaxLength = ({ value, limit }) => {
+const useMaxLength = ({ value, limit }) => {
   return {
     limit,
     remaining: limit - (value?.length || 0),

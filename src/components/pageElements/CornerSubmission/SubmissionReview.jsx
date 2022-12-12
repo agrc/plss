@@ -14,7 +14,7 @@ import {
   grid as gridOptions,
 } from './Options.mjs';
 import { ImagePreview } from './Images.jsx';
-import { A } from '../../formElements/Buttons.jsx';
+import { Link } from '../../formElements/Buttons.jsx';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);
@@ -315,9 +315,9 @@ const AttachmentReview = ({ path }) => {
         Existing Monument Record Sheet
       </h3>
       <div className="h-[400px] max-w-[300px] justify-self-center">
-        <A href={data} target="_blank" rel="noopener noreferrer">
+        <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
-        </A>
+        </Link>
         {path && (
           <object data={data} type="application/pdf" width="300" height="375">
             PDF preview

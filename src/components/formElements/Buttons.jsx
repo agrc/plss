@@ -212,14 +212,14 @@ Button.defaultProps = {
   buttonGroup: undefined,
 };
 
-export const A = ({ href, children, target, rel }) => {
+export const Link = ({ href, children, target, rel }) => {
   return (
     <a href={href} target={target} rel={rel} className={linkClasses}>
       {children}
     </a>
   );
 };
-A.propTypes = {
+Link.propTypes = {
   href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   target: PropTypes.string,

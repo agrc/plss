@@ -10,7 +10,7 @@ import { Select } from '../../formElements/Select.jsx';
 import Switch from '../../formElements/Switch.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
-import { A } from '../../formElements/Buttons.jsx';
+import { Link } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { accuracy, status, corner } from './Options.mjs';
@@ -175,14 +175,14 @@ const Metadata = ({ dispatch }) => {
                   />
                 )}
               />
-              <A
+              <Link
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
               >
                 Help
                 <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
-              </A>
+              </Link>
             </div>
             <ErrorMessage
               errors={formState.errors}

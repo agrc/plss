@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Button, A } from '../formElements/Buttons.jsx';
+import { Button, Link } from '../formElements/Buttons.jsx';
 export default function Welcome({ dispatch }) {
   return (
     <main className="mt-3 inline-grid gap-4">
@@ -40,17 +40,17 @@ export default function Welcome({ dispatch }) {
       <h1 className="text-2xl font-semibold">Where can I get the data</h1>
       <p className="ml-3">
         All of the data in this app and more is made available for{' '}
-        <A
+        <Link
           href="https://gis.utah.gov/data/cadastre/plss/"
           target="_blank"
           rel="noreferrer"
         >
           download
-        </A>{' '}
+        </Link>{' '}
         on the{' '}
-        <A href="https://gis.utah.gov/" target="_blank" rel="noreferrer">
+        <Link href="https://gis.utah.gov/" target="_blank" rel="noreferrer">
           UGRC website
-        </A>
+        </Link>
         .
       </p>
     </main>
