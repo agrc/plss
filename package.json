@@ -46,7 +46,7 @@
     "firebase": "^9.15.0",
     "firebase-admin": "^11.3.0",
     "firebase-function-tools": "^2.0.1",
-    "firebase-functions": "^4.1.0",
+    "firebase-functions": "^4.1.1",
     "got": "^12.5.3",
     "if-env": "^1.0.4",
     "ky": "^0.32.2",
