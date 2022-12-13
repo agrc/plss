@@ -11,7 +11,7 @@ const syncProfileImage = storage
 
     logger.info('storage object deleted', name, { structuredData: true });
 
-    const match = /submitters\/(?<uid>.+)\/profile\/seal\.(png|jpe?g)$/.exec(
+    const match = /submitters\/(?<uid>.+)\/profile\/seal\.(png|jpe?g)$/i.exec(
       name
     );
 
