@@ -312,7 +312,7 @@ export const existingSheetSchema = yup.object().shape({
   pdf: yup
     .string()
     .typeError(pdfMessage)
-    .matches(/submitters\/.+\/existing\/.+\/existing-sheet\.pdf$/, {
+    .matches(/submitters\/.+\/existing\/.+\/existing-sheet\.pdf$/i, {
       message: pdfMessage,
     })
     .required(pdfMessage),
@@ -322,91 +322,91 @@ export const imagesSchema = yup.object().shape({
   map: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/map\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/map\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   monument: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/monument\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/monument\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   closeUp: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/closeUp\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/closeUp\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra1: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra1\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra1\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra2: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra2\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra2\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra3: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra3\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra3\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra4: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra4\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra4\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra5: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra5\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra5\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra6: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra6\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra6\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra7: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra7\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra7\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra8: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra8\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra8\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra9: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra9\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra9\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra10: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra10\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/new\/.+\/extra10\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
@@ -436,7 +436,7 @@ export const profileSchema = yup.object().shape({
   seal: yup
     .string()
     .notRequired()
-    .matches(/submitters\/.+\/profile\/seal\.(png|jpe?g)$/, {
+    .matches(/submitters\/.+\/profile\/seal\.(png|jpe?g)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     })
