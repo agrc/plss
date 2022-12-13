@@ -12,7 +12,6 @@ import { Input, Label } from '../formElements/Inputs.jsx';
 import Card from '../formElements/Card.jsx';
 import { Button } from '../formElements/Buttons.jsx';
 import { ImageUpload } from '../formElements/ImageUpload.jsx';
-import { DevTool } from '@hookform/devtools';
 import Note from '../formElements/Note.jsx';
 
 const defaultValues = {
@@ -155,7 +154,6 @@ export default function Profile({ dispatch }) {
           )}
         </Card>
       </form>
-      <DevTool control={control} />
     </div>
   );
 }
