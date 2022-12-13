@@ -22,7 +22,10 @@ for (const file of files) {
     file.replace('./', '').split('.f.mjs').join('').split('/')
   );
 
-  console.log(functionName);
+  if (import.meta.env?.DEV) {
+    console.log(functionName);
+  }
+
   const module = await import(path.resolve(__dirname, file));
 
   functionExports[functionName] = module?.default || module;
