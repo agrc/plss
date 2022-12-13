@@ -9,7 +9,7 @@ const syncProfileImage = storage
   .onDelete(async (object) => {
     const { name } = object;
 
-    logger.info('storage object deleted', object, { structuredData: true });
+    logger.info('storage object deleted', name, { structuredData: true });
 
     const match = /submitters\/(?<uid>.+)\/profile\/seal\.(png|jpe?g)$/.exec(
       name
@@ -22,6 +22,7 @@ const syncProfileImage = storage
     try {
       const docRef = await db.collection('submitters').doc(match.groups.uid);
       await docRef.update({ seal: '' });
+      logger.info('seal path removed');
     } catch (error) {
       logger.error('error syncing seal photo', error, {
         structuredData: true,
