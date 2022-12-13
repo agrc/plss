@@ -16,16 +16,15 @@ describe('schema tests', () => {
   describe('helpers', () => {
     describe('scale and precision', () => {
       test.each([
-        [12, { scale: 2, precision: 2 }, true],
-        [12.12, { scale: 2, precision: 2 }, true],
-        [12345678.123, { scale: 8, precision: 3 }, true],
-        [12345678.12, { scale: 8, precision: 3 }, true],
-        [12345678.1, { scale: 8, precision: 3 }, true],
-        [12.12, { scale: 3, precision: 2 }, false],
-        [12.1, { scale: 2, precision: 0 }, false],
-        [null, { scale: 2, precision: 3 }, false],
-        [undefined, { scale: 2, precision: 3 }, false],
-        ['ab.abc', { scale: 2, precision: 3 }, false],
+        [12, { precision: 2 }, true],
+        [12.12, { precision: 2 }, true],
+        [12345678.123, { precision: 3 }, true],
+        [12345678.12, { precision: 3 }, true],
+        [12345678.1, { precision: 3 }, true],
+        [12.1, { precision: 0 }, false],
+        [null, { precision: 3 }, false],
+        [undefined, { precision: 3 }, false],
+        ['ab.abc', { precision: 3 }, false],
       ])(`number %s with %o is %s`, (value, properties, expected) => {
         expect(schemas.scaleAndPrecision(value, properties)).toEqual(expected);
       });
@@ -541,26 +540,42 @@ describe('schema tests', () => {
       );
     });
     describe('northing', () => {
+      const errors = {
+        northingMeters: {
+          generic:
+            'Northing value must contain seven values to the left of the decimal, and up to three to the right.',
+          min: 'Northing value must be greater than or equal to 2018522',
+          max: 'Northing value must be less than or equal to 2305365',
+        },
+        northingFeet: {
+          generic:
+            'Northing value must contain eight values to the left of the decimal, and up to three to the right.',
+          min: 'Northing value must be greater than or equal to 6622436',
+          max: 'Northing value must be less than or equal to 7563519',
+        },
+      };
+
       describe('feet', () => {
         const validSchema = {
           zone: 'central',
           unit: 'ft',
-          easting: 1234567,
+          easting: 911358,
           elevation: 2000,
         };
         test.each([
-          [null],
-          [undefined],
-          [''],
-          ['garbage'],
-          ['abcdefg.abc'],
-          [0],
-          [100],
-          [10.1],
-          [-12345678.123],
-          [123456789],
-          [12345678.1234],
-        ])('shows proper error message for %j', (northing) => {
+          [null, errors.northingFeet.generic],
+          [undefined, errors.northingFeet.generic],
+          ['', errors.northingFeet.generic],
+          ['garbage', errors.northingFeet.generic],
+          ['abcdefg.abc', errors.northingFeet.generic],
+          [0, errors.northingFeet.min],
+          [100, errors.northingFeet.min],
+          [10.1, errors.northingFeet.min],
+          [-12345678.123, errors.northingFeet.min],
+          [7563510.0001, errors.northingFeet.generic],
+          [123456789, errors.northingFeet.max],
+          [12345678.1234, errors.northingFeet.max],
+        ])('shows proper error message for %j', (northing, error) => {
           let result;
 
           try {
@@ -572,31 +587,30 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(
-            'Northing value must contain eight values to the left of the decimal, and up to three to the right.'
-          );
+          expect(result.errors[0]).toBe(error);
         });
       });
       describe('meters', () => {
         const validSchema = {
           zone: 'central',
           unit: 'm',
-          easting: 123456,
+          easting: 277790,
           elevation: 2000,
         };
         test.each([
-          [null],
-          [undefined],
-          [''],
-          ['garbage'],
-          ['abcdefg.abc'],
-          [0],
-          [100],
-          [10.1],
-          [-1234567.123],
-          [12345678],
-          [1234567.1234],
-        ])('shows proper error message for %j', (northing) => {
+          [null, errors.northingMeters.generic],
+          [undefined, errors.northingMeters.generic],
+          ['', errors.northingMeters.generic],
+          ['garbage', errors.northingMeters.generic],
+          ['abcdefg.abc', errors.northingMeters.generic],
+          [0, errors.northingMeters.min],
+          [100, errors.northingMeters.min],
+          [10.1, errors.northingMeters.min],
+          [-1234567.123, errors.northingMeters.min],
+          [1234567.1234, errors.northingMeters.min],
+          [12345678, errors.northingMeters.max],
+          [2018522.1234, errors.northingMeters.generic],
+        ])('shows proper error message for %j', (northing, error) => {
           let result;
 
           try {
@@ -608,34 +622,46 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(
-            'Northing value must contain seven values to the left of the decimal, and up to three to the right.'
-          );
+          expect(result.errors[0]).toBe(error);
         });
       });
     });
     describe('easting', () => {
+      const errors = {
+        eastingFeet: {
+          generic:
+            'Easting value must contain seven values to the left of the decimal, and up to three to the right.',
+          min: 'Easting value must be greater than or equal to 911357',
+          max: 'Easting value must be less than or equal to 2338732',
+        },
+        eastingMeters: {
+          generic:
+            'Easting value must contain six values to the left of the decimal, and up to three to the right.',
+          min: 'Easting value must be greater than or equal to 277782',
+          max: 'Easting value must be less than or equal to 712847',
+        },
+      };
       describe('feet', () => {
         const validSchema = {
           zone: 'central',
           unit: 'ft',
-          northing: 12345678,
+          northing: 6622440,
           elevation: 2000,
         };
         test.each([
-          [null],
-          [undefined],
-          [''],
-          ['garbage'],
-          ['abcdefg.abc'],
-          [0],
-          [100],
-          [10.1],
-          [-1234567.123],
-          [123456],
-          [12345678],
-          [1234567.1234],
-        ])('shows proper error message for %j', (easting) => {
+          [null, errors.eastingFeet.generic],
+          [undefined, errors.eastingFeet.generic],
+          ['', errors.eastingFeet.generic],
+          ['garbage', errors.eastingFeet.generic],
+          ['abcdefg.abc', errors.eastingFeet.generic],
+          [0, errors.eastingFeet.min],
+          [100, errors.eastingFeet.min],
+          [10.1, errors.eastingFeet.min],
+          [-1234567.123, errors.eastingFeet.min],
+          [911357.12345, errors.eastingFeet.generic],
+          [12345678, errors.eastingFeet.max],
+          [1234567.1234, errors.eastingFeet.generic],
+        ])('shows proper error message for %j', (easting, error) => {
           let result;
 
           try {
@@ -647,32 +673,30 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(
-            'Easting value must contain seven values to the left of the decimal, and up to three to the right.'
-          );
+          expect(result.errors[0]).toBe(error);
         });
       });
       describe('meters', () => {
         const validSchema = {
           zone: 'central',
           unit: 'm',
-          northing: 1234567,
+          northing: 2018530,
           elevation: 2000,
         };
         test.each([
-          [null],
-          [undefined],
-          [''],
-          ['garbage'],
-          ['abcdefg.abc'],
-          [0],
-          [100],
-          [10.1],
-          [-123456.123],
-          [12345],
-          [1234567],
-          [123456.1234],
-        ])('shows proper error message for %j', (easting) => {
+          [null, errors.eastingMeters.generic],
+          [undefined, errors.eastingMeters.generic],
+          ['', errors.eastingMeters.generic],
+          ['garbage', errors.eastingMeters.generic],
+          ['abcdefg.abc', errors.eastingMeters.generic],
+          [0, errors.eastingMeters.min],
+          [100, errors.eastingMeters.min],
+          [10.1, errors.eastingMeters.min],
+          [-123456.123, errors.eastingMeters.min],
+          [12345, errors.eastingMeters.min],
+          [1234567, errors.eastingMeters.max],
+          [277790.1234, errors.eastingMeters.generic],
+        ])('shows proper error message for %j', (easting, error) => {
           let result;
 
           try {
@@ -684,9 +708,7 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(
-            'Easting value must contain six values to the left of the decimal, and up to three to the right.'
-          );
+          expect(result.errors[0]).toBe(error);
         });
       });
     });
