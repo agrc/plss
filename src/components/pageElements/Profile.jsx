@@ -67,8 +67,6 @@ export default function Profile({ dispatch }) {
     mutate(payload);
   };
 
-  console.log(fields);
-
   return (
     <div className="mt-5">
       <form onSubmit={handleSubmit(onSubmit)}>
