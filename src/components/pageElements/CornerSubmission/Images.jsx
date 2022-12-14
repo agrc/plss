@@ -155,7 +155,7 @@ export default function MonumentImages() {
               setExtraPageCount(nextPage);
             }}
           >
-            Add another image
+            Add another file
           </Button>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
