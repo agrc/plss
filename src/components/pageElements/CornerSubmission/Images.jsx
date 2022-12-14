@@ -57,7 +57,10 @@ export default function MonumentImages() {
   return (
     <>
       <h3 className="text-2xl font-semibold">Monument Images</h3>
-      <p className="text-sm leading-none">All images are optional</p>
+      <p className="text-sm leading-none">
+        All images/files are optional. Acceptable file types are jpg, png, plus
+        pdf for the Extra Pages.
+      </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Map view or sketch">
