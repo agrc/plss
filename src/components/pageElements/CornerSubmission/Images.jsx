@@ -269,11 +269,13 @@ function ImageUpload({ defaultFileName, onChange, id, value }) {
             setError('You can only upload jpg or png images here.');
           } else {
             setStatus('error');
-            setError('Permission denied. Please try again.');
+            setError(
+              'Permission denied. Check your login status and try again.'
+            );
           }
         } catch {
           setStatus('error');
-          setError('Permission denied. Please try again.');
+          setError('Permission denied. Check your login status and try again.');
         }
         setUploadTask(undefined);
       });
