@@ -266,13 +266,7 @@ function ImageUpload({ defaultFileName, onChange, id, value }) {
             );
           } else if (!task.snapshot.metadata.contentType.match(/image.*/)) {
             setStatus('error');
-            setError(
-              `You can only upload images. That was a ${
-                task.snapshot.metadata.contentType
-                  ? task.snapshot.metadata.contentType
-                  : 'unknown type'
-              }.`
-            );
+            setError('You can only upload jpg or png images here.');
           } else {
             setStatus('error');
             setError('Permission denied. Please try again.');
