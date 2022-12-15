@@ -1,10 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
-import { ref } from 'firebase/storage';
-import { useFunctions, useStorage, useStorageDownloadURL } from 'reactfire';
+import { useFunctions, useStorage } from 'reactfire';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import Wizard from './Wizard.jsx';
 import { keyMap, formatDatum } from '../../helpers/index.mjs';
@@ -13,8 +12,9 @@ import {
   geographic as geographicOptions,
   grid as gridOptions,
 } from './Options.mjs';
-import { ImagePreview } from './Images.jsx';
+import { ObjectPreview } from '../../formElements/FileUpload.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);
@@ -289,11 +289,7 @@ const ImagesReview = ({ images }) => {
             return;
           }
 
-          return (
-            <div key={key} className="flex flex-col items-center">
-              <ImagePreview storagePath={value} />
-            </div>
-          );
+          return <Image key={key} path={value} />;
         })
       ) : (
         <p className="text-center">This submission contains no images.</p>
@@ -305,9 +301,25 @@ ImagesReview.propTypes = {
   images: PropTypes.object,
 };
 
+const Image = ({ path }) => {
+  const storage = useStorage();
+  const [data, setData] = useState();
+  getDownloadURL(ref(storage, path)).then(setData);
+
+  return (
+    <div className="flex flex-col items-center">
+      {data ? <ObjectPreview url={data}>preview</ObjectPreview> : 'Loading...'}
+    </div>
+  );
+};
+Image.propTypes = {
+  path: PropTypes.string,
+};
+
 const AttachmentReview = ({ path }) => {
   const storage = useStorage();
-  const { data } = useStorageDownloadURL(ref(storage, path));
+  const [data, setData] = useState();
+  getDownloadURL(ref(storage, path)).then(setData);
 
   return (
     <Card>
@@ -318,10 +330,10 @@ const AttachmentReview = ({ path }) => {
         <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
         </Link>
-        {path && (
-          <object data={data} type="application/pdf" width="300" height="375">
-            PDF preview
-          </object>
+        {data ? (
+          <ObjectPreview url={data}>preview</ObjectPreview>
+        ) : (
+          'loading...'
         )}
       </div>
     </Card>
@@ -356,14 +368,17 @@ MonumentPreview.propTypes = {
 
 const PdfPreview = ({ path }) => {
   const storage = useStorage();
-  const { data } = useStorageDownloadURL(ref(storage, path));
+  const [data, setData] = useState();
+  getDownloadURL(ref(storage, path)).then(setData);
 
-  return path ? (
-    <object data={data} type="application/pdf" width="300" height="400">
-      {data}
-    </object>
-  ) : (
-    'loading...'
+  if (!data) {
+    return <div className="flex flex-col items-center">Loading...</div>;
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      {data && <ObjectPreview url={data}>preview</ObjectPreview>}
+    </div>
   );
 };
 PdfPreview.propTypes = {
