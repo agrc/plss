@@ -11,7 +11,7 @@ import { profileSchema as schema } from './CornerSubmission/Schema.mjs';
 import { Input, Label } from '../formElements/Inputs.jsx';
 import Card from '../formElements/Card.jsx';
 import { Button } from '../formElements/Buttons.jsx';
-import { ImageUpload } from '../formElements/ImageUpload.jsx';
+import FileUpload from '../formElements/FileUpload.jsx';
 import Note from '../formElements/Note.jsx';
 
 const defaultValues = {
@@ -118,10 +118,15 @@ export default function Profile({ dispatch }) {
                 name="seal"
                 control={control}
                 render={({ field: { onChange, name } }) => (
-                  <ImageUpload
+                  <FileUpload
                     defaultFileName={name}
-                    value={fields[name]}
                     path={`submitters/${data.uid}/profile`}
+                    contentTypes={[
+                      { name: 'PNG', value: 'image/png' },
+                      { name: 'JPEG', value: 'image/jpeg' },
+                    ]}
+                    maxFileSize={5}
+                    value={fields[name]}
                     onChange={onChange}
                   />
                 )}
