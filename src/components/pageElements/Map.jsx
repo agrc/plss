@@ -180,7 +180,7 @@ export default function PlssMap({ state, dispatch, color }) {
       return;
     }
 
-    mapView.current.when(() => {
+    if (mapView.current) {
       if (windowDimensions.width > 640) {
         mapView.current.padding.left = 400;
         mapView.current.padding.bottom = 0;
@@ -188,7 +188,7 @@ export default function PlssMap({ state, dispatch, color }) {
         mapView.current.padding.left = 0;
         mapView.current.padding.bottom = 450;
       }
-    });
+    }
 
     window.addEventListener('resize', handleResize, false);
 
