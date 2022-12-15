@@ -9,6 +9,10 @@ service firebase.storage {
   function lessThan(megabytes) {
     return request.resource != null && request.resource.size < (megabytes * 1024 * 1024);
   }
+  function isAcceptableFile(file) {
+    return (file.matches("^extra[0-9].(pdf|png|jpe?g)$") && (isImage() || isPdf())) ||
+         !file.matches("^extra[0-9].(pdf|png|jpe?g)$") && isImage();
+  }
   function isImage() {
     return request.resource.contentType.matches('image/png') ||
         request.resource.contentType.matches('image/jpeg');
@@ -31,7 +35,7 @@ service firebase.storage {
       }
 
       match /new/{point_id}/{file} {
-        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
       }
 
       match /existing/{point_id}/{file} {

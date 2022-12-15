@@ -458,70 +458,70 @@ export const imagesSchema = yup.object().shape({
   extra1: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra1\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra1\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra2: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra2\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra2\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra3: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra3\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra3\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra4: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra4\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra4\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra5: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra5\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra5\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra6: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra6\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra6\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra7: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra7\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra7\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra8: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra8\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra8\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra9: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra9\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra9\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
   extra10: yup
     .string()
     .typeError(imageMessage)
-    .matches(/submitters\/.+\/new\/.+\/extra10\.(png|jpe?g)$/i, {
+    .matches(/submitters\/.+\/new\/.+\/extra10\.(png|jpe?g|pdf)$/i, {
       excludeEmptyString: true,
       message: imageMessage,
     }),
