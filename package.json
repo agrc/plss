@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@arcgis/core": "^4.25.5",
-    "@headlessui/react": "^1.7.5",
+    "@headlessui/react": "^1.7.6",
     "@heroicons/react": "^2.0.13",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^2.9.10",
@@ -44,7 +44,7 @@
     "dms-conversion": "^3.1.1",
     "express": "^4.18.2",
     "firebase": "^9.15.0",
-    "firebase-admin": "^11.3.0",
+    "firebase-admin": "^11.4.0",
     "firebase-function-tools": "^2.0.1",
     "firebase-functions": "^4.1.1",
     "got": "^12.5.3",

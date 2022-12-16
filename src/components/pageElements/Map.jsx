@@ -14,9 +14,8 @@ import { contrastColor } from 'contrast-color';
 import clsx from 'clsx';
 import { useSigninCheck, useFunctions } from 'reactfire';
 import { httpsCallable } from 'firebase/functions';
+import MyLocation from './mapElements/MyLocation.jsx';
 import '@ugrc/layer-selector/src/LayerSelector.css';
-
-// import Search from '../Search/Search';
 
 esriConfig.assetsPath = '/assets';
 
@@ -46,6 +45,7 @@ export default function PlssMap({ state, dispatch, color }) {
   const isLoading = useViewLoading(mapView.current);
   const { graphic, setGraphic } = useGraphicManager(mapView);
   const { setGraphic: setUserGraphics } = useGraphicManager(mapView);
+  const { setGraphic: setGpsGraphic } = useGraphicManager(mapView);
 
   const functions = useFunctions();
   const myContent = httpsCallable(functions, 'functions-httpsGetMyContent');
@@ -61,7 +61,7 @@ export default function PlssMap({ state, dispatch, color }) {
     });
   };
 
-  const { graphic: identifyGraphic } = state;
+  const { graphic: identifyGraphic, gps: gpsGraphic } = state;
 
   // create map
   useEffect(() => {
@@ -328,6 +328,23 @@ export default function PlssMap({ state, dispatch, color }) {
     }
   }, [dispatch, setUserGraphics, content, status, signInCheckResult?.signedIn]);
 
+  // add and zoom to gps location
+  useEffect(() => {
+    if (!mapView.current.ready) {
+      return;
+    }
+
+    setGpsGraphic(gpsGraphic);
+
+    mapView.current.goTo(
+      new Viewpoint({
+        targetGeometry: gpsGraphic.geometry,
+        scale: 4500,
+      }),
+      { duration: 1000 }
+    );
+  }, [gpsGraphic, setGpsGraphic]);
+
   return (
     <section className="ugrc__map">
       <div
@@ -340,7 +357,7 @@ export default function PlssMap({ state, dispatch, color }) {
         {selectorOptions ? (
           <LayerSelector {...selectorOptions}></LayerSelector>
         ) : null}
-        {/* <Search view={mapView.current} /> */}
+        <MyLocation view={mapView.current} dispatch={dispatch} />
       </div>
     </section>
   );

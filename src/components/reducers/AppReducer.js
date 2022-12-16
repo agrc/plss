@@ -29,6 +29,7 @@ export const defaults = {
   map: {
     activeTool: null,
     graphic: null,
+    gps: null,
   },
   submission: {},
 };
@@ -104,6 +105,11 @@ expected
       if (action.payload === '' && draft.map.graphic) {
         draft.map.graphic = null;
       }
+
+      break;
+    }
+    case 'map/set-gps-location': {
+      draft.map.gps = action.payload;
 
       break;
     }
