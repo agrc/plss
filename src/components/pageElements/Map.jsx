@@ -168,6 +168,10 @@ export default function PlssMap({ state, dispatch, color }) {
       height: window.innerHeight,
     });
 
+    mapView.current.when(() => {
+      mapView.current.ui.move(['zoom'], 'bottom-right');
+    });
+
     return () => {
       mapView.current.destroy();
       esriMap.destroy();
