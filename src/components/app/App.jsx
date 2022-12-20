@@ -71,6 +71,7 @@ export default function App() {
             <Map
               state={state.map}
               color={state.addPoint.color}
+              drawerOpen={state.drawerOpen}
               dispatch={dispatch}
             />
             <Menu drawerOpen={state.drawerOpen} dispatch={dispatch}>

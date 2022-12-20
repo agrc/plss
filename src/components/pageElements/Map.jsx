@@ -14,6 +14,7 @@ import { contrastColor } from 'contrast-color';
 import clsx from 'clsx';
 import { useSigninCheck, useFunctions } from 'reactfire';
 import { httpsCallable } from 'firebase/functions';
+import { useWindowWidth } from '@react-hook/window-size';
 import MyLocation from './mapElements/MyLocation.jsx';
 import '@ugrc/layer-selector/src/LayerSelector.css';
 
@@ -33,12 +34,12 @@ const urls = {
 const loadingCss =
   'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
-export default function PlssMap({ state, dispatch, color }) {
+export default function PlssMap({ state, dispatch, color, drawerOpen }) {
   const node = useRef(null);
   const mapView = useRef();
   const [selectorOptions, setSelectorOptions] = useState();
   const [mapState, setMapState] = useState('idle');
-  const [windowDimensions, setWindowDimensions] = useState();
+  const onlyWidth = useWindowWidth();
 
   const { data: signInCheckResult } = useSigninCheck();
 
@@ -53,13 +54,6 @@ export default function PlssMap({ state, dispatch, color }) {
   const { data: content, status } = useQuery(['my content'], myContent, {
     enabled: signInCheckResult?.signedIn === true,
   });
-
-  const handleResize = () => {
-    setWindowDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-  };
 
   const { graphic: identifyGraphic, gps: gpsGraphic } = state;
 
@@ -163,11 +157,6 @@ export default function PlssMap({ state, dispatch, color }) {
       position: 'top-right',
     });
 
-    setWindowDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-
     mapView.current.when(() => {
       mapView.current.ui.move(['zoom'], 'bottom-right');
     });
@@ -180,24 +169,20 @@ export default function PlssMap({ state, dispatch, color }) {
 
   // set view padding depending on screen size
   useEffect(() => {
-    if (!windowDimensions) {
+    if (!onlyWidth) {
       return;
     }
 
     if (mapView.current) {
-      if (windowDimensions.width > 640) {
-        mapView.current.padding.left = 400;
-        mapView.current.padding.bottom = 0;
+      if (onlyWidth > 640) {
+        mapView.current.padding = { left: drawerOpen ? 400 : 0, bottom: 0 };
+        console.log('window.large', mapView.current.padding);
       } else {
-        mapView.current.padding.left = 0;
-        mapView.current.padding.bottom = 450;
+        mapView.current.padding = { bottom: drawerOpen ? 580 : 70, left: 0 };
+        console.log('window.small', mapView.current.padding);
       }
     }
-
-    window.addEventListener('resize', handleResize, false);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [windowDimensions]);
+  }, [onlyWidth, drawerOpen]);
 
   // manage highlighted graphic
   useEffect(() => {
@@ -367,4 +352,5 @@ PlssMap.propTypes = {
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   color: PropTypes.object.isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
 };
