@@ -316,19 +316,21 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
 
   // add and zoom to gps location
   useEffect(() => {
-    if (!mapView.current.ready) {
+    if (!gpsGraphic) {
       return;
     }
 
-    setGpsGraphic(gpsGraphic);
+    setGpsGraphic(gpsGraphic.graphic);
 
-    mapView.current.goTo(
-      new Viewpoint({
-        targetGeometry: gpsGraphic.geometry,
-        scale: 4500,
-      }),
-      { duration: 1000 }
-    );
+    mapView.current.when(() => {
+      mapView.current.goTo(
+        new Viewpoint({
+          targetGeometry: gpsGraphic.graphic.geometry,
+          scale: gpsGraphic.scale ?? mapView.current.scale,
+        }),
+        { duration: 1000 }
+      );
+    });
   }, [gpsGraphic, setGpsGraphic]);
 
   return (
