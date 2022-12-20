@@ -176,10 +176,8 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
     if (mapView.current) {
       if (onlyWidth > 640) {
         mapView.current.padding = { left: drawerOpen ? 400 : 0, bottom: 0 };
-        console.log('window.large', mapView.current.padding);
       } else {
         mapView.current.padding = { bottom: drawerOpen ? 580 : 70, left: 0 };
-        console.log('window.small', mapView.current.padding);
       }
     }
   }, [onlyWidth, drawerOpen]);

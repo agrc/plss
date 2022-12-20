@@ -47,9 +47,9 @@ MyLocation.propTypes = {
 };
 
 export const GpsButton = forwardRef(({ state, send }, ref) => {
-  console.log('geolocation', state);
+  console.log('geolocation', state.value, state.context);
   return (
-    <div className="mb-[10px] rounded-full shadow-sm" ref={ref}>
+    <div className="rounded-full bg-white shadow-sm" ref={ref}>
       <button
         onClick={(event) => {
           event.stopPropagation();
@@ -62,9 +62,11 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
 
           console.log('current state', state.value);
 
-          if (!state.matches('idle')) {
+          if (state.matches('resolved')) {
             console.log('geolocation', 'cancelling location request');
             send('CANCEL');
+
+            return;
           }
 
           console.log('geolocation', 'requesting location');

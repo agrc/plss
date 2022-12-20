@@ -4,7 +4,7 @@ import Graphic from '@arcgis/core/Graphic';
 
 const updatePosition = assign({
   position: (_, event) => {
-    console.log('updatePosition', event);
+    console.log('geoservice', 'updatePosition', event);
     return new Graphic({
       geometry: {
         type: 'point',
@@ -30,6 +30,7 @@ const updateError = assign({
 
 const geoService = () => (callback, onReceive) => {
   if (!navigator.geolocation) {
+    console.log('geoService', 'not supported');
     callback({
       type: 'notSupported',
       error: new Error('Geolocation is not supported'),
@@ -39,8 +40,14 @@ const geoService = () => (callback, onReceive) => {
   }
 
   const geoWatch = navigator.geolocation.watchPosition(
-    (position) => callback({ type: 'success', position }),
-    (error) => callback({ type: 'error', error }),
+    (position) => {
+      console.log('geoService', 'watchingPosition', position);
+      return callback({ type: 'success', position });
+    },
+    (error) => {
+      console.log('geoService', 'watchingPosition', error);
+      return callback({ type: 'error', error });
+    },
     {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -50,12 +57,16 @@ const geoService = () => (callback, onReceive) => {
 
   onReceive((event) => {
     if (event.type === 'STOP') {
+      console.log('geoService', 'clearWatch');
       navigator.geolocation.clearWatch(geoWatch);
     }
   });
 
   // disposal function
-  return () => navigator.geolocation.clearWatch(geoWatch);
+  return () => {
+    console.log('geoService', 'dispose');
+    return navigator.geolocation.clearWatch(geoWatch);
+  };
 };
 
 const geolocationMachine =
