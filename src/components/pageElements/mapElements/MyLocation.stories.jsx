@@ -9,26 +9,26 @@ const Template = () => {
   const node = { ui: { add: () => {} } };
 
   return (
-    <div className="text-white" style={{ width: '320px' }}>
+    <div className="flex gap-2 text-white" style={{ width: '320px' }}>
       <GpsButton
         fwdRef={node}
         send={() => {}}
-        state={{ matches: (value) => value === 'gps.idle' }}
+        state={{ matches: (value) => value === 'idle' }}
       />
       <GpsButton
         fwdRef={node}
         send={() => {}}
-        state={{ matches: (value) => value === 'gps.pending' }}
+        state={{ matches: (value) => value === 'tracking.requesting' }}
       />
       <GpsButton
         fwdRef={node}
         send={() => {}}
-        state={{ matches: (value) => value === 'resolved' }}
+        state={{ matches: (value) => value === 'tracking.active' }}
       />
       <GpsButton
         fwdRef={node}
         send={() => {}}
-        state={{ matches: (value) => value === 'rejected' }}
+        state={{ matches: (value) => value === 'error' }}
       />
       <GpsButton
         fwdRef={node}
