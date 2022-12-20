@@ -59,20 +59,15 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
           event.preventDefault();
 
           if (state.matches('notSupported')) {
-            console.log('geolocation', state.value);
             return;
           }
 
-          console.log('current state', state.value);
-
           if (state.matches('tracking')) {
-            console.log('geolocation', 'cancelling location request');
             send('CANCEL_TRACKING');
 
             return;
           }
 
-          console.log('geolocation', 'requesting location');
           send('START_TRACKING');
         }}
         className={clsx(

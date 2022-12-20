@@ -320,16 +320,16 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
       return;
     }
 
-    setGpsGraphic(gpsGraphic.graphic);
-
-    mapView.current.when(() => {
-      mapView.current.goTo(
+    mapView.current.when(async () => {
+      await mapView.current.goTo(
         new Viewpoint({
           targetGeometry: gpsGraphic.graphic.geometry,
           scale: gpsGraphic.scale ?? mapView.current.scale,
         }),
         { duration: 1000 }
       );
+
+      setGpsGraphic(gpsGraphic.graphic);
     });
   }, [gpsGraphic, setGpsGraphic]);
 
