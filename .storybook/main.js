@@ -4,13 +4,18 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    'storybook-xstate-addon/preset',
   ],
-  framework: '@storybook/react',
-  core: {
-    builder: '@storybook/builder-vite',
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
   },
   features: {
     storyStoreV7: true,
+  },
+  docs: {
+    docsPage: 'automatic',
+  },
+  core: {
+    disableTelemetry: true,
   },
 };
