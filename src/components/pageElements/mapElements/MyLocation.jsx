@@ -15,7 +15,7 @@ export default function MyLocation({ view, dispatch, width }) {
 
   useEffect(() => {
     if (position) {
-      let type = 'map/gps-location-update';
+      let type = 'map/update-gps-location';
 
       if (count.current === 1) {
         type = 'map/set-gps-location';
@@ -65,40 +65,41 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
 
           console.log('current state', state.value);
 
-          if (state.matches('resolved')) {
+          if (state.matches('tracking')) {
             console.log('geolocation', 'cancelling location request');
-            send('CANCEL');
+            send('CANCEL_TRACKING');
 
             return;
           }
 
           console.log('geolocation', 'requesting location');
-          send('LOCATION REQUESTED');
+          send('START_TRACKING');
         }}
         className={clsx(
           'flex flex-1 items-center justify-center rounded-full',
           {
-            'cursor-pointer bg-white':
-              state.matches('gps.idle') || state.matches('resolved'),
+            'cursor-pointer bg-white': state.matches('idle'),
             'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
-            'cursor-progress bg-sky-400': state.matches('gps.pending'),
-            'cursor-pointer bg-red-700': state.matches('rejected'),
+            'cursor-progress bg-sky-400': state.matches('tracking.requesting'),
+            'cursor-pointer bg-red-700': state.matches('error'),
           }
         )}
       >
-        {state.matches('resolved') && (
-          <span className="absolute top-0 right-0 flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-300/75"></span>
-            <span className="relative inline-flex h-3 w-3 rounded-full border-2 border-white bg-sky-600/80"></span>
+        {state.matches('tracking.active') && (
+          <span className="absolute flex h-6 w-6 justify-center">
+            <span className="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-sky-200/75"></span>
+            <span className="inline-flex h-1 w-1 self-center rounded-full bg-sky-400"></span>
           </span>
         )}
         <ViewfinderCircleIcon
           className={clsx('h-6 w-6', {
             'text-slate-700':
-              state.matches('gps.idle') || state.matches('resolved'),
-            'text-slate-300': state.matches('notSupported'),
-            'text-white motion-safe:animate-spin': state.matches('gps.pending'),
-            'text-white': state.matches('rejected'),
+              state.matches('idle') || state.matches('tracking.active'),
+            'text-white motion-safe:animate-spin': state.matches(
+              'tracking.requesting'
+            ),
+            'text-white':
+              state.matches('rejected') || state.matches('notSupported'),
           })}
         />
       </button>
