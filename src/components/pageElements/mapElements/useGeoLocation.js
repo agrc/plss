@@ -49,8 +49,6 @@ const geoService = () => (callback, onReceive) => {
   );
 
   onReceive((event) => {
-    console.log('received', event.type);
-
     if (event.type === 'STOP') {
       navigator.geolocation.clearWatch(geoWatch);
     }

@@ -46,46 +46,51 @@ MyLocation.propTypes = {
   view: PropTypes.object,
 };
 
-export const GpsButton = forwardRef(({ state, send }, ref) => (
-  <div className="mb-[10px] rounded-full shadow-sm" ref={ref}>
-    <button
-      onClick={(event) => {
-        event.stopPropagation();
-        event.preventDefault();
+export const GpsButton = forwardRef(({ state, send }, ref) => {
+  console.log('geolocation', state);
+  return (
+    <div className="mb-[10px] rounded-full shadow-sm" ref={ref}>
+      <button
+        onClick={(event) => {
+          event.stopPropagation();
+          event.preventDefault();
 
-        if (state.matches('notSupported')) {
-          return;
-        }
+          if (state.matches('notSupported')) {
+            console.log('geolocation', state.value);
+            return;
+          }
 
-        console.log('current state', state.value);
+          console.log('current state', state.value);
 
-        if (!state.matches('idle')) {
-          send('CANCEL');
-        }
+          if (!state.matches('idle')) {
+            console.log('geolocation', 'cancelling location request');
+            send('CANCEL');
+          }
 
-        console.log('requesting location');
-        send('LOCATION REQUESTED');
-      }}
-      className={clsx('rounded-full p-2', {
-        'cursor-pointer bg-white': state.matches('gps.idle'),
-        'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
-        'cursor-progress bg-sky-400': state.matches('gps.pending'),
-        'cursor-pointer bg-slate-800': state.matches('resolved'),
-        'cursor-pointer bg-red-700': state.matches('rejected'),
-      })}
-    >
-      <ViewfinderCircleIcon
-        className={clsx('h-6 w-6', {
-          'text-slate-800': state.matches('gps.idle'),
-          'text-slate-700': state.matches('notSupported'),
-          'text-white motion-safe:animate-spin': state.matches('gps.pending'),
-          'text-sky-400 motion-safe:animate-pulse': state.matches('resolved'),
-          'text-white': state.matches('rejected'),
+          console.log('geolocation', 'requesting location');
+          send('LOCATION REQUESTED');
+        }}
+        className={clsx('rounded-full p-2', {
+          'cursor-pointer bg-white': state.matches('gps.idle'),
+          'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
+          'cursor-progress bg-sky-400': state.matches('gps.pending'),
+          'cursor-pointer bg-slate-800': state.matches('resolved'),
+          'cursor-pointer bg-red-700': state.matches('rejected'),
         })}
-      />
-    </button>
-  </div>
-));
+      >
+        <ViewfinderCircleIcon
+          className={clsx('h-6 w-6', {
+            'text-slate-800': state.matches('gps.idle'),
+            'text-slate-700': state.matches('notSupported'),
+            'text-white motion-safe:animate-spin': state.matches('gps.pending'),
+            'text-sky-400 motion-safe:animate-pulse': state.matches('resolved'),
+            'text-white': state.matches('rejected'),
+          })}
+        />
+      </button>
+    </div>
+  );
+});
 GpsButton.displayName = 'GpsButton';
 GpsButton.propTypes = {
   state: PropTypes.object,
