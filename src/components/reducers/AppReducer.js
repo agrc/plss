@@ -109,7 +109,17 @@ expected
       break;
     }
     case 'map/set-gps-location': {
-      draft.map.gps = action.payload;
+      draft.map.gps = {
+        graphic: action.payload,
+        scale: 4500,
+      };
+
+      break;
+    }
+    case 'map/update-gps-location': {
+      draft.map.gps = {
+        graphic: action.payload,
+      };
 
       break;
     }
