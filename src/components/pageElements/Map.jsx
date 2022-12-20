@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
@@ -158,7 +159,9 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
     });
 
     mapView.current.when(() => {
-      mapView.current.ui.move(['zoom'], 'bottom-right');
+      if (onlyWidth > 640) {
+        mapView.current.ui.move(['zoom'], 'bottom-right');
+      }
     });
 
     return () => {
@@ -340,7 +343,11 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
         {selectorOptions ? (
           <LayerSelector {...selectorOptions}></LayerSelector>
         ) : null}
-        <MyLocation view={mapView.current} dispatch={dispatch} />
+        <MyLocation
+          view={mapView.current}
+          dispatch={dispatch}
+          width={onlyWidth}
+        />
       </div>
     </section>
   );

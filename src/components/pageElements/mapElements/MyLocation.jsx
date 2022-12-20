@@ -6,7 +6,7 @@ import clsx from 'clsx';
 // eslint-disable-next-line import/no-unresolved
 import { useMapReady } from '@ugrc/utilities/hooks';
 
-export default function MyLocation({ view, dispatch }) {
+export default function MyLocation({ view, dispatch, width }) {
   const node = useRef();
   const count = useRef(1);
   const ready = useMapReady(view);
@@ -28,12 +28,12 @@ export default function MyLocation({ view, dispatch }) {
 
   useEffect(() => {
     if (ready && node.current) {
-      view.ui.add(node.current, 'bottom-right');
+      view.ui.add(node.current, width > 640 ? 'bottom-right' : 'top-left');
     }
     const handle = node.current;
 
     () => view?.ui.remove(handle);
-  }, [view, ready]);
+  }, [view, ready, width]);
 
   if (!ready) {
     return null;
@@ -44,6 +44,7 @@ export default function MyLocation({ view, dispatch }) {
 MyLocation.propTypes = {
   dispatch: PropTypes.func,
   view: PropTypes.object,
+  width: PropTypes.number,
 };
 
 export const GpsButton = forwardRef(({ state, send }, ref) => {
