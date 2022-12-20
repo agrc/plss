@@ -1,7 +1,6 @@
-import { createMachine, assign } from 'xstate';
+import { createMachine, assign, send } from 'xstate';
 import { useMachine } from '@xstate/react';
 import Graphic from '@arcgis/core/Graphic';
-import { send } from 'vite';
 
 const updatePosition = assign({
   position: (_, event) => {
