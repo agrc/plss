@@ -4,6 +4,7 @@ module.exports = {
     extend: {
       animation: {
         'gradient-x': 'gradient-x 5s ease infinite',
+        'ping-slow': 'ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
       keyframes: {
         'gradient-x': {
