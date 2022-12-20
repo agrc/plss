@@ -61,12 +61,6 @@ const geoService = () => (callback, onReceive) => {
       navigator.geolocation.clearWatch(geoWatch);
     }
   });
-
-  // disposal function
-  return () => {
-    console.log('geoService', 'dispose');
-    return navigator.geolocation.clearWatch(geoWatch);
-  };
 };
 
 const geolocationMachine =
