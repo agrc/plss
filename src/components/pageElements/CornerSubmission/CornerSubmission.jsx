@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { lazy, useContext, useEffect, useState } from 'react';
+import { lazy, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useUser } from 'reactfire';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -51,17 +51,20 @@ ErrorFallback.propTypes = {
 
 export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useState(false);
+  const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
   const { data: user } = useUser();
   const pointId = submission.blmPointId;
   const submissions = {};
   submissions[pointId] = {};
 
-  console.log('current context', state.context);
-
   useEffect(() => {
     send('start submission');
   }, [submission.type, send]);
+
+  useEffect(() => {
+    scrollContainer.current?.scrollTo(0, 0);
+  }, [state]);
 
   const townshipInformation = extractTownshipInformation(pointId);
   const location = {
@@ -163,7 +166,7 @@ export default function CornerSubmission({ submission, dispatch }) {
           </Card>
         </div>
       )}
-      <div className="mb-2 flex-1 overflow-y-auto pb-2">
+      <div ref={scrollContainer} className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary
           FallbackComponent={ErrorFallback}
           onReset={() => send('BACK')}

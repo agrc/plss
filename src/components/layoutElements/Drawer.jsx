@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -49,6 +49,11 @@ export default function Drawer({
   submission,
 }) {
   const { data: signInCheckResult } = useSigninCheck();
+  const scrollContainer = useRef();
+
+  useEffect(() => {
+    scrollContainer.current?.scrollTo(0, 0);
+  }, [activeComponent]);
 
   const classes = clsx(
     [
@@ -133,7 +138,7 @@ export default function Drawer({
   };
 
   return (
-    <aside className={classes}>
+    <aside ref={scrollContainer} className={classes}>
       <Logo />
       <XCircleIcon
         className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
