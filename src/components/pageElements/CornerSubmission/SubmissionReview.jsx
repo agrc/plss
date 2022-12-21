@@ -163,8 +163,8 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
     coordinates[0] = <GridCoordinateReview grid={grid} />;
     coordinates[1] = <GeographicCoordinateReview geographic={geographic} />;
   } else {
-    coordinates[0] = <GridCoordinateReview grid={grid} />;
-    coordinates[1] = <GeographicCoordinateReview geographic={geographic} />;
+    coordinates[0] = <GeographicCoordinateReview geographic={geographic} />;
+    coordinates[1] = <GridCoordinateReview grid={grid} />;
   }
 
   return (
