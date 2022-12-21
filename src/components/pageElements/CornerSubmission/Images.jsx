@@ -32,12 +32,24 @@ const defaults = {
 export default function MonumentImages() {
   const { data: user } = useUser();
   const [state, send] = useContext(SubmissionContext);
-  const [extraPageCount, setExtraPageCount] = useState(1);
 
   let defaultValues = state.context?.images;
   if (!defaultValues) {
     defaultValues = defaults;
   }
+
+  const [extraPageCount, setExtraPageCount] = useState(() => {
+    let largestExtraPage = 1;
+    for (let i = 1; i <= limit; i++) {
+      if (defaultValues[`extra${i}`]) {
+        largestExtraPage = i;
+      }
+    }
+
+    console.log('largestExtraPage', largestExtraPage);
+
+    return largestExtraPage;
+  });
 
   const { handleSubmit, control, formState } = useForm({
     resolver: yupResolver(schema),
@@ -136,11 +148,11 @@ export default function MonumentImages() {
           {new Array(extraPageCount).fill().map((_, i) => (
             <>
               <Controller
-                name={`extra${i}`}
-                key={i}
+                name={`extra${i + 1}`}
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
+                    key={i}
                     defaultFileName={name}
                     path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
                     contentTypes={[
