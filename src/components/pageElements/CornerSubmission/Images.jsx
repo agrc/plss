@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { useUser } from 'reactfire';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -146,13 +146,12 @@ export default function MonumentImages() {
         </NumberedFormSection>
         <NumberedFormSection number={4} title="Extra pages">
           {new Array(extraPageCount).fill().map((_, i) => (
-            <>
+            <Fragment key={i}>
               <Controller
                 name={`extra${i + 1}`}
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
-                    key={i}
                     defaultFileName={name}
                     path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
                     contentTypes={[
@@ -171,7 +170,7 @@ export default function MonumentImages() {
                 name={`extra${i}`}
                 as={ErrorMessageTag}
               />
-            </>
+            </Fragment>
           ))}
           {limit - extraPageCount} extra pages are allowed
           <Button

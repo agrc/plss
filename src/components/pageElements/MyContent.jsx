@@ -289,7 +289,7 @@ ListCounter.propTypes = {
 const ItemList = ({ items, dispatch }) => (
   <ul className="divide-y divide-slate-200">
     {items.map((item) => (
-      <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+      <li key={item.attributes.id} className="py-4 first:pt-0 last:pb-0">
         <Item dispatch={dispatch} key={item.attributes.id} item={item}></Item>
       </li>
     ))}
