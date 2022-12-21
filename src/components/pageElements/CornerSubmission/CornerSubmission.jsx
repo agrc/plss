@@ -1,10 +1,11 @@
-/* eslint-disable no-unused-vars */
-import { lazy, useContext, useEffect, useRef, useState } from 'react';
+import { lazy, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useUser } from 'reactfire';
 import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+// eslint-disable-next-line import/no-unresolved
+import { useLocalStorage } from '@ugrc/utilities/hooks';
 import extractTownshipInformation from './blmPointId.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
@@ -50,7 +51,11 @@ ErrorFallback.propTypes = {
 };
 
 export default function CornerSubmission({ submission, dispatch }) {
-  const [hide, setHide] = useState(false);
+  const [hide, setHide] = useLocalStorage(
+    'plssSubmissionNoteVisible',
+    false,
+    true
+  );
   const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
   const { data: user } = useUser();
