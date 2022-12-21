@@ -1,19 +1,9 @@
+import { Controller, useForm } from 'react-hook-form';
 import { Select } from './Select.jsx';
 
 export default {
   title: 'Form Elements/Select',
   component: Select,
-  parameters: {
-    backgrounds: {
-      default: 'drawer',
-      values: [
-        {
-          name: 'drawer',
-          value: '#4B5563',
-        },
-      ],
-    },
-  },
 };
 
 const simpleOptions = ['1', '2', '3'];
@@ -77,4 +67,41 @@ DisabledItem.args = {
   options: optionsWithDisabledProperty,
   name: 'input',
   onChange: () => {},
+};
+
+export const ResetInForm = () => {
+  const defaultValues = {
+    corner: '',
+  };
+
+  const { control, reset } = useForm({
+    defaultValues,
+  });
+
+  return (
+    <>
+      <Controller
+        control={control}
+        name="corner"
+        defaultValue=""
+        render={({ field: { onChange, name, value } }) => (
+          <Select
+            name={name}
+            label="Section Corner"
+            required={true}
+            options={['1', '2', '3']}
+            placeholder="What is the section corner"
+            currentValue={value}
+            onUpdate={onChange}
+          />
+        )}
+      />
+      <button
+        className="border bg-amber-200 p-2"
+        onClick={() => reset(defaultValues)}
+      >
+        Reset
+      </button>
+    </>
+  );
 };

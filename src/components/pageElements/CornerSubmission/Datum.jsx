@@ -108,13 +108,13 @@ const CoordinatePicker = () => {
                   <Controller
                     control={control}
                     name="datum"
-                    render={({ field: { onChange, name } }) => (
+                    render={({ field: { onChange, name, value } }) => (
                       <Select
                         name={name}
                         label={false}
                         options={options}
                         placeholder="Coordinate System"
-                        currentValue={datum}
+                        currentValue={value}
                         onUpdate={onChange}
                         required={true}
                       />

@@ -81,14 +81,14 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="zone"
-                render={({ field: { onChange, name } }) => (
+                render={({ field: { onChange, name, value } }) => (
                   <Select
                     name={name}
                     options={statePlaneZones}
                     label="State Plane Zone"
                     required={true}
                     placeholder="What is the zone"
-                    currentValue={defaultValues.zone}
+                    currentValue={value}
                     onUpdate={onChange}
                   />
                 )}
@@ -103,14 +103,14 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="unit"
-                render={({ field: { onChange, name } }) => (
+                render={({ field: { onChange, name, value } }) => (
                   <Select
                     name={name}
                     options={units}
                     label="Units"
                     required={true}
                     placeholder="What are the units"
-                    currentValue={defaultValues.unit}
+                    currentValue={value}
                     onUpdate={onChange}
                   />
                 )}
@@ -161,14 +161,14 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="verticalDatum"
-                render={({ field: { onChange, name } }) => (
+                render={({ field: { onChange, name, value } }) => (
                   <Select
                     name={name}
                     options={verticalDatums}
                     label="Vertical datum"
                     required={false}
                     placeholder="What is the vertical datum"
-                    currentValue={defaultValues.verticalDatum}
+                    currentValue={value}
                     onUpdate={onChange}
                   />
                 )}

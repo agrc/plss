@@ -1,10 +1,15 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 const getDefaultValue = (value, placeholder, options) => {
+  console.log('getDefaultValue', value, placeholder, options);
+  if ((value?.length ?? 0) < 1) {
+    return placeholder;
+  }
+
   if ((options?.length ?? 0) < 1) {
     return placeholder;
   }
@@ -39,12 +44,16 @@ export const Select = ({
   onUpdate,
   placeholder,
 }) => {
-  const [value, setValue] = useState(currentValue);
+  console.log('select', currentValue);
+  // const [value, setValue] = useState(currentValue);
+
   return (
     <Listbox
-      value={value}
+      value={currentValue}
+      name={name}
       onChange={(newValue) => {
-        setValue(newValue);
+        console.log('onChange', newValue);
+        // setValue(newValue);
         onUpdate(newValue?.value ?? newValue);
       }}
     >
@@ -62,7 +71,7 @@ export const Select = ({
           className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
         >
           <span className="block h-5 truncate text-slate-600">
-            {getDefaultValue(value, placeholder, options)}
+            {getDefaultValue(currentValue, placeholder, options)}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronUpDownIcon

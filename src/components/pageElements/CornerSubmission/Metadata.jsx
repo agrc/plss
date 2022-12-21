@@ -17,6 +17,7 @@ import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 import { parseBool } from '../../helpers/index.mjs';
+import { DevTool } from '@hookform/devtools';
 
 const defaults = {
   section: '',
@@ -57,6 +58,7 @@ const Metadata = ({ dispatch }) => {
 
   return (
     <>
+      <DevTool control={control} />
       <h3 className="text-2xl font-semibold">Monument Metadata</h3>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -83,14 +85,14 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="corner"
-              render={({ field: { onChange, name } }) => (
+              render={({ field: { onChange, name, value } }) => (
                 <Select
                   name={name}
                   label="Section Corner"
                   required={true}
                   options={corner}
                   placeholder="What is the section corner"
-                  currentValue={defaultValues[name]}
+                  currentValue={value}
                   onUpdate={onChange}
                 />
               )}
@@ -107,14 +109,14 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="status"
-              render={({ field: { onChange, name } }) => (
+              render={({ field: { onChange, name, value } }) => (
                 <Select
                   name={name}
                   label="Monument Status"
                   required={true}
                   options={status}
                   placeholder="What is the status"
-                  currentValue={defaultValues[name]}
+                  currentValue={value}
                   onUpdate={onChange}
                 />
               )}
@@ -131,14 +133,14 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="accuracy"
-              render={({ field: { onChange, name } }) => (
+              render={({ field: { onChange, name, value } }) => (
                 <Select
                   name={name}
                   label="Accuracy"
                   required={true}
                   options={accuracy}
                   placeholder="Choose the accuracy"
-                  currentValue={defaultValues[name]}
+                  currentValue={value}
                   onUpdate={onChange}
                 />
               )}
@@ -166,11 +168,11 @@ const Metadata = ({ dispatch }) => {
               <Controller
                 control={control}
                 name="mrrc"
-                render={({ field: { onChange, name } }) => (
+                render={({ field: { onChange, name, value } }) => (
                   <Switch
                     name={name}
                     screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    currentValue={parseBool(defaultValues[name], false)}
+                    currentValue={parseBool(value, false)}
                     onUpdate={onChange}
                   />
                 )}
