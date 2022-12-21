@@ -60,14 +60,13 @@ export default function CornerSubmission({ submission, dispatch }) {
   const [state, send] = useContext(SubmissionContext);
   const { data: user } = useUser();
   const pointId = submission.blmPointId;
-  const submissions = {};
-  submissions[pointId] = {};
 
   useEffect(() => {
     send('start submission');
   }, [submission.type, send]);
 
   useEffect(() => {
+    console.log('current state', state.context);
     scrollContainer.current?.scrollTo(0, 0);
   }, [state]);
 

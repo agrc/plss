@@ -46,8 +46,6 @@ export default function MonumentImages() {
       }
     }
 
-    console.log('largestExtraPage', largestExtraPage);
-
     return largestExtraPage;
   });
 

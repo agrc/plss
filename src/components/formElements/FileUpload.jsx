@@ -86,7 +86,6 @@ const FileUpload = ({
         setUploadPercent(percent);
       },
       () => {
-        console.log('2. upload task error', uploadTask);
         setUploadPercent();
         try {
           if (validateSize(uploadTask.snapshot.totalBytes, maxFileSize ?? 5)) {
