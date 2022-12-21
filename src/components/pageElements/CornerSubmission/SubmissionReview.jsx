@@ -281,7 +281,7 @@ GeographicCoordinateReview.propTypes = {
 const ImagesReview = ({ images }) => {
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">Images</h3>
+      <h3 className="-mt-2 text-lg font-bold">Images and Extra Pages</h3>
       {Object.values(images).filter((x) => x).length > 0 ? (
         Object.entries(images).map((image) => {
           const [key, value] = image;
