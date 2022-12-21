@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
-import Switch from '../../formElements/Switch.jsx';
+import { Switch } from '../../formElements/Switch.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
@@ -16,8 +16,6 @@ import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
-import { parseBool } from '../../helpers/index.mjs';
-import { DevTool } from '@hookform/devtools';
 
 const defaults = {
   section: '',
@@ -42,10 +40,11 @@ const Metadata = ({ dispatch }) => {
     defaultValues.mrrc = false;
   }
 
-  const { register, control, handleSubmit, reset, formState } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues,
-  });
+  const { control, formState, handleSubmit, register, reset, setFocus } =
+    useForm({
+      resolver: yupResolver(schema),
+      defaultValues,
+    });
 
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta, payload });
@@ -56,24 +55,25 @@ const Metadata = ({ dispatch }) => {
     reset(defaults);
   };
 
+  useEffect(() => {
+    setFocus('section');
+  }, [setFocus]);
+
   return (
     <>
-      <DevTool control={control} />
       <h3 className="text-2xl font-semibold">Monument Metadata</h3>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Section Information">
           <div>
             <Input
-              name="section"
               label="Section"
-              required={true}
+              placeholder="What is the section"
               type="number"
               min="1"
               max="36"
-              placeholder="What is the section"
-              value={defaultValues.section}
-              inputRef={register}
+              required={true}
+              {...register('section')}
             />
             <ErrorMessage
               errors={formState.errors}
@@ -85,15 +85,13 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="corner"
-              render={({ field: { onChange, name, value } }) => (
+              render={({ field }) => (
                 <Select
-                  name={name}
                   label="Section Corner"
-                  required={true}
-                  options={corner}
                   placeholder="What is the section corner"
-                  currentValue={value}
-                  onUpdate={onChange}
+                  options={corner}
+                  required={true}
+                  {...field}
                 />
               )}
             />
@@ -109,15 +107,13 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="status"
-              render={({ field: { onChange, name, value } }) => (
+              render={({ field }) => (
                 <Select
-                  name={name}
                   label="Monument Status"
-                  required={true}
-                  options={status}
                   placeholder="What is the status"
-                  currentValue={value}
-                  onUpdate={onChange}
+                  options={status}
+                  required={true}
+                  {...field}
                 />
               )}
             />
@@ -133,15 +129,13 @@ const Metadata = ({ dispatch }) => {
             <Controller
               control={control}
               name="accuracy"
-              render={({ field: { onChange, name, value } }) => (
+              render={({ field }) => (
                 <Select
-                  name={name}
                   label="Accuracy"
-                  required={true}
-                  options={accuracy}
                   placeholder="Choose the accuracy"
-                  currentValue={value}
-                  onUpdate={onChange}
+                  options={accuracy}
+                  required={true}
+                  {...field}
                 />
               )}
             />
@@ -168,12 +162,10 @@ const Metadata = ({ dispatch }) => {
               <Controller
                 control={control}
                 name="mrrc"
-                render={({ field: { onChange, name, value } }) => (
+                render={({ field }) => (
                   <Switch
-                    name={name}
                     screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    currentValue={parseBool(value, false)}
-                    onUpdate={onChange}
+                    {...field}
                   />
                 )}
               />

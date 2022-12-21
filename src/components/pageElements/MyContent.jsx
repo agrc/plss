@@ -8,7 +8,7 @@ import { httpsCallable } from 'firebase/functions';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { Select } from '../formElements/Select.jsx';
-import Switch from '../formElements/Switch.jsx';
+import { Switch } from '../formElements/Switch.jsx';
 import Card from '../formElements/Card.jsx';
 import { timeSince } from '../helpers/index.mjs';
 import { Button } from '../formElements/Buttons.jsx';
@@ -92,7 +92,7 @@ const ReferencePoints = ({ items, dispatch }) => (
       <Select
         label="Sort order"
         options={sortOrders}
-        currentValue={sortOrders[0]}
+        value={sortOrders[0]}
       ></Select>
       <MapFilterToggle></MapFilterToggle>
     </Card>
@@ -268,8 +268,8 @@ const MapFilterToggle = () => {
   return (
     <div className="flex items-center">
       <Switch
-        currentValue={enabled}
-        onUpdate={() => setEnabled(!enabled)}
+        value={enabled}
+        onChange={() => setEnabled(!enabled)}
         hideLabel={true}
       />
       <span className="pl-2 text-sm">Only show content visible on the map</span>

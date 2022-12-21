@@ -36,11 +36,16 @@ export default function Profile({ dispatch }) {
     }
   );
 
-  const { control, formState, handleSubmit, register, reset } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues,
-  });
+  const { control, formState, handleSubmit, register, reset, setFocus } =
+    useForm({
+      resolver: yupResolver(schema),
+      defaultValues,
+    });
   const fields = useWatch({ control });
+
+  useEffect(() => {
+    setFocus('displayName');
+  }, [setFocus]);
 
   const { mutate, status } = useMutation(
     ['update profile', data.uid],
@@ -76,35 +81,25 @@ export default function Profile({ dispatch }) {
           ) : (
             <>
               <Input
-                name="displayName"
                 label="Name"
                 required={true}
-                value={fields[name]}
-                inputRef={register}
+                {...register('displayName')}
               />
               <ErrorMessage
                 errors={formState.errors}
                 name="name"
                 as={ErrorMessageTag}
               />
-              <Input
-                name="email"
-                label="Email"
-                required={true}
-                value={fields[name]}
-                inputRef={register}
-              />
+              <Input label="Email" required={true} {...register('email')} />
               <ErrorMessage
                 errors={formState.errors}
                 name="email"
                 as={ErrorMessageTag}
               />
               <Input
-                name="license"
                 label="Surveyor License"
                 required={false}
-                value={fields[name]}
-                inputRef={register}
+                {...register('license')}
               />
               <ErrorMessage
                 errors={formState.errors}

@@ -32,10 +32,14 @@ export const Latitude = () => {
     northing: state.context?.geographic?.northing ?? defaults,
   };
 
-  const { register, handleSubmit, reset, formState } = useForm({
+  const { formState, handleSubmit, register, reset, setFocus } = useForm({
     resolver: yupResolver(latitudeSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    setFocus('northing.degrees');
+  }, [setFocus]);
 
   useEffect(() => {
     if (state.matches('form.entering alternate latitude')) {
@@ -77,15 +81,13 @@ export const Latitude = () => {
           <NumberedFormSection number={2} title="Latitude">
             <div>
               <Input
-                value={defaultValues.degrees}
-                type="number"
-                name="northing.degrees"
                 label="Degrees"
                 placeholder="##"
+                type="number"
                 min="36"
                 max="42"
                 required={true}
-                inputRef={register}
+                {...register('northing.degrees')}
               />
               <ErrorMessage
                 errors={formState.errors}
@@ -95,15 +97,13 @@ export const Latitude = () => {
             </div>
             <div>
               <Input
-                value={defaultValues.minutes}
-                type="number"
-                name="northing.minutes"
                 label="Minutes"
                 placeholder="##"
+                type="number"
                 min="0"
                 max="59"
                 required={true}
-                inputRef={register}
+                {...register('northing.minutes')}
               />
               <ErrorMessage
                 errors={formState.errors}
@@ -113,16 +113,14 @@ export const Latitude = () => {
             </div>
             <div>
               <Input
-                value={defaultValues.seconds}
-                type="number"
-                name="northing.seconds"
                 label="Seconds"
                 placeholder="##.00000"
+                type="number"
                 step="0.00001"
                 min="0"
                 max="59.99999"
                 required={true}
-                inputRef={register}
+                {...register('northing.seconds')}
               />
               <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
               <ErrorMessage
@@ -156,10 +154,14 @@ export const Longitude = () => {
     easting: state.context?.geographic?.easting ?? defaults,
   };
 
-  const { register, handleSubmit, reset, formState } = useForm({
+  const { formState, handleSubmit, register, reset, setFocus } = useForm({
     resolver: yupResolver(longitudeSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    setFocus('easting.degrees');
+  }, [setFocus]);
 
   const onSubmit = (payload) => {
     send({ type: 'NEXT', meta, payload });
@@ -181,15 +183,13 @@ export const Longitude = () => {
         <NumberedFormSection number={3} title="Longitude">
           <div>
             <Input
-              value={defaultValues.degrees}
-              type="number"
-              name="easting.degrees"
               label="Degrees"
               placeholder="###"
+              type="number"
               min="109"
               max="114"
               required={true}
-              inputRef={register}
+              {...register('easting.degrees')}
             />
             <ErrorMessage
               errors={formState.errors}
@@ -199,15 +199,13 @@ export const Longitude = () => {
           </div>
           <div>
             <Input
-              value={defaultValues.minutes}
-              type="number"
               label="Minutes"
-              name="easting.minutes"
               placeholder="##"
+              type="number"
               min="0"
               max="59"
               required={true}
-              inputRef={register}
+              {...register('easting.minutes')}
             />
             <ErrorMessage
               errors={formState.errors}
@@ -217,16 +215,14 @@ export const Longitude = () => {
           </div>
           <div>
             <Input
-              value={defaultValues.seconds}
-              type="number"
-              name="easting.seconds"
               label="Seconds"
               placeholder="##.00000"
+              type="number"
               step="0.000001"
               min="0"
               max="59.99999"
               required={true}
-              inputRef={register}
+              {...register('easting.seconds')}
             />
             <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
             <ErrorMessage
@@ -269,10 +265,15 @@ export const GeographicHeight = () => {
 
   const selectedUnit = units.find((x) => x.value === defaultValues.unit);
 
-  const { control, register, handleSubmit, reset, formState } = useForm({
-    resolver: yupResolver(geographicHeightSchema),
-    defaultValues,
-  });
+  const { control, formState, handleSubmit, register, reset, setFocus } =
+    useForm({
+      resolver: yupResolver(geographicHeightSchema),
+      defaultValues,
+    });
+
+  useEffect(() => {
+    setFocus('elevation');
+  }, [setFocus]);
 
   const [selected, setSelected] = useState(selectedUnit);
 
@@ -294,13 +295,7 @@ export const GeographicHeight = () => {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={4} title="Ellipsoid Height">
-          <Input
-            value={defaultValues.elevation}
-            label={false}
-            required={true}
-            name="elevation"
-            inputRef={register}
-          />
+          <Input label={false} required={true} {...register('elevation')} />
           <Controller
             control={control}
             name="unit"

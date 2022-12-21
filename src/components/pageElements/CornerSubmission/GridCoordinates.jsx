@@ -31,10 +31,15 @@ const GridCoordinates = () => {
     defaultValues = defaults;
   }
 
-  const { control, register, handleSubmit, reset, formState } = useForm({
-    resolver: yupResolver(gridCoordinatesSchema),
-    defaultValues,
-  });
+  const { control, formState, handleSubmit, register, reset, setFocus } =
+    useForm({
+      resolver: yupResolver(gridCoordinatesSchema),
+      defaultValues,
+    });
+
+  useEffect(() => {
+    setFocus('zone');
+  }, [setFocus]);
 
   useEffect(() => {
     if (state.matches('form.entering alternate grid coordinates')) {
@@ -81,15 +86,13 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="zone"
-                render={({ field: { onChange, name, value } }) => (
+                render={({ field }) => (
                   <Select
-                    name={name}
-                    options={statePlaneZones}
                     label="State Plane Zone"
-                    required={true}
                     placeholder="What is the zone"
-                    currentValue={value}
-                    onUpdate={onChange}
+                    options={statePlaneZones}
+                    required={true}
+                    {...field}
                   />
                 )}
               />
@@ -103,15 +106,13 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="unit"
-                render={({ field: { onChange, name, value } }) => (
+                render={({ field }) => (
                   <Select
-                    name={name}
-                    options={units}
                     label="Units"
-                    required={true}
                     placeholder="What are the units"
-                    currentValue={value}
-                    onUpdate={onChange}
+                    options={units}
+                    required={true}
+                    {...field}
                   />
                 )}
               />
@@ -125,13 +126,11 @@ const GridCoordinates = () => {
           <NumberedFormSection number={3} title="Location">
             <div>
               <Input
-                name="easting"
                 label="Easting"
                 type="number"
                 step="0.001"
-                value={defaultValues.easting}
                 required={true}
-                inputRef={register}
+                {...register('easting')}
               />
               <ErrorMessage
                 errors={formState.errors}
@@ -141,13 +140,11 @@ const GridCoordinates = () => {
             </div>
             <div>
               <Input
-                name="northing"
                 label="Northing"
                 type="number"
                 step="0.001"
-                value={defaultValues.northing}
                 required={true}
-                inputRef={register}
+                {...register('northing')}
               />
               <ErrorMessage
                 errors={formState.errors}
@@ -161,15 +158,13 @@ const GridCoordinates = () => {
               <Controller
                 control={control}
                 name="verticalDatum"
-                render={({ field: { onChange, name, value } }) => (
+                render={({ field }) => (
                   <Select
-                    name={name}
-                    options={verticalDatums}
                     label="Vertical datum"
-                    required={false}
                     placeholder="What is the vertical datum"
-                    currentValue={value}
-                    onUpdate={onChange}
+                    options={verticalDatums}
+                    required={false}
+                    {...field}
                   />
                 )}
               />
@@ -181,12 +176,10 @@ const GridCoordinates = () => {
             </div>
             <div>
               <Input
-                value={defaultValues.elevation}
                 type="number"
                 label="Elevation"
                 required={false}
-                name="elevation"
-                inputRef={register}
+                {...register('elevation')}
               />
               <ErrorMessage
                 errors={formState.errors}

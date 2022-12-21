@@ -43,7 +43,7 @@ const CoordinatePicker = () => {
     datum = '';
   }
 
-  const { control, handleSubmit, reset, formState } = useForm({
+  const { control, formState, handleSubmit, reset, setFocus } = useForm({
     resolver: yupResolver(coordinatePickerSchema),
     defaultValues: { datum },
   });
@@ -63,6 +63,10 @@ const CoordinatePicker = () => {
     send({ type: 'RESET', meta, payload: '' });
     reset({ datum: '' });
   };
+
+  useEffect(() => {
+    setFocus('datum');
+  }, [setFocus]);
 
   return (
     <>
@@ -108,15 +112,13 @@ const CoordinatePicker = () => {
                   <Controller
                     control={control}
                     name="datum"
-                    render={({ field: { onChange, name, value } }) => (
+                    render={({ field }) => (
                       <Select
-                        name={name}
                         label={false}
-                        options={options}
                         placeholder="Coordinate System"
-                        currentValue={value}
-                        onUpdate={onChange}
+                        options={options}
                         required={true}
+                        {...field}
                       />
                     )}
                   />

@@ -103,7 +103,7 @@ export default function AddPoint({
             type="text"
             placeholder="Point Name"
             value={`Point (${dateFormatter.format(new Date())})`}
-            inputRef={register}
+            {...register}
           />
           <h2 className="text-lg font-bold">Pick a point color</h2>
           <div className="flex justify-center">
