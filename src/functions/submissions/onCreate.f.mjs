@@ -55,6 +55,11 @@ const onCreateUpdateCounty = firestore
     const db = getFirestore();
     const doc = await db.collection('submissions').doc(context.params.docId);
 
+    // exit if county already set
+    if (doc.data().county) {
+      return;
+    }
+
     const county = await getCountyFromId(blmPointId);
 
     logger.info('setting county', county, {
