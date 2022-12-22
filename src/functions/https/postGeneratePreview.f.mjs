@@ -4,6 +4,7 @@ import { getStorage } from 'firebase-admin/storage';
 import PdfPrinter from 'pdfmake';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import extractTownshipInformation from '../../components/pageElements/CornerSubmission/blmPointId.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,6 +74,14 @@ const postGeneratePreview = https.onCall(async (data, context) => {
 
     throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
+
+  //TODO! validate data
+
+  const {
+    township,
+    range,
+    meridian: { name: meridian },
+  } = extractTownshipInformation(data.blmPointId);
 
   var definition = {
     info: {
@@ -197,7 +206,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
                 style: vars.label,
               },
             ],
-            [{ text: data.metadata.meridian ?? '-', style: vars.value }],
+            [{ text: meridian ?? '-', style: vars.value }],
             [
               {
                 text: 'Township Range Section',
@@ -206,7 +215,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
             ],
             [
               {
-                text: `T- R- Section ${data.metadata.section}`,
+                text: `T-${township} R-${range} Section ${data.metadata.section}`,
                 style: vars.value,
               },
             ],
@@ -415,7 +424,8 @@ const postGeneratePreview = https.onCall(async (data, context) => {
             ],
             [
               {
-                text: `${data.metadata.description} Accuracy: ${data.metadata.accuracy}.`,
+                text: `Accuracy: ${data.metadata.accuracy}.
+${data.metadata.description} `,
                 style: vars.value,
                 colSpan: 7,
               },
