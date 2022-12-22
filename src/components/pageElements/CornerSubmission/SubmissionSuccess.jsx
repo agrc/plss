@@ -20,9 +20,8 @@ export default function SubmissionSuccess({ dispatch }) {
         implicitly approve the sheet.
       </p>
       <p className="ml-3">
-        Once the sheet is approved, UGRC will update the PLSS point dataset in
-        the State Geographic Information Datasource and the monument record
-        sheet pdf will be accessible through this PLSS website.
+        Once the sheet is approved, the monument record sheet pdf will be accessible through this PLSS website. 
+        UGRC will then use the submitted coordinates to improve the PLSS point dataset and fabric.
       </p>
       <h1 className="text-2xl font-semibold">Tracking progress</h1>
       <p className="ml-3">
