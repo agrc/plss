@@ -5,6 +5,8 @@ import PdfPrinter from 'pdfmake';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import extractTownshipInformation from '../../components/pageElements/CornerSubmission/blmPointId.mjs';
+import { Base64Encode } from 'base64-stream';
+import { Buffer } from 'buffer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,6 +70,53 @@ const createPdfDocument = (definition) => {
   return promise;
 };
 
+const getImages = async (bucket, images) => {
+  const promises = [];
+  Object.entries(images).forEach(([imageName, fileName]) => {
+    logger.debug('creating stream for', imageName, {
+      structuredData: true,
+    });
+
+    promises.push(
+      getImageData(bucket.file(fileName).createReadStream()).then((result) => {
+        return { [imageName]: result };
+      })
+    );
+  });
+
+  const results = await Promise.all(promises);
+
+  return results.reduce((obj, item) => {
+    const [key, value] = Object.entries(item)[0];
+
+    return Object.assign(obj, { [key]: value });
+  }, {});
+};
+
+const getImageData = (stream) => {
+  const chunks = new Base64Encode();
+  let contentType = '';
+
+  return new Promise((resolve, reject) => {
+    stream.on('error', (err) => {
+      logger.error('error', err, { structuredData: true });
+
+      return reject(err);
+    });
+    stream.on('response', (response) => {
+      contentType = response.headers['content-type'];
+
+      return;
+    });
+    stream.on('data', chunks.write);
+    stream.on('end', () => {
+      chunks.end();
+
+      return resolve(`data:${contentType};base64,${chunks.read()}`);
+    });
+  });
+};
+
 const postGeneratePreview = https.onCall(async (data, context) => {
   if (!context.auth) {
     logger.warn('unauthenticated request', { structuredData: true });
@@ -82,6 +131,31 @@ const postGeneratePreview = https.onCall(async (data, context) => {
     range,
     meridian: { name: meridian },
   } = extractTownshipInformation(data.blmPointId);
+
+  let seal = '';
+  try {
+    const snapshot = await db
+      .collection('submitters')
+      .doc(context.auth.uid)
+      .get();
+
+    const doc = snapshot.data();
+    logger.debug('user doc', doc, { structuredData: true });
+    if ((doc.seal?.length ?? 0) > 0) {
+      seal = doc.seal;
+    }
+  } catch (error) {
+    logger.error('error looking for user seal', fileName, error, {
+      structuredData: true,
+    });
+  }
+
+  const allItems = { ...data.images, seal };
+
+  const items = Object.fromEntries(
+    Object.entries(allItems).filter(([, value]) => (value?.length ?? 0) > 0)
+  );
+  const images = await getImages(bucket, items);
 
   var definition = {
     info: {
@@ -158,7 +232,12 @@ const postGeneratePreview = https.onCall(async (data, context) => {
                 text: 'Monument Status',
                 style: vars.label,
               },
-              { image: vars.map, rowSpan: 12, colSpan: 6 },
+              {
+                image: images.map?.length > 0 ? images.map : vars.map,
+                fit: [317, 237],
+                rowSpan: 12,
+                colSpan: 6,
+              },
               ...span(4),
             ],
             [
@@ -294,14 +373,22 @@ const postGeneratePreview = https.onCall(async (data, context) => {
                 style: vars.label,
               },
               {
-                image: vars.monument,
+                image:
+                  (images.monument?.length ?? 0) > 0
+                    ? images.monument
+                    : vars.monument,
+                fit: [155, 155],
                 border: [false, false, false, true],
                 colSpan: 3,
                 rowSpan: 6,
               },
               ...span(2),
               {
-                image: vars.close,
+                image:
+                  (images.closeUp?.length ?? 0) > 0
+                    ? images.closeUp
+                    : vars.close,
+                fit: [155, 155],
                 border: [false, false, true, true],
                 colSpan: 3,
                 rowSpan: 6,
@@ -441,7 +528,8 @@ ${data.metadata.description} `,
               { text: data.metadata.notes, style: vars.value, colSpan: 5 },
               ...span(4),
               {
-                image: vars.seal,
+                image: (images.seal?.length ?? 0) > 0 ? images.seal : vars.seal,
+                fit: [100, 100],
                 alignment: 'center',
                 colSpan: 2,
                 margin: [0, 0, 0, 0],
