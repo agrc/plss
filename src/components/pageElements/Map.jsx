@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
@@ -168,7 +167,7 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
       mapView.current.destroy();
       esriMap.destroy();
     };
-  }, []);
+  }, [onlyWidth]);
 
   // set view padding depending on screen size
   useEffect(() => {
