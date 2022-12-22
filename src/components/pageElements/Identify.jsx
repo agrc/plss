@@ -47,7 +47,10 @@ export default function Identify({ authenticated, graphic, dispatch }) {
               <SubmissionPicker
                 dispatch={dispatch}
                 authenticated={authenticated}
-                blmPointId={graphic.attributes.point_id}
+                metadata={{
+                  blmPointId: graphic.attributes.point_id,
+                  county: graphic.attributes.county,
+                }}
               />
             </TieSheetList>
           </div>
@@ -201,7 +204,7 @@ EmptyIdentify.propTypes = {
   dispatch: PropTypes.func,
 };
 
-const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
+const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
   return (
     <div className="rounded-b-lg px-6">
       {authenticated ? (
@@ -218,7 +221,7 @@ const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
                 dispatch({
                   type: 'menu/toggle',
                   payload: 'submission',
-                  meta: { blmPointId, type: 'new' },
+                  meta: { ...metadata, type: 'new' },
                 });
               }}
             >
@@ -229,7 +232,7 @@ const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
                 dispatch({
                   type: 'menu/toggle',
                   payload: 'submission',
-                  meta: { blmPointId, type: 'existing' },
+                  meta: { ...metadata, type: 'existing' },
                 });
               }}
             >
@@ -254,7 +257,10 @@ const SubmissionPicker = ({ authenticated, blmPointId, dispatch }) => {
 SubmissionPicker.propTypes = {
   authenticated: PropTypes.bool,
   dispatch: PropTypes.func,
-  blmPointId: PropTypes.string.isRequired,
+  metadata: PropTypes.shape({
+    blmPointId: PropTypes.string,
+    county: PropTypes.string,
+  }).isRequired,
 };
 
 const TieSheetList = ({ blmPointId, children }) => {

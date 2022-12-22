@@ -124,13 +124,7 @@ export default function Drawer({
       case 'submission': {
         return (
           <SubmissionProvider context={submission}>
-            <CornerSubmission
-              submission={{
-                ...submission,
-                county: map.graphic?.attributes?.county,
-              }}
-              dispatch={dispatch}
-            />
+            <CornerSubmission submission={submission} dispatch={dispatch} />
           </SubmissionProvider>
         );
       }
