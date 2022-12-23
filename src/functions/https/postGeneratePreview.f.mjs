@@ -52,18 +52,9 @@ const createPdfDocument = (definition) => {
     const chunks = [];
     const pdf = printer.createPdfKitDocument(definition);
 
-    pdf.on('data', (chunk) => {
-      chunks.push(chunk);
-    });
-
-    pdf.on('end', () => {
-      resolve(Buffer.concat(chunks));
-    });
-
-    pdf.on('error', (error) => {
-      reject(error);
-    });
-
+    pdf.on('data', (chunk) => chunks.push(chunk));
+    pdf.on('end', () => resolve(Buffer.concat(chunks)));
+    pdf.on('error', (error) => reject(error));
     pdf.end();
   });
 
@@ -99,7 +90,7 @@ const getImageData = (stream) => {
 
   return new Promise((resolve, reject) => {
     stream.on('error', (err) => {
-      logger.error('error', err, { structuredData: true });
+      logger.error('getImageData error', err, { structuredData: true });
 
       return reject(err);
     });
@@ -108,7 +99,7 @@ const getImageData = (stream) => {
 
       return;
     });
-    stream.on('data', chunks.write);
+    stream.on('data', (chunk) => chunks.write(chunk));
     stream.on('end', () => {
       chunks.end();
 
