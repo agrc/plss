@@ -245,9 +245,13 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
         default: {
           const response = await mapView.current.hitTest(event);
 
+          const hits = response?.results?.filter(
+            (result) => result.layer?.id === 'PLSS Points'
+          );
+
           let payload = null;
-          if (response?.results?.length > 0) {
-            payload = response.results[0].graphic;
+          if (hits.length > 0) {
+            payload = hits[0].graphic;
           } else {
             if (mapView.current.scale > 200000) {
               mapView.current.goTo(
