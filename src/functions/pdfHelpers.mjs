@@ -5,9 +5,13 @@ import path from 'path';
 import { PDFDocument } from 'pdf-lib';
 import PdfPrinter from 'pdfmake';
 import { fileURLToPath } from 'url';
+import extractTownshipInformation from '../components/pageElements/CornerSubmission/blmPointId.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const empty = {};
+const span = (int) => Array(int).fill(empty);
 
 const printer = new PdfPrinter({
   Roboto: {
@@ -164,6 +168,498 @@ const getPdfData = (stream) => {
   });
 };
 
+export const generatePdfDefinition = (data, surveyor, images) => {
+  const {
+    township,
+    range,
+    meridian: { name: meridian },
+  } = extractTownshipInformation(data.blmPointId);
+
+  const addExtraImages = (images) => {
+    const extras = Object.keys(images ?? {}).filter((key) =>
+      key.startsWith('extra')
+    );
+
+    if (extras.length === 0) {
+      return;
+    }
+
+    const extraPages = {
+      layout: 'noBorders',
+      table: {
+        pageBreak: 'before',
+        widths: [constants.half, constants.half],
+        body: [],
+      },
+    };
+
+    for (let i = 0; i < extras.length; i += 2) {
+      const row = [];
+
+      row.push({ image: images[extras[i]], fit: [230, 230] });
+
+      if (extras[i + 1]) {
+        row.push({ image: images[extras[i + 1]], fit: [230, 230] });
+      } else {
+        row.push({});
+      }
+
+      extraPages.table.body.push(row);
+    }
+
+    return [extraPages];
+  };
+
+  const definition = {
+    info: {
+      title: 'Monument Record Sheet',
+      author: 'Utah Geospatial Resource Center (UGRC)',
+      subject: `Monument sheet for ${data.blmPointId}`,
+      keywords: 'plss utah tiesheet corner',
+    },
+    pageOrientation: 'LETTER',
+    defaultStyle: {
+      font: 'Roboto',
+    },
+    header: {
+      text: 'Monument Record Sheet',
+      style: constants.header,
+    },
+    content: [
+      { text: 'for', style: ['text-normal', 'bold', 'center', 'sky-800'] },
+      { text: 'Beaver County', style: constants.subHeader },
+      {
+        table: {
+          widths: constants.grid,
+          body: [
+            [
+              {
+                text: 'BLM Point Name',
+                style: constants.label,
+              },
+              {
+                text: 'Contact Name',
+                style: constants.label,
+                colSpan: 2,
+              },
+              ...span(1),
+              {
+                text: 'License Number',
+                style: constants.label,
+                colSpan: 2,
+              },
+              ...span(1),
+              {
+                text: 'Date',
+                style: constants.label,
+                colSpan: 2,
+              },
+              ...span(1),
+            ],
+            [
+              {
+                text: data.blmPointId,
+                style: constants.value,
+              },
+              {
+                text: surveyor,
+                style: constants.value,
+                colSpan: 2,
+              },
+              ...span(1),
+              {
+                text: '12312312',
+                style: constants.value,
+                colSpan: 2,
+              },
+              ...span(1),
+              {
+                text: '2022/11/14',
+                style: constants.value,
+                colSpan: 2,
+              },
+              ...span(1),
+            ],
+            [
+              {
+                text: 'Monument Status',
+                style: constants.label,
+              },
+              {
+                image: images.map?.length > 0 ? images.map : constants.map,
+                fit: [317, 237],
+                rowSpan: 12,
+                colSpan: 6,
+              },
+              ...span(4),
+            ],
+            [
+              { text: data.metadata.status, style: constants.value },
+              {
+                text: 'Map View Photo or Sketch',
+                style: constants.label,
+                colSpan: 6,
+              },
+              ...span(5),
+            ],
+            [
+              {
+                style: constants.label,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: 'County',
+                  },
+                  {
+                    width: constants.half,
+                    text: 'State',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                style: constants.value,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: data.county ?? '-',
+                  },
+                  {
+                    width: constants.half,
+                    text: 'Utah',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                text: 'Base and Meridian',
+                style: constants.label,
+              },
+            ],
+            [{ text: meridian ?? '-', style: constants.value }],
+            [
+              {
+                text: 'Township Range Section',
+                style: constants.label,
+              },
+            ],
+            [
+              {
+                text: `T-${township} R-${range} Section ${data.metadata.section}`,
+                style: constants.value,
+              },
+            ],
+            [
+              {
+                text: 'Corner of Section',
+                style: constants.label,
+              },
+            ],
+            [{ text: data.metadata.corner, style: constants.value }],
+            [
+              {
+                text: 'Geographic Coordinates',
+                style: constants.label,
+              },
+            ],
+            [
+              {
+                layout: 'noBorders',
+                table: {
+                  widths: [77, 85],
+                  body: [
+                    [
+                      {
+                        text: 'Latitude (DMS)',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: `${data.geographic.northing.degrees}° ${data.geographic.northing.minutes}' ${data.geographic.northing.seconds}"`,
+                        style: constants.value,
+                      },
+                    ],
+                    [
+                      {
+                        text: 'Longitude (DMS)',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: `${data.geographic.easting.degrees}° ${data.geographic.easting.minutes}' ${data.geographic.easting.seconds}"`,
+                        style: constants.value,
+                      },
+                    ],
+                    [
+                      {
+                        text: 'Ellipsoid Height',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: data.geographic.elevation,
+                        style: constants.value,
+                      },
+                    ],
+                    [
+                      {
+                        text: 'Unit',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: data.geographic.unit,
+                        style: constants.value,
+                      },
+                    ],
+                  ],
+                },
+              },
+            ],
+          ],
+        },
+      },
+      {
+        table: {
+          pageBreak: 'after',
+          widths: constants.grid,
+          body: [
+            [
+              {
+                text: 'Grid Coordinates',
+                border: [false, false, false, false],
+                style: constants.label,
+              },
+              {
+                image:
+                  (images.monument?.length ?? 0) > 0
+                    ? images.monument
+                    : constants.monument,
+                fit: [155, 155],
+                border: [false, false, false, true],
+                colSpan: 3,
+                rowSpan: 6,
+              },
+              ...span(2),
+              {
+                image:
+                  (images.closeUp?.length ?? 0) > 0
+                    ? images.closeUp
+                    : constants.close,
+                fit: [155, 155],
+                border: [false, false, true, true],
+                colSpan: 3,
+                rowSpan: 6,
+              },
+              ...span(2),
+            ],
+            [
+              {
+                layout: 'noBorders',
+                table: {
+                  widths: [77, 85],
+                  body: [
+                    [
+                      {
+                        text: 'Northing',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: data.grid.northing,
+                        style: constants.value,
+                      },
+                    ],
+                    [
+                      {
+                        text: 'Easting',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: data.grid.easting,
+                        style: constants.value,
+                      },
+                    ],
+                    [
+                      {
+                        text: 'Elevation',
+                        style: constants.subLabel,
+                      },
+                      { text: data.grid.elevation, style: constants.value },
+                    ],
+                    [
+                      {
+                        text: 'Units',
+                        style: constants.subLabel,
+                      },
+                      {
+                        text: data.grid.unit,
+                        style: constants.value,
+                      },
+                    ],
+                  ],
+                },
+              },
+            ],
+            [
+              {
+                style: constants.label,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: 'Datum',
+                  },
+                  {
+                    width: constants.half,
+                    text: 'Vertical Datum',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                style: constants.value,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: 'NAD83',
+                  },
+                  {
+                    width: constants.half,
+                    text: data.grid.verticalDatum,
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                style: constants.label,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: 'CRS',
+                  },
+                  {
+                    width: constants.half,
+                    text: 'Zone',
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                style: constants.value,
+                columns: [
+                  {
+                    width: constants.half,
+                    text: 'NAD83 State Plane',
+                  },
+                  {
+                    width: constants.half,
+                    text: data.grid.zone,
+                  },
+                ],
+              },
+            ],
+            [
+              {
+                text: 'Monument Description',
+                style: constants.label,
+                colSpan: 7,
+              },
+            ],
+            [
+              {
+                text: `Accuracy: ${data.metadata.accuracy}.
+${data.metadata.description} `,
+                style: constants.value,
+                colSpan: 7,
+              },
+            ],
+            [
+              {
+                text: 'General Notes',
+                style: constants.label,
+                colSpan: 7,
+              },
+            ],
+            [
+              { text: data.metadata.notes, style: constants.value, colSpan: 5 },
+              ...span(4),
+              {
+                image:
+                  (images.seal?.length ?? 0) > 0 ? images.seal : constants.seal,
+                fit: [100, 100],
+                alignment: 'center',
+                colSpan: 2,
+                margin: [0, 0, 0, 0],
+              },
+              ...span(1),
+            ],
+          ],
+        },
+      },
+      ...addExtraImages(images),
+    ],
+    watermark: {
+      text: 'draft',
+      color: constants.sky500,
+      opacity: 0.7,
+      bold: true,
+    },
+    footer: [
+      {
+        style: constants.footer,
+        margin: [40, 5, 40, 0],
+        text: 'The state of Utah makes no guarantees, representations, or warranties of any kind, expressed or implied, as to the content, accuracy, timeliness, or completeness of any of the data. Unless otherwise noted all images are oriented north and are not to scale. The data is provided on an "as is, where is" basis. The State assumes no obligation or liability for its use by any persons.',
+      },
+      {
+        qr: 'https://plss.utah.gov/monument=blmpointid',
+        fit: 50,
+        absolutePosition: { x: 5, y: 5 },
+        foreground: constants.sky500,
+      },
+    ],
+    styles: {
+      'text-xl': {
+        fontSize: 34,
+      },
+      'text-lg': {
+        fontSize: 21,
+      },
+      'text-normal': {
+        fontSize: 10,
+      },
+      'text-sm': {
+        fontSize: 8,
+      },
+      'slate-800': {
+        color: '#1e293b',
+      },
+      'sky-800': {
+        color: '#075985',
+      },
+      'sky-50': {
+        color: '#f0f9ff',
+      },
+      'rose-700': {
+        color: '#be123c',
+      },
+      'bg-sky-800': {
+        fillColor: '#075985',
+      },
+      bold: {
+        bold: true,
+      },
+      italic: {
+        italics: true,
+      },
+      center: {
+        alignment: 'center',
+      },
+    },
+  };
+
+  return definition;
+};
+
 export const createPdfDocument = async (definition, extraPdfPages) => {
   const partialPdf = await new Promise((resolve, reject) => {
     const chunks = [];
@@ -210,7 +706,7 @@ export const appendPdfPages = async (original, metadata) => {
   return complete;
 };
 
-export const constants = {
+const constants = {
   grid: ['40%', '10%', '10%', '10%', '10%', '10%', '10%'],
   half: '50%',
   sky500: '#0ea5e9',
