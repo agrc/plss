@@ -6,6 +6,7 @@ import {
   generatePdfDefinition,
   getPdfAssets,
 } from '../pdfHelpers.mjs';
+import { validateNewSubmission } from './postCorner.f.mjs';
 
 const bucket = getStorage().bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET);
 const db = getFirestore();
@@ -18,7 +19,22 @@ const postGeneratePreview = https.onCall(async (data, context) => {
     throw new auth.HttpsError('unauthenticated', 'You must log in');
   }
 
-  //TODO! validate data
+  try {
+    const result = await validateNewSubmission(data);
+    logger.debug('validation result', result, {
+      structuredData: true,
+    });
+  } catch (error) {
+    logger.error('validation error', error, {
+      structuredData: true,
+    });
+
+    throw new auth.HttpsError(
+      'invalid-argument',
+      'pdf preview data is invalid',
+      error
+    );
+  }
 
   const { images, pdfs } = await getPdfAssets(
     bucket,
