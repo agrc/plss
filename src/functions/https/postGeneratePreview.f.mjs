@@ -1,8 +1,8 @@
-import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
+import { auth, https, logger } from 'firebase-functions/v1';
 import extractTownshipInformation from '../../components/pageElements/CornerSubmission/blmPointId.mjs';
-import { constants, getPdfAssets, createPdfDocument } from '../pdfHelpers.mjs';
+import { constants, createPdfDocument, getPdfAssets } from '../pdfHelpers.mjs';
 
 const bucket = getStorage().bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET);
 const db = getFirestore();

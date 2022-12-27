@@ -1,10 +1,10 @@
-import { PDFDocument } from 'pdf-lib';
 import { Base64Encode } from 'base64-stream';
 import { Buffer } from 'buffer';
-import PdfPrinter from 'pdfmake';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { logger } from 'firebase-functions/v1';
+import path from 'path';
+import { PDFDocument } from 'pdf-lib';
+import PdfPrinter from 'pdfmake';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -185,25 +185,25 @@ export const createPdfDocument = async (definition, extraPdfPages) => {
 };
 
 export const appendPdfPages = async (original, metadata) => {
+  const pdfs = Object.values(metadata ?? {});
+
+  if (pdfs.length === 0) {
+    return original;
+  }
+
   const source = await PDFDocument.load(original);
 
-  await Object.values(metadata).forEach(async (extra) => {
-    const extraPages = await PDFDocument.load(extra);
-    const pageCount = extraPages.getPageIndices();
+  for (let i = 0; i < pdfs.length; i++) {
+    const extraPages = await PDFDocument.load(pdfs[i]);
+    const copiedPages = await source.copyPages(
+      extraPages,
+      extraPages.getPageIndices()
+    );
 
-    logger.debug('loading extra pages', pageCount.length, {
-      structuredData: true,
-    });
-
-    const copiedPages = await source.copyPages(extraPages, pageCount);
-
-    copiedPages.forEach((page, i) => {
-      logger.debug('adding pages', i, {
-        structuredData: true,
-      });
+    copiedPages.forEach((page) => {
       source.addPage(page);
     });
-  });
+  }
 
   const complete = await source.save();
 
