@@ -51,8 +51,11 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
   const functions = useFunctions();
   const myContent = httpsCallable(functions, 'functions-httpsGetMyContent');
 
-  const { data: content, status } = useQuery(['my content'], myContent, {
+  const { data: content, status } = useQuery({
+    queryKey: ['my content'],
+    queryFn: myContent,
     enabled: signInCheckResult?.signedIn === true,
+    staleTime: Infinity,
   });
 
   const { graphic: identifyGraphic, gps: gpsGraphic } = state;

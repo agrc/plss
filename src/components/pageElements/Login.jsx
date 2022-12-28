@@ -51,13 +51,12 @@ const Profile = ({ dispatch }) => {
 
   const { data: user } = useUser();
 
-  const { data: response, status } = useQuery(
-    ['profile', user?.uid],
-    getProfile,
-    {
-      enabled: user?.uid?.length > 0,
-    }
-  );
+  const { data: response, status } = useQuery({
+    enabled: user?.uid?.length > 0,
+    queryKey: ['profile', user.uid],
+    queryFn: getProfile,
+    staleTime: Infinity,
+  });
 
   const data =
     status === 'success' ? response.data : { email: '', displayName: '' };

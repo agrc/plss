@@ -269,9 +269,10 @@ const TieSheetList = ({ blmPointId, children }) => {
   const path = `tiesheets/${blmPointId}`;
   const fileRef = ref(storage, path);
 
-  const { data, status } = useQuery(
-    ['identify', blmPointId],
-    async () => {
+  const { data, status } = useQuery({
+    enabled: blmPointId != null,
+    queryKey: ['identify', blmPointId],
+    queryFn: async () => {
       const response = await listAll(fileRef);
 
       if ((response?.items?.length ?? 0) > 0) {
@@ -291,10 +292,8 @@ const TieSheetList = ({ blmPointId, children }) => {
 
       return [];
     },
-    {
-      enabled: blmPointId != null,
-    }
-  );
+    staleTime: Infinity,
+  });
 
   return (
     <Card>

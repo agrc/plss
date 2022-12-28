@@ -31,8 +31,11 @@ const MyContent = ({ dispatch }) => {
   const functions = useFunctions();
   const myPoints = httpsCallable(functions, 'functions-httpsGetMyContent');
 
-  const { data, status } = useQuery(['my content'], myPoints, {
+  const { data, status } = useQuery({
+    queryKey: ['my content'],
+    queryFn: myPoints,
     enabled: signInCheckResult?.signedIn === true,
+    staleTime: Infinity,
   });
 
   return (

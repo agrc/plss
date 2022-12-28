@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { httpsCallable } from 'firebase/functions';
 import { useUser, useFunctions } from 'reactfire';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
@@ -28,13 +28,14 @@ export default function Profile({ dispatch }) {
   const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
   const updateProfile = httpsCallable(functions, 'functions-httpsPostProfile');
 
-  const { data: response, status: profileStatus } = useQuery(
-    ['profile', data?.uid],
-    getProfile,
-    {
-      enabled: data?.uid?.length > 0,
-    }
-  );
+  const queryClient = useQueryClient();
+
+  const { data: response, status: profileStatus } = useQuery({
+    queryKey: ['profile', data.uid],
+    queryFn: getProfile,
+    enabled: data?.uid?.length > 0,
+    staleTime: Infinity,
+  });
 
   const { control, formState, handleSubmit, register, reset, setFocus } =
     useForm({
@@ -47,19 +48,18 @@ export default function Profile({ dispatch }) {
     setFocus('displayName');
   }, [setFocus]);
 
-  const { mutate, status } = useMutation(
-    ['update profile', data.uid],
-    (data) => updateProfile(data),
-    {
-      onSuccess: (response) => {
-        reset(response.data);
-      },
-      onError: (error) => {
-        console.warn('error', error);
-        reset();
-      },
-    }
-  );
+  const { mutate, status } = useMutation({
+    mutationKey: ['update profile', data.uid],
+    mutationFn: (data) => updateProfile(data),
+    onSuccess: (response) => {
+      reset(response.data);
+      queryClient.invalidateQueries({ queryKey: ['profile', data.uid] });
+    },
+    onError: (error) => {
+      console.warn('error', error);
+      reset();
+    },
+  });
 
   useEffect(() => {
     if (profileStatus === 'success') {

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
 import { useFunctions, useStorage } from 'reactfire';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
@@ -25,28 +25,32 @@ const Review = () => {
     functions,
     'functions-httpsPostGeneratePreview'
   );
-  const { data, status } = useQuery(
-    ['preview', state.context.blmPointId],
-    () => generatePreview(state.context),
-    {
-      enabled: state.context.type === 'new',
-    }
-  );
-  const { mutate, status: mutationStatus } = useMutation(
-    ['save-corner', state.context.blmPointId],
-    (data) => saveCorner(data),
-    {
-      onSuccess: (response) => {
-        console.log('success', response);
-        send({ type: 'NEXT' });
-        state.context = undefined;
-      },
-      onError: (error) => {
-        console.warn('error', error);
-        send({ type: 'NEXT' });
-      },
-    }
-  );
+  const queryClient = useQueryClient();
+
+  const { data, status } = useQuery({
+    enabled: state.context.type === 'new',
+    queryKey: [
+      'monument record sheet',
+      state.context.blmPointId,
+      { preview: true },
+    ],
+    queryFfn: () => generatePreview(state.context),
+    staleTime: 5000, // 5 seconds,
+  });
+  const { mutate, status: mutationStatus } = useMutation({
+    mutationKey: ['submit corner', state.context.blmPointId],
+    mutationFn: (data) => saveCorner(data),
+    onSuccess: (response) => {
+      console.log('success', response);
+      send({ type: 'NEXT' });
+      state.context = undefined;
+      queryClient.invalidateQueries({ queryKey: 'my content' });
+    },
+    onError: (error) => {
+      console.warn('error', error);
+      send({ type: 'NEXT' });
+    },
+  });
 
   return (
     <>
