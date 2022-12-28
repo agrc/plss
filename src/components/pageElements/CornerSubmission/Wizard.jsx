@@ -41,7 +41,7 @@ export default function Wizard({ back, next, finish, clear, status }) {
 }
 
 Wizard.propTypes = {
-  back: PropTypes.func,
+  back: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   next: PropTypes.bool,
   finish: PropTypes.func,
   clear: PropTypes.func,
