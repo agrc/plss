@@ -231,7 +231,7 @@ const Metadata = ({ dispatch }) => {
             />
           </div>
         </NumberedFormSection>
-        <NumberedFormSection number={-1}>
+        <NumberedFormSection number={0}>
           <Wizard
             next={true}
             back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
