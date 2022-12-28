@@ -5,7 +5,15 @@ import clsx from 'clsx';
 
 const Toggle = forwardRef(
   (
-    { name, value = false, onChange, screenReader = 'Toggle', hideLabel },
+    {
+      name,
+      value = false,
+      onChange,
+      screenReader = 'Toggle',
+      hideLabel,
+      yesValue = 'Yes',
+      noValue = 'No',
+    },
     ref
   ) => {
     return (
@@ -34,7 +42,7 @@ const Toggle = forwardRef(
         </Switch>
         {!hideLabel && (
           <span className="mt-1 self-center pl-2 text-sm text-slate-500">
-            {value ? 'Yes' : 'No'}
+            {value ? yesValue : noValue}
           </span>
         )}
       </div>
@@ -49,6 +57,8 @@ Toggle.propTypes = {
   screenReader: PropTypes.string,
   hideLabel: PropTypes.bool,
   name: PropTypes.string,
+  yesValue: PropTypes.string,
+  noValue: PropTypes.string,
 };
 
 Toggle.defaultProps = {
