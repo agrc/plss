@@ -34,22 +34,22 @@ const postCorner = https.onCall(async (data, context) => {
 
   try {
     const result = await validateSubmission(data);
-    logger.debug('validation result', result, {
+    logger.debug('corner validation result', result, {
       structuredData: true,
     });
   } catch (error) {
-    logger.error('validation error', error, {
+    logger.error('corner validation error', error, {
       structuredData: true,
     });
 
     throw new auth.HttpsError(
       'invalid-argument',
-      'form submission data is invalid',
+      'corner submission data is invalid',
       error
     );
   }
 
-  logger.debug('formatting document', data.type, {
+  logger.debug('formatting corner document', data.type, {
     structuredData: true,
   });
 
