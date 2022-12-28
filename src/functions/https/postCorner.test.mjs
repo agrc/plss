@@ -348,7 +348,7 @@ describe('postCorner', () => {
     });
     test('throws with an valid submission', () => {
       expect(() => func({}, { auth: user })).rejects.toThrowError(
-        'form submission data is invalid'
+        'corner submission data is invalid'
       );
     });
     test('returns 1 for a valid submission', () => {
