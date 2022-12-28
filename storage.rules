@@ -34,6 +34,10 @@ service firebase.storage {
         allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
       }
 
+      match /reference/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
+      }
+
       match /new/{point_id}/{file} {
         allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
       }

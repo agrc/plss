@@ -49,7 +49,7 @@ export default function Menu({ dispatch, drawerOpen }) {
             Icon={PlusCircleIcon}
             onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}
           >
-            Add Point
+            Add Reference Point
           </MenuItem>
           <MenuItem
             Icon={FolderIcon}

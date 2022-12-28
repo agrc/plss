@@ -22,7 +22,7 @@ export const defaults = {
   drawerOpen: true,
   activeLayers: ['Parcels'],
   addPoint: {
-    color: { hex: '' },
+    color: '',
     geometry: {},
   },
   userPoints: [],
@@ -81,7 +81,7 @@ expected
     case 'add-point/reset': {
       draft.map.activeTool === null;
       draft.addPoint = {
-        color: { hex: '' },
+        color: '',
         geometry: null,
       };
       break;

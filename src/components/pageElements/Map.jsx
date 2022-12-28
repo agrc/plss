@@ -234,10 +234,10 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
               symbol: {
                 type: 'simple-marker',
                 style: 'circle',
-                color: color.hex,
+                color: color,
                 size: '8px',
                 outline: {
-                  color: contrastColor.call({}, { bgColor: color.hex }),
+                  color: contrastColor.call({}, { bgColor: color }),
                   width: 1,
                 },
               },
@@ -282,7 +282,7 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
       return;
     }
 
-    if (color.hex === '') {
+    if (color === '') {
       // hex reset on completion, remove the graphic
       setGraphic({});
     } else {
@@ -292,10 +292,10 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
           symbol: {
             type: 'simple-marker',
             style: 'circle',
-            color: color.hex,
+            color: color,
             size: '8px',
             outline: {
-              color: contrastColor.call({}, { bgColor: color.hex }),
+              color: contrastColor.call({}, { bgColor: color }),
               width: 1,
             },
           },
@@ -364,6 +364,6 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
 PlssMap.propTypes = {
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  color: PropTypes.object.isRequired,
+  color: PropTypes.string.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
 };

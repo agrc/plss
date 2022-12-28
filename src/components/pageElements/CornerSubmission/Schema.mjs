@@ -52,6 +52,16 @@ const gridMessages = {
 const imageMessage = 'Images must be jpeg or png.';
 const pdfMessage = 'An existing tiesheet PDF is required.';
 
+export const addPointSchema = yup.object().shape({
+  name: yup.string().required('Name is a required field.'),
+  notes: yup.string().max(500, 'Notes must be at most 500 characters.'),
+  color: yup.string().matches(/^#[0-9a-f]{6}$/i, 'Color is a required field.'),
+  location: yup.object().typeError('A point is required.').shape({
+    x: yup.number().required(),
+    y: yup.number().required(),
+  }),
+});
+
 export const metadataSchema = yup.object().shape({
   status: yup
     .string()
