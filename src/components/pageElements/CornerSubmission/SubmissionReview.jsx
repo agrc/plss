@@ -95,6 +95,7 @@ const Review = () => {
 
 const MetadataReview = ({
   accuracy,
+  collected,
   corner,
   description,
   mrrc,
@@ -115,6 +116,10 @@ const MetadataReview = ({
       <div className="flex justify-between">
         <span className="font-semibold">Monument Status</span>
         <span className="ml-4">{keyMap.status(status)}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="font-semibold">Collected on</span>
+        <span className="ml-4">{collected}</span>
       </div>
       <div className="flex justify-between">
         <span className="font-semibold">Accuracy</span>
@@ -140,6 +145,7 @@ MetadataReview.propTypes = {
   notes: PropTypes.string,
   description: PropTypes.string,
   accuracy: PropTypes.string,
+  collected: PropTypes.string,
   section: PropTypes.number,
   corner: PropTypes.string,
   mrrc: PropTypes.bool,
