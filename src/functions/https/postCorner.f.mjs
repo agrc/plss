@@ -148,6 +148,7 @@ export const formatNewCorner = (data, metadata) => {
   const [y, x] = getLatLon(data.geographic);
 
   return {
+    type: 'new',
     ...metadata,
     location: new GeoPoint(y, x),
     metadata: {
@@ -202,7 +203,7 @@ export const formatNewCorner = (data, metadata) => {
 };
 
 export const formatExistingCorner = (data, metadata) => {
-  let record = { ...metadata, pdf: data.existing.pdf };
+  let record = { ...metadata, pdf: data.existing.pdf, type: 'existing' };
 
   if (data.datum) {
     const [y, x] = getLatLon(data.geographic);
