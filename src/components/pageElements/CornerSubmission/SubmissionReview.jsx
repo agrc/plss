@@ -40,11 +40,15 @@ const Review = () => {
   const { mutate, status: mutationStatus } = useMutation({
     mutationKey: ['submit corner', state.context.blmPointId],
     mutationFn: (data) => saveCorner(data),
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       console.log('success', response);
+      await queryClient.cancelQueries();
+
+      queryClient.invalidateQueries({ queryKey: ['my content'] });
+      queryClient.removeQueries({ queryKey: ['monument record sheet'] });
+
       send({ type: 'NEXT' });
       state.context = undefined;
-      queryClient.invalidateQueries({ queryKey: 'my content' });
     },
     onError: (error) => {
       console.warn('error', error);

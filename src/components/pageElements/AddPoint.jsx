@@ -102,11 +102,14 @@ export default function AddPoint({
       scrollContainer.current?.scrollTo(0, 0);
       console.log('success', response);
       uniqueId.current = crypto.randomUUID();
+
       dispatch({ type: 'add-point/reset' });
       if (active) {
         dispatch({ type: 'add-point/activate' });
       }
-      queryClient.invalidateQueries({ queryKey: 'my content' });
+
+      queryClient.invalidateQueries({ queryKey: ['my content'] });
+
       reset(defaultValues);
     },
   });
