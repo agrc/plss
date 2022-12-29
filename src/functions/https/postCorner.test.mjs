@@ -223,6 +223,7 @@ describe('postCorner', () => {
           datum: parts.datum,
           location: new GeoPoint(41.73695741666667, -111.83666519166667),
           ...metadata,
+          type: 'new',
         };
 
         expect(formatDataForFirestore(parts, user)).toEqual(output);
@@ -245,6 +246,7 @@ describe('postCorner', () => {
           datum: parts.datum,
           location: new GeoPoint(41.73695741666667, -111.83666519166667),
           extra: 'metadata',
+          type: 'new',
         };
 
         expect(formatNewCorner(parts, { extra: 'metadata' })).toEqual(output);
@@ -282,6 +284,7 @@ describe('postCorner', () => {
           datum: parts.datum,
           location: new GeoPoint(41.73695741666667, -111.83666519166667),
           ...metadata,
+          type: 'existing',
         };
 
         expect(formatDataForFirestore(parts, user)).toEqual(output);
@@ -296,6 +299,7 @@ describe('postCorner', () => {
         const output = {
           pdf: parts.existing.pdf,
           extra: 'metadata',
+          type: 'existing',
         };
 
         expect(formatExistingCorner(input, { extra: 'metadata' })).toEqual(

@@ -35,6 +35,7 @@ describe('schema tests', () => {
       const validSchema = {
         accuracy: 'survey',
         status: 'existing',
+        collected: '2021-01-01',
         description: 'description',
         notes: 'notes',
         mrrc: false,
@@ -64,6 +65,7 @@ describe('schema tests', () => {
     describe('corner', () => {
       const validSchema = {
         accuracy: 'survey',
+        collected: '2021-01-01',
         status: 'existing',
         description: 'description',
         notes: 'notes',
@@ -92,6 +94,7 @@ describe('schema tests', () => {
     describe('status', () => {
       const validSchema = {
         accuracy: 'survey',
+        collected: '2021-01-01',
         corner: 'NW',
         description: 'description',
         notes: 'notes',
@@ -117,8 +120,41 @@ describe('schema tests', () => {
         }
       );
     });
+    describe('collected', () => {
+      const validSchema = {
+        accuracy: 'survey',
+        corner: 'NW',
+        status: 'existing',
+        description: 'description',
+        notes: 'notes',
+        mrrc: false,
+        section: 1,
+      };
+
+      test.each([
+        [null, 'Collection date is a required field.'],
+        [undefined, 'Collection date is a required field.'],
+        ['', 'Collection date is a required field.'],
+        ['garbage', 'Collection date is a required field.'],
+        [100, 'Collection date is too old.'],
+      ])('shows proper error message for %j', (collected, expectedError) => {
+        let result;
+
+        try {
+          schemas.metadataSchema.validateSync({
+            ...validSchema,
+            collected,
+          });
+        } catch (error) {
+          result = error;
+        }
+
+        expect(result.errors[0]).toBe(expectedError);
+      });
+    });
     describe('accuracy', () => {
       const validSchema = {
+        collected: '2021-01-01',
         status: 'existing',
         corner: 'NW',
         description: 'description',
@@ -150,6 +186,7 @@ describe('schema tests', () => {
         status: 'existing',
         corner: 'NW',
         accuracy: 'survey',
+        collected: '2021-01-01',
         notes: 'notes',
         mrrc: false,
         section: 1,
@@ -193,6 +230,7 @@ describe('schema tests', () => {
     describe('notes', () => {
       const validSchema = {
         status: 'existing',
+        collected: '2021-01-01',
         corner: 'NW',
         accuracy: 'survey',
         description: 'description',
@@ -575,7 +613,7 @@ describe('schema tests', () => {
           [7563510.0001, errors.northingFeet.generic],
           [123456789, errors.northingFeet.max],
           [12345678.1234, errors.northingFeet.max],
-        ])('shows proper error message for %j', (northing, error) => {
+        ])('shows proper error message for %j', (northing, expectedError) => {
           let result;
 
           try {
@@ -587,7 +625,7 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(error);
+          expect(result.errors[0]).toBe(expectedError);
         });
       });
       describe('meters', () => {
@@ -610,7 +648,7 @@ describe('schema tests', () => {
           [1234567.1234, errors.northingMeters.min],
           [12345678, errors.northingMeters.max],
           [2018522.1234, errors.northingMeters.generic],
-        ])('shows proper error message for %j', (northing, error) => {
+        ])('shows proper error message for %j', (northing, expectedError) => {
           let result;
 
           try {
@@ -622,7 +660,7 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(error);
+          expect(result.errors[0]).toBe(expectedError);
         });
       });
     });
@@ -661,7 +699,7 @@ describe('schema tests', () => {
           [911357.12345, errors.eastingFeet.generic],
           [12345678, errors.eastingFeet.max],
           [1234567.1234, errors.eastingFeet.generic],
-        ])('shows proper error message for %j', (easting, error) => {
+        ])('shows proper error message for %j', (easting, expectedError) => {
           let result;
 
           try {
@@ -673,7 +711,7 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(error);
+          expect(result.errors[0]).toBe(expectedError);
         });
       });
       describe('meters', () => {
@@ -696,7 +734,7 @@ describe('schema tests', () => {
           [12345, errors.eastingMeters.min],
           [1234567, errors.eastingMeters.max],
           [277790.1234, errors.eastingMeters.generic],
-        ])('shows proper error message for %j', (easting, error) => {
+        ])('shows proper error message for %j', (easting, expectedError) => {
           let result;
 
           try {
@@ -708,7 +746,7 @@ describe('schema tests', () => {
             result = error;
           }
 
-          expect(result.errors[0]).toBe(error);
+          expect(result.errors[0]).toBe(expectedError);
         });
       });
     });

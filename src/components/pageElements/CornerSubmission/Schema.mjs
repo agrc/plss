@@ -75,7 +75,8 @@ export const metadataSchema = yup.object().shape({
   collected: yup
     .date()
     .typeError(metadataMessages.collected)
-    .required()
+    .required(metadataMessages.collected)
+    .min(new Date(1980, 0, 1), 'Collection date is too old.')
     .max(new Date(), "Collection date must be on or before today's date."),
   accuracy: yup
     .string()
