@@ -252,7 +252,7 @@ export const generatePdfDefinition = (data, surveyor, images) => {
               },
               ...span(1),
               {
-                text: '2022/11/14',
+                text: data.metadata.collected,
                 style: constants.value,
                 colSpan: 2,
               },
