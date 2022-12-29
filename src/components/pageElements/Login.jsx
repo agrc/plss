@@ -64,12 +64,15 @@ const Profile = ({ dispatch }) => {
   return (
     <div className="flex w-full flex-col items-center gap-6">
       <h2 className="text-3xl font-semibold lg:text-2xl">
-        {status === 'success' && `Welcome back, ${data.displayName}`}
+        {status === 'success' &&
+          `Welcome back, ${data?.displayName ?? user?.displayName ?? '...'}`}
         {status === 'loading' && `Welcome back, ...`}
       </h2>
       <span className="relative">
         <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100 shadow-lg">
-          {status === 'success' && <Gravatar email={data.email} />}
+          {status === 'success' && (
+            <Gravatar email={data?.email ?? user?.email ?? ''} />
+          )}
         </span>
         <svg
           className="absolute bottom-1 right-3 h-6 w-6 fill-current text-slate-800/20"
