@@ -28,6 +28,8 @@ const defaults = {
   mrrc: false,
 };
 
+const dateFormatter = new Intl.DateTimeFormat('sv-SE');
+
 const Metadata = ({ dispatch }) => {
   const meta = 'metadata';
   const [state, send] = useContext(SubmissionContext);
@@ -48,6 +50,8 @@ const Metadata = ({ dispatch }) => {
     });
 
   const onSubmit = (payload) => {
+    payload.collected = dateFormatter.format(payload.collected);
+
     send({ type: 'NEXT', meta, payload });
   };
 
