@@ -34,7 +34,7 @@ const Review = () => {
       state.context.blmPointId,
       { preview: true },
     ],
-    queryFfn: () => generatePreview(state.context),
+    queryFn: () => generatePreview(state.context),
     staleTime: 5000, // 5 seconds,
   });
   const { mutate, status: mutationStatus } = useMutation({
