@@ -1,0 +1,19 @@
+{
+  "name": "submitters/jcyYUlsQ6OfWdqaPiqAbWh4QgMkd/existing/UT260060S0050W0_100640/existing-sheet.pdf",
+  "bucket": "localhost",
+  "metageneration": 1,
+  "generation": 1672342843702,
+  "contentType": "application/pdf",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "8cd2f33a-51ac-4f07-a3e4-3836e92ba440"
+  ],
+  "etag": "musmf64jVko2CACx1Z4DM8Bp6a8",
+  "customMetadata": {},
+  "timeCreated": "2022-12-29T19:40:43.702Z",
+  "updated": "2022-12-29T19:40:43.702Z",
+  "size": 3165863,
+  "md5Hash": "vpkhY5A+36X9WOafgS2Iqg==",
+  "crc32c": "114338950"
+}
