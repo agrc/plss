@@ -85,6 +85,7 @@ describe('postCorner', () => {
           mrrc: true,
           notes: 'Some general notes',
           description: 'A monument description',
+          collected: '2021-01-01',
           accuracy: 'survey',
           status: 'existing',
         },
