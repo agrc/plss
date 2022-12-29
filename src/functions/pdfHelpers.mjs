@@ -649,9 +649,13 @@ export const createPdfDocument = async (definition, extraPdfPages) => {
     stream.end();
   });
 
-  logger.debug('saved front page now appending', {
-    structuredData: true,
-  });
+  logger.debug(
+    'saved front page now appending extra pages',
+    Object.keys(extraPdfPages).length,
+    {
+      structuredData: true,
+    }
+  );
 
   const pdf = await appendPdfPages(partialPdf, extraPdfPages);
 
