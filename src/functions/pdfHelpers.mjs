@@ -22,9 +22,9 @@ const printer = new PdfPrinter({
   },
 });
 
-export const getPdfAssets = async (bucket, db, metadata, userId) => {
+export const getPdfAssets = async (bucket, metadata, seal) => {
   const { imagePaths, pdfPaths } = splitImagesFromPdfs(metadata);
-  imagePaths.seal = await getSurveyorSeal(db, userId);
+  imagePaths.seal = seal;
 
   const images = await getBase64Images(bucket, imagePaths);
   const pdfs = await getBinaryPdfs(bucket, pdfPaths);
@@ -58,28 +58,6 @@ export const splitImagesFromPdfs = (paths) => {
   }
 
   return { imagePaths, pdfPaths };
-};
-
-const getSurveyorSeal = async (db, userId) => {
-  let seal = '';
-
-  try {
-    const snapshot = await db.collection('submitters').doc(userId).get();
-
-    const doc = snapshot.data();
-
-    logger.debug('user doc', doc, { structuredData: true });
-
-    if ((doc.seal?.length ?? 0) > 0) {
-      seal = doc.seal;
-    }
-  } catch (error) {
-    logger.error('error looking for surveyor seal', userId, error, {
-      structuredData: true,
-    });
-  }
-
-  return seal;
 };
 
 const getBase64Images = async (bucket, metadata) => {

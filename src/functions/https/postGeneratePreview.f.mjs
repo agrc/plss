@@ -36,18 +36,43 @@ const postGeneratePreview = https.onCall(async (data, context) => {
     );
   }
 
+  let surveyor = {
+    name: context.auth.token.name,
+    license: '',
+    seal: '',
+  };
+
+  try {
+    logger.debug('getting surveyor data', context.auth.uid, {
+      structuredData: true,
+    });
+
+    const snapshot = await db
+      .collection('submitters')
+      .doc(context.auth.uid)
+      .get();
+
+    const { license, seal } = snapshot.data();
+
+    surveyor.seal = seal;
+    surveyor.license = license;
+  } catch (error) {
+    logger.error(
+      'error fetching surveyor license. using empty string',
+      context.auth.uid,
+      {
+        structuredData: true,
+      }
+    );
+  }
+
   const { images, pdfs } = await getPdfAssets(
     bucket,
-    db,
     data.images,
-    context.auth.uid
+    surveyor.seal
   );
 
-  const definition = generatePdfDefinition(
-    data,
-    context.auth.token.name,
-    images
-  );
+  const definition = generatePdfDefinition(data, surveyor, images);
 
   const fileName = `submitters/${context.auth.uid}/new/${data.blmPointId}/preview.pdf`;
   const file = bucket.file(fileName);
