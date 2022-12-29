@@ -159,7 +159,7 @@ export const generatePdfDefinition = (data, surveyor, images) => {
     );
 
     if (extras.length === 0) {
-      return;
+      return [];
     }
 
     const extraPages = {
