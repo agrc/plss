@@ -153,6 +153,7 @@ export const formatNewCorner = (data, metadata) => {
     metadata: {
       status: data.metadata.status,
       accuracy: data.metadata.accuracy,
+      collected: data.metadata.collected,
       description: data.metadata.description,
       notes: data.metadata.notes,
       mrrc: data.metadata.mrrc,
