@@ -110,6 +110,9 @@ ReferencePoints.propTypes = {
   dispatch: PropTypes.func,
 };
 
+const submissionsDescending = (a, b) =>
+  new Date(b.submitted) - new Date(a.submitted);
+
 const Submissions = ({ items, dispatch }) => {
   if (items?.length < 1) {
     return (
@@ -122,10 +125,11 @@ const Submissions = ({ items, dispatch }) => {
       </Card>
     );
   }
+
   return (
     <Card>
       <ul className="divide-y divide-slate-200">
-        {items.map((item) => (
+        {items.sort(submissionsDescending).map((item) => (
           <li key={item.id} className="py-4 first:pt-0 last:pb-0">
             <Submission item={item} dispatch={dispatch} />
           </li>
@@ -148,7 +152,7 @@ const Submission = ({ item, dispatch }) => {
       <span className="font-semibold">{id}</span>
       <div className="absolute top-0 right-0">
         <span
-          className="flex select-none flex-col items-center text-xs text-slate-500"
+          className="flex select-none flex-col text-xs text-slate-500"
           alt={dateFormatter.format(submission)}
         >
           <span>submitted</span>
