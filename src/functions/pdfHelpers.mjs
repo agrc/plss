@@ -240,13 +240,13 @@ export const generatePdfDefinition = (data, surveyor, images) => {
                 style: constants.value,
               },
               {
-                text: surveyor,
+                text: surveyor.name,
                 style: constants.value,
                 colSpan: 2,
               },
               ...span(1),
               {
-                text: '12312312',
+                text: surveyor.license,
                 style: constants.value,
                 colSpan: 2,
               },
