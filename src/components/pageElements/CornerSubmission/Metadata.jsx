@@ -23,6 +23,7 @@ const defaults = {
   notes: '',
   description: '',
   status: '',
+  collected: '',
   accuracy: '',
   mrrc: false,
 };
@@ -125,6 +126,20 @@ const Metadata = ({ dispatch }) => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Collection">
+          <div>
+            <Input
+              label="Collection Date"
+              placeholder="Date monument was surveyed"
+              type="date"
+              required={true}
+              {...register('collected')}
+            ></Input>
+            <ErrorMessage
+              errors={formState.errors}
+              name="collected"
+              as={ErrorMessageTag}
+            />
+          </div>
           <div>
             <Controller
               control={control}

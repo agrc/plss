@@ -21,6 +21,7 @@ const metadataMessages = {
   section: 'Section must be a whole number from 1 to 36.',
   corner: 'Corner is a required field.',
   status: 'Status is a required field.',
+  collected: 'Collection date is a required field.',
   accuracy: 'Accuracy is a required field.',
   description: 'Description is a required field.',
   notes: 'Notes is a required field.',
@@ -71,6 +72,11 @@ export const metadataSchema = yup.object().shape({
       options.status.map((x) => x.value),
       metadataMessages.status
     ),
+  collected: yup
+    .date()
+    .typeError(metadataMessages.collected)
+    .required()
+    .max(new Date(), "Collection date must be on or before today's date."),
   accuracy: yup
     .string()
     .typeError(metadataMessages.accuracy)
