@@ -144,7 +144,7 @@ Submissions.propTypes = {
 };
 
 const Submission = ({ item, dispatch }) => {
-  const { label, submitted, id, status } = item;
+  const { label, submitted, id, status, geometry } = item;
   const submission = Date.parse(submitted);
 
   return (
@@ -161,7 +161,12 @@ const Submission = ({ item, dispatch }) => {
       </div>
       <SubmissionStatus status={status} label={label} />
       <div className="mt-3 flex justify-between">
-        <Button style="alternate" onClick={() => dispatch()}>
+        <Button
+          style="alternate"
+          onClick={() =>
+            dispatch({ type: 'map/center-and-zoom', payload: geometry })
+          }
+        >
           Zoom
         </Button>
         <Button style="alternate" onClick={() => dispatch()}>
@@ -324,7 +329,12 @@ const Item = ({ item, dispatch }) => {
       </div>
       <span className="text-sm">{item.attributes.notes}</span>
       <div className="mt-3 flex justify-between">
-        <Button style="alternate" onClick={() => dispatch()}>
+        <Button
+          style="alternate"
+          onClick={() =>
+            dispatch({ type: 'map/center-and-zoom', payload: item.geometry })
+          }
+        >
           Zoom
         </Button>
         <Button style="alternate" onClick={() => dispatch()}>

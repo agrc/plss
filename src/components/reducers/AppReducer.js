@@ -30,6 +30,7 @@ export const defaults = {
     activeTool: null,
     graphic: null,
     gps: null,
+    center: null,
   },
   submission: {},
 };
@@ -95,19 +96,6 @@ expected
 
       break;
     }
-    case 'menu/toggle': {
-      draft = toggleDrawer(draft, action);
-
-      if (action.payload === 'submission') {
-        draft.submission = action.meta;
-      }
-
-      if (action.payload === '' && draft.map.graphic) {
-        draft.map.graphic = null;
-      }
-
-      break;
-    }
     case 'map/set-gps-location': {
       draft.map.gps = {
         graphic: action.payload,
@@ -120,6 +108,27 @@ expected
       draft.map.gps = {
         graphic: action.payload,
       };
+
+      break;
+    }
+    case 'map/center-and-zoom': {
+      draft.map.center = {
+        geometry: action.payload,
+        scale: 4500,
+      };
+
+      break;
+    }
+    case 'menu/toggle': {
+      draft = toggleDrawer(draft, action);
+
+      if (action.payload === 'submission') {
+        draft.submission = action.meta;
+      }
+
+      if (action.payload === '' && draft.map.graphic) {
+        draft.map.graphic = null;
+      }
 
       break;
     }

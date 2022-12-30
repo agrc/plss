@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
-import { useViewLoading, useGraphicManager } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
+import {
+  useViewLoading,
+  useViewPointZooming,
+  useGraphicManager,
+} from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import EsriMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
@@ -47,6 +51,7 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
   const { graphic, setGraphic } = useGraphicManager(mapView);
   const { setGraphic: setUserGraphics } = useGraphicManager(mapView);
   const { setGraphic: setGpsGraphic } = useGraphicManager(mapView);
+  const { setViewPoint } = useViewPointZooming(mapView);
 
   const functions = useFunctions();
   const myContent = httpsCallable(functions, 'functions-httpsGetMyContent');
@@ -338,6 +343,17 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
       setGpsGraphic(gpsGraphic.graphic);
     });
   }, [gpsGraphic, setGpsGraphic]);
+
+  useEffect(() => {
+    if (state.center) {
+      const vp = new Viewpoint({
+        targetGeometry: state.center.geometry,
+        scale: state.center.scale,
+      });
+
+      setViewPoint(vp);
+    }
+  }, [state.center, setViewPoint]);
 
   return (
     <section className="ugrc__map">
