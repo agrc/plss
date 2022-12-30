@@ -181,10 +181,16 @@ const Submission = ({ item, dispatch }) => {
         >
           Zoom
         </Button>
-        <Button style="alternate" onClick={() => dispatch()}>
+        <Button
+          style="alternate"
+          onClick={() => dispatch({ type: 'submission/download', payload: id })}
+        >
           Download
         </Button>
-        <Button style="secondary" onClick={() => dispatch()}>
+        <Button
+          style="secondary"
+          onClick={() => dispatch({ type: 'submission/cancel', payload: id })}
+        >
           Cancel
         </Button>
       </div>
