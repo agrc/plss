@@ -89,29 +89,35 @@ MyContent.propTypes = {
   dispatch: PropTypes.func,
 };
 
-const ReferencePoints = ({ items, dispatch }) => (
-  <section className="inline-grid w-full gap-2">
-    <Card>
-      <Select
-        label="Sort order"
-        options={sortOrders}
-        value={sortOrders[0]}
-      ></Select>
-      <MapFilterToggle></MapFilterToggle>
-    </Card>
-    <Card>
-      <ListCounter items={items}></ListCounter>
-      <ItemList dispatch={dispatch} items={items}></ItemList>
-    </Card>
-  </section>
-);
+const ReferencePoints = ({ items, dispatch }) => {
+  const [sortOrder, setSortOrder] = useState(sortOrders[0]);
+
+  return (
+    <section className="inline-grid w-full gap-2">
+      <Card>
+        <Select
+          label="Sort order"
+          options={sortOrders}
+          value={sortOrder}
+          onChange={setSortOrder}
+        ></Select>
+        <MapFilterToggle></MapFilterToggle>
+      </Card>
+      <Card>
+        <ListCounter items={items}></ListCounter>
+        <ItemList
+          dispatch={dispatch}
+          items={items}
+          sortOrder={sortOrder}
+        ></ItemList>
+      </Card>
+    </section>
+  );
+};
 ReferencePoints.propTypes = {
   items: PropTypes.array,
   dispatch: PropTypes.func,
 };
-
-const submissionsDescending = (a, b) =>
-  new Date(b.submitted) - new Date(a.submitted);
 
 const Submissions = ({ items, dispatch }) => {
   if (items?.length < 1) {
@@ -129,11 +135,17 @@ const Submissions = ({ items, dispatch }) => {
   return (
     <Card>
       <ul className="divide-y divide-slate-200">
-        {items.sort(submissionsDescending).map((item) => (
-          <li key={item.id} className="py-4 first:pt-0 last:pb-0">
-            <Submission item={item} dispatch={dispatch} />
-          </li>
-        ))}
+        {items
+          .sort(
+            sortFunction('New to Old', (a, b) => {
+              return { a: a.submitted, b: b.submitted };
+            })
+          )
+          .map((item) => (
+            <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+              <Submission item={item} dispatch={dispatch} />
+            </li>
+          ))}
       </ul>
     </Card>
   );
@@ -298,18 +310,60 @@ ListCounter.propTypes = {
   items: PropTypes.array,
 };
 
-const ItemList = ({ items, dispatch }) => (
-  <ul className="divide-y divide-slate-200">
-    {items.map((item) => (
-      <li key={item.attributes.id} className="py-4 first:pt-0 last:pb-0">
-        <Item dispatch={dispatch} key={item.attributes.id} item={item}></Item>
-      </li>
-    ))}
-  </ul>
-);
+const sortFunction = (sortOrder, transform) => {
+  return (one, two) => {
+    const { a, b } = transform(one, two);
+    switch (sortOrder) {
+      case 'New to Old':
+        return Date.parse(b) - Date.parse(a);
+      case 'Old to New':
+        return Date.parse(a) - Date.parse(b);
+      case 'Ascending (0-9 A-Z)':
+        return a.localeCompare(b);
+      case 'Descending (Z-A 0-9)':
+        return b.localeCompare(a);
+      default:
+        return 0;
+    }
+  };
+};
+
+const ItemList = ({ items, dispatch, sortOrder }) => {
+  const clone = items.map((item) => item);
+
+  return (
+    <ul className="divide-y divide-slate-200">
+      {clone
+        .sort(
+          sortFunction(sortOrder, (x, y) => {
+            if (
+              sortOrder === 'Ascending (0-9 A-Z)' ||
+              sortOrder === 'Descending (Z-A 0-9)'
+            ) {
+              return { a: x.attributes.name, b: y.attributes.name };
+            }
+
+            return { a: x.attributes.when, b: y.attributes.when };
+          })
+        )
+        .map((item) => {
+          return (
+            <li key={item.attributes.id} className="py-4 first:pt-0 last:pb-0">
+              <Item
+                dispatch={dispatch}
+                key={item.attributes.id}
+                item={item}
+              ></Item>
+            </li>
+          );
+        })}
+    </ul>
+  );
+};
 ItemList.propTypes = {
   items: PropTypes.array,
   dispatch: PropTypes.func,
+  sortOrder: PropTypes.string,
 };
 
 const Item = ({ item, dispatch }) => {
