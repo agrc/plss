@@ -380,7 +380,7 @@ const Item = ({ item, dispatch }) => {
       <span className="font-semibold">{item.attributes.name}</span>
       <div className="absolute top-0 right-0">
         <span
-          className="flex select-none flex-col items-center text-xs text-slate-500"
+          className="flex select-none flex-col text-xs text-slate-500"
           alt={dateFormatter.format(date)}
         >
           <span>created</span>
