@@ -1,5 +1,5 @@
 import { logger, firestore } from 'firebase-functions/v1';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import got from 'got';
 
 const client = got.extend({
@@ -9,13 +9,14 @@ const client = got.extend({
   resolveBodyOnly: true,
 });
 
-const getCountyFromId = async (id) => {
+const getLocationFromId = async (id) => {
   // query points for shape
   const featureSet = await client
     .get('PLSSPoint_AGRC/FeatureServer/0/query', {
       searchParams: {
         where: `POINTID='${id}'`,
         returnGeometry: true,
+        outSR: 4326,
         f: 'json',
       },
     })
@@ -23,52 +24,55 @@ const getCountyFromId = async (id) => {
 
   logger.debug('featureSet', featureSet, { structuredData: true });
 
-  // query county for name
-  const countyFeatureSet = await client
-    .get('UtahCountyBoundaries/FeatureServer/0/query', {
-      searchParams: {
-        where: '',
-        fields: 'name',
-        geometry: JSON.stringify(featureSet.features[0].geometry),
-        geometryType: 'esriGeometryPoint',
-        spatialRel: 'esriSpatialRelIntersects',
-        returnGeometry: false,
-        f: 'json',
-      },
-    })
-    .json();
+  if (featureSet.features.length === 0) {
+    return {};
+  }
 
-  logger.debug('countyFeatureSet', countyFeatureSet, { structuredData: true });
-
-  return countyFeatureSet.features[0].attributes['NAME'];
+  return new GeoPoint(
+    featureSet.features[0].geometry.y,
+    featureSet.features[0].geometry.x
+  );
 };
 
-const onCreateUpdateCounty = firestore
+const onCreateSetEmptyLocation = firestore
   .document('/submissions/{docId}')
   .onCreate(async (snap, context) => {
-    const blmPointId = snap.data().blmPointId;
+    const document = snap.data();
 
-    logger.info('getting county for new document', blmPointId, {
+    logger.debug('onCreateSetEmptyLocation', document, {
+      structuredData: true,
+    });
+
+    if (document.type === 'new') {
+      logger.debug('skipping location. reason: new submission');
+
+      return;
+    }
+
+    if (document.location) {
+      logger.debug(
+        'skipping location. reason: existing submission with coordinates'
+      );
+
+      return;
+    }
+
+    logger.info('getting location for submission', document.blm_point_id, {
       structuredData: true,
     });
 
     const db = getFirestore();
-    const doc = await db.collection('submissions').doc(context.params.docId);
+    const doc = db.collection('submissions').doc(context.params.docId);
 
-    // exit if county already set
-    if (doc.data().county) {
-      return;
-    }
+    const location = await getLocationFromId(document.blm_point_id);
 
-    const county = await getCountyFromId(blmPointId);
-
-    logger.info('setting county', county, {
+    logger.debug('setting location', location, {
       structuredData: true,
     });
 
-    const result = await doc.update({ county });
+    const result = await doc.update({ location });
 
     return result;
   });
 
-export default onCreateUpdateCounty;
+export default onCreateSetEmptyLocation;
