@@ -14,6 +14,7 @@ module.exports = {
   },
   docs: {
     docsPage: 'automatic',
+    autodocs: true,
   },
   core: {
     disableTelemetry: true,
