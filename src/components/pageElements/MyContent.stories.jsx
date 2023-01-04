@@ -9,14 +9,12 @@ import {
   FunctionsProvider,
   StorageProvider,
 } from 'reactfire';
-import { useImmerReducer } from 'use-immer';
-import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';
-import AddPoint from './AddPoint.jsx';
+import MyContent from './MyContent.jsx';
 
 export default {
-  title: 'Drawer/AddPoint',
-  component: AddPoint,
+  title: 'Drawer/MyContent',
+  component: MyContent,
   argTypes: {
     publish: { action: 'action' },
   },
@@ -37,7 +35,17 @@ export default {
       const auth = getAuth(app);
 
       return (
-        <QueryClientProvider client={new QueryClient()}>
+        <QueryClientProvider
+          client={
+            new QueryClient({
+              defaultOptions: {
+                queries: {
+                  retry: false,
+                },
+              },
+            })
+          }
+        >
           <FirebaseAppProvider firebaseConfig={config}>
             <AuthProvider sdk={auth}>
               <FunctionsProvider sdk={functions}>
@@ -57,7 +65,7 @@ export default {
       values: [
         {
           name: 'drawer',
-          value: '#4B5563',
+          value: '#F8FAFC',
         },
       ],
     },
@@ -65,40 +73,11 @@ export default {
 };
 
 const Template = (args) => {
-  const [state, dispatch] = useImmerReducer(reduce, defaults);
-  const data = { ...state.addPoint, ...args };
-
   return (
-    <div className="text-white" style={{ width: '320px' }}>
-      <AddPoint
-        dispatch={(action) => {
-          dispatch(action);
-          args.publish(action);
-        }}
-        {...data}
-      />
+    <div className="text-sky-900" style={{ width: '450px' }}>
+      <MyContent {...args} />
     </div>
   );
 };
 
-export const Default = Template.bind({});
-
-export const Active = Template.bind({});
-Active.args = {
-  active: true,
-};
-
-export const PointSet = Template.bind({});
-PointSet.args = {
-  point: { x: 100.123456, y: -112.234234 },
-};
-
-export const Notes = Template.bind({});
-Notes.args = {
-  notes: 'i really like this area where i put the point.',
-};
-
-export const Images = Template.bind({});
-Images.args = {
-  photos: ['some photo', 'another photo'],
-};
+export const MyContentSelector = Template.bind({});
