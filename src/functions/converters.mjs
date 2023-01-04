@@ -9,6 +9,7 @@ export const graphicConverter = {
     const data = snapshot.data(options);
 
     return {
+      photos: data.photos,
       geometry: {
         type: 'point',
         x: data.location.x,

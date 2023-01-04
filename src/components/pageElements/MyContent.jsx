@@ -1,17 +1,21 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Tab } from '@headlessui/react';
-import clsx from 'clsx';
-import { useQuery } from '@tanstack/react-query';
-import { useSigninCheck, useFunctions } from 'reactfire';
-import { httpsCallable } from 'firebase/functions';
-import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
+import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
+import { useQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
+import { httpsCallable } from 'firebase/functions';
+import { getDownloadURL, ref } from 'firebase/storage';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useFunctions, useSigninCheck, useStorage } from 'reactfire';
+// eslint-disable-next-line import/no-unresolved
+import { useOpenClosed } from '@ugrc/utilities/hooks';
+import { Button } from '../formElements/Buttons.jsx';
+import Card from '../formElements/Card.jsx';
+import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
 import { Switch } from '../formElements/Switch.jsx';
-import Card from '../formElements/Card.jsx';
 import { timeSince } from '../helpers/index.mjs';
-import { Button } from '../formElements/Buttons.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -64,7 +68,39 @@ const MyContent = ({ dispatch }) => {
           <Tab.Panels>
             {tabs.map((name) => (
               <Tab.Panel key={name}>
-                {status !== 'success' && 'loading'}
+                {status !== 'success' && (
+                  <Card>
+                    <p className="flex">
+                      {status === 'error' ? (
+                        'error loading content'
+                      ) : (
+                        <>
+                          <svg
+                            className="-ml-1 mr-2 h-5 w-5 animate-spin motion-reduce:hidden"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          loading content...
+                        </>
+                      )}
+                    </p>
+                  </Card>
+                )}
                 {status === 'success' && name === 'Submissions' && (
                   <Submissions
                     items={data.data.submissions}
@@ -104,7 +140,6 @@ const ReferencePoints = ({ items, dispatch }) => {
         <MapFilterToggle></MapFilterToggle>
       </Card>
       <Card>
-        <ListCounter items={items}></ListCounter>
         <ItemList
           dispatch={dispatch}
           items={items}
@@ -172,9 +207,17 @@ const Submission = ({ item, dispatch }) => {
         </span>
       </div>
       <SubmissionStatus status={status} label={label} />
-      <div className="mt-3 flex justify-between">
+      <div className="mt-3 flex justify-center">
+        <Button
+          style="primary"
+          buttonGroup={{ left: true }}
+          onClick={() => dispatch({ type: 'submission/download', payload: id })}
+        >
+          Download
+        </Button>
         <Button
           style="alternate"
+          buttonGroup={{ middle: true }}
           onClick={() =>
             dispatch({ type: 'map/center-and-zoom', payload: geometry })
           }
@@ -182,13 +225,8 @@ const Submission = ({ item, dispatch }) => {
           Zoom
         </Button>
         <Button
-          style="alternate"
-          onClick={() => dispatch({ type: 'submission/download', payload: id })}
-        >
-          Download
-        </Button>
-        <Button
           style="secondary"
+          buttonGroup={{ right: true }}
           onClick={() => dispatch({ type: 'submission/cancel', payload: id })}
         >
           Cancel
@@ -307,15 +345,6 @@ const MapFilterToggle = () => {
   );
 };
 
-const ListCounter = ({ items }) => (
-  <label className="mb-3">
-    Showing {items.length} of {items.length}
-  </label>
-);
-ListCounter.propTypes = {
-  items: PropTypes.array,
-};
-
 const sortFunction = (sortOrder, transform) => {
   return (one, two) => {
     const { a, b } = transform(one, two);
@@ -374,10 +403,17 @@ ItemList.propTypes = {
 
 const Item = ({ item, dispatch }) => {
   const date = Date.parse(item.attributes.when);
+  const [isOpen, { toggle }] = useOpenClosed(false);
 
   return (
-    <div className="relative flex flex-col text-base">
-      <span className="font-semibold">{item.attributes.name}</span>
+    <div className="relative flex flex-col gap-2 text-base">
+      <p
+        className={clsx('max-w-xs font-semibold', {
+          truncate: !isOpen,
+        })}
+      >
+        {item.attributes.name}
+      </p>
       <div className="absolute top-0 right-0">
         <span
           className="flex select-none flex-col text-xs text-slate-500"
@@ -387,20 +423,52 @@ const Item = ({ item, dispatch }) => {
           <span>{timeSince(date)}</span>
         </span>
       </div>
-      <span className="text-sm">{item.attributes.notes}</span>
-      <div className="mt-3 flex justify-between">
+      <p
+        className={clsx('max-w-sm text-sm', {
+          truncate: !isOpen,
+        })}
+      >
+        {item.attributes.notes}
+      </p>
+      {isOpen && (
+        <div>
+          <div className="mb-4 mt-2 flex items-center text-slate-500">
+            <span className="h-px flex-1 bg-slate-200"></span>
+            <span className="mx-3 text-xs uppercase tracking-wide">photos</span>
+            <span className="h-px flex-1 bg-slate-200"></span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {item.photos.length === 0 && (
+              <Card>
+                <p className="text-center">
+                  No photos are attached to this point.
+                </p>
+              </Card>
+            )}
+            {item.photos.map((path) => (
+              <Image key={path} path={path} />
+            ))}
+          </div>
+        </div>
+      )}
+      <div className="mt-3 flex justify-center">
+        <Button style="primary" buttonGroup={{ left: true }} onClick={toggle}>
+          {isOpen ? 'Less' : 'More'}
+        </Button>
         <Button
           style="alternate"
+          buttonGroup={{ middle: true }}
           onClick={() =>
             dispatch({ type: 'map/center-and-zoom', payload: item.geometry })
           }
         >
           Zoom
         </Button>
-        <Button style="alternate" onClick={() => dispatch()}>
-          Hide
-        </Button>
-        <Button style="secondary" onClick={() => dispatch()}>
+        <Button
+          style="secondary"
+          buttonGroup={{ right: true }}
+          onClick={() => dispatch()}
+        >
           Delete
         </Button>
       </div>
@@ -410,6 +478,21 @@ const Item = ({ item, dispatch }) => {
 Item.propTypes = {
   item: PropTypes.object,
   dispatch: PropTypes.func,
+};
+
+const Image = ({ path }) => {
+  const storage = useStorage();
+  const [data, setData] = useState();
+  getDownloadURL(ref(storage, path)).then(setData);
+
+  return (
+    <div className="flex flex-col items-center">
+      {data ? <ObjectPreview url={data}>preview</ObjectPreview> : 'Loading...'}
+    </div>
+  );
+};
+Image.propTypes = {
+  path: PropTypes.string,
 };
 
 export default MyContent;
