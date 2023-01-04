@@ -95,7 +95,11 @@ export default function AddPoint({
 
   const queryClient = useQueryClient();
 
-  const { mutate, status } = useMutation({
+  const {
+    mutate,
+    status,
+    reset: mutateReset,
+  } = useMutation({
     mutationFn: (data) => addPoint(data),
     onSuccess: (response) => {
       scrollContainer.current?.scrollTo(0, 0);
@@ -108,6 +112,7 @@ export default function AddPoint({
       }
 
       queryClient.invalidateQueries({ queryKey: ['my content'] });
+      setTimeout(() => mutateReset(), 3000);
 
       reset(defaultValues);
     },
