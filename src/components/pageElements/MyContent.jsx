@@ -23,7 +23,6 @@ import { Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
-import { Switch } from '../formElements/Switch.jsx';
 import { timeSince } from '../helpers/index.mjs';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -167,7 +166,6 @@ const ReferencePoints = ({ items, dispatch }) => {
             value={sortOrder}
             onChange={setSortOrder}
           ></Select>
-          <MapFilterToggle></MapFilterToggle>
         </Card>
         <Card>
           <ItemList
@@ -360,21 +358,6 @@ const sortOrders = [
   'Ascending (0-9 A-Z)',
   'Descending (Z-A 0-9)',
 ];
-
-const MapFilterToggle = () => {
-  const [enabled, setEnabled] = useState(false);
-
-  return (
-    <div className="flex items-center">
-      <Switch
-        value={enabled}
-        onChange={() => setEnabled(!enabled)}
-        hideLabel={true}
-      />
-      <span className="pl-2 text-sm">Only show content visible on the map</span>
-    </div>
-  );
-};
 
 const sortFunction = (sortOrder, transform) => {
   return (one, two) => {
