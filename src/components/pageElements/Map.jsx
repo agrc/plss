@@ -38,7 +38,7 @@ const urls = {
 const loadingCss =
   'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
-export default function PlssMap({ state, dispatch, color, drawerOpen }) {
+export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
   const [selectorOptions, setSelectorOptions] = useState();
@@ -289,7 +289,7 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
 
     if (color === '') {
       // hex reset on completion, remove the graphic
-      setGraphic({});
+      setGraphic();
     } else {
       setGraphic(
         new Graphic({
@@ -313,17 +313,33 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
   // add and remove points on login and logout
   useEffect(() => {
     setMapState(status);
+    const points = [];
 
     if (signInCheckResult?.signedIn === true && status === 'success') {
-      setUserGraphics(content.data.points);
-      dispatch({ type: 'map/userPoints', payload: content.data.points });
+      for (const point of content?.data?.points ?? []) {
+        points.push(
+          new Graphic({
+            geometry: point.geometry,
+            symbol: point.symbol,
+          })
+        );
+      }
+
+      setUserGraphics(points);
+      dispatch({ type: 'map/userPoints', payload: points });
     }
 
     if (signInCheckResult?.signedIn === false) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [dispatch, setUserGraphics, content, status, signInCheckResult?.signedIn]);
+  }, [
+    dispatch,
+    setUserGraphics,
+    content?.data?.points,
+    status,
+    signInCheckResult?.signedIn,
+  ]);
 
   // add and zoom to gps location
   useEffect(() => {
@@ -344,6 +360,7 @@ export default function PlssMap({ state, dispatch, color, drawerOpen }) {
     });
   }, [gpsGraphic, setGpsGraphic]);
 
+  // zoom to the center state object
   useEffect(() => {
     if (state.center) {
       const vp = new Viewpoint({
