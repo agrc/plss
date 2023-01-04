@@ -16,7 +16,6 @@ import { addPointSchema as schema } from './CornerSubmission/Schema.mjs';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
 import ErrorMessageTag from './ErrorMessage.jsx';
-import { DevTool } from '@hookform/devtools';
 import Wizard from './CornerSubmission/Wizard.jsx';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import FileUpload from '../formElements/FileUpload.jsx';
@@ -130,7 +129,6 @@ export default function AddPoint({
 
   return (
     <>
-      <DevTool control={control} />
       <h2 ref={scrollContainer} className="text-2xl font-bold">
         Add Reference Point
       </h2>
