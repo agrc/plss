@@ -1,13 +1,22 @@
 import { Tab } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
+import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { useFunctions, useSigninCheck, useStorage } from 'reactfire';
+import {
+  FirestoreProvider,
+  useFirebaseApp,
+  useFirestore,
+  useFunctions,
+  useSigninCheck,
+  useStorage,
+  useUser,
+} from 'reactfire';
 // eslint-disable-next-line import/no-unresolved
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import { Button } from '../formElements/Buttons.jsx';
@@ -127,26 +136,48 @@ MyContent.propTypes = {
 
 const ReferencePoints = ({ items, dispatch }) => {
   const [sortOrder, setSortOrder] = useState(sortOrders[0]);
+  const app = useFirebaseApp();
+  const firestore = getFirestore(app);
+
+  if ((items?.length ?? 0) < 1) {
+    return (
+      <Card>
+        <h4 className="text-xl">Your reference point list is empty</h4>
+        <p>
+          You can create reference points in the{' '}
+          <Button
+            style="link"
+            onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}
+          >
+            Add Reference Point
+          </Button>{' '}
+          section
+        </p>
+      </Card>
+    );
+  }
 
   return (
-    <section className="inline-grid w-full gap-2">
-      <Card>
-        <Select
-          label="Sort order"
-          options={sortOrders}
-          value={sortOrder}
-          onChange={setSortOrder}
-        ></Select>
-        <MapFilterToggle></MapFilterToggle>
-      </Card>
-      <Card>
-        <ItemList
-          dispatch={dispatch}
-          items={items}
-          sortOrder={sortOrder}
-        ></ItemList>
-      </Card>
-    </section>
+    <FirestoreProvider sdk={firestore}>
+      <section className="inline-grid w-full gap-2">
+        <Card>
+          <Select
+            label="Sort order"
+            options={sortOrders}
+            value={sortOrder}
+            onChange={setSortOrder}
+          ></Select>
+          <MapFilterToggle></MapFilterToggle>
+        </Card>
+        <Card>
+          <ItemList
+            dispatch={dispatch}
+            items={items}
+            sortOrder={sortOrder}
+          ></ItemList>
+        </Card>
+      </section>
+    </FirestoreProvider>
   );
 };
 ReferencePoints.propTypes = {
@@ -404,6 +435,10 @@ ItemList.propTypes = {
 const Item = ({ item, dispatch }) => {
   const date = Date.parse(item.attributes.when);
   const [isOpen, { toggle }] = useOpenClosed(false);
+  const [status, setStatus] = useState('idle');
+  const db = useFirestore();
+  const queryClient = useQueryClient();
+  const { data: user } = useUser();
 
   return (
     <div className="relative flex flex-col gap-2 text-base">
@@ -466,8 +501,21 @@ const Item = ({ item, dispatch }) => {
         </Button>
         <Button
           style="secondary"
+          state={status}
           buttonGroup={{ right: true }}
-          onClick={() => dispatch()}
+          onClick={async () => {
+            try {
+              setStatus('loading');
+              await deleteDoc(
+                doc(db, 'submitters', user.uid, 'points', item.attributes.id)
+              );
+              queryClient.invalidateQueries(['my content']);
+              setStatus('success');
+            } catch (error) {
+              setStatus('error');
+              console.error(error);
+            }
+          }}
         >
           Delete
         </Button>

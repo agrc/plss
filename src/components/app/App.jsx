@@ -8,6 +8,7 @@ import {
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import reduce, { defaults } from '../reducers/AppReducer';
 import Drawer from '../layoutElements/Drawer.jsx';
 import Menu from '../layoutElements/Menu.jsx';
@@ -19,6 +20,7 @@ export default function App() {
   const functions = getFunctions(app);
   const storage = getStorage(app);
   const auth = getAuth(app);
+  const firestore = getFirestore(app);
 
   if (import.meta.env.DEV) {
     if (typeof window === 'undefined' || !window['_firebase_auth_emulator']) {
@@ -59,6 +61,20 @@ export default function App() {
       }
       if (typeof window !== 'undefined') {
         window['_firebase_storage_emulator'] = true;
+      }
+    }
+
+    if (
+      typeof window === 'undefined' ||
+      !window['_firebase_firestore_emulator']
+    ) {
+      try {
+        connectFirestoreEmulator(firestore, 'localhost', 8080);
+      } catch {
+        console.log('firestore emulator already connected');
+      }
+      if (typeof window !== 'undefined') {
+        window['_firebase_firestore_emulator'] = true;
       }
     }
   }
