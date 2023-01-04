@@ -1,11 +1,11 @@
-import { lazy, Suspense, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { XCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSigninCheck } from 'reactfire';
-import Logo from '../pageElements/Logo.jsx';
 import { Button } from '../formElements/Buttons.jsx';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import Logo from '../pageElements/Logo.jsx';
 
 const SubmissionProvider = lazy(() =>
   import('../contexts/SubmissionContext.jsx').then((module) => ({
