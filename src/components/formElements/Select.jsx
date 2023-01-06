@@ -35,11 +35,19 @@ const getDefaultValue = (value, placeholder, options) => {
 };
 
 export const Select = forwardRef(
-  ({ label, name, required, options, value, onChange, placeholder }, ref) => {
+  (
+    { disabled, label, name, required, options, value, onChange, placeholder },
+    ref
+  ) => {
     return (
       <Listbox
         value={value}
         name={name}
+        disabled={disabled}
+        className={clsx('transform-opacity', {
+          'opacity-25': disabled,
+        })}
+        as="div"
         onChange={(newValue) => {
           if (onChange) {
             onChange(newValue?.value ?? newValue);
@@ -144,6 +152,10 @@ Select.propTypes = {
    * The help text to display
    */
   placeholder: PropTypes.string,
+  /**
+   * If the input is disabled
+   */
+  disabled: PropTypes.bool,
   /**
    * The options to place inside the select
    */
