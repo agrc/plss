@@ -165,16 +165,18 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       position: 'top-right',
     });
 
+    return () => {
+      mapView.current.destroy();
+      esriMap.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
     mapView.current.when(() => {
       if (onlyWidth > 640) {
         mapView.current.ui.move(['zoom'], 'bottom-right');
       }
     });
-
-    return () => {
-      mapView.current.destroy();
-      esriMap.destroy();
-    };
   }, [onlyWidth]);
 
   // set view padding depending on screen size
