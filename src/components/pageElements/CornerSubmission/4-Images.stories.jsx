@@ -8,13 +8,7 @@ import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 export default {
   title: 'Corner/Submission/Parts',
   component: Images,
-  decorators: [
-    (Story) => (
-      <SubmissionProvider>
-        <Story />
-      </SubmissionProvider>
-    ),
-  ],
+  decorators: [(Story) => <SubmissionProvider>{Story()}</SubmissionProvider>],
   parameters: {
     backgrounds: {
       default: 'drawer',

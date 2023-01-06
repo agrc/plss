@@ -29,9 +29,7 @@ export default {
           <QueryClientProvider client={new QueryClient()}>
             <FirebaseAppProvider firebaseConfig={config}>
               <AuthProvider sdk={auth}>
-                <StorageProvider sdk={storage}>
-                  <Story />
-                </StorageProvider>
+                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
               </AuthProvider>
             </FirebaseAppProvider>
           </QueryClientProvider>

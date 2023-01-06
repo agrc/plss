@@ -41,9 +41,7 @@ export default {
           <FirebaseAppProvider firebaseConfig={config}>
             <AuthProvider sdk={auth}>
               <FunctionsProvider sdk={functions}>
-                <StorageProvider sdk={storage}>
-                  <Story />
-                </StorageProvider>
+                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
               </FunctionsProvider>
             </AuthProvider>
           </FirebaseAppProvider>

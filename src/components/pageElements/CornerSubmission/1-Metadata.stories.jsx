@@ -7,7 +7,7 @@ export default {
   decorators: [
     (Story) => (
       <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
-        <Story />
+        {Story()}
       </SubmissionProvider>
     ),
   ],

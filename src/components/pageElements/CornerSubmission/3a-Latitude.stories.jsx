@@ -19,7 +19,7 @@ export default {
           },
         }}
       >
-        <Story />
+        {Story()}
       </SubmissionProvider>
     ),
   ],

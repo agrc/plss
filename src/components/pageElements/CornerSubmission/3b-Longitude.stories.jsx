@@ -9,7 +9,7 @@ export default {
       <SubmissionProvider
         context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}
       >
-        <Story />
+        {Story()}
       </SubmissionProvider>
     ),
   ],
