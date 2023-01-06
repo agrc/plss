@@ -1,26 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useQuery } from '@tanstack/react-query';
-import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
-import {
-  useViewLoading,
-  useViewPointZooming,
-  useGraphicManager,
-} from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
-import EsriMap from '@arcgis/core/Map';
-import MapView from '@arcgis/core/views/MapView';
+import esriConfig from '@arcgis/core/config';
+import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
-import Graphic from '@arcgis/core/Graphic';
+import EsriMap from '@arcgis/core/Map';
 import Viewpoint from '@arcgis/core/Viewpoint';
-import esriConfig from '@arcgis/core/config';
-import { contrastColor } from 'contrast-color';
-import clsx from 'clsx';
-import { useSigninCheck, useFunctions } from 'reactfire';
-import { httpsCallable } from 'firebase/functions';
+import MapView from '@arcgis/core/views/MapView';
 import { useWindowWidth } from '@react-hook/window-size';
-import MyLocation from './mapElements/MyLocation.jsx';
+import { useQuery } from '@tanstack/react-query';
+import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
 import '@ugrc/layer-selector/src/LayerSelector.css';
+import {
+  useGraphicManager,
+  useViewLoading,
+  useViewPointZooming,
+} from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
+import clsx from 'clsx';
+import { contrastColor } from 'contrast-color';
+import { httpsCallable } from 'firebase/functions';
+import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
+import { useFunctions, useSigninCheck } from 'reactfire';
+import MyLocation from './mapElements/MyLocation.jsx';
 
 esriConfig.assetsPath = '/assets';
 
