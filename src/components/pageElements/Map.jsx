@@ -1,4 +1,6 @@
 import esriConfig from '@arcgis/core/config';
+import Polygon from '@arcgis/core/geometry/Polygon';
+import Polyline from '@arcgis/core/geometry/Polyline';
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
@@ -365,8 +367,19 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   // zoom to the center state object
   useEffect(() => {
     if (state.center) {
+      let targetGeometry = state.center.geometry;
+
+      switch (state.center.geometry.type) {
+        case 'polygon':
+          targetGeometry = new Polygon(state.center.geometry).extent.center;
+          break;
+        case 'polyline':
+          targetGeometry = new Polyline(state.center.geometry).extent.center;
+          break;
+      }
+
       const vp = new Viewpoint({
-        targetGeometry: state.center.geometry,
+        targetGeometry,
         scale: state.center.scale,
       });
 
