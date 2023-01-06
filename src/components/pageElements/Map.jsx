@@ -22,7 +22,9 @@ import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { useFunctions, useSigninCheck } from 'reactfire';
+import GroupButton from './mapElements/GroupButton.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
+import Township from './mapElements/Township.jsx';
 
 esriConfig.assetsPath = '/assets';
 
@@ -388,24 +390,28 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   }, [state.center, setViewPoint]);
 
   return (
-    <section className="ugrc__map">
-      <div
-        className={clsx(
-          loadingCss,
-          isLoading || mapState === 'loading' ? '' : 'opacity-0'
-        )}
-      ></div>
-      <div ref={node} className="h-screen w-full bg-white">
-        {selectorOptions ? (
-          <LayerSelector {...selectorOptions}></LayerSelector>
-        ) : null}
-        <MyLocation
-          view={mapView.current}
-          dispatch={dispatch}
-          width={onlyWidth}
-        />
-      </div>
-    </section>
+    <>
+      <section className="ugrc__map">
+        <div
+          className={clsx(
+            loadingCss,
+            isLoading || mapState === 'loading' ? '' : 'opacity-0'
+          )}
+        ></div>
+        <div ref={node} className="h-screen w-full bg-white"></div>
+      </section>
+      {selectorOptions ? (
+        <LayerSelector {...selectorOptions}></LayerSelector>
+      ) : null}
+      <MyLocation
+        view={mapView.current}
+        dispatch={dispatch}
+        width={onlyWidth}
+      />
+      <GroupButton view={mapView.current} width={onlyWidth}>
+        <Township dispatch={dispatch} apiKey={import.meta.env.VITE_API_KEY} />
+      </GroupButton>
+    </>
   );
 }
 
