@@ -114,7 +114,7 @@ expected
     case 'map/center-and-zoom': {
       draft.map.center = {
         geometry: action.payload,
-        scale: 4500,
+        scale: action.meta?.scale ?? 4500,
       };
 
       break;
