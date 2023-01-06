@@ -28,11 +28,11 @@ export default function MyLocation({ view, dispatch, width }) {
 
   useEffect(() => {
     if (ready && node.current) {
-      view.ui.add(node.current, width > 640 ? 'bottom-right' : 'top-left');
+      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left');
     }
     const handle = node.current;
 
-    () => view?.ui.remove(handle);
+    () => view?.ui?.remove(handle);
   }, [view, ready, width]);
 
   if (!ready) {
