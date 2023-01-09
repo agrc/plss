@@ -7,6 +7,8 @@ import { useSigninCheck } from 'reactfire';
 import { Button } from '../formElements/Buttons.jsx';
 import Logo from '../pageElements/Logo.jsx';
 
+const version = import.meta.env.PACKAGE_VERSION;
+
 const SubmissionProvider = lazy(() =>
   import('../contexts/SubmissionContext.jsx').then((module) => ({
     default: module.SubmissionProvider,
@@ -133,7 +135,7 @@ export default function Drawer({
 
   return (
     <aside ref={scrollContainer} className={classes}>
-      <Logo />
+      <Logo version={version} t />
       <XCircleIcon
         className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
         onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}

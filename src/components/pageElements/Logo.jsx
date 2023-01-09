@@ -1,4 +1,6 @@
-export default function Logo() {
+import PropTypes from 'prop-types';
+
+export default function Logo({ version }) {
   return (
     <div className="mb-0 flex sm:mb-6">
       <svg
@@ -39,7 +41,18 @@ export default function Logo() {
       </svg>
       <div className="self-center text-5xl font-black text-sky-900/80 sm:text-6xl">
         Utah PLSS
+        <a
+          className="-ml-4 align-sub text-xs font-normal tracking-tight no-underline"
+          href={`https://github.com/agrc/atlas/releases/v${version}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {version}
+        </a>
       </div>
     </div>
   );
 }
+Logo.propTypes = {
+  version: PropTypes.string,
+};

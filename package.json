@@ -2,7 +2,7 @@
   "name": "@ugrc/plss-app",
   "description": "A React app for the UGRC PLSS",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "author": "UGRC",
   "main": "./src/functions/index.mjs",
@@ -110,6 +110,7 @@
     "tailwindcss": "^3.2.4",
     "vite": "^4.0.4",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-package-version": "^1.0.2",
     "vitest": "^0.27.0"
   },
   "eslintConfig": {
