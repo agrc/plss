@@ -43,7 +43,7 @@ export default function Logo({ version }) {
         Utah PLSS
         <a
           className="-ml-4 align-sub text-xs font-normal tracking-tight no-underline"
-          href={`https://github.com/agrc/atlas/releases/v${version}`}
+          href={`https://github.com/agrc/plss/releases/v${version}`}
           target="_blank"
           rel="noreferrer"
         >
