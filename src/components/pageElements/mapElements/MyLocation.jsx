@@ -1,8 +1,8 @@
-import { forwardRef, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import useGeolocation from './useGeoLocation.js';
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { forwardRef, useEffect, useRef } from 'react';
+import useGeolocation from './useGeoLocation.js';
 // eslint-disable-next-line import/no-unresolved
 import { useMapReady } from '@ugrc/utilities/hooks';
 
@@ -28,7 +28,7 @@ export default function MyLocation({ view, dispatch, width }) {
 
   useEffect(() => {
     if (ready && node.current) {
-      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left');
+      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left', 2);
     }
     const handle = node.current;
 

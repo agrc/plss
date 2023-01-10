@@ -13,12 +13,12 @@ export default function GroupButton({ view, width, children }) {
 
   useEffect(() => {
     if (ready && node.current) {
-      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left');
+      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left', 1);
     }
     const handle = node.current;
 
     () => view?.ui?.remove(handle);
-  }, [view, ready, width, node]);
+  }, [view, ready, width]);
 
   return (
     <>

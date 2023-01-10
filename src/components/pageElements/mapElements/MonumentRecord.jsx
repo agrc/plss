@@ -1,0 +1,101 @@
+import { useQuery } from '@tanstack/react-query';
+import ky from 'ky';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { Transition } from '@headlessui/react';
+// eslint-disable-next-line import/no-unresolved
+import { useOpenClosed } from '@ugrc/utilities/hooks';
+import { Input } from '../../formElements/Inputs.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
+import TieSheetList from '../TieSheetList.jsx';
+import Point from '@arcgis/core/geometry/Point';
+const client = ky.create({
+  prefixUrl:
+    'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
+});
+
+export default function MonumentRecord({ dispatch }) {
+  const [pointId, setPointId] = useState('');
+  const [isOpen, { open, close }] = useOpenClosed(false);
+
+  const { data } = useQuery({
+    queryKey: [pointId, 'location'],
+    queryFn: async () => {
+      const response = await client
+        .get('query', {
+          searchParams: {
+            where: `point_id='${pointId}'`,
+            f: 'json',
+          },
+        })
+        .json();
+
+      if (!response || response.error) {
+        throw new Error('Error fetching location');
+      }
+
+      const count = response?.features?.length ?? 0;
+
+      if (count === 0 || count > 1) {
+        throw new Error('An incorrect response count was received.', count);
+      }
+
+      return new Point({
+        type: 'point',
+        x: response.features[0].geometry.x,
+        y: response.features[0].geometry.y,
+        spatialReference: 3857,
+      });
+    },
+    enabled: pointId.length > 5 && isOpen === true,
+    staleTime: Infinity,
+  });
+
+  useEffect(() => {
+    if (data) {
+      dispatch({
+        type: 'map/center-and-zoom',
+        payload: data,
+        meta: {
+          scale: 4500,
+        },
+      });
+    }
+  }, [data, dispatch]);
+
+  return (
+    <section className="mx-auto grid max-w-prose gap-2">
+      <h1 className="mb-2 text-2xl font-bold">Monument Record Finder</h1>
+      <div className="flex-1">
+        <Input
+          label="BLM Point Id"
+          placeholder="UT260010S0130W0_600100"
+          value={pointId}
+          onChange={(e) => {
+            close();
+            setPointId(e.target.value);
+          }}
+        />
+      </div>
+      <Transition
+        appear
+        show={isOpen}
+        enter="ease-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <TieSheetList blmPointId={pointId} />
+      </Transition>
+      <div className="mt-4 flex justify-center">
+        <Button onClick={open}>Find</Button>
+      </div>
+    </section>
+  );
+}
+MonumentRecord.displayName = 'MonumentRecord';
+MonumentRecord.propTypes = {
+  dispatch: PropTypes.func,
+};

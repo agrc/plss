@@ -1,20 +1,15 @@
-import PropTypes from 'prop-types';
-import { useStorage } from 'reactfire';
-import { ref, listAll, getDownloadURL } from 'firebase/storage';
-import { useQuery } from '@tanstack/react-query';
+import { ArrowDownCircleIcon } from '@heroicons/react/20/solid';
 import {
-  ExclamationCircleIcon,
   CheckIcon,
+  ExclamationCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import {
-  ArrowDownOnSquareIcon,
-  ArrowDownCircleIcon,
-} from '@heroicons/react/20/solid';
+import PropTypes from 'prop-types';
 import { Button, Link } from '../formElements/Buttons.jsx';
-import { getDefault } from '../helpers';
-import Spacer from '../formElements/Spacer.jsx';
 import Card from '../formElements/Card.jsx';
+import Spacer from '../formElements/Spacer.jsx';
+import { getDefault } from '../helpers';
+import TieSheetList from './TieSheetList.jsx';
 
 const managed_counties = {
   UTAH: 'https://maps.utahcounty.gov/TieSheets/TieSheet.htm',
@@ -211,7 +206,7 @@ const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
         <>
           <h3 className="flex items-center justify-center font-light uppercase">
             <ArrowDownCircleIcon className="mr-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
-            <span className=" text-slate-700">Submit your tiesheet</span>
+            <span className=" text-slate-700">Submit your monument record</span>
             <ArrowDownCircleIcon className="ml-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
           </h3>
           <Spacer />
@@ -247,7 +242,7 @@ const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
               dispatch({ type: 'menu/toggle', payload: 'login' });
             }}
           >
-            login to submit your tiesheets
+            login to submit your monument record
           </Button>
         </div>
       )}
@@ -261,74 +256,4 @@ SubmissionPicker.propTypes = {
     blmPointId: PropTypes.string,
     county: PropTypes.string,
   }).isRequired,
-};
-
-const TieSheetList = ({ blmPointId, children }) => {
-  const storage = useStorage();
-
-  const path = `tiesheets/${blmPointId}`;
-  const fileRef = ref(storage, path);
-
-  const { data, status } = useQuery({
-    enabled: blmPointId != null,
-    queryKey: ['identify', blmPointId],
-    queryFn: async () => {
-      const response = await listAll(fileRef);
-
-      if ((response?.items?.length ?? 0) > 0) {
-        const urls = await Promise.all(
-          response.items.map(async (item) => {
-            const url = await getDownloadURL(item);
-
-            return {
-              url,
-              name: item.name,
-            };
-          })
-        );
-
-        return urls;
-      }
-
-      return [];
-    },
-    staleTime: Infinity,
-  });
-
-  return (
-    <Card>
-      <div>
-        <h3 className="text-xl font-medium">Tiesheet Documents</h3>
-        {status === 'loading' && <div>Loading...</div>}
-        {status === 'error' && (
-          <div>The tiesheets are currently not available</div>
-        )}
-        {status === 'success' && (data?.length ?? 0) === 0 && (
-          <div>This point has no tiesheets</div>
-        )}
-        {status === 'success' && data.length > 0 && (
-          <ul>
-            {data.map((x) => (
-              <li
-                key={x.name}
-                className="group hover:rounded hover:bg-slate-100"
-              >
-                <span className="inline-flex align-middle">
-                  <ArrowDownOnSquareIcon className="mr-2 inline-block h-4 w-4 text-sky-600 group-hover:text-sky-800" />
-                  <a href={x.url} target="_blank" rel="noopener noreferrer">
-                    {x.name}
-                  </a>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="mt-4">{children}</div>
-    </Card>
-  );
-};
-TieSheetList.propTypes = {
-  blmPointId: PropTypes.string.isRequired,
-  children: PropTypes.node,
 };

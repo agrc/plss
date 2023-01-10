@@ -7,6 +7,7 @@ import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import Viewpoint from '@arcgis/core/Viewpoint';
 import MapView from '@arcgis/core/views/MapView';
+import { Tab } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
@@ -21,10 +22,14 @@ import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useFunctions, useSigninCheck } from 'reactfire';
 import GroupButton from './mapElements/GroupButton.jsx';
+import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
+import HomeButton from './mapElements/HomeButton.jsx';
 import Township from './mapElements/Township.jsx';
+import DefaultFallback from './ErrorBoundary.jsx';
 
 esriConfig.assetsPath = '/assets';
 
@@ -42,6 +47,15 @@ const urls = {
 const loadingCss =
   'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
+const extent = {
+  type: 'extent',
+  xmax: -11762120.612131765,
+  xmin: -13074391.513731329,
+  ymax: 5225035.106177688,
+  ymin: 4373832.359194187,
+  spatialReference: 3857,
+};
+const tabs = ['Township', 'Monuments', 'Coordinates', 'Location'];
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
@@ -82,13 +96,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     mapView.current = new MapView({
       container: node.current,
       map: esriMap,
-      extent: {
-        xmax: -11762120.612131765,
-        xmin: -13074391.513731329,
-        ymax: 5225035.106177688,
-        ymin: 4373832.359194187,
-        spatialReference: 3857,
-      },
+      extent,
       ui: {
         components: ['zoom'],
       },
@@ -178,7 +186,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   useEffect(() => {
     mapView.current.when(() => {
       if (onlyWidth > 640) {
-        mapView.current.ui.move(['zoom'], 'bottom-right');
+        mapView.current.ui.move(['zoom'], 'bottom-right', 0);
       }
     });
   }, [onlyWidth]);
@@ -396,28 +404,64 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   }, [state.center, setViewPoint]);
 
   return (
-    <>
-      <section className="ugrc__map">
-        <div
-          className={clsx(
-            loadingCss,
-            isLoading || mapState === 'loading' ? '' : 'opacity-0'
-          )}
-        ></div>
-        <div ref={node} className="h-screen w-full bg-white"></div>
-      </section>
-      {selectorOptions ? (
-        <LayerSelector {...selectorOptions}></LayerSelector>
-      ) : null}
-      <MyLocation
-        view={mapView.current}
-        dispatch={dispatch}
-        width={onlyWidth}
-      />
-      <GroupButton view={mapView.current} width={onlyWidth}>
-        <Township dispatch={dispatch} apiKey={import.meta.env.VITE_API_KEY} />
-      </GroupButton>
-    </>
+    <ErrorBoundary FallbackComponent={DefaultFallback}>
+      <>
+        <section className="ugrc__map">
+          <div
+            className={clsx(
+              loadingCss,
+              isLoading || mapState === 'loading' ? '' : 'opacity-0'
+            )}
+          ></div>
+          <div ref={node} className="h-screen w-full bg-white"></div>
+        </section>
+        {selectorOptions ? (
+          <LayerSelector {...selectorOptions}></LayerSelector>
+        ) : null}
+        <HomeButton view={mapView.current} extent={extent} width={onlyWidth} />
+        <MyLocation
+          view={mapView.current}
+          dispatch={dispatch}
+          width={onlyWidth}
+        />
+        <GroupButton view={mapView.current} width={onlyWidth}>
+          <section className="mx-auto grid max-w-prose gap-2">
+            <h1 className="mb-2 text-2xl font-bold">Section Finder</h1>
+            <Tab.Group>
+              <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+                {tabs.map((item) => (
+                  <Tab
+                    key={item}
+                    className={({ selected }) =>
+                      clsx(
+                        'w-full rounded-lg py-2.5 font-medium leading-5',
+                        'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                        selected
+                          ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                          : 'text-sky-700 hover:bg-sky-600/20'
+                      )
+                    }
+                  >
+                    {item}
+                  </Tab>
+                ))}
+              </Tab.List>
+              <Tab.Panels>
+                <Tab.Panel>
+                  <Township
+                    dispatch={dispatch}
+                    apiKey={import.meta.env.VITE_API_KEY}
+                  />
+                </Tab.Panel>
+                <Tab.Panel>
+                  <MonumentRecord dispatch={dispatch} />
+                </Tab.Panel>
+              </Tab.Panels>
+            </Tab.Group>
+          </section>
+        </GroupButton>
+      </>
+    </ErrorBoundary>
   );
 }
 
