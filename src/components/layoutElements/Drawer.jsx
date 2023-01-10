@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSigninCheck } from 'reactfire';
-import { Button } from '../formElements/Buttons.jsx';
+import DefaultFallback from '../pageElements/ErrorBoundary.jsx';
 import Logo from '../pageElements/Logo.jsx';
 
 const version = import.meta.env.PACKAGE_VERSION;
@@ -24,22 +24,6 @@ const Login = lazy(() => import('../pageElements/Login.jsx'));
 const Profile = lazy(() => import('../pageElements/Profile.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
-
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <div role="alert" data-area="drawer">
-      <h1 className="text-lg font-bold">Something went wrong</h1>
-      <p className="rounded border p-4">{error.message}</p>
-      <div className="mt-4 flex justify-center">
-        <Button onClick={() => resetErrorBoundary()}>Reset</Button>
-      </div>
-    </div>
-  );
-}
-ErrorFallback.propTypes = {
-  error: PropTypes.object.isRequired,
-  resetErrorBoundary: PropTypes.func.isRequired,
-};
 
 export default function Drawer({
   dispatch,
@@ -141,7 +125,7 @@ export default function Drawer({
         onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}
       />
       <ErrorBoundary
-        FallbackComponent={ErrorFallback}
+        FallbackComponent={DefaultFallback}
         onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
       >
         <Suspense fallback={<div>loading...</div>}>

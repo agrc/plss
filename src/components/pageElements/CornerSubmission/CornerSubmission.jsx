@@ -11,6 +11,7 @@ import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
 import Note from '../../formElements/Note.jsx';
+import DefaultFallback from '../ErrorBoundary.jsx';
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
@@ -33,22 +34,6 @@ const Longitude = lazy(() =>
     default: module.Longitude,
   }))
 );
-
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <div role="alert" data-area="submission">
-      <h1 className="text-lg font-bold">Something went wrong</h1>
-      <p className="m-4 rounded border p-4 text-sm">{error.message}</p>
-      <div className="mt-4 flex justify-center">
-        <Button onClick={() => resetErrorBoundary()}>Reset</Button>
-      </div>
-    </div>
-  );
-}
-ErrorFallback.propTypes = {
-  error: PropTypes.object.isRequired,
-  resetErrorBoundary: PropTypes.func.isRequired,
-};
 
 export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useLocalStorage(
@@ -172,7 +157,7 @@ export default function CornerSubmission({ submission, dispatch }) {
       )}
       <div ref={scrollContainer} className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary
-          FallbackComponent={ErrorFallback}
+          FallbackComponent={DefaultFallback}
           onReset={() => send('BACK')}
         >
           {getFormPart(state)}
