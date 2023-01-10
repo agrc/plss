@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.0-1](https://github.com/agrc/plss/compare/v3.0.0-0...v3.0.0-1) (2023-01-10)
+
+
+### 🐛 Bug Fixes
+
+* link to correct change log ([f8cb1fb](https://github.com/agrc/plss/commit/f8cb1fb35fce3c837bfa36a4c346bbbbf6f7a219))
+
 ## 3.0.0-0 (2023-01-10)
 
 
