@@ -371,13 +371,19 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     if (state.center) {
       let targetGeometry = state.center.geometry;
 
-      switch (state.center.geometry.type) {
+      switch (state.center.geometry?.type) {
         case 'polygon':
           targetGeometry = new Polygon(state.center.geometry).extent.center;
           break;
         case 'polyline':
           targetGeometry = new Polyline(state.center.geometry).extent.center;
           break;
+        default:
+          break;
+      }
+
+      if (!targetGeometry) {
+        return;
       }
 
       const vp = new Viewpoint({
