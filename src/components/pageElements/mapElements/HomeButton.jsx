@@ -1,5 +1,5 @@
 import Extent from '@arcgis/core/geometry/Extent';
-import { GlobeAmericasIcon } from '@heroicons/react/24/outline';
+import { HomeModernIcon } from '@heroicons/react/24/outline';
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 // eslint-disable-next-line import/no-unresolved
@@ -37,7 +37,7 @@ export default function HomeButton({ view, extent, width }) {
         title="Default map view"
         onClick={() => goHome(view, extent)}
       >
-        <GlobeAmericasIcon className="h-6 w-6 text-slate-700" />
+        <HomeModernIcon className="h-5 w-5 text-slate-700" />
       </button>
     </div>
   );
