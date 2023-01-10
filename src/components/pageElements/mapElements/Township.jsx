@@ -143,7 +143,7 @@ export default function Township({ apiKey, dispatch }) {
 
       const count = response?.result?.length ?? 0;
 
-      if (count === 0 || count > 1) {
+      if (count === 0) {
         throw new Error('An incorrect response count was received.', count);
       }
 
@@ -261,6 +261,12 @@ export default function Township({ apiKey, dispatch }) {
           Go
         </Button>
       </div>
+      {status === 'error' && (
+        <div className="rounded border border-rose-900 p-4 text-sm text-rose-800">
+          There was a problem with this combination. Try again or try something
+          near by to help you find your way.
+        </div>
+      )}
     </section>
   );
 }
