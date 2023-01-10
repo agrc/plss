@@ -157,7 +157,6 @@ export default function Township({ apiKey, dispatch }) {
 
   return (
     <section className="mx-auto grid max-w-prose gap-2">
-      <h1 className="mb-2 text-2xl font-bold">Section Finder</h1>
       <Tab.Group
         selectedIndex={selectedTabIndex}
         onChange={(e) => {
@@ -167,17 +166,17 @@ export default function Township({ apiKey, dispatch }) {
           setSelectedSection('');
         }}
       >
-        <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+        <Tab.List className="flex space-x-1 rounded-xl bg-slate-500/20 p-1">
           {tabs.map((item) => (
             <Tab
               key={item.name}
               className={({ selected }) =>
                 clsx(
                   'w-full rounded-lg py-2.5 font-medium leading-5',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-slate-400 focus:outline-none focus:ring-2',
                   selected
-                    ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
-                    : 'text-sky-700 hover:bg-sky-600/20'
+                    ? 'border border-slate-600 bg-slate-500 text-white shadow hover:border-slate-700 hover:bg-slate-600 focus:border-slate-500 focus:ring-slate-600 active:bg-slate-700'
+                    : 'text-slate-700 hover:bg-slate-600/20'
                 )
               }
             >

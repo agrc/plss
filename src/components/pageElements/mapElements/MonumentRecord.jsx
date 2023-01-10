@@ -65,7 +65,6 @@ export default function MonumentRecord({ dispatch }) {
 
   return (
     <section className="mx-auto grid max-w-prose gap-2">
-      <h1 className="mb-2 text-2xl font-bold">Monument Record Finder</h1>
       <div className="flex-1">
         <Input
           label="BLM Point Id"
