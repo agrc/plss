@@ -55,7 +55,12 @@ const extent = {
   ymin: 4373832.359194187,
   spatialReference: 3857,
 };
-const tabs = ['Township', 'Monuments', 'Coordinates', 'Location'];
+const tabs = [
+  'Section Finder',
+  'Monument Finder',
+  'Coordinate Finder',
+  'Place Finder',
+];
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
@@ -425,10 +430,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           width={onlyWidth}
         />
         <GroupButton view={mapView.current} width={onlyWidth}>
-          <section className="mx-auto grid max-w-prose gap-2">
-            <h1 className="mb-2 text-2xl font-bold">Section Finder</h1>
+          <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
+            <h1 className="mb-2 text-2xl font-bold">Quick finder tools</h1>
             <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+              <Tab.List className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
                 {tabs.map((item) => (
                   <Tab
                     key={item}
@@ -446,7 +451,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                   </Tab>
                 ))}
               </Tab.List>
-              <Tab.Panels>
+              <Tab.Panels className="mx-4">
                 <Tab.Panel>
                   <Township
                     dispatch={dispatch}
