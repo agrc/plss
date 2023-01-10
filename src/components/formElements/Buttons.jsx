@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { OAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useAuth } from 'reactfire';
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
 export const LogInButton = () => {
   const auth = useAuth();
@@ -128,7 +129,7 @@ export const Button = ({
       type={type}
       name={name}
       ref={inputRef}
-      disabled={state === 'disabled' || state === 'loading'}
+      disabled={['disabled', 'loading', 'error'].includes(state)}
       onClick={onClick}
       className={clsx(
         style !== 'link' &&
@@ -165,6 +166,9 @@ export const Button = ({
           ></path>
         </svg>
       )}
+      {state === 'error' && (
+        <ExclamationCircleIcon className="-ml-1 mr-2 h-5 w-5 text-red-500" />
+      )}
       {children}
     </button>
   );
@@ -186,7 +190,7 @@ Button.propTypes = {
   /**
    * The state of button
    */
-  state: PropTypes.oneOf(['idle', 'disabled', 'loading', 'success']),
+  state: PropTypes.oneOf(['idle', 'disabled', 'loading', 'success', 'error']),
   /**
    * The property name used by react hook form
    */
