@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0-2](https://github.com/agrc/plss/compare/v3.0.0-1...v3.0.0-2) (2023-01-11)
+
+
+### 🎨 Design Improvements
+
+* change default extent home button icon to a house ([8d68208](https://github.com/agrc/plss/commit/8d68208443ac70f883133fb7973380fa9a97f12d))
+* change secondary tab color on navigaton tools ([c3d1308](https://github.com/agrc/plss/commit/c3d130832a6673b77b9d1504ee38551c0d6aeada))
+* place quick finder fixed to the top instead of center ([ff0eab0](https://github.com/agrc/plss/commit/ff0eab048fae9b4a01ed0645a08e468cb6a98aee))
+
 ## [3.0.0-1](https://github.com/agrc/plss/compare/v3.0.0-0...v3.0.0-1) (2023-01-10)
 
 
