@@ -29,6 +29,7 @@ import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
 import Township from './mapElements/Township.jsx';
+import Coordinates from './mapElements/Coordinates.jsx';
 import DefaultFallback from './ErrorBoundary.jsx';
 
 esriConfig.assetsPath = '/assets';
@@ -457,6 +458,9 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                     dispatch={dispatch}
                     apiKey={import.meta.env.VITE_API_KEY}
                   />
+                </Tab.Panel>
+                <Tab.Panel>
+                  <Coordinates dispatch={dispatch} />
                 </Tab.Panel>
                 <Tab.Panel>
                   <MonumentRecord dispatch={dispatch} />
