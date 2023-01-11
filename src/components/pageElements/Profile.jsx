@@ -32,8 +32,14 @@ export default function Profile({ dispatch }) {
 
   const { data: response, status: profileStatus } = useQuery({
     queryKey: ['profile', data.uid],
-    queryFn: getProfile,
     enabled: data?.uid?.length > 0,
+    queryFn: getProfile,
+    placeholderData: {
+      data: {
+        displayName: data?.displayName ?? '',
+        license: '',
+      },
+    },
     staleTime: Infinity,
   });
 

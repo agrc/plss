@@ -1,17 +1,33 @@
 import PropTypes from 'prop-types';
 import { httpsCallable } from 'firebase/functions';
 import { useFunctions, useSigninCheck, useUser } from 'reactfire';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LogInButton, LogOutButton, Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import md5 from 'md5';
+import { useEffect } from 'react';
 
 const size = 160;
 const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
 
 export default function Login({ dispatch }) {
   const { data } = useSigninCheck();
+  const queryClient = useQueryClient();
 
+  const signedIn = data?.signedIn ?? '';
+
+  useEffect(() => {
+    if (!signedIn) {
+      queryClient.removeQueries({
+        queryKey: ['profile'],
+        type: 'all',
+      });
+      queryClient.removeQueries({
+        queryKey: ['my content'],
+        type: 'all',
+      });
+    }
+  }, [signedIn, queryClient]);
   return (
     <Card>{data?.signedIn ? <Profile dispatch={dispatch} /> : <SignIn />}</Card>
   );
@@ -48,31 +64,30 @@ const SignIn = () => (
 const Profile = ({ dispatch }) => {
   const functions = useFunctions();
   const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
-
   const { data: user } = useUser();
 
   const { data: response, status } = useQuery({
-    enabled: user?.uid?.length > 0,
     queryKey: ['profile', user.uid],
+    enabled: user?.uid?.length > 0,
     queryFn: getProfile,
+    placeholderData: {
+      data: {
+        displayName: user?.displayName ?? '',
+        email: user?.email ?? '',
+        license: '',
+      },
+    },
     staleTime: Infinity,
   });
-
-  const data =
-    status === 'success' ? response.data : { email: '', displayName: '' };
 
   return (
     <div className="flex w-full flex-col items-center gap-6">
       <h2 className="text-3xl font-semibold lg:text-2xl">
-        {status === 'success' &&
-          `Welcome back, ${data?.displayName ?? user?.displayName ?? '...'}`}
-        {status === 'loading' && `Welcome back, ...`}
+        Welcome back, {response.data.displayName}
       </h2>
       <span className="relative">
         <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100 shadow-lg">
-          {status === 'success' && (
-            <Gravatar email={data?.email ?? user?.email ?? ''} />
-          )}
+          {status === 'success' && <Gravatar email={response.data.email} />}
         </span>
         <svg
           className="absolute bottom-1 right-3 h-6 w-6 fill-current text-slate-800/20"
