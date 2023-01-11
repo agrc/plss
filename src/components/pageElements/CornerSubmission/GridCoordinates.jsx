@@ -126,20 +126,6 @@ const GridCoordinates = () => {
           <NumberedFormSection number={3} title="Location">
             <div>
               <Input
-                label="Easting"
-                type="number"
-                step="0.001"
-                required={true}
-                {...register('easting')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="easting"
-                as={ErrorMessageTag}
-              />
-            </div>
-            <div>
-              <Input
                 label="Northing"
                 type="number"
                 step="0.001"
@@ -149,6 +135,20 @@ const GridCoordinates = () => {
               <ErrorMessage
                 errors={formState.errors}
                 name="northing"
+                as={ErrorMessageTag}
+              />
+            </div>
+            <div>
+              <Input
+                label="Easting"
+                type="number"
+                step="0.001"
+                required={true}
+                {...register('easting')}
+              />
+              <ErrorMessage
+                errors={formState.errors}
+                name="easting"
                 as={ErrorMessageTag}
               />
             </div>
