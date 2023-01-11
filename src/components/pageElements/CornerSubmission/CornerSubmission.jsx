@@ -1,17 +1,14 @@
 import { lazy, useContext, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useUser } from 'reactfire';
 import { ErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 // eslint-disable-next-line import/no-unresolved
 import { useLocalStorage } from '@ugrc/utilities/hooks';
-import extractTownshipInformation from './blmPointId.mjs';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
-import Card from '../../formElements/Card.jsx';
-import Note from '../../formElements/Note.jsx';
 import DefaultFallback from '../ErrorBoundary.jsx';
+const SubmissionNotice = lazy(() => import('./SubmissionNotice.jsx'));
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
@@ -43,7 +40,7 @@ export default function CornerSubmission({ submission, dispatch }) {
   );
   const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
-  const { data: user } = useUser();
+
   const pointId = submission.blmPointId;
 
   useEffect(() => {
@@ -54,14 +51,6 @@ export default function CornerSubmission({ submission, dispatch }) {
     console.log('current state', state.context);
     scrollContainer.current?.scrollTo(0, 0);
   }, [state]);
-
-  const townshipInformation = extractTownshipInformation(pointId);
-  const location = {
-    county: submission.county,
-    meridian: townshipInformation.meridian.abbr,
-    township: townshipInformation.township,
-    range: townshipInformation.range,
-  };
 
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
 
@@ -118,42 +107,11 @@ export default function CornerSubmission({ submission, dispatch }) {
         />
       </div>
       {!hide && (
-        <div className="mb-4 inline-grid">
-          <Card>
-            <Note>
-              This monument record information will be reviewed by the county
-              surveyor under stewardship of this corner to satisfy the
-              requirements of state code 17-23-17-7a.
-            </Note>
-            <div className="flex justify-between">
-              <span className="font-semibold">Submitted By</span>
-              <span>{user.displayName}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-semibold">Surveyor License</span>
-              <span>{user.license}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-semibold">BLM Point #</span>
-              <span>{pointId}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-semibold">County</span>
-              <span>{location.county}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-semibold">Township</span>
-              <span>
-                {location.meridian}T{location.township}R{location.range}
-              </span>
-            </div>
-            <div className="mt-2 flex justify-center">
-              <Button style="alternate" onClick={() => setHide(!hide)}>
-                close
-              </Button>
-            </div>
-          </Card>
-        </div>
+        <SubmissionNotice
+          pointId={pointId}
+          county={submission.county}
+          toggle={() => setHide(!hide)}
+        />
       )}
       <div ref={scrollContainer} className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary
