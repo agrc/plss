@@ -55,12 +55,7 @@ const extent = {
   ymin: 4373832.359194187,
   spatialReference: 3857,
 };
-const tabs = [
-  'Section Finder',
-  'Coordinate Finder',
-  'Monument Finder',
-  'Place Finder',
-];
+const tabs = ['Section Finder', 'Monument Finder'];
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
