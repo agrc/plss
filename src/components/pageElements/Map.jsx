@@ -57,8 +57,8 @@ const extent = {
 };
 const tabs = [
   'Section Finder',
-  'Monument Finder',
   'Coordinate Finder',
+  'Monument Finder',
   'Place Finder',
 ];
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
