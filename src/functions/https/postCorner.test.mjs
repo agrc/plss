@@ -71,11 +71,11 @@ describe('postCorner', () => {
     vi.useRealTimers();
   });
   describe('validate new submission', () => {
-    test('it throws on invalid data', () => {
-      expect(validateNewSubmission()).rejects.toThrowError();
+    test('it throws on invalid data', async () => {
+      await expect(validateNewSubmission()).rejects.toThrowError();
     });
 
-    test('it returns true for valid data', () => {
+    test('it returns true for valid data', async () => {
       const input = {
         blmPointId: 'point_id',
         type: 'new',
@@ -121,16 +121,16 @@ describe('postCorner', () => {
         },
       };
 
-      expect(validateNewSubmission(input)).resolves.toBe(true);
-      expect(validateSubmission(input)).resolves.toBe(true);
+      await expect(validateNewSubmission(input)).resolves.toBe(true);
+      await expect(validateSubmission(input)).resolves.toBe(true);
     });
   });
   describe('validate existing submission', () => {
-    test('it throws on invalid data', () => {
-      expect(validateExistingSubmission()).rejects.toThrowError();
+    test('it throws on invalid data', async () => {
+      await expect(validateExistingSubmission()).rejects.toThrowError();
     });
 
-    test('it returns true for valid data', () => {
+    test('it returns true for valid data', async () => {
       const input = {
         blmPointId: 'point_id',
         type: 'existing',
@@ -154,10 +154,10 @@ describe('postCorner', () => {
         },
       };
 
-      expect(validateExistingSubmission(input)).resolves.toBe(true);
+      await expect(validateExistingSubmission(input)).resolves.toBe(true);
     });
 
-    test('it returns true for valid data when coordinates are skipped', () => {
+    test('it returns true for valid data when coordinates are skipped', async () => {
       const input = {
         blmPointId: 'point_id',
         type: 'existing',
@@ -166,7 +166,7 @@ describe('postCorner', () => {
         },
       };
 
-      expect(validateExistingSubmission(input)).resolves.toBe(true);
+      await expect(validateExistingSubmission(input)).resolves.toBe(true);
     });
   });
   describe('formatting records', () => {
@@ -341,23 +341,23 @@ describe('postCorner', () => {
     const { wrap } = firebaseFunctionsTest();
     const func = wrap(postCorner);
 
-    test('throws without authentication', () => {
-      expect(() => func(undefined, { auth: null })).rejects.toThrowError(
+    test('throws without authentication', async () => {
+      await expect(() => func(undefined, { auth: null })).rejects.toThrowError(
         'You must log in'
       );
     });
-    test('throws without data', () => {
-      expect(() => func(undefined, { auth: user })).rejects.toThrowError(
+    test('throws without data', async () => {
+      await expect(() => func(undefined, { auth: user })).rejects.toThrowError(
         'The submission data is missing'
       );
     });
-    test('throws with an valid submission', () => {
-      expect(() => func({}, { auth: user })).rejects.toThrowError(
+    test('throws with an valid submission', async () => {
+      await expect(() => func({}, { auth: user })).rejects.toThrowError(
         'corner submission data is invalid'
       );
     });
-    test('returns 1 for a valid submission', () => {
-      expect(
+    test('returns 1 for a valid submission', async () => {
+      await expect(
         func(
           {
             blmPointId: 'point_id',
@@ -384,7 +384,7 @@ describe('postCorner', () => {
           { auth: user }
         )
       ).resolves.toBe(1);
-      // expect(addMock).toHaveBeenCalledTimes(1);
+      expect(addMock).toHaveBeenCalledTimes(1);
     });
   });
 });
