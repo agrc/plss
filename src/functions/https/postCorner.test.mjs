@@ -23,6 +23,7 @@ describe('postCorner', () => {
   const metadata = {
     created_at: date,
     blm_point_id: 'point_id',
+    county: 'Beaver',
     submitted_by: {
       id: user.uid,
       name: user.displayName,
@@ -78,6 +79,7 @@ describe('postCorner', () => {
     test('it returns true for valid data', async () => {
       const input = {
         blmPointId: 'point_id',
+        county: 'Beaver',
         type: 'new',
         metadata: {
           corner: 'NW',
@@ -133,6 +135,7 @@ describe('postCorner', () => {
     test('it returns true for valid data', async () => {
       const input = {
         blmPointId: 'point_id',
+        county: 'Beaver',
         type: 'existing',
         existing: {
           pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
@@ -160,6 +163,7 @@ describe('postCorner', () => {
     test('it returns true for valid data when coordinates are skipped', async () => {
       const input = {
         blmPointId: 'point_id',
+        county: 'Beaver',
         type: 'existing',
         existing: {
           pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
@@ -173,11 +177,13 @@ describe('postCorner', () => {
     describe('new corners', () => {
       const parts = {
         blmPointId: 'point_id',
+        county: 'Beaver',
         type: 'new',
         metadata: {
           corner: 'NW',
           section: 1,
           mrrc: true,
+          collected: '2021-01-01',
           notes: 'Some general notes',
           description: 'A monument description',
           accuracy: 'survey',
@@ -257,6 +263,7 @@ describe('postCorner', () => {
       const parts = {
         blmPointId: 'point_id',
         type: 'existing',
+        county: 'Beaver',
         datum: 'grid-nad83',
         grid: {
           verticalDatum: 'NAVD88',
@@ -362,6 +369,7 @@ describe('postCorner', () => {
           {
             blmPointId: 'point_id',
             type: 'existing',
+            county: 'Beaver',
             existing: {
               pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
             },
