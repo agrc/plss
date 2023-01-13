@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.1.0-0](https://github.com/agrc/plss/compare/v3.0.0-2...v3.1.0-0) (2023-01-13)
+
+
+### 🎨 Design Improvements
+
+* flip northing and easting data entry order ([141bc41](https://github.com/agrc/plss/commit/141bc41ec7ffe22791ca53b8ff345e62defa5ad8)), closes [#208](https://github.com/agrc/plss/issues/208)
+
+
+### 🐛 Bug Fixes
+
+* show surveyor license in submission notice ([e701342](https://github.com/agrc/plss/commit/e701342efb9d47958a2e328c28173452c00d3914)), closes [#190](https://github.com/agrc/plss/issues/190)
+
+
+### 🚀 Features
+
+* send email notifications when submissions are created ([c9290bf](https://github.com/agrc/plss/commit/c9290bfc38d4f4e4e16a33ab4051b79f0b78cb59)), closes [#199](https://github.com/agrc/plss/issues/199)
+
 ## [3.0.0-2](https://github.com/agrc/plss/compare/v3.0.0-1...v3.0.0-2) (2023-01-11)
 
 
