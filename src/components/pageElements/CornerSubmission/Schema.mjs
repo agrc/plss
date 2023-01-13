@@ -63,6 +63,46 @@ export const addPointSchema = yup.object().shape({
   }),
 });
 
+export const cornerData = yup.object().shape({
+  blmPointId: yup.string().required(),
+  county: yup
+    .string()
+    .required()
+    .lowercase()
+    .oneOf([
+      'beaver',
+      'box elder',
+      'cache',
+      'carbon',
+      'daggett',
+      'davis',
+      'duchesne',
+      'emery',
+      'garfield',
+      'grand',
+      'iron',
+      'juab',
+      'kane',
+      'millard',
+      'morgan',
+      'piute',
+      'rich',
+      'salt lake',
+      'san juan',
+      'sanpete',
+      'sevier',
+      'summit',
+      'tooele',
+      'uintah',
+      'utah',
+      'wasatch',
+      'washington',
+      'wayne',
+      'weber',
+    ]),
+  type: yup.string().required().oneOf(['new', 'existing']),
+});
+
 export const metadataSchema = yup.object().shape({
   status: yup
     .string()

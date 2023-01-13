@@ -73,6 +73,8 @@ const postCorner = https.onCall(async (data, context) => {
 });
 
 export const validateSubmission = async (data) => {
+  await schemas.cornerData.validate(data, options);
+
   if (data.type === 'new') {
     return await validateNewSubmission(data);
   } else if (data.type === 'existing') {
@@ -113,6 +115,7 @@ export const formatDataForFirestore = (data, user) => {
   const metadata = {
     created_at: new Date(),
     blm_point_id: data.blmPointId,
+    county: data.county,
     status: {
       ugrc: {
         approved: null,
