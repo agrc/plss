@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0-2](https://github.com/agrc/plss/compare/v3.1.0-1...v3.1.0-2) (2023-01-16)
+
+
+### 🎨 Design Improvements
+
+* use proper header value ([c5a744f](https://github.com/agrc/plss/commit/c5a744fccad3813044019d1c32aa5014d2cafbbe))
+
 ## [3.1.0-1](https://github.com/agrc/plss/compare/v3.1.0-0...v3.1.0-1) (2023-01-16)
 
 
