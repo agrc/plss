@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0-1](https://github.com/agrc/plss/compare/v3.1.0-0...v3.1.0-1) (2023-01-16)
+
+
+### 🐛 Bug Fixes
+
+* use secrets for firebase functions instead of env ([37814cb](https://github.com/agrc/plss/commit/37814cbdbf9fb2147b6866ca7811036059c6be53))
+
 ## [3.1.0-0](https://github.com/agrc/plss/compare/v3.0.0-2...v3.1.0-0) (2023-01-13)
 
 
