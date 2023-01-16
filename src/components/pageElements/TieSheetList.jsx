@@ -40,7 +40,7 @@ const TieSheetList = ({ blmPointId, children }) => {
   return (
     <Card>
       <div>
-        <h3 className="text-xl font-medium">Monument Records</h3>
+        <h4 className="text-xl font-medium">Monument Records</h4>
         {status === 'loading' && <div>Loading...</div>}
         {status === 'error' && (
           <div>The monument records are currently not available</div>

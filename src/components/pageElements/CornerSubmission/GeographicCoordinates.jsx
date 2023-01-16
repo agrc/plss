@@ -70,7 +70,7 @@ export const Latitude = () => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Location Information</h3>
+      <h2 className="text-2xl font-semibold">Location Information</h2>
       <p className="text-sm leading-none">
         Geographic Northing for {formatDatum(state.context.datum)}
       </p>
@@ -177,7 +177,7 @@ export const Longitude = () => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Location Information</h3>
+      <h2 className="text-2xl font-semibold">Location Information</h2>
       <p className="text-sm leading-none">
         Geographic Easting for {formatDatum(state.context.datum)}
       </p>
@@ -292,7 +292,7 @@ export const GeographicHeight = () => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Location Information</h3>
+      <h2 className="text-2xl font-semibold">Location Information</h2>
       <p className="text-sm leading-none">
         Geographic height for {formatDatum(state.context.datum)}
       </p>

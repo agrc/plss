@@ -70,7 +70,7 @@ const GridCoordinates = () => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Location Information</h3>
+      <h2 className="text-2xl font-semibold">Location Information</h2>
       <p className="text-sm leading-none">
         Grid coordinates for {formatDatum(state.context.datum)}
       </p>

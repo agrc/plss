@@ -8,7 +8,7 @@ export default function SubmissionSuccess({ dispatch }) {
   return (
     <main className="mt-3 inline-grid gap-4">
       <div>
-        <h3 className="text-2xl font-semibold">Submission success</h3>
+        <h2 className="text-2xl font-semibold">Submission success</h2>
         <p className="ml-3 text-sm leading-none">What happens next?</p>
       </div>
       <p className="ml-3">
@@ -27,7 +27,7 @@ export default function SubmissionSuccess({ dispatch }) {
         accessible through this PLSS website. UGRC will then use the submitted
         coordinates to improve the PLSS point dataset and fabric.
       </p>
-      <h1 className="text-2xl font-semibold">Tracking progress</h1>
+      <h2 className="text-2xl font-semibold">Tracking progress</h2>
       <p className="ml-3">
         You can track the progress of this submission and all of your prior
         submissions by clicking on the{' '}

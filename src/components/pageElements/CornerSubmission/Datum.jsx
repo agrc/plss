@@ -72,7 +72,7 @@ const CoordinatePicker = () => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Location Information</h3>
+      <h2 className="text-2xl font-semibold">Location Information</h2>
       <Spacer className="my-4" />
       {state.context.type === 'existing' && (
         <>

@@ -30,10 +30,10 @@ export default function Identify({ authenticated, graphic, dispatch }) {
 
   return (
     <>
-      <h1 className="text-2xl font-bold">PLSS Point Information</h1>
-      <h2 className="ml-2 mt-1 text-xl font-light">
+      <h2 className="text-2xl font-semibold">PLSS Point Information</h2>
+      <h3 className="ml-2 mt-1 text-xl font-light">
         {graphic.attributes.point_id}
-      </h2>
+      </h3>
 
       <main className="inline-grid gap-3 text-sm">
         {graphic?.attributes?.point_id && (
@@ -52,7 +52,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
         )}
 
         <Card>
-          <h3 className="mb-1 text-xl font-medium">Location</h3>
+          <h4 className="mb-1 text-xl font-medium">Location</h4>
           <section className="flex w-full">
             <span className="mr-2">{graphic.attributes.latitude}</span>
             <span>{graphic.attributes.longitude}</span>
@@ -70,7 +70,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
         </Card>
 
         <Card>
-          <h3 className="mb-1 text-xl font-medium">Identification</h3>
+          <h4 className="mb-1 text-xl font-medium">Identification</h4>
           <section className="flex w-full justify-between">
             <span className="font-semibold">Corner Id</span>
             <span>{graphic.attributes.point_id}</span>
@@ -86,7 +86,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
         </Card>
 
         <Card>
-          <h3 className="mb-1 text-xl font-medium">Categories</h3>
+          <h4 className="mb-1 text-xl font-medium">Categories</h4>
           <div className="grid grid-cols-2 gap-2">
             <section className="flex flex-col items-center">
               <span className="font-semibold">Control point</span>
@@ -122,7 +122,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
         </Card>
 
         <Card>
-          <h3 className="mb-1 text-xl font-medium">Stewards</h3>
+          <h4 className="mb-1 text-xl font-medium">Stewards</h4>
           <section className="flex w-full justify-between">
             <span className="font-semibold">Primary</span>
             <span>{getDefault(graphic.attributes.steward)}</span>
@@ -171,12 +171,13 @@ Identify.propTypes = {
 const EmptyIdentify = ({ dispatch }) => {
   return (
     <>
-      <h3 className="text-2xl font-semibold">Monument Record Lookup</h3>
+      <h2 className="text-2xl font-semibold">Monument Record Lookup</h2>
+      <Spacer />
       <Card>
         <div className="flex justify-center">
           <ExclamationCircleIcon className="h-14 w-14 text-sky-600" />
         </div>
-        <h4 className="text-xl">No corner point was found at this location.</h4>
+        <h3 className="text-xl">No corner point was found at this location.</h3>
         <p>
           If you do not see any points, try zooming in and click on the point
           again. Otherwise try clicking on the corner point again.
@@ -204,11 +205,11 @@ const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
     <div className="rounded-b-lg px-6">
       {authenticated ? (
         <>
-          <h3 className="flex items-center justify-center font-light uppercase">
+          <h5 className="flex items-center justify-center font-light uppercase">
             <ArrowDownCircleIcon className="mr-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
             <span className=" text-slate-700">Submit your monument record</span>
             <ArrowDownCircleIcon className="ml-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
-          </h3>
+          </h5>
           <Spacer />
           <div className="space-between flex w-full justify-around">
             <Button

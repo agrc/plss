@@ -136,13 +136,14 @@ export default function AddPoint({
 
   return (
     <>
-      <h2 ref={scrollContainer} className="text-2xl font-bold">
+      <h2 ref={scrollContainer} className="text-2xl font-semibold">
         Add Reference Point
       </h2>
-      <p className="mb-4 text-sm leading-tight">
+      <p className="text-sm leading-tight">
         Use reference points to help you remember points of interest or other
         identifying features when out in the field collecting information.
       </p>
+      <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Name the point">
           <div>

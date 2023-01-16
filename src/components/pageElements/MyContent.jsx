@@ -24,6 +24,7 @@ import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
 import { timeSince } from '../helpers/index.mjs';
+import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -55,7 +56,8 @@ const MyContent = ({ dispatch }) => {
 
   return (
     <>
-      <h1 className="mb-2 text-2xl font-bold">My Content</h1>
+      <h2 className="text-2xl font-semibold">My Content</h2>
+      <Spacer className="mb-2" />
       <section className="grid gap-2">
         <Tab.Group
           selectedIndex={selectedTab}
@@ -333,7 +335,7 @@ const SelectedItem = ({ item, dispatch }) => (
       className="h-10 w-10"
       onClick={() => dispatch({ type: 'set_selection', payload: null })}
     />
-    <h1 className="text-lg font-bold">{item.name}</h1>
+    <h3 className="text-lg font-bold">{item.name}</h3>
     <div>{dateFormatter.format(item.when)}</div>
     <div className="flex justify-evenly">
       <button

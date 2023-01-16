@@ -63,12 +63,12 @@ const Review = () => {
     <>
       <div className="grid gap-2">
         <div className="mb-1 flex flex-col text-center">
-          <h1 className="text-2xl font-bold uppercase">
+          <h2 className="text-2xl font-bold uppercase">
             Corner Submission Review
-          </h1>
-          <h2 className="ml-2 text-xl font-light">
-            {state.context.blmPointId}
           </h2>
+          <h3 className="ml-2 text-xl font-light">
+            {state.context.blmPointId}
+          </h3>
         </div>
         {state.context.type !== 'existing' && (
           <MetadataReview {...state.context.metadata} />
@@ -112,14 +112,14 @@ const MetadataReview = ({
 }) => {
   return (
     <Card>
-      <h3 className="relative -mt-2 text-lg font-bold">
+      <h4 className="relative -mt-2 text-lg font-bold">
         Metadata
         {mrrc && (
           <div className="absolute top-0 right-0 rounded border border-sky-800 bg-sky-300 px-2 text-sm uppercase text-sky-800 shadow">
             MRRC
           </div>
         )}
-      </h3>
+      </h4>
       <div className="flex justify-between">
         <span className="font-semibold">Monument Status</span>
         <span className="ml-4">{keyMap.status(status)}</span>
@@ -162,7 +162,7 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
   if (!datum) {
     return (
       <Card>
-        <h3 className="-mt-2 text-lg font-bold">Primary Coordinates</h3>
+        <h4 className="-mt-2 text-lg font-bold">Primary Coordinates</h4>
         <div>No coordinates were specified with this submission</div>
       </Card>
     );
@@ -187,15 +187,15 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
   return (
     <>
       <Card>
-        <h3 className="-mt-2 text-lg font-bold">Primary Coordinates</h3>
+        <h4 className="-mt-2 text-lg font-bold">Primary Coordinates</h4>
         <div className="flex justify-between">
           <span className="font-semibold">Datum</span>
           <span>{formatDatum(datum)}</span>
         </div>
         {coordinates[0]}
-        <h3 className="py-2 text-lg font-bold text-slate-400">
+        <h4 className="py-2 text-lg font-bold text-slate-400">
           Calculated Coordinates
-        </h3>
+        </h4>
         <div className="flex justify-between">
           <span className="font-semibold">Datum</span>
           <span>{calculated}</span>
@@ -298,7 +298,7 @@ GeographicCoordinateReview.propTypes = {
 const ImagesReview = ({ images }) => {
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">Images and Extra Pages</h3>
+      <h4 className="-mt-2 text-lg font-bold">Images and Extra Pages</h4>
       {Object.values(images).filter((x) => x).length > 0 ? (
         Object.entries(images).map((image) => {
           const [key, value] = image;
@@ -340,9 +340,9 @@ const AttachmentReview = ({ path }) => {
 
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">
+      <h4 className="-mt-2 text-lg font-bold">
         Existing Monument Record Sheet
-      </h3>
+      </h4>
       <div className="h-[400px] max-w-[300px] justify-self-center">
         <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
@@ -363,7 +363,7 @@ AttachmentReview.propTypes = {
 const MonumentPreview = ({ status, children }) => {
   return (
     <Card>
-      <h3 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h3>
+      <h4 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h4>
       {status === 'loading' && 'generating preview...'}
       {status === 'success' && (
         <div className="h-[400px] max-w-[300px] justify-self-center border">

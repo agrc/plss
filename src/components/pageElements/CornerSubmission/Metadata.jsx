@@ -68,7 +68,7 @@ const Metadata = ({ dispatch }) => {
 
   return (
     <>
-      <h3 className="text-2xl font-semibold">Monument Metadata</h3>
+      <h2 className="text-2xl font-semibold">Monument Metadata</h2>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Section Information">

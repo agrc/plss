@@ -84,7 +84,7 @@ export default function Profile({ dispatch }) {
     <div className="mt-5">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card>
-          <h1 className="mb-4 text-2xl font-bold">Personal Information</h1>
+          <h2 className="mb-4 text-2xl font-bold">Personal Information</h2>
           {profileStatus === 'loading' ? (
             <p>Loading...</p>
           ) : (

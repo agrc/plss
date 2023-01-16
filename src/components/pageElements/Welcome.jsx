@@ -6,7 +6,7 @@ export default function Welcome({ dispatch }) {
 
   return (
     <main className="mt-3 inline-grid gap-4">
-      <h1 className="text-2xl font-semibold">What is the PLSS</h1>
+      <h2 className="text-2xl font-semibold">What is the PLSS</h2>
       <p className="ml-3">
         Section corners in the Public Land Survey System (PLSS) form the
         foundation for all descriptions of private property and public land
@@ -15,7 +15,7 @@ export default function Welcome({ dispatch }) {
         precise location of these monuments accessible greatly reduces boundary
         discrepancies and disputes.
       </p>
-      <h1 className="text-2xl font-semibold">What is a monument</h1>
+      <h2 className="text-2xl font-semibold">What is a monument</h2>
       <p className="ml-3">
         Monuments are physical objects that mark the corners of the PLSS
         sections. The monuments are usually metal rods or brass disks in the
@@ -25,7 +25,7 @@ export default function Welcome({ dispatch }) {
         conservation projects that rehabilitate vegetation after wild land and
         forest fires.
       </p>
-      <h1 className="text-2xl font-semibold">Getting started</h1>
+      <h2 className="text-2xl font-semibold">Getting started</h2>
       <p className="ml-3">
         You can use this website to view the location of the monuments and the
         information about them. Navigate around the map and click on the PLSS
@@ -40,7 +40,7 @@ export default function Welcome({ dispatch }) {
         to submit a monument record.
       </p>
       <p className="ml-3"></p>
-      <h1 className="text-2xl font-semibold">Where can I get the data</h1>
+      <h2 className="text-2xl font-semibold">Where can I get the data</h2>
       <p className="ml-3">
         All of the data in this app and more is made available for{' '}
         <Link

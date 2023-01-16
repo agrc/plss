@@ -3,6 +3,7 @@ import { contrastColor } from 'contrast-color';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Popover, Transition } from '@headlessui/react';
 import Card from '../formElements/Card.jsx';
+import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
 export default function Legend() {
@@ -10,7 +11,11 @@ export default function Legend() {
 
   return (
     <Card>
-      <h1 className="mb-4 text-2xl font-bold">Map Layer Legend</h1>
+      <h2 className="text-2xl font-semibold">PLSS Points Legend</h2>
+      <p className="text-sm leading-none">
+        What do the colors mean? Click on the question mark to learn more.
+      </p>
+      <Spacer />
       <Popover.Group
         as="section"
         className="flex flex-wrap justify-around gap-3"
