@@ -1,10 +1,8 @@
-import { logger, firestore } from 'firebase-functions/v1';
+import { logger, runWith } from 'firebase-functions/v1';
+import { defineSecret } from 'firebase-functions/params';
 import { getFirestore } from 'firebase-admin/firestore';
 import client from '@sendgrid/client';
-
-if (process.env.NODE_ENV !== 'test') {
-  client.setApiKey(process.env.SENDGRID_API_KEY);
-}
+const sendGridApiKey = defineSecret('SENDGRID_API_KEY');
 
 const notify = (template) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -51,9 +49,18 @@ export const getContactsToNotify = async (county) => {
   return contacts;
 };
 
-const onCreateAdminNotify = firestore
-  .document('/submissions/{docId}')
+const onCreateAdminNotify = runWith({ secrets: [sendGridApiKey] })
+  .firestore.document('/submissions/{docId}')
   .onCreate(async (snap) => {
+    client.setApiKey(process.env.SENDGRID_API_KEY);
+    logger.debug(
+      'runWith',
+      (process.env.SENDGRID_API_KEY ?? 'null').slice(0, 4),
+      {
+        structuredData: true,
+      }
+    );
+
     const document = snap.data();
 
     logger.debug('trigger: new submission for', document, {
