@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0-3](https://github.com/agrc/plss/compare/v3.1.0-2...v3.1.0-3) (2023-01-16)
+
+
+### 🐛 Bug Fixes
+
+* correct ci build variable ([6fd7a1a](https://github.com/agrc/plss/commit/6fd7a1aa7efda9809ff8a51dfc2afb2b5ef23314))
+
 ## [3.1.0-2](https://github.com/agrc/plss/compare/v3.1.0-1...v3.1.0-2) (2023-01-16)
 
 
