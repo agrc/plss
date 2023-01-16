@@ -13,6 +13,7 @@ import Card from '../formElements/Card.jsx';
 import { Button } from '../formElements/Buttons.jsx';
 import FileUpload from '../formElements/FileUpload.jsx';
 import Note from '../formElements/Note.jsx';
+import usePageView from '../hooks/usePageView.jsx';
 
 const defaultValues = {
   displayName: '',
@@ -29,6 +30,8 @@ export default function Profile({ dispatch }) {
   const updateProfile = httpsCallable(functions, 'functions-httpsPostProfile');
 
   const queryClient = useQueryClient();
+
+  usePageView('screen-edit-profile');
 
   const { data: response, status: profileStatus } = useQuery({
     queryKey: ['profile', data.uid],

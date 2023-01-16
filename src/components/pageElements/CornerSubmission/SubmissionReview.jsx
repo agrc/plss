@@ -15,9 +15,12 @@ import {
 import { ObjectPreview } from '../../formElements/FileUpload.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import { getDownloadURL, ref } from 'firebase/storage';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);
+
+  usePageView('screen-submission-review');
 
   const functions = useFunctions();
   const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');

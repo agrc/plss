@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { useMapReady } from '@ugrc/utilities/hooks';
+import { logEvent } from 'firebase/analytics';
+import { useAnalytics } from 'reactfire';
 
 const goHome = async (view, extent) => {
   if (!(extent instanceof Extent)) {
@@ -16,6 +18,7 @@ const goHome = async (view, extent) => {
 export default function HomeButton({ view, extent, width }) {
   const ready = useMapReady(view);
   const me = useRef();
+  const analytics = useAnalytics();
 
   useEffect(() => {
     if (ready && me.current) {
@@ -35,7 +38,10 @@ export default function HomeButton({ view, extent, width }) {
         className="flex flex-1 cursor-pointer items-center justify-center rounded-full bg-white"
         aria-label="Default map view"
         title="Default map view"
-        onClick={() => goHome(view, extent)}
+        onClick={() => {
+          goHome(view, extent);
+          logEvent(analytics, 'map-home');
+        }}
       >
         <HomeModernIcon className="h-5 w-5 text-slate-700" />
       </button>

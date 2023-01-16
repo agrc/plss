@@ -1,10 +1,12 @@
 import { useImmerReducer } from 'use-immer';
 import {
+  AnalyticsProvider,
   AuthProvider,
   useFirebaseApp,
   FunctionsProvider,
   StorageProvider,
 } from 'reactfire';
+import { getAnalytics } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
@@ -80,23 +82,25 @@ export default function App() {
   }
 
   return (
-    <AuthProvider sdk={auth}>
-      <FunctionsProvider sdk={functions}>
-        <StorageProvider sdk={storage}>
-          <main className="app grid h-full w-screen">
-            <Map
-              state={state.map}
-              color={state.addPoint.color}
-              drawerOpen={state.drawerOpen}
-              dispatch={dispatch}
-            />
-            <Menu drawerOpen={state.drawerOpen} dispatch={dispatch}>
-              menu
-            </Menu>
-            <Drawer {...state} dispatch={dispatch} />
-          </main>
-        </StorageProvider>
-      </FunctionsProvider>
-    </AuthProvider>
+    <AnalyticsProvider sdk={getAnalytics(app)}>
+      <AuthProvider sdk={auth}>
+        <FunctionsProvider sdk={functions}>
+          <StorageProvider sdk={storage}>
+            <main className="app grid h-full w-screen">
+              <Map
+                state={state.map}
+                color={state.addPoint.color}
+                drawerOpen={state.drawerOpen}
+                dispatch={dispatch}
+              />
+              <Menu drawerOpen={state.drawerOpen} dispatch={dispatch}>
+                menu
+              </Menu>
+              <Drawer {...state} dispatch={dispatch} />
+            </main>
+          </StorageProvider>
+        </FunctionsProvider>
+      </AuthProvider>
+    </AnalyticsProvider>
   );
 }

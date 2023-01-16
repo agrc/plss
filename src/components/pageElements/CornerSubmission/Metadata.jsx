@@ -16,6 +16,7 @@ import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { accuracy, status, corner } from './Options.mjs';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const defaults = {
   section: '',
@@ -33,6 +34,7 @@ const dateFormatter = new Intl.DateTimeFormat('sv-SE');
 const Metadata = ({ dispatch }) => {
   const meta = 'metadata';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-submission-metadata');
 
   let defaultValues = state.context?.metadata;
   if (!defaultValues) {

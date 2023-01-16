@@ -6,6 +6,7 @@ import { LogInButton, LogOutButton, Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import md5 from 'md5';
 import { useEffect } from 'react';
+import usePageView from '../hooks/usePageView.jsx';
 
 const size = 160;
 const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
@@ -13,7 +14,6 @@ const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
 export default function Login({ dispatch }) {
   const { data } = useSigninCheck();
   const queryClient = useQueryClient();
-
   const signedIn = data?.signedIn ?? '';
 
   useEffect(() => {
@@ -36,35 +36,40 @@ Login.propTypes = {
   dispatch: PropTypes.func,
 };
 
-const SignIn = () => (
-  <div className="grid flex-1 gap-4">
-    <h2 className="text-2xl font-bold">Sign in to your account</h2>
-    <p>
-      This app requires a UtahId account to submit monument record sheets. Your
-      name and email address will be shared with this application.
-    </p>
-    <p>
-      A surveyor license and seal will be displayed publicly on monument record
-      sheets if you choose to add them on your profile. Otherwise, no other
-      personal information will be shared or made public.
-    </p>
-    <div className="flex items-center text-slate-500">
-      <span className="h-px flex-1 bg-slate-200"></span>
-      <span className="mx-3 text-xs uppercase tracking-wide">
-        continue with
-      </span>
-      <span className="h-px flex-1 bg-slate-200"></span>
+const SignIn = () => {
+  usePageView('screen-sign-in');
+
+  return (
+    <div className="grid flex-1 gap-4">
+      <h2 className="text-2xl font-bold">Sign in to your account</h2>
+      <p>
+        This app requires a UtahId account to submit monument record sheets.
+        Your name and email address will be shared with this application.
+      </p>
+      <p>
+        A surveyor license and seal will be displayed publicly on monument
+        record sheets if you choose to add them on your profile. Otherwise, no
+        other personal information will be shared or made public.
+      </p>
+      <div className="flex items-center text-slate-500">
+        <span className="h-px flex-1 bg-slate-200"></span>
+        <span className="mx-3 text-xs uppercase tracking-wide">
+          continue with
+        </span>
+        <span className="h-px flex-1 bg-slate-200"></span>
+      </div>
+      <div className="flex justify-center">
+        <LogInButton />
+      </div>
     </div>
-    <div className="flex justify-center">
-      <LogInButton />
-    </div>
-  </div>
-);
+  );
+};
 
 const Profile = ({ dispatch }) => {
   const functions = useFunctions();
   const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
   const { data: user } = useUser();
+  usePageView('screen-main-profile');
 
   const { data: response, status } = useQuery({
     queryKey: ['profile', user.uid],

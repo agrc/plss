@@ -8,6 +8,7 @@ import { useLocalStorage } from '@ugrc/utilities/hooks';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import DefaultFallback from '../ErrorBoundary.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 const SubmissionNotice = lazy(() => import('./SubmissionNotice.jsx'));
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
@@ -40,12 +41,14 @@ export default function CornerSubmission({ submission, dispatch }) {
   );
   const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
+  const { analytics, logEvent } = usePageView('screen-submission-start');
 
   const pointId = submission.blmPointId;
 
   useEffect(() => {
     send('start submission');
-  }, [submission.type, send]);
+    logEvent(analytics, 'submission-start', { type: submission.type });
+  }, [submission.type, send, analytics, logEvent]);
 
   useEffect(() => {
     console.log('current state', state.context);
@@ -81,9 +84,10 @@ export default function CornerSubmission({ submission, dispatch }) {
       case state.matches('form.idle'):
         return <SubmissionSuccess dispatch={dispatch} />;
       default:
+        logEvent(analytics, 'submission-error', { state: state.value });
         return (
           <div role="alert" data-area="drawer">
-            <h1 className="text-lg font-bold">Something went wrong</h1>
+            <h3 className="text-lg font-bold">Something went wrong</h3>
             <p className="m-4 rounded border p-4">
               No matching component for {JSON.stringify(state.value, null, 2)}{' '}
               state.
@@ -103,20 +107,33 @@ export default function CornerSubmission({ submission, dispatch }) {
           className={clsx('h-6 w-6 cursor-pointer', {
             hidden: !hide,
           })}
-          onClick={() => setHide(!hide)}
+          onClick={() => {
+            setHide(!hide);
+            logEvent(analytics, 'submission-notice-visibility', {
+              hide: !hide,
+            });
+          }}
         />
       </div>
       {!hide && (
         <SubmissionNotice
           pointId={pointId}
           county={submission.county}
-          toggle={() => setHide(!hide)}
+          toggle={() => {
+            setHide(!hide);
+            logEvent(analytics, 'submission-notice-visibility', {
+              hide: !hide,
+            });
+          }}
         />
       )}
       <div ref={scrollContainer} className="mb-2 flex-1 overflow-y-auto pb-2">
         <ErrorBoundary
           FallbackComponent={DefaultFallback}
-          onReset={() => send('BACK')}
+          onReset={() => {
+            send('BACK');
+            logEvent(analytics, 'submission-error-boundary', { state: state });
+          }}
         >
           {getFormPart(state)}
         </ErrorBoundary>

@@ -3,8 +3,11 @@ import { contrastColor } from 'contrast-color';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { Popover, Transition } from '@headlessui/react';
 import Card from '../formElements/Card.jsx';
+import usePageView from '../hooks/usePageView.jsx';
 
 export default function Legend() {
+  const { analytics, logEvent } = usePageView('screen-legend');
+
   return (
     <Card>
       <h1 className="mb-4 text-2xl font-bold">Map Layer Legend</h1>
@@ -36,11 +39,21 @@ export default function Legend() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute left-1/2 z-20 mt-2 w-60 -translate-x-1/2 transform px-4">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                  <div className="bg-white px-3 py-2 text-sm text-slate-800">
-                    {layer.about}
-                  </div>
-                </div>
+                {({ open }) => {
+                  if (open) {
+                    logEvent(analytics, 'legend-item-open', {
+                      layer: layer.name,
+                    });
+                  }
+
+                  return (
+                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                      <div className="bg-white px-3 py-2 text-sm text-slate-800">
+                        {layer.about}
+                      </div>
+                    </div>
+                  );
+                }}
               </Popover.Panel>
             </Transition>
           </Popover>

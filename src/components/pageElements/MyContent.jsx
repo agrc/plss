@@ -24,6 +24,7 @@ import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
 import { timeSince } from '../helpers/index.mjs';
+import usePageView from '../hooks/usePageView.jsx';
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
@@ -40,6 +41,8 @@ const MyContent = ({ dispatch }) => {
   const { data: signInCheckResult } = useSigninCheck();
   const [selectedTab, setSelectedTab] = useState();
 
+  const { analytics, logEvent } = usePageView('screen-my-content');
+
   const functions = useFunctions();
   const myPoints = httpsCallable(functions, 'functions-httpsGetMyContent');
 
@@ -54,7 +57,15 @@ const MyContent = ({ dispatch }) => {
     <>
       <h1 className="mb-2 text-2xl font-bold">My Content</h1>
       <section className="grid gap-2">
-        <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
+        <Tab.Group
+          selectedIndex={selectedTab}
+          onChange={(event) => {
+            setSelectedTab(event);
+            logEvent(analytics, 'my-content-tab-change', {
+              tab: tabs[event],
+            });
+          }}
+        >
           <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
             {tabs.map((name) => (
               <Tab

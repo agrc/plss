@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { Button, Link } from '../formElements/Buttons.jsx';
+import usePageView from '../hooks/usePageView.jsx';
 export default function Welcome({ dispatch }) {
+  usePageView('screen-home');
+
   return (
     <main className="mt-3 inline-grid gap-4">
       <h1 className="text-2xl font-semibold">What is the PLSS</h1>

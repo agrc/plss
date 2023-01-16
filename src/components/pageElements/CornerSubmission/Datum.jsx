@@ -13,6 +13,7 @@ import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { geographic, grid } from './Options.mjs';
 import { coordinatePickerSchema } from './Schema.mjs';
 import Wizard from './Wizard.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const formats = { Geographic: geographic, Grid: grid };
 
@@ -37,6 +38,7 @@ const getOpenTabIndex = (datum) => {
 const CoordinatePicker = () => {
   const meta = 'datum';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-submission-datum');
 
   let { datum } = state.context;
   if (!datum) {

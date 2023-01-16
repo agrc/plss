@@ -20,6 +20,7 @@ import Wizard from './CornerSubmission/Wizard.jsx';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import FileUpload from '../formElements/FileUpload.jsx';
 import { Button } from '../formElements/Buttons.jsx';
+import usePageView from '../hooks/usePageView.jsx';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -41,6 +42,7 @@ export default function AddPoint({
   const [imageCount, setImageCount] = useState(1);
   const uniqueId = useRef(crypto.randomUUID());
   const scrollContainer = useRef();
+  usePageView('screen-reference-points');
 
   const defaultValues = {
     name: `Point (${dateFormatter.format(new Date())})`,

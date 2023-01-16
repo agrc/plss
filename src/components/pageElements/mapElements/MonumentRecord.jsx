@@ -9,6 +9,7 @@ import { Input } from '../../formElements/Inputs.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import TieSheetList from '../TieSheetList.jsx';
 import Point from '@arcgis/core/geometry/Point';
+import usePageView from '../../hooks/usePageView.jsx';
 const client = ky.create({
   prefixUrl:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
@@ -17,10 +18,13 @@ const client = ky.create({
 export default function MonumentRecord({ dispatch }) {
   const [pointId, setPointId] = useState('');
   const [isOpen, { open, close }] = useOpenClosed(false);
+  const { analytics, logEvent } = usePageView('screen-monument-record-finder');
 
   const { data } = useQuery({
     queryKey: [pointId, 'location'],
     queryFn: async () => {
+      logEvent(analytics, 'monument-record', { pointId });
+
       const response = await client
         .get('query', {
           searchParams: {
@@ -31,12 +35,16 @@ export default function MonumentRecord({ dispatch }) {
         .json();
 
       if (!response || response.error) {
+        logEvent(analytics, 'monument-record-error', { response });
+
         throw new Error('Error fetching location');
       }
 
       const count = response?.features?.length ?? 0;
 
       if (count === 0 || count > 1) {
+        logEvent(analytics, 'monument-record-error', { response });
+
         throw new Error('An incorrect response count was received.', count);
       }
 

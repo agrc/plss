@@ -8,6 +8,7 @@ import { Select } from '../../formElements/Select.jsx';
 import { sl, ub } from './townships.js';
 import naturalCompare from 'natural-compare-lite';
 import { Button } from '../../formElements/Buttons.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const client = ky.create({
   prefixUrl: 'https://api.mapserv.utah.gov/api/v1/search',
@@ -38,30 +39,49 @@ const composePredicate = (meridian, township, range, section) => {
 };
 
 export default function Township({ apiKey, dispatch }) {
+  // TODO: move this to a reducer or an object
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [selectedTownship, setSelectedTownship] = useState('');
   const [selectedRange, setSelectedRange] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
+  const { analytics, logEvent } = usePageView('screen-township-finder');
 
   const { data: ranges } = useQuery({
     queryKey: ['ranges', tabs[selectedTabIndex].value, selectedTownship],
     queryFn: async () => {
+      const predicate = `torrname='${tabs[selectedTabIndex].value}T${selectedTownship}'`;
+
+      logEvent(analytics, 'township-finder', {
+        type: 'range',
+        predicate,
+      });
+
       const response = await client
         .get('cadastre.plss_township_and_range_lookup/pairswith', {
           searchParams: {
             apiKey,
-            predicate: `torrname='${tabs[selectedTabIndex].value}T${selectedTownship}'`,
+            predicate,
           },
         })
         .json();
 
       if (!response || response.status != 200) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'range',
+          response,
+        });
+
         throw new Error('Error fetching ranges');
       }
 
       const count = response?.result?.length ?? 0;
 
       if (count === 0 || count > 1) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'range',
+          response,
+        });
+
         throw new Error('An incorrect response count was received.', count);
       }
 
@@ -84,22 +104,39 @@ export default function Township({ apiKey, dispatch }) {
       selectedRange,
     ],
     queryFn: async () => {
+      const predicate = `trname='${tabs[selectedTabIndex].value}T${selectedTownship}R${selectedRange}'`;
+
+      logEvent(analytics, 'township-finder', {
+        type: 'section',
+        predicate,
+      });
+
       const response = await client
         .get('cadastre.plss_section_lookup/pairswith', {
           searchParams: {
             apiKey,
-            predicate: `trname='${tabs[selectedTabIndex].value}T${selectedTownship}R${selectedRange}'`,
+            predicate,
           },
         })
         .json();
 
       if (!response || response.status != 200) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'section',
+          response,
+        });
+
         throw new Error('Error fetching sections');
       }
 
       const count = response?.result?.length ?? 0;
 
       if (count === 0 || count > 1) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'section',
+          response,
+        });
+
         throw new Error('An incorrect response count was received.', count);
       }
 
@@ -122,28 +159,45 @@ export default function Township({ apiKey, dispatch }) {
       selectedSection,
     ],
     queryFn: async () => {
+      const predicate = composePredicate(
+        tabs[selectedTabIndex].number,
+        selectedTownship,
+        selectedRange,
+        selectedSection
+      );
+
+      logEvent(analytics, 'township-finder', {
+        type: 'shape',
+        predicate,
+      });
+
       const response = await client
         .get('cadastre.plss_sections_gcdb/shape@envelope', {
           searchParams: {
             apiKey,
-            predicate: composePredicate(
-              tabs[selectedTabIndex].number,
-              selectedTownship,
-              selectedRange,
-              selectedSection
-            ),
+            predicate,
             spatialReference: 3857,
           },
         })
         .json();
 
       if (!response || response.status != 200) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'shape',
+          response,
+        });
+
         throw new Error('Error fetching envelope');
       }
 
       const count = response?.result?.length ?? 0;
 
       if (count === 0) {
+        logEvent(analytics, 'township-finder-error', {
+          type: 'shape',
+          response,
+        });
+
         throw new Error('An incorrect response count was received.', count);
       }
 

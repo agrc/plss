@@ -12,6 +12,7 @@ import { units, statePlaneZones, verticalDatums } from './Options.mjs';
 import { gridCoordinatesSchema } from './Schema.mjs';
 import Wizard from './Wizard.jsx';
 import { formatDatum } from '../../helpers/index.mjs';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const defaults = {
   zone: '',
@@ -25,6 +26,7 @@ const defaults = {
 const GridCoordinates = () => {
   const meta = 'grid';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-submission-grid-coordinates');
 
   let defaultValues = state.context.grid;
   if (!defaultValues) {

@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import { Button } from '../../formElements/Buttons.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 
 export default function SubmissionSuccess({ dispatch }) {
+  usePageView('screen-submission-success');
+
   return (
     <main className="mt-3 inline-grid gap-4">
       <div>

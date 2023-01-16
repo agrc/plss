@@ -11,10 +11,13 @@ import Spacer from '../../formElements/Spacer.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
 import { existingSheetSchema } from './Schema';
+import usePageView from '../../hooks/usePageView.jsx';
 
 export default function MonumentPdf({ dispatch }) {
   const { data: user } = useUser();
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-submission-pdf');
+
   const defaultValues = state.context.existing;
 
   const { handleSubmit, control, formState } = useForm({

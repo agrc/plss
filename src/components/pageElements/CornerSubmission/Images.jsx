@@ -11,6 +11,7 @@ import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
 import Wizard from './Wizard.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const limit = 10;
 const defaults = {
@@ -32,6 +33,7 @@ const defaults = {
 export default function MonumentImages() {
   const { data: user } = useUser();
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-submission-images');
 
   let defaultValues = state.context?.images;
   if (!defaultValues) {

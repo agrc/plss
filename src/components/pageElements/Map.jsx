@@ -19,11 +19,12 @@ import {
 } from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
 import clsx from 'clsx';
 import { contrastColor } from 'contrast-color';
+import { logEvent } from 'firebase/analytics';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useFunctions, useSigninCheck } from 'reactfire';
+import { useAnalytics, useFunctions, useSigninCheck } from 'reactfire';
 import GroupButton from './mapElements/GroupButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
@@ -64,6 +65,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const onlyWidth = useWindowWidth();
 
   const { data: signInCheckResult } = useSigninCheck();
+  const analytics = useAnalytics();
 
   const isLoading = useViewLoading(mapView.current);
   const { graphic, setGraphic } = useGraphicManager(mapView);
@@ -183,6 +185,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     };
   }, []);
 
+  // move zoom widget to bottom right on larger screens
   useEffect(() => {
     mapView.current.when(() => {
       if (onlyWidth > 640) {
@@ -242,6 +245,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     if (!mapView.current) {
       return;
     }
+
     const clickHandler = mapView.current.on('click', async (event) => {
       switch (state.activeTool) {
         case 'add-point': {
@@ -262,6 +266,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
               },
             })
           );
+          logEvent(analytics, 'my-points-set');
           break;
         }
         default: {
@@ -286,6 +291,11 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
             }
           }
 
+          logEvent(analytics, 'identify', {
+            hits: hits.length,
+            scale: mapView.current.scale,
+          });
+
           dispatch({ type: 'map/identify', payload });
           dispatch({ type: 'menu/toggle', payload: 'identify' });
         }
@@ -293,13 +303,17 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     });
 
     return () => clickHandler?.remove();
-  }, [state, dispatch, color, setGraphic]);
+  }, [state, dispatch, color, setGraphic, analytics]);
 
   // update graphic on color change
   useEffect(() => {
     if (!graphic) {
       return;
     }
+
+    logEvent(analytics, 'my-points-color-change', {
+      color: color,
+    });
 
     if (color === '') {
       // hex reset on completion, remove the graphic
@@ -321,7 +335,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         })
       );
     }
-  }, [setGraphic, color]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setGraphic, color, analytics]); // eslint-disable-line react-hooks/exhaustive-deps
   // ignore graphic
 
   // add and remove points on login and logout
@@ -361,6 +375,8 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
+    logEvent(analytics, 'gps-on');
+
     mapView.current.when(async () => {
       await mapView.current.goTo(
         new Viewpoint({
@@ -372,12 +388,16 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       setGpsGraphic(gpsGraphic.graphic);
     });
-  }, [gpsGraphic, setGpsGraphic]);
+  }, [gpsGraphic, setGpsGraphic, analytics]);
 
   // zoom to the center state object
   useEffect(() => {
     if (state.center) {
       let targetGeometry = state.center.geometry;
+
+      logEvent(analytics, 'zooming', {
+        type: state.center.geometry?.type,
+      });
 
       switch (state.center.geometry?.type) {
         case 'polygon':
@@ -401,7 +421,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       setViewPoint(vp);
     }
-  }, [state.center, setViewPoint]);
+  }, [state.center, setViewPoint, analytics]);
 
   return (
     <ErrorBoundary FallbackComponent={DefaultFallback}>
@@ -426,7 +446,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         />
         <GroupButton view={mapView.current} width={onlyWidth}>
           <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
-            <h1 className="mb-2 text-2xl font-bold">Quick finder tools</h1>
+            <h2 className="mb-2 text-2xl font-bold">Quick finder tools</h2>
             <Tab.Group>
               <Tab.List className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
                 {tabs.map((item) => (

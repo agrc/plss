@@ -17,6 +17,7 @@ import {
 } from './Schema.mjs';
 import Wizard from './Wizard.jsx';
 import { formatDatum } from '../../helpers/index.mjs';
+import usePageView from '../../hooks/usePageView.jsx';
 
 const defaults = {
   seconds: '',
@@ -27,6 +28,7 @@ const defaults = {
 export const Latitude = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-geographic-coordinates-latitude');
 
   let defaultValues = {
     northing: state.context?.geographic?.northing ?? defaults,
@@ -149,6 +151,7 @@ export const Latitude = () => {
 export const Longitude = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-geographic-coordinates-longitude');
 
   let defaultValues = {
     easting: state.context?.geographic?.easting ?? defaults,
@@ -248,6 +251,7 @@ const geographicHeightDefaults = {
 export const GeographicHeight = () => {
   const meta = 'geographic';
   const [state, send] = useContext(SubmissionContext);
+  usePageView('screen-geographic-coordinates-height');
 
   let geographic = state.context?.geographic;
 
