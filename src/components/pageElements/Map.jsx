@@ -57,6 +57,7 @@ const extent = {
   spatialReference: 3857,
 };
 const tabs = ['Section Finder', 'Monument Finder'];
+const level14 = 72223;
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
@@ -156,10 +157,11 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           labelingInfo: [
             {
               labelPlacement: 'above-right',
-              minScale: 50000,
+              minScale: 20000,
               labelExpressionInfo: {
                 expression: '$feature.point_id',
               },
+              where: 'primary_corner=1 or mrrc=1 or monument=1',
               font: {
                 family: 'Helvetica',
                 size: 14,
@@ -173,7 +175,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
               },
             },
           ],
-          minScale: 500000,
+          minScale: level14 + 10000,
         },
       ],
       position: 'top-right',
@@ -280,11 +282,11 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           if (hits.length > 0) {
             payload = hits[0].graphic;
           } else {
-            if (mapView.current.scale > 200000) {
+            if (mapView.current.scale > level14 + 1) {
               mapView.current.goTo(
                 new Viewpoint({
                   targetGeometry: event.mapPoint,
-                  scale: 200000,
+                  scale: level14,
                 }),
                 { duration: 1000 }
               );
