@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0-4](https://github.com/agrc/plss/compare/v3.1.0-3...v3.1.0-4) (2023-01-17)
+
+
+### 🎨 Design Improvements
+
+* make points and labels come in as you zoom closer ([2aef36b](https://github.com/agrc/plss/commit/2aef36bc4d4ee16adf67791c749c4e841cd96001))
+
 ## [3.1.0-3](https://github.com/agrc/plss/compare/v3.1.0-2...v3.1.0-3) (2023-01-16)
 
 
