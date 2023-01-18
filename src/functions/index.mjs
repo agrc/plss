@@ -1,12 +1,10 @@
-import { initializeApp } from 'firebase-admin/app';
-import { config } from 'firebase-functions';
+import setupFirebase from './firebase.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import glob from 'glob';
 import camelcase from 'camelcase';
 
-const firebaseConfig = config().firebase;
-initializeApp(firebaseConfig);
+setupFirebase();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

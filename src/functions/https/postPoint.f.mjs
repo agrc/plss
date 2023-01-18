@@ -1,7 +1,9 @@
 import { auth, https, logger } from 'firebase-functions';
 import { getFirestore } from 'firebase-admin/firestore';
 import { addPointSchema as schema } from '../../components/pageElements/CornerSubmission/Schema.mjs';
+import setupFirebase from '../firebase.mjs';
 
+setupFirebase();
 const db = getFirestore();
 const options = {
   abortEarly: false,

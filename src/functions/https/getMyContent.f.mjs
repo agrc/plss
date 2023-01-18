@@ -1,7 +1,9 @@
 import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import { graphicConverter, myContentConverter } from '../converters.mjs';
+import setupFirebase from '../firebase.mjs';
 
+setupFirebase();
 const db = getFirestore();
 
 const getMyContent = https.onCall(async (_, context) => {
@@ -22,34 +24,38 @@ const getMyContent = https.onCall(async (_, context) => {
       .withConverter(graphicConverter)
       .get();
 
-    snapshot.forEach((doc) => {
-      const item = doc.data();
-      points.push(item);
-    });
+    if (snapshot.empty) {
+      logger.error('user points are empty', context.auth.uid, {
+        structuredData: true,
+      });
+    } else {
+      snapshot.forEach((doc) => {
+        const item = doc.data();
+        points.push(item);
+      });
+    }
   } catch (error) {
     logger.error('error querying points', error, context.auth, {
       structuredData: true,
     });
   }
 
-  logger.debug('successfully queried points', points.length, {
-    structuredData: true,
-  });
-
   try {
     const filter = db
       .collection('submissions')
       .where('submitted_by.id', '==', context.auth.uid);
 
-    logger.debug('filter created', `submitted_by.id==${context.auth.uid}`, {
-      structuredData: true,
-    });
-
     const snapshot = await filter.withConverter(myContentConverter).get();
 
-    snapshot.forEach((doc) => {
-      submissions.push(doc.data());
-    });
+    if (snapshot.empty) {
+      logger.error('user submissions are empty', context.auth.uid, {
+        structuredData: true,
+      });
+    } else {
+      snapshot.forEach((doc) => {
+        submissions.push(doc.data());
+      });
+    }
   } catch (error) {
     logger.error('error querying submissions', error, context.auth, {
       structuredData: true,

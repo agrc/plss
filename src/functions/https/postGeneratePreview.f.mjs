@@ -7,8 +7,10 @@ import {
   getPdfAssets,
 } from '../pdfHelpers.mjs';
 import { validateNewSubmission } from './postCorner.f.mjs';
+import setupFirebase from '../firebase.mjs';
 
-const bucket = getStorage().bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET);
+const config = setupFirebase();
+const bucket = getStorage().bucket(config.storageBucket);
 const db = getFirestore();
 const oneDay = 1000 * 60 * 60 * 24;
 

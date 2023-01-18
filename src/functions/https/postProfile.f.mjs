@@ -1,7 +1,9 @@
 import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import { profileSchema } from '../../components/pageElements/CornerSubmission/Schema.mjs';
+import setupFirebase from '../firebase.mjs';
 
+setupFirebase();
 const db = getFirestore();
 const options = {
   stripUnknown: true,

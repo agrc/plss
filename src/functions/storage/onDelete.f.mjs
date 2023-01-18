@@ -1,21 +1,25 @@
 import { auth, logger, storage } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
+import setupFirebase from '../firebase.mjs';
 
+const config = setupFirebase();
 const db = getFirestore();
 
 const syncProfileImage = storage
-  .bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET)
+  .bucket(config.storageBucket)
   .object()
   .onDelete(async (object) => {
     const { name } = object;
 
-    logger.info('storage object deleted', name, { structuredData: true });
+    logger.debug('storage object deleted', name, { structuredData: true });
 
     const match = /submitters\/(?<uid>.+)\/profile\/seal\.(png|jpe?g)$/i.exec(
       name
     );
 
     if (!match) {
+      logger.debug('skipping');
+
       return;
     }
 

@@ -3,7 +3,9 @@ import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import { parseDms } from 'dms-conversion';
 import * as schemas from '../../components/pageElements/CornerSubmission/Schema.mjs';
 import { formatDegrees } from '../../components/helpers/index.mjs';
+import setupFirebase from '../firebase.mjs';
 
+setupFirebase();
 const db = getFirestore();
 const options = {
   stripUnknown: true,

@@ -1,7 +1,9 @@
 import { logger, firestore } from 'firebase-functions/v1';
 import { getStorage } from 'firebase-admin/storage';
+import setupFirebase from '../../firebase.mjs';
 
-const bucket = getStorage().bucket(process.env.VITE_FIREBASE_STORAGE_BUCKET);
+const config = setupFirebase();
+const bucket = getStorage().bucket(config.storageBucket);
 
 const onCleanUpPointAttachments = firestore
   .document('/submitters/{userId}/points/{docId}')

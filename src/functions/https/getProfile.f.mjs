@@ -1,6 +1,8 @@
 import { auth, https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
+import setupFirebase from '../firebase.mjs';
 
+setupFirebase();
 const db = getFirestore();
 
 const getProfile = https.onCall(async (_, context) => {

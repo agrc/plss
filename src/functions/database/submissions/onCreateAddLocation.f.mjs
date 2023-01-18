@@ -1,6 +1,9 @@
 import { logger, firestore } from 'firebase-functions/v1';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import got from 'got';
+import setupFirebase from '../../firebase.mjs';
+
+setupFirebase();
 
 const client = got.extend({
   prefixUrl:
@@ -34,24 +37,20 @@ const getLocationFromId = async (id) => {
   );
 };
 
-const onCreateSetEmptyLocation = firestore
+const onCreateAddLocation = firestore
   .document('/submissions/{docId}')
   .onCreate(async (snap, context) => {
     const document = snap.data();
 
-    logger.debug('onCreateSetEmptyLocation', document, {
-      structuredData: true,
-    });
-
     if (document.type === 'new') {
-      logger.debug('skipping location. reason: new submission');
+      logger.debug('skipping location update. reason: new submission');
 
       return;
     }
 
     if (document.location) {
       logger.debug(
-        'skipping location. reason: existing submission with coordinates'
+        'skipping location update. reason: existing submission with coordinates'
       );
 
       return;
@@ -75,4 +74,4 @@ const onCreateSetEmptyLocation = firestore
     return result;
   });
 
-export default onCreateSetEmptyLocation;
+export default onCreateAddLocation;
