@@ -74,7 +74,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
     surveyor.seal
   );
 
-  const definition = generatePdfDefinition(data, surveyor, images);
+  const definition = generatePdfDefinition(data, surveyor, images, true);
 
   const fileName = `submitters/${context.auth.uid}/new/${data.blmPointId}/preview.pdf`;
   const file = bucket.file(fileName);

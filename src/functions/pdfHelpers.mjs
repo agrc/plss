@@ -26,8 +26,19 @@ export const getPdfAssets = async (bucket, metadata, seal) => {
   const { imagePaths, pdfPaths } = splitImagesFromPdfs(metadata);
   imagePaths.seal = seal;
 
-  const images = await getBase64Images(bucket, imagePaths);
-  const pdfs = await getBinaryPdfs(bucket, pdfPaths);
+  let images = {};
+  let pdfs = {};
+
+  try {
+    images = await getBase64Images(bucket, imagePaths);
+  } catch (error) {
+    logger.error('could not get binary images');
+  }
+  try {
+    pdfs = await getBinaryPdfs(bucket, pdfPaths);
+  } catch (error) {
+    logger.error('could not get binary pdfs');
+  }
 
   return { images, pdfs };
 };
@@ -67,6 +78,10 @@ const getBase64Images = async (bucket, metadata) => {
     logger.debug('creating stream for', key, {
       structuredData: true,
     });
+
+    if (!fileName) {
+      return { [key]: null };
+    }
 
     promises.push(
       getImageData(bucket.file(fileName).createReadStream()).then((result) => {
@@ -114,7 +129,7 @@ const getImageData = (stream) => {
 
   return new Promise((resolve, reject) => {
     stream.on('error', (err) => {
-      logger.error('getImageData error', err, { structuredData: true });
+      logger.error('getImageData error', err);
 
       return reject(err);
     });
@@ -146,12 +161,12 @@ const getPdfData = (stream) => {
   });
 };
 
-export const generatePdfDefinition = (data, surveyor, images) => {
+export const generatePdfDefinition = (data, surveyor, images, watermark) => {
   const {
     township,
     range,
     meridian: { name: meridian },
-  } = extractTownshipInformation(data.blmPointId);
+  } = extractTownshipInformation(data.blmPointId ?? data.blm_point_id);
 
   const addExtraImages = (images) => {
     const extras = Object.keys(images ?? {}).filter((key) =>
@@ -192,7 +207,7 @@ export const generatePdfDefinition = (data, surveyor, images) => {
     info: {
       title: 'Monument Record Sheet',
       author: 'Utah Geospatial Resource Center (UGRC)',
-      subject: `Monument sheet for ${data.blmPointId}`,
+      subject: `Monument sheet for ${data.blmPointId ?? data.blm_point_id}`,
       keywords: 'plss utah tiesheet corner',
     },
     pageOrientation: 'LETTER',
@@ -236,7 +251,7 @@ export const generatePdfDefinition = (data, surveyor, images) => {
             ],
             [
               {
-                text: data.blmPointId,
+                text: data.blmPointId ?? data.blm_point_id,
                 style: constants.value,
               },
               {
@@ -576,12 +591,6 @@ ${data.metadata.description} `,
       },
       ...addExtraImages(images),
     ],
-    watermark: {
-      text: 'draft',
-      color: constants.sky500,
-      opacity: 0.7,
-      bold: true,
-    },
     footer: [
       {
         style: constants.footer,
@@ -589,7 +598,9 @@ ${data.metadata.description} `,
         text: 'The state of Utah makes no guarantees, representations, or warranties of any kind, expressed or implied, as to the content, accuracy, timeliness, or completeness of any of the data. Unless otherwise noted all images are oriented north and are not to scale. The data is provided on an "as is, where is" basis. The State assumes no obligation or liability for its use by any persons.',
       },
       {
-        qr: 'https://plss.utah.gov/monument=blmpointid',
+        qr: `https://plss.utah.gov?monument=${
+          data.blmPointId ?? data.blm_point_id
+        }`,
         fit: 50,
         absolutePosition: { x: 5, y: 5 },
         foreground: constants.sky500,
@@ -634,6 +645,15 @@ ${data.metadata.description} `,
       },
     },
   };
+
+  if (watermark) {
+    definition.watermark = {
+      text: 'draft',
+      color: constants.sky500,
+      opacity: 0.7,
+      bold: true,
+    };
+  }
 
   return definition;
 };
