@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.3.0-0](https://github.com/agrc/plss/compare/v3.2.0-0...v3.3.0-0) (2023-01-18)
+
+
+### 🎨 Design Improvements
+
+* allow links to look like buttons ([cf7518f](https://github.com/agrc/plss/commit/cf7518f13219e1127cd977ba1993ce780e66dc7c))
+
+
+### 🐛 Bug Fixes
+
+* store monument location to allow download ([276b24a](https://github.com/agrc/plss/commit/276b24a8d910f3e789836348e4bcd349a40e1909)), closes [#191](https://github.com/agrc/plss/issues/191)
+* use db key for possible duplicate point submissions ([7ff9baf](https://github.com/agrc/plss/commit/7ff9baf4a1f3eafd687a8c67c626ceca25977ee0))
+
+
+### 🚀 Features
+
+* my submission download button downloads the final sheet ([08e9d14](https://github.com/agrc/plss/commit/08e9d140bd82a26afaf95cd0dac292ee16dee35f)), closes [#191](https://github.com/agrc/plss/issues/191)
+
 ## [3.2.0-0](https://github.com/agrc/plss/compare/v3.1.0-4...v3.2.0-0) (2023-01-18)
 
 
