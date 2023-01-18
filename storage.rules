@@ -46,6 +46,9 @@ service firebase.storage {
         allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
       }
     }
+    match /under-review/{point_id}/{uid}/{file} {
+      allow get: if isAuthenticated() && isCurrentUser(uid);
+    }
     match /tiesheets/{allPaths=**} {
       allow list: if true;
       allow get: if true;

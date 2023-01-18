@@ -6,10 +6,12 @@ import clsx from 'clsx';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
+import { logEvent } from 'firebase/analytics';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import {
   FirestoreProvider,
+  useAnalytics,
   useFirebaseApp,
   useFirestore,
   useFunctions,
@@ -19,7 +21,7 @@ import {
 } from 'reactfire';
 // eslint-disable-next-line import/no-unresolved
 import { useOpenClosed } from '@ugrc/utilities/hooks';
-import { Button } from '../formElements/Buttons.jsx';
+import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
@@ -233,8 +235,20 @@ Submissions.propTypes = {
 };
 
 const Submission = ({ item, dispatch }) => {
-  const { label, submitted, id, status, geometry } = item;
+  const analytics = useAnalytics();
+  const storage = useStorage();
+  const [url, setUrl] = useState('');
+
+  const { label, submitted, id, status, geometry, attributes } = item;
   const submission = Date.parse(submitted);
+
+  try {
+    getDownloadURL(ref(storage, attributes.ref)).then(setUrl);
+  } catch (e) {
+    logEvent(analytics, 'download-submission-error', {
+      document: item.key,
+    });
+  }
 
   return (
     <div className="relative flex flex-col text-base">
@@ -250,13 +264,21 @@ const Submission = ({ item, dispatch }) => {
       </div>
       <SubmissionStatus status={status} label={label} />
       <div className="mt-3 flex justify-center">
-        <Button
-          style="primary"
-          buttonGroup={{ left: true }}
-          onClick={() => dispatch({ type: 'submission/download', payload: id })}
-        >
-          Download
-        </Button>
+        {(url?.length ?? 0) > 0 ? (
+          <Link
+            style="primary"
+            buttonGroup={{ left: true }}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download
+          </Link>
+        ) : (
+          <Button style="primary" buttonGroup={{ left: true }} state="disabled">
+            Download
+          </Button>
+        )}
         <Button
           style="alternate"
           buttonGroup={{ middle: true }}
