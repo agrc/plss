@@ -69,7 +69,23 @@ const onCreateMonumentRecord = firestore
         contentDisposition: 'inline',
       });
     } catch (error) {
-      logger.error('error generating monument', error, newSubmissionDoc, {
+      logger.error(
+        'error generating monument',
+        error,
+        newSubmissionDoc,
+        context.params.docId,
+        {
+          structuredData: true,
+        }
+      );
+    }
+
+    try {
+      const doc = db.collection('submissions').doc(context.params.docId);
+
+      await doc.update({ monument: fileName });
+    } catch (error) {
+      logger.error('error updating monument record sheet', fileName, {
         structuredData: true,
       });
     }
