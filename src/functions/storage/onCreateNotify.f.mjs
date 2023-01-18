@@ -9,10 +9,6 @@ import setupFirebase from '../firebase.mjs';
 const config = setupFirebase();
 const db = getFirestore();
 
-logger.debug('config set to', config, {
-  structuredData: true,
-});
-
 const sendGridApiKey = defineSecret('SENDGRID_API_KEY');
 
 const notify = (template) => {
