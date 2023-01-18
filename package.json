@@ -72,7 +72,7 @@
     "@commitlint/config-conventional": "^17.4.2",
     "@firebase/rules-unit-testing": "^2.0.5",
     "@hookform/devtools": "^4.3.0",
-    "@storybook/addon-actions": "^7.0.0-beta.21",
+    "@storybook/addon-actions": "^7.0.0-beta.30",
     "@storybook/addon-essentials": "^7.0.0-beta.21",
     "@storybook/addon-interactions": "^7.0.0-beta.21",
     "@storybook/addon-links": "^7.0.0-beta.21",
