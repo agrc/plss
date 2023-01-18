@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
 import { Button } from '../formElements/Buttons.jsx';
+import { useAnalytics } from 'reactfire';
+import { logEvent } from 'firebase/analytics';
 
 export default function DefaultFallback({ error, resetErrorBoundary }) {
+  const analytics = useAnalytics();
+
+  logEvent(analytics, 'error-boundary', {
+    error: error.message,
+  });
+
   return (
     <div role="alert" data-area="drawer">
       <h2 className="text-lg font-bold">Something went wrong</h2>
