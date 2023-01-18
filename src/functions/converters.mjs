@@ -10,6 +10,7 @@ export const graphicConverter = {
 
     return {
       photos: data.photos,
+      key: snapshot.id,
       geometry: {
         type: 'point',
         x: data.location.x,
@@ -73,6 +74,7 @@ export const myContentConverter = {
 
     const result = {
       id: data.blm_point_id,
+      key: snapshot.id,
       submitted: data.created_at.toDate().toISOString(),
       label: status.label,
       status,
@@ -90,6 +92,7 @@ export const myContentConverter = {
         id: data.blm_point_id,
         status: status.label,
         when: data.created_at.toDate().toISOString(),
+        ref: data.monument,
       },
     };
 

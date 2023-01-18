@@ -219,7 +219,7 @@ const Submissions = ({ items, dispatch }) => {
             })
           )
           .map((item) => (
-            <li key={item.id} className="py-4 first:pt-0 last:pb-0">
+            <li key={item.key} className="py-4 first:pt-0 last:pb-0">
               <Submission item={item} dispatch={dispatch} />
             </li>
           ))}
@@ -410,12 +410,8 @@ const ItemList = ({ items, dispatch, sortOrder }) => {
         )
         .map((item) => {
           return (
-            <li key={item.attributes.id} className="py-4 first:pt-0 last:pb-0">
-              <Item
-                dispatch={dispatch}
-                key={item.attributes.id}
-                item={item}
-              ></Item>
+            <li key={item.key} className="py-4 first:pt-0 last:pb-0">
+              <Item dispatch={dispatch} key={item.key} item={item}></Item>
             </li>
           );
         })}
