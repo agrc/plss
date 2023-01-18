@@ -114,6 +114,20 @@ const buttonGroupLeft = 'border-r-0 rounded-l-full';
 const buttonGroupRight = 'border-l-0 rounded-r-full';
 const buttonGroupMiddle = 'border-x-0';
 
+const buttonClasses = (style, buttonGroup) => {
+  return clsx(
+    style !== 'link' &&
+      'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
+    style === 'primary' && primaryClasses,
+    style === 'secondary' && secondaryClasses,
+    style === 'alternate' && alternateClasses,
+    style === 'link' && linkClasses,
+    !buttonGroup && noButtonGroup,
+    buttonGroup?.left && buttonGroupLeft,
+    buttonGroup?.middle && buttonGroupMiddle,
+    buttonGroup?.right && buttonGroupRight
+  );
+};
 export const Button = ({
   children,
   name,
@@ -131,18 +145,7 @@ export const Button = ({
       ref={inputRef}
       disabled={['disabled', 'loading', 'error'].includes(state)}
       onClick={onClick}
-      className={clsx(
-        style !== 'link' &&
-          'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50',
-        style === 'primary' && primaryClasses,
-        style === 'secondary' && secondaryClasses,
-        style === 'alternate' && alternateClasses,
-        style === 'link' && linkClasses,
-        !buttonGroup && noButtonGroup,
-        buttonGroup?.left && buttonGroupLeft,
-        buttonGroup?.middle && buttonGroupMiddle,
-        buttonGroup?.right && buttonGroupRight
-      )}
+      className={buttonClasses(style, buttonGroup)}
     >
       {state === 'loading' && (
         <svg
@@ -216,16 +219,31 @@ Button.defaultProps = {
   buttonGroup: undefined,
 };
 
-export const Link = ({ href, children, target, rel }) => {
-  return (
-    <a href={href} target={target} rel={rel} className={linkClasses}>
-      {children}
-    </a>
-  );
+export const Link = ({
+  href,
+  children,
+  target,
+  rel,
+  buttonGroup,
+  style = 'link',
+}) => {
+  const attributes = {
+    target,
+    rel,
+    href,
+    className: buttonClasses(style, buttonGroup),
+  };
+
+  return <a {...attributes}>{children}</a>;
 };
 Link.propTypes = {
   href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   target: PropTypes.string,
   rel: PropTypes.string,
+  /**
+   * The style of button
+   */
+  style: PropTypes.oneOf(['primary', 'secondary', 'alternate', 'link']),
+  buttonGroup: PropTypes.object,
 };
