@@ -25,7 +25,7 @@ const getMyContent = https.onCall(async (_, context) => {
       .get();
 
     if (snapshot.empty) {
-      logger.error('user points are empty', context.auth.uid, {
+      logger.debug('user points are empty', context.auth.uid, {
         structuredData: true,
       });
     } else {
@@ -48,7 +48,7 @@ const getMyContent = https.onCall(async (_, context) => {
     const snapshot = await filter.withConverter(myContentConverter).get();
 
     if (snapshot.empty) {
-      logger.error('user submissions are empty', context.auth.uid, {
+      logger.debug('user submissions are empty', context.auth.uid, {
         structuredData: true,
       });
     } else {
