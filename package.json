@@ -9,7 +9,7 @@
   "scripts": {
     "cm": "cz",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
-    "dev": "run-p dev:*",
+    "dev": "cross-env NODE_ENV=local run-p dev:*",
     "dev:firebase": "firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
     "save-firebase-state": "firebase emulators:start --import .emulator-data --export-on-exit --only auth,functions,firestore,storage",
     "dev:vite": "vite",
@@ -90,6 +90,7 @@
     "autoprefixer": "^10.4.13",
     "commitizen": "^4.2.6",
     "cpy-cli": "^4.2.0",
+    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
