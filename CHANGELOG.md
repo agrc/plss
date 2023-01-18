@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0-0](https://github.com/agrc/plss/compare/v3.1.0-4...v3.2.0-0) (2023-01-18)
+
+
+### 🐛 Bug Fixes
+
+* **api:** try to initialize firebase properly ([e102297](https://github.com/agrc/plss/commit/e102297eafc4e91e9e140f003bc50c8a993f4763))
+* move create notify to a storage trigger ([69482fa](https://github.com/agrc/plss/commit/69482faad9281a642bda991cb4fc3332e33aaec0))
+
+
+### 🚀 Features
+
+* a non watermarked monument record sheet is created upon submission ([7af4399](https://github.com/agrc/plss/commit/7af43996de727376fed8e037eb10694e59d8e359)), closes [#180](https://github.com/agrc/plss/issues/180)
+
 ## [3.1.0-4](https://github.com/agrc/plss/compare/v3.1.0-3...v3.1.0-4) (2023-01-17)
 
 
