@@ -1,9 +1,14 @@
 import { initializeApp } from 'firebase-admin/app';
 
 const setupFirebase = () => {
-  const app = JSON.parse(process.env.FIREBASE_CONFIG);
+  let app = {};
+  try {
+    app = JSON.parse(process.env.FIREBASE_CONFIG);
+  } catch (error) {
+    console.error('This happens in unit tests', error);
+  }
 
-  if (process.env.NODE_ENV === 'local') {
+  if (['local', 'test'].includes(process.env.NODE_ENV)) {
     app.storageBucket = 'localhost';
   }
 
