@@ -31,7 +31,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'invalid-argument',
       'pdf preview data is invalid',
       error
@@ -92,7 +92,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'internal',
       'There was a problem creating the pdf'
     );

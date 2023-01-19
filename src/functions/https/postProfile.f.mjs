@@ -42,7 +42,7 @@ const postProfile = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'invalid-argument',
       'form data is invalid',
       error
@@ -63,7 +63,7 @@ const postProfile = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError('internal', 'The profile was not saved');
+    throw new https.HttpsError('internal', 'The profile was not saved');
   }
 
   return doc;
