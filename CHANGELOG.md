@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.5.1-0](https://github.com/agrc/plss/compare/v3.5.0...v3.5.1-0) (2023-01-19)
+
+
+### 🌲 Dependencies
+
+* update project dependencies :evergreen_tree: ([7fa68bd](https://github.com/agrc/plss/commit/7fa68bd02fbecbbe8f8f783bce72a8a0dcfd9109))
+
+
+### 🐛 Bug Fixes
+
+* allow 3 significant digits for grid coordinate elevation values ([5ad8b10](https://github.com/agrc/plss/commit/5ad8b10626728ee627dbc3d2db0e0f81ee5b6f43)), closes [#198](https://github.com/agrc/plss/issues/198)
+
 ## [3.5.0](https://github.com/agrc/plss/compare/v3.3.0...v3.5.0) (2023-01-19)
 
 
