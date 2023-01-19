@@ -99,7 +99,7 @@ const getBase64Images = async (bucket, metadata) => {
   }, {});
 };
 
-const getBinaryPdfs = async (bucket, metadata) => {
+export const getBinaryPdfs = async (bucket, metadata) => {
   const promises = [];
 
   Object.entries(metadata).forEach(([key, fileName]) => {

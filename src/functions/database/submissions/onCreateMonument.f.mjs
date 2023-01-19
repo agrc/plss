@@ -4,6 +4,7 @@ import { getStorage } from 'firebase-admin/storage';
 import {
   createPdfDocument,
   generatePdfDefinition,
+  getBinaryPdfs,
   getPdfAssets,
 } from '../../pdfHelpers.mjs';
 import setupFirebase from '../../firebase.mjs';
@@ -17,9 +18,41 @@ const onCreateMonumentRecord = firestore
   .onCreate(async (snap, context) => {
     const newSubmissionDoc = snap.data();
 
-    logger.debug('trigger: new submission for', context.params.docId, {
-      structuredData: true,
-    });
+    logger.debug(
+      'trigger: new submission for',
+      context.params.docId,
+      newSubmissionDoc.type,
+      {
+        structuredData: true,
+      }
+    );
+
+    if (newSubmissionDoc.type === 'existing') {
+      try {
+        const fileName = `under-review/${newSubmissionDoc.blm_point_id}/${newSubmissionDoc.submitted_by.id}/${context.params.docId}.pdf`;
+        const file = bucket.file(fileName);
+
+        const data = await getBinaryPdfs(bucket, { pdf: newSubmissionDoc.pdf });
+
+        await file.save(data.pdf);
+        await file.setMetadata({
+          contentType: 'application/pdf',
+          contentDisposition: 'inline',
+        });
+      } catch (error) {
+        logger.error(
+          'error generating monument',
+          error,
+          newSubmissionDoc,
+          context.params.docId,
+          {
+            structuredData: true,
+          }
+        );
+      }
+
+      return true;
+    }
 
     let surveyor = {};
 
