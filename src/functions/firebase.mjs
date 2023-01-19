@@ -8,8 +8,9 @@ const setupFirebase = () => {
     console.error('This happens in unit tests', error);
   }
 
-  if (['local', 'test'].includes(process.env.NODE_ENV)) {
+  if (['development', 'test'].includes(process.env.NODE_ENV)) {
     app.storageBucket = 'localhost';
+    app.projectId = 'ut-dts-agrc-plss-dev';
   }
 
   try {

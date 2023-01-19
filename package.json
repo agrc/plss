@@ -9,7 +9,7 @@
   "scripts": {
     "cm": "cz",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
-    "dev": "cross-env NODE_ENV=local run-p dev:*",
+    "dev": "cross-env NODE_ENV=development run-p dev:*",
     "dev:firebase": "firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
     "save-firebase-state": "firebase emulators:start --import .emulator-data --export-on-exit --only auth,functions,firestore,storage",
     "dev:vite": "vite",
