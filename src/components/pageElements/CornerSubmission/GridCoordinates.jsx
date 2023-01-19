@@ -180,6 +180,7 @@ const GridCoordinates = () => {
               <Input
                 type="number"
                 label="Elevation"
+                step="0.001"
                 required={false}
                 {...register('elevation')}
               />
