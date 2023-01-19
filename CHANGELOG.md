@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.4.0-0](https://github.com/agrc/plss/compare/v3.3.0-0...v3.4.0-0) (2023-01-19)
+
+
+### 🐛 Bug Fixes
+
+* dependecy updates ([7be2705](https://github.com/agrc/plss/commit/7be270569ca768fed09cf9d363a6a2f41a4c0818))
+* send emails on existing submissions ([ce40a65](https://github.com/agrc/plss/commit/ce40a65c00e1fed68dea08123ab8d9002001e14d))
+* track when the error boundary is shown ([b1673e5](https://github.com/agrc/plss/commit/b1673e519652a8f98048af2f346d665333ff8073))
+
+
+### 🚀 Features
+
+* allow for submissions to be cancelled ([194e0f3](https://github.com/agrc/plss/commit/194e0f350fa294dc1a2b44e07d133b9ee2f28163)), closes [#210](https://github.com/agrc/plss/issues/210)
+* send an email notification when a submission is cancelled ([4f27023](https://github.com/agrc/plss/commit/4f270232a2b3dc443de50a8441d653de3fc2ebad))
+
 ## [3.3.0](https://github.com/agrc/plss/compare/v3.3.0-0...v3.3.0) (2023-01-18)
 
 
