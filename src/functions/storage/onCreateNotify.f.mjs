@@ -1,60 +1,18 @@
-import { Base64Encode } from 'base64-stream';
 import { logger, runWith } from 'firebase-functions/v1';
 import { getStorage } from 'firebase-admin/storage';
 import { defineSecret } from 'firebase-functions/params';
 import { getFirestore } from 'firebase-admin/firestore';
-import client from '@sendgrid/client';
 import setupFirebase from '../firebase.mjs';
+import {
+  getContactsToNotify,
+  getBase64EncodedAttachment,
+  notify,
+} from '../emailHelpers.mjs';
 
 const config = setupFirebase();
 const db = getFirestore();
 
 const sendGridApiKey = defineSecret('SENDGRID_API_KEY');
-
-const notify = (template) => {
-  if (process.env.NODE_ENV !== 'production') {
-    logger.warn(
-      'Skipping mail send and returning a fake promise',
-      { nodeEnv: process.env.NODE_ENV },
-      {
-        structuredData: true,
-      }
-    );
-
-    return Promise.resolve([
-      {
-        statusCode: 202,
-        body: '',
-        headers: {
-          server: 'nginx',
-        },
-      },
-    ]);
-  }
-
-  return client.request(template);
-};
-
-export const getContactsToNotify = async (county) => {
-  const db = getFirestore();
-  const documentReference = db.collection('contacts').doc('admin');
-  const documentSnapshot = await documentReference.get();
-  const data = documentSnapshot.data();
-
-  let contacts = data.ugrc;
-
-  if (!county) {
-    return contacts;
-  }
-
-  county = county.toLowerCase();
-
-  if (county in data) {
-    contacts = [...contacts, ...data[county]];
-  }
-
-  return contacts;
-};
 
 const getDocument = async (documentId) => {
   try {
@@ -79,24 +37,6 @@ const getDocument = async (documentId) => {
   };
 };
 
-const getBase64EncodedAttachment = (stream) => {
-  const chunks = new Base64Encode();
-
-  return new Promise((resolve, reject) => {
-    stream.on('error', (err) => {
-      logger.error('get pdf error', err, { structuredData: true });
-
-      return reject(err);
-    });
-    stream.on('data', (chunk) => chunks.write(chunk));
-    stream.on('end', () => {
-      chunks.end();
-
-      return resolve(chunks.read());
-    });
-  });
-};
-
 const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
   .storage.bucket(config.storageBucket)
   .object()
@@ -113,7 +53,7 @@ const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
       );
 
     if (!match) {
-      logger.debug('skipping');
+      logger.debug('skipping creation notify. reason: not a final pdf');
 
       return;
     }
@@ -124,8 +64,6 @@ const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
       structuredData: true,
     });
 
-    client.setApiKey(process.env.SENDGRID_API_KEY);
-
     const bucket = getStorage().bucket(fileBucket);
 
     const document = await getDocument(match.groups.documentId);
@@ -134,7 +72,7 @@ const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
     );
 
     // TODO add document.county to add the county contacts #199
-    const to = await getContactsToNotify();
+    const to = await getContactsToNotify(db, null);
 
     const template = {
       method: 'post',
@@ -175,7 +113,7 @@ const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
     });
 
     try {
-      const result = await notify(template);
+      const result = await notify(process.env.SENDGRID_API_KEY, template);
 
       logger.debug('mail sent with status', result[0].statusCode, {
         structuredData: true,
