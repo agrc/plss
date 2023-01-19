@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
-import { getContactsToNotify } from './onCreateNotify.f.mjs';
+import { getContactsToNotify } from './emailHelpers.mjs';
 
 const docMock = vi.fn(() => {
   return {
@@ -15,39 +15,36 @@ const docMock = vi.fn(() => {
     }),
   };
 });
-describe('onCreate submission notification', async () => {
+let db;
+describe('email helper tests', async () => {
   beforeAll(() => {
-    vi.mock('firebase-admin/firestore', () => {
+    db = vi.fn(() => {
       return {
-        getFirestore: vi.fn(() => {
+        collection: vi.fn(() => {
           return {
-            collection: vi.fn(() => {
-              return {
-                doc: docMock,
-              };
-            }),
+            doc: docMock,
           };
         }),
       };
-    });
+    })();
   });
   afterAll(() => {
     vi.clearAllMocks();
   });
 
   test('it returns the ugrc contact if no county is provided', async () => {
-    await expect(getContactsToNotify()).resolves.toStrictEqual([
+    await expect(getContactsToNotify(db, null)).resolves.toStrictEqual([
       { name: 'UGRC', email: 'ugrc-email' },
     ]);
   });
   test('it returns the combined contacts for the county', async () => {
-    await expect(getContactsToNotify('beaver')).resolves.toStrictEqual([
+    await expect(getContactsToNotify(db, 'beaver')).resolves.toStrictEqual([
       { name: 'UGRC', email: 'ugrc-email' },
       { name: 'beaver', email: 'beaver-email' },
     ]);
   });
   test('it returns the combined contacts for the county despite the case', async () => {
-    await expect(getContactsToNotify('BEAVER')).resolves.toStrictEqual([
+    await expect(getContactsToNotify(db, 'BEAVER')).resolves.toStrictEqual([
       { name: 'UGRC', email: 'ugrc-email' },
       { name: 'beaver', email: 'beaver-email' },
     ]);
