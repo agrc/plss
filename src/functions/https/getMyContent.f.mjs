@@ -41,9 +41,10 @@ const getMyContent = https.onCall(async (_, context) => {
   }
 
   try {
-    const filter = db
-      .collection('submissions')
-      .where('submitted_by.id', '==', context.auth.uid);
+    let filter = db
+      .collectionGroup('submissions')
+      .where('submitted_by.id', '==', context.auth.uid)
+      .where('status.user.cancelled', '==', null);
 
     const snapshot = await filter.withConverter(myContentConverter).get();
 
