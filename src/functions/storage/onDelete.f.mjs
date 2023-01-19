@@ -1,4 +1,4 @@
-import { auth, logger, storage } from 'firebase-functions/v1';
+import { https, logger, storage } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import setupFirebase from '../firebase.mjs';
 
@@ -32,7 +32,7 @@ const syncProfileImage = storage
         structuredData: true,
       });
 
-      throw new auth.HttpsError('internal', 'error syncing seal photo');
+      throw new https.HttpsError('internal', 'error syncing seal photo');
     }
   });
 

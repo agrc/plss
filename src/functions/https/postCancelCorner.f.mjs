@@ -29,7 +29,7 @@ const postCancelCorner = https.onCall(async (data, context) => {
   });
 
   if (!data.key) {
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'invalid-argument',
       'corner submission data is invalid'
     );
@@ -53,7 +53,7 @@ const postCancelCorner = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError('internal', 'The submission was not cancelled');
+    throw new https.HttpsError('internal', 'The submission was not cancelled');
   }
 
   return 1;

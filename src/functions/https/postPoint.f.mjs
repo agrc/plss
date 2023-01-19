@@ -41,7 +41,7 @@ const postPoint = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'invalid-argument',
       'reference point data is invalid',
       error
@@ -69,7 +69,10 @@ const postPoint = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError('internal', 'Your reference point was not saved');
+    throw new https.HttpsError(
+      'internal',
+      'Your reference point was not saved'
+    );
   }
 
   return 1;

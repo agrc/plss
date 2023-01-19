@@ -44,7 +44,7 @@ const postCorner = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError(
+    throw new https.HttpsError(
       'invalid-argument',
       'corner submission data is invalid',
       error
@@ -68,7 +68,7 @@ const postCorner = https.onCall(async (data, context) => {
       structuredData: true,
     });
 
-    throw new auth.HttpsError('internal', 'The corner was not saved');
+    throw new https.HttpsError('internal', 'The corner was not saved');
   }
 
   return 1;
