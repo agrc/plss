@@ -32,6 +32,17 @@ const getProfile = https.onCall(async (_, context) => {
     });
   }
 
+  if (!profile) {
+    logger.warn('profile is empty', profile, {
+      structuredData: true,
+    });
+
+    throw new https.HttpsError(
+      'failed-precondition',
+      'profile has not been written yet'
+    );
+  }
+
   return profile;
 });
 
