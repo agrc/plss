@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.2](https://github.com/agrc/plss/compare/v3.5.1...v3.5.2) (2023-01-19)
+
+
+### 🐛 Bug Fixes
+
+* fix account creation error ([7ce427e](https://github.com/agrc/plss/commit/7ce427e920720672eb02b6d4aa3d922176ff8690))
+
 ## [3.5.2-0](https://github.com/agrc/plss/compare/v3.5.1...v3.5.2-0) (2023-01-19)
 
 
