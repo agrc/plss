@@ -43,6 +43,9 @@ describe('postCorner', () => {
       sgid: {
         approved: null,
       },
+      user: {
+        cancelled: null,
+      },
     },
   };
 

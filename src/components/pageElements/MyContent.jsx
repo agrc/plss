@@ -1,7 +1,7 @@
 import { Tab } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
@@ -239,6 +239,27 @@ const Submission = ({ item, dispatch }) => {
   const storage = useStorage();
   const [url, setUrl] = useState('');
 
+  const functions = useFunctions();
+  const cancelSubmission = httpsCallable(
+    functions,
+    'functions-httpsPostCancelCorner'
+  );
+
+  const queryClient = useQueryClient();
+  const { mutate, status: mutationStatus } = useMutation({
+    mutationFn: (data) => cancelSubmission(data),
+    onSuccess: async (response) => {
+      console.log('success', response);
+      await queryClient.cancelQueries();
+
+      queryClient.invalidateQueries({ queryKey: ['my content'] });
+      queryClient.removeQueries({ queryKey: ['monument record sheet'] });
+    },
+    onError: (error) => {
+      console.warn('error', error);
+    },
+  });
+
   const { label, submitted, id, status, geometry, attributes } = item;
   const submission = Date.parse(submitted);
 
@@ -290,8 +311,9 @@ const Submission = ({ item, dispatch }) => {
         </Button>
         <Button
           style="secondary"
+          state={mutationStatus}
           buttonGroup={{ right: true }}
-          onClick={() => dispatch({ type: 'submission/cancel', payload: id })}
+          onClick={() => mutate({ key: item.key })}
         >
           Cancel
         </Button>

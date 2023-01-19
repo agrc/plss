@@ -132,6 +132,9 @@ export const formatDataForFirestore = (data, user) => {
       sgid: {
         approved: null,
       },
+      user: {
+        cancelled: null,
+      },
     },
     submitted_by: {
       id: user.uid,
