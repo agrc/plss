@@ -46,7 +46,7 @@
     "cors": "^2.8.5",
     "dms-conversion": "^3.1.1",
     "firebase": "^9.15.0",
-    "firebase-admin": "^11.4.1",
+    "firebase-admin": "^11.5.0",
     "firebase-function-tools": "^2.0.1",
     "firebase-functions": "^4.1.1",
     "got": "^12.5.3",
