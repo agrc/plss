@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.3-0](https://github.com/agrc/plss/compare/v3.5.2...v3.5.3-0) (2023-01-20)
+
+
+### 🌲 Dependencies
+
+* update dependencies ([7fdffb7](https://github.com/agrc/plss/commit/7fdffb7ff134edf31db83368fbd174f858e86cc9))
+
+
+### 🐛 Bug Fixes
+
+* add a content security policy ([dcc3615](https://github.com/agrc/plss/commit/dcc3615140212bf85b0d3e6cf37f19dd6163c4bf)), closes [#233](https://github.com/agrc/plss/issues/233)
+* add missing robot.txt and sitemap.xml ([efdeac7](https://github.com/agrc/plss/commit/efdeac74cb8b20b75c842cc55f20e3f4a9033c3b)), closes [#233](https://github.com/agrc/plss/issues/233)
+* correct accessibility light house issues ([c07ef65](https://github.com/agrc/plss/commit/c07ef65928823ba63ee5f5fd1b97da6cd50c9f30)), closes [#233](https://github.com/agrc/plss/issues/233)
+
 ## [3.5.2](https://github.com/agrc/plss/compare/v3.5.1...v3.5.2) (2023-01-19)
 
 
