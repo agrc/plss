@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3-4](https://github.com/agrc/plss/compare/v3.5.3-3...v3.5.3-4) (2023-01-20)
+
+
+### 🐛 Bug Fixes
+
+* update object embed CSP ([6da0e52](https://github.com/agrc/plss/commit/6da0e52f60ec66df29154b9b444b17e676add370))
+
 ## [3.5.3-3](https://github.com/agrc/plss/compare/v3.5.3-2...v3.5.3-3) (2023-01-20)
 
 
