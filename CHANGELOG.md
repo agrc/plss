@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3-2](https://github.com/agrc/plss/compare/v3.5.3-1...v3.5.3-2) (2023-01-20)
+
+
+### 🐛 Bug Fixes
+
+* update policy for prod services ([d9cf24c](https://github.com/agrc/plss/commit/d9cf24cad3850885ab60e8d520a9e74cb3204076))
+
 ## [3.5.3-1](https://github.com/agrc/plss/compare/v3.5.3-0...v3.5.3-1) (2023-01-20)
 
 
