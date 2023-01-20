@@ -54,6 +54,9 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
       ref={ref}
     >
       <button
+        name="activate geolocation"
+        aria-label="activate geolocation"
+        title="activate geolocation"
         onClick={(event) => {
           event.stopPropagation();
           event.preventDefault();

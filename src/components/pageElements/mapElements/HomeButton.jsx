@@ -36,6 +36,7 @@ export default function HomeButton({ view, extent, width }) {
     >
       <button
         className="flex flex-1 cursor-pointer items-center justify-center rounded-full bg-white"
+        name="default view"
         aria-label="Default map view"
         title="Default map view"
         onClick={() => {
