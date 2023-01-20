@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3-1](https://github.com/agrc/plss/compare/v3.5.3-0...v3.5.3-1) (2023-01-20)
+
+
+### 🐛 Bug Fixes
+
+* apply CPS to all responses ([2d1e3bf](https://github.com/agrc/plss/commit/2d1e3bf79cbc26f91bfed6a3c062db005c2d0478))
+
 ## [3.5.3-0](https://github.com/agrc/plss/compare/v3.5.2...v3.5.3-0) (2023-01-20)
 
 
