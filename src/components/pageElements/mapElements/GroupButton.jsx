@@ -27,6 +27,9 @@ export default function GroupButton({ view, width, children }) {
         className="relative flex h-8 w-8 rounded-full bg-white shadow-sm"
       >
         <button
+          name="open map finding tools"
+          aria-label="open map finding tools"
+          title="open map finding tools"
           onClick={(event) => {
             event.stopPropagation();
             event.preventDefault();
