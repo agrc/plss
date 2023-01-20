@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3-3](https://github.com/agrc/plss/compare/v3.5.3-2...v3.5.3-3) (2023-01-20)
+
+
+### 🐛 Bug Fixes
+
+* add missing csp dns ([d7550d8](https://github.com/agrc/plss/commit/d7550d81c04ccdeeecedb3c2fdd75339bdf015c3))
+
 ## [3.5.3-2](https://github.com/agrc/plss/compare/v3.5.3-1...v3.5.3-2) (2023-01-20)
 
 
