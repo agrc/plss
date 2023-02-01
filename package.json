@@ -88,7 +88,7 @@
     "@xstate/inspect": "^0.7.0",
     "@xstate/react": "^3.0.2",
     "autoprefixer": "^10.4.13",
-    "commitizen": "^4.2.6",
+    "commitizen": "^4.3.0",
     "cpy-cli": "^4.2.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
