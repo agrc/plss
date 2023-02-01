@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.5.3](https://github.com/agrc/plss/compare/v3.5.2...v3.5.3) (2023-02-01)
+
+
+### 🐛 Bug Fixes
+
+* add a content security policy ([7b33138](https://github.com/agrc/plss/commit/7b3313814adf981c661d4f4db9b0db571e2e0676)), closes [#233](https://github.com/agrc/plss/issues/233)
+* add missing robot.txt and sitemap.xml ([f6274bc](https://github.com/agrc/plss/commit/f6274bc7bd2ac05d1aa2d9f5e34fe86656a90300)), closes [#233](https://github.com/agrc/plss/issues/233)
+* correct accessibility light house issues ([576646a](https://github.com/agrc/plss/commit/576646abc4067f4c527d0b182c5168f943d37cdc)), closes [#233](https://github.com/agrc/plss/issues/233)
+
+
+### 🌲 Dependencies
+
+* february dependency updates ([99ab0f1](https://github.com/agrc/plss/commit/99ab0f16b29511319b857804c5f83f4b0b870002))
+* update dependencies ([5f5312f](https://github.com/agrc/plss/commit/5f5312fc700ba4264acfd2406b42b62b530c00a8))
+* update storybook ([7202478](https://github.com/agrc/plss/commit/7202478eae08ec6123c4054ec2a7adf5c98a841d))
+
 ## [3.5.3-5](https://github.com/agrc/plss/compare/v3.5.2...v3.5.3-5) (2023-02-01)
 
 
