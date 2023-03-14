@@ -220,7 +220,7 @@ export const generatePdfDefinition = (data, surveyor, images, watermark) => {
     },
     content: [
       { text: 'for', style: ['text-normal', 'bold', 'center', 'sky-800'] },
-      { text: 'Beaver County', style: constants.subHeader },
+      { text: `${data.county ?? 'Unknown'} County`, style: constants.subHeader },
       {
         table: {
           widths: constants.grid,
