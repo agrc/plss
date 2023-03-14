@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.4](https://github.com/agrc/plss/compare/v3.5.3...v3.5.4) (2023-03-14)
+
+
+### 🐛 Bug Fixes
+
+* **api:** replace beaver with dynamic data ([642cd52](https://github.com/agrc/plss/commit/642cd52dfb5a4fe9f77e4662b7c76fd9ba4206aa))
+
 ## [3.5.3](https://github.com/agrc/plss/compare/v3.5.2...v3.5.3) (2023-02-01)
 
 
