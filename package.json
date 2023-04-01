@@ -76,7 +76,7 @@
     "@storybook/addon-essentials": "^7.0.0-beta.39",
     "@storybook/addon-interactions": "^7.0.0-beta.39",
     "@storybook/addon-links": "^7.0.0-beta.39",
-    "@storybook/addons": "^7.0.0-beta.39",
+    "@storybook/addons": "^7.0.0",
     "@storybook/builder-vite": "^7.0.0-beta.39",
     "@storybook/react-vite": "^7.0.0-beta.39",
     "@types/arcgis-js-api": "^4.25.0",
