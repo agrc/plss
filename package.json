@@ -172,7 +172,8 @@
     ]
   },
   "lint-staged": {
-    "*.{js,jsx,md,yml}": "eslint --cache --fix"
+    "*.{js,jsx,mjs}": "eslint --cache --fix",
+    "*.{md,yml,yaml,json}": "prettier --write"
   },
   "config": {
     "commitizen": {
