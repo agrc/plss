@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.5-0](https://github.com/agrc/plss/compare/v3.5.4...v3.5.5-0) (2023-04-04)
+
+
+### 📖 Documentation Improvements
+
+* create a readme ([f390875](https://github.com/agrc/plss/commit/f3908750207024229869a625e85f10ebae3e3640))
+
+
+### 🌲 Dependencies
+
+* q2 package updates ([c3a8b17](https://github.com/agrc/plss/commit/c3a8b17e7304400a245631bc82b7a83ff7e22d94))
+* update react-error-boundary ([42972b3](https://github.com/agrc/plss/commit/42972b38ddecf0a2b1a2c1660af292d6f1a3e471))
+
 ## [3.5.4](https://github.com/agrc/plss/compare/v3.5.3...v3.5.4) (2023-03-14)
 
 
