@@ -221,21 +221,23 @@ export const geographicHeightSchema = yup.object().shape({
     .number()
     .when('unit', {
       is: 'ft',
-      then: yup
-        .number()
-        .typeError(heightMessages.feet)
-        .required(heightMessages.feet)
-        .min(2000, heightMessages.feet)
-        .max(14000, heightMessages.feet),
+      then: () =>
+        yup
+          .number()
+          .min(2000, heightMessages.feet)
+          .max(14000, heightMessages.feet)
+          .required(heightMessages.feet)
+          .typeError(heightMessages.feet),
     })
     .when('unit', {
       is: 'm',
-      then: yup
-        .number()
-        .typeError(heightMessages.meters)
-        .required(heightMessages.meters)
-        .min(600, heightMessages.meters)
-        .max(4300, heightMessages.meters),
+      then: () =>
+        yup
+          .number()
+          .min(600, heightMessages.meters)
+          .max(4300, heightMessages.meters)
+          .required(heightMessages.meters)
+          .typeError(heightMessages.meters),
     })
     .required()
     .label('Ellipsoid Height'),
@@ -269,208 +271,224 @@ export const gridCoordinatesSchema = yup.object().shape({
     .number()
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'north',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingFeet)
-        .required(gridMessages.northingFeet)
-        .min(3358936)
-        .max(3895966)
-        .test('feet', gridMessages.northingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(3358936)
+          .max(3895966)
+          .typeError(gridMessages.northingFeet)
+          .required(gridMessages.northingFeet)
+          .test('feet', gridMessages.northingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .label('Northing value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'central',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingFeet)
-        .required(gridMessages.northingFeet)
-        .min(6622436)
-        .max(7563519)
-        .test('feet', gridMessages.northingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(6622436)
+          .max(7563519)
+          .test('feet', gridMessages.northingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .required(gridMessages.northingFeet)
+          .typeError(gridMessages.northingFeet)
+          .label('Northing value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'south',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingFeet)
-        .required(gridMessages.northingFeet)
-        .min(9964678)
-        .max(10546599)
-        .test('feet', gridMessages.northingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(9964678)
+          .max(10546599)
+          .test('feet', gridMessages.northingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.northingFeet)
+          .required(gridMessages.northingFeet)
+          .label('Northing value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'north',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingMeters)
-        .required(gridMessages.northingMeters)
-        .min(1023805)
-        .max(1187493)
-        .test('meters', gridMessages.northingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(1023805)
+          .max(1187493)
+          .test('meters', gridMessages.northingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.northingMeters)
+          .required(gridMessages.northingMeters)
+          .label('Northing value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'central',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingMeters)
-        .required(gridMessages.northingMeters)
-        .min(2018522)
-        .max(2305365)
-        .test('meters', gridMessages.northingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(2018522)
+          .max(2305365)
+          .test('meters', gridMessages.northingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.northingMeters)
+          .required(gridMessages.northingMeters)
+          .label('Northing value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'south',
-      then: yup
-        .number()
-        .typeError(gridMessages.northingMeters)
-        .required(gridMessages.northingMeters)
-        .min(3037239)
-        .max(3214610)
-        .test('meters', gridMessages.northingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Northing value'),
+      then: () =>
+        yup
+          .number()
+          .min(3037239)
+          .max(3214610)
+          .test('meters', gridMessages.northingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.northingMeters)
+          .required(gridMessages.northingMeters)
+          .label('Northing value'),
     })
     .when('unit', {
       is: '',
-      then: yup
-        .number()
-        .typeError('Northing is a required field.')
-        .required('Northing is a required field.'),
+      then: () =>
+        yup
+          .number()
+          .typeError('Northing is a required field.')
+          .required('Northing is a required field.'),
     }),
   easting: yup
     .number()
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'north',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingFeet)
-        .required(gridMessages.eastingFeet)
-        .min(938853)
-        .max(2320842)
-        .test('feet', gridMessages.eastingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(938853)
+          .max(2320842)
+          .test('feet', gridMessages.eastingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.eastingFeet)
+          .required(gridMessages.eastingFeet)
+          .label('Easting value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'central',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingFeet)
-        .required(gridMessages.eastingFeet)
-        .min(911357)
-        .max(2338732)
-        .test('feet', gridMessages.eastingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(911357)
+          .max(2338732)
+          .test('feet', gridMessages.eastingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.eastingFeet)
+          .required(gridMessages.eastingFeet)
+          .label('Easting value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'ft' && zone === 'south',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingFeet)
-        .required(gridMessages.eastingFeet)
-        .min(895779)
-        .max(2357266)
-        .test('feet', gridMessages.eastingFeet, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(895779)
+          .max(2357266)
+          .test('feet', gridMessages.eastingFeet, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.eastingFeet)
+          .required(gridMessages.eastingFeet)
+          .label('Easting value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'north',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingMeters)
-        .required(gridMessages.eastingMeters)
-        .min(286163)
-        .max(707394)
-        .test('meters', gridMessages.eastingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(286163)
+          .max(707394)
+          .test('meters', gridMessages.eastingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.eastingMeters)
+          .required(gridMessages.eastingMeters)
+          .label('Easting value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'central',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingMeters)
-        .required(gridMessages.eastingMeters)
-        .min(277782)
-        .max(712847)
-        .test('meters', gridMessages.eastingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(277782)
+          .max(712847)
+          .test('meters', gridMessages.eastingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+          )
+          .typeError(gridMessages.eastingMeters)
+          .required(gridMessages.eastingMeters)
+          .label('Easting value'),
     })
     .when(['unit', 'zone'], {
       is: (unit, zone) => unit === 'm' && zone === 'south',
-      then: yup
-        .number()
-        .typeError(gridMessages.eastingMeters)
-        .required(gridMessages.eastingMeters)
-        .min(273034)
-        .max(718496)
-        .test('meters', gridMessages.eastingMeters, (number) =>
-          scaleAndPrecision(number, { precision: 3 })
-        )
-        .label('Easting value'),
+      then: () =>
+        yup
+          .number()
+          .min(273034)
+          .max(718496)
+          .test('meters', gridMessages.eastingMeters, (number) =>
+            scaleAndPrecision(number, { precision: 3 })
+              .typeError(gridMessages.eastingMeters)
+              .required(gridMessages.eastingMeters)
+          )
+          .label('Easting value'),
     })
     .when('unit', {
       is: '',
-      then: yup
-        .number()
-        .typeError('Easting is a required field.')
-        .required('Easting is a required field.'),
+      then: () =>
+        yup
+          .number()
+          .typeError('Easting is a required field.')
+          .required('Easting is a required field.'),
     }),
   elevation: yup
     .mixed()
     .notRequired()
     .when('unit', {
       is: 'ft',
-      then: yup
-        .number()
-        .typeError(gridMessages.elevationFeet)
-        .min(2000, gridMessages.elevationFeet)
-        .max(14000, gridMessages.elevationFeet)
-        .nullable()
-        .transform((value, originalValue) =>
-          typeof originalValue === 'string' && originalValue.trim() === ''
-            ? null
-            : value
-        )
-        .notRequired(),
+      then: () =>
+        yup
+          .number()
+          .min(2000, gridMessages.elevationFeet)
+          .max(14000, gridMessages.elevationFeet)
+          .nullable()
+          .transform((value, originalValue) =>
+            typeof originalValue === 'string' && originalValue.trim() === ''
+              ? null
+              : value
+          )
+          .typeError(gridMessages.elevationFeet)
+          .notRequired(),
     })
     .when('unit', {
       is: 'm',
-      then: yup
-        .number()
-        .typeError(gridMessages.elevationMeters)
-        .min(600, gridMessages.elevationMeters)
-        .max(4300, gridMessages.elevationMeters)
-        .nullable()
-        .transform((value, originalValue) =>
-          typeof originalValue === 'string' && originalValue.trim() === ''
-            ? null
-            : value
-        )
-        .notRequired(),
+      then: () =>
+        yup
+          .number()
+          .min(600, gridMessages.elevationMeters)
+          .max(4300, gridMessages.elevationMeters)
+          .nullable()
+          .typeError(gridMessages.elevationMeters)
+          .transform((value, originalValue) =>
+            typeof originalValue === 'string' && originalValue.trim() === ''
+              ? null
+              : value
+          )
+          .notRequired(),
     })
     .label('elevation'),
   verticalDatum: yup
