@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef } from 'react';
 import useGeolocation from './useGeoLocation.js';
-// eslint-disable-next-line import/no-unresolved
 import { useMapReady } from '@ugrc/utilities/hooks';
 
 export default function MyLocation({ view, dispatch, width }) {

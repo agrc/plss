@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-// eslint-disable-next-line import/no-unresolved
 import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '../../formElements/Buttons.jsx';
@@ -54,7 +53,7 @@ export default function GroupButton({ view, width, children }) {
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="fixed top-2 left-0 right-0 overflow-y-auto">
+          <div className="fixed left-0 right-0 top-2 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
