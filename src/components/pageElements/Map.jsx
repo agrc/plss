@@ -10,13 +10,13 @@ import MapView from '@arcgis/core/views/MapView';
 import { Tab } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
-import LayerSelector from '@ugrc/layer-selector'; // eslint-disable-line import/no-unresolved
+import LayerSelector from '@ugrc/layer-selector';
 import '@ugrc/layer-selector/src/LayerSelector.css';
 import {
   useGraphicManager,
   useViewLoading,
   useViewPointZooming,
-} from '@ugrc/utilities/hooks'; // eslint-disable-line import/no-unresolved
+} from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { logEvent } from 'firebase/analytics';

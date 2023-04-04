@@ -3,7 +3,6 @@ import ky from 'ky';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
-// eslint-disable-next-line import/no-unresolved
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Button } from '../../formElements/Buttons.jsx';

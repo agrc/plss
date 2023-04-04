@@ -2,7 +2,6 @@ import Extent from '@arcgis/core/geometry/Extent';
 import { HomeModernIcon } from '@heroicons/react/24/outline';
 import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
-// eslint-disable-next-line import/no-unresolved
 import { useMapReady } from '@ugrc/utilities/hooks';
 import { logEvent } from 'firebase/analytics';
 import { useAnalytics } from 'reactfire';
