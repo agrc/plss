@@ -19,7 +19,6 @@ import {
   useStorage,
   useUser,
 } from 'reactfire';
-// eslint-disable-next-line import/no-unresolved
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -274,7 +273,7 @@ const Submission = ({ item, dispatch }) => {
   return (
     <div className="relative flex flex-col text-base">
       <span className="font-semibold">{id}</span>
-      <div className="absolute top-0 right-0">
+      <div className="absolute right-0 top-0">
         <span
           className="flex select-none flex-col text-xs text-slate-500"
           alt={dateFormatter.format(submission)}
@@ -485,7 +484,7 @@ const Item = ({ item, dispatch }) => {
       >
         {item.attributes.name}
       </p>
-      <div className="absolute top-0 right-0">
+      <div className="absolute right-0 top-0">
         <span
           className="flex select-none flex-col text-xs text-slate-500"
           alt={dateFormatter.format(date)}
