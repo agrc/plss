@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.6](https://github.com/agrc/plss/compare/v3.5.5...v3.5.6) (2023-05-15)
+
+
+### 🐛 Bug Fixes
+
+* correct plss point service ([2f085af](https://github.com/agrc/plss/commit/2f085af4e0a0b97c10e3358b90c27dd1e43a8a97))
+
 ## [3.5.5](https://github.com/agrc/plss/compare/v3.5.4...v3.5.5) (2023-04-04)
 
 
