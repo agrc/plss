@@ -15,7 +15,7 @@ const client = got.extend({
 const getLocationFromId = async (id) => {
   // query points for shape
   const featureSet = await client
-    .get('PLSSPoint_AGRC/FeatureServer/0/query', {
+    .get('UtahPLSSGCDBPoints/FeatureServer/0/query', {
       searchParams: {
         where: `POINTID='${id}'`,
         returnGeometry: true,
