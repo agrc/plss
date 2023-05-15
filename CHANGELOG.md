@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.7-0](https://github.com/agrc/plss/compare/v3.5.6...v3.5.7-0) (2023-05-15)
+
+
+### 🌲 Dependencies
+
+* update deps ([049b1b8](https://github.com/agrc/plss/commit/049b1b830c02e3c65c0c540dd7b842d5b661d83d))
+
 ## [3.5.6](https://github.com/agrc/plss/compare/v3.5.5...v3.5.6) (2023-05-15)
 
 
