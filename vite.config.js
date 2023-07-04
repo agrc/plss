@@ -8,5 +8,6 @@ export default defineConfig({
   plugins: [react(), eslintPlugin(), loadVersion()],
   test: {
     env: 'node',
+    provider: 'v8',
   },
 });
