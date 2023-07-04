@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.8-0](https://github.com/agrc/plss/compare/v3.5.7...v3.5.8-0) (2023-07-04)
+
+
+### 🌲 Dependencies
+
+* q3 dependency updates ([7234a67](https://github.com/agrc/plss/commit/7234a6737789fc28a844b645dbc5b1ecccc125b9))
+
 ## [3.5.7](https://github.com/agrc/plss/compare/v3.5.6...v3.5.7) (2023-05-15)
 
 
