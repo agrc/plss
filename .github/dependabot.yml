@@ -4,20 +4,20 @@ updates:
     directory: /
     schedule:
       interval: monthly
-      groups:
-        safe-app-dependencies:
-          update-types: ['minor', 'patch']
-        major-app-dependencies:
-          update-types: ['major']
+    groups:
+      safe-app-dependencies:
+        update-types: ['minor', 'patch']
+      major-app-dependencies:
+        update-types: ['major']
   - package-ecosystem: npm
     directory: /function
     schedule:
       interval: monthly
-      groups:
-        safe-function-dependencies:
-          update-types: ['minor', 'patch']
-        major-function-dependencies:
-          update-types: ['major']
+    groups:
+      safe-function-dependencies:
+        update-types: ['minor', 'patch']
+      major-function-dependencies:
+        update-types: ['major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
