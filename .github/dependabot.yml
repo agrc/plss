@@ -9,6 +9,8 @@ updates:
         update-types: ['minor', 'patch']
       major-app-dependencies:
         update-types: ['major']
+        exclude-patterns:
+        - firebase
   - package-ecosystem: github-actions
     directory: /
     schedule:
