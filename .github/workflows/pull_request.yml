@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: ⬇️ Set up code
         uses: actions/checkout@v4
+        with:
+          show-progress: false
 
       - name: 💾 Cache firebase emulators
         uses: actions/cache@v3
