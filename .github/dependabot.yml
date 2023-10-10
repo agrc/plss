@@ -11,6 +11,9 @@ updates:
         update-types: ['major']
         exclude-patterns:
         - firebase
+    commit-message:
+      prefix: deps
+      prefix-development: deps(dev)
   - package-ecosystem: github-actions
     directory: /
     schedule:
