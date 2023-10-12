@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.9](https://github.com/agrc/plss/compare/v3.5.8...v3.5.9) (2023-10-12)
+
+
+### 🐛 Bug Fixes
+
+* add analytics measurement id to firebase app init ([2437597](https://github.com/agrc/plss/commit/24375977a37ab98827f8d2d735c29e6c0e402ca0))
+
+
+### 🌲 Dependencies
+
+* bump the safe-app-dependencies group with 4 updates ([7e7525a](https://github.com/agrc/plss/commit/7e7525a3cfa07bbc3cdc0203ae5ea809c951a94f))
+* q4 dependency updates ([ee662b0](https://github.com/agrc/plss/commit/ee662b0f8328a59ed6f35f57edb4eb4662b43530))
+
 ## [3.5.8](https://github.com/agrc/plss/compare/v3.5.7...v3.5.8) (2023-07-04)
 
 
