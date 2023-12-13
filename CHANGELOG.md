@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.5.10](https://github.com/agrc/plss/compare/v3.5.9...v3.5.10) (2023-12-13)
+
+
+### 🌲 Dependencies
+
+* bump axios and @sendgrid/client ([926ecbf](https://github.com/agrc/plss/commit/926ecbf00b703b13a4c523e38bf6a82ab2425074))
+* bump crypto-js from 4.1.1 to 4.2.0 ([5ed36b3](https://github.com/agrc/plss/commit/5ed36b314a6b44411074235d75c164694987ddc7))
+* bump the safe-app-dependencies group with 23 updates ([5f62804](https://github.com/agrc/plss/commit/5f628042d778382925ec074212b9a867cd2e8139))
+* bump tough-cookie and firebase-tools ([65e2b54](https://github.com/agrc/plss/commit/65e2b54e682a4f1e8c90d0280d1d7bab3a91c5fb))
+* **dev:** bump @babel/traverse from 7.23.0 to 7.23.2 ([adf64e0](https://github.com/agrc/plss/commit/adf64e02a8d25c4092e8a35f89cbe5b6c41f440a))
+* **dev:** bump vite from 4.5.0 to 4.5.1 ([ab8ca9a](https://github.com/agrc/plss/commit/ab8ca9a379585b678aee9f7046c06e3972581d46))
+
 ## [3.5.9](https://github.com/agrc/plss/compare/v3.5.8...v3.5.9) (2023-10-12)
 
 
