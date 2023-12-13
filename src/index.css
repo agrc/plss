@@ -76,6 +76,6 @@ body {
   fill: #f7ea99;
 }
 
-.esri-view .esri-view-surface--inset-outline:focus::after {
+.esri-view .esri-view-surface:focus:after {
   @apply outline-none;
 }
