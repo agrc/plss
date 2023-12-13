@@ -2,7 +2,7 @@
   "functions": {
     "source": ".",
     "codebase": "src",
-    "runtime": "nodejs16",
+    "runtime": "nodejs20",
     "ignore": [
       ".emulator-data",
       ".git",
