@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.10-0](https://github.com/agrc/plss/compare/v3.5.9...v3.5.10-0) (2023-12-13)
+
+
+### 🌲 Dependencies
+
+* bump the safe-app-dependencies group with 23 updates ([5f62804](https://github.com/agrc/plss/commit/5f628042d778382925ec074212b9a867cd2e8139))
+* **dev:** bump @babel/traverse from 7.23.0 to 7.23.2 ([adf64e0](https://github.com/agrc/plss/commit/adf64e02a8d25c4092e8a35f89cbe5b6c41f440a))
+
 ## [3.5.9](https://github.com/agrc/plss/compare/v3.5.8...v3.5.9) (2023-10-12)
 
 
