@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.11](https://github.com/agrc/plss/compare/v3.5.10...v3.5.11) (2023-12-13)
+
+
+### 🐛 Bug Fixes
+
+* update function runtime ([07f7313](https://github.com/agrc/plss/commit/07f73138ed56135502db073685c4d3126ecc4302))
+
 ## [3.5.10](https://github.com/agrc/plss/compare/v3.5.9...v3.5.10) (2023-12-13)
 
 
