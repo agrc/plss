@@ -35,7 +35,6 @@ export const submissionMachine =
   createMachine(
     {
       preserveActionOrder: true,
-      predictableActionArguments: true,
       id: 'submission',
       type: 'parallel',
       states: {
@@ -298,7 +297,7 @@ export const submissionMachine =
                     createProjectFormData({
                       type: 'grid',
                       coordinates: context.grid,
-                    })
+                    }),
                   ).forEach(([key, value]) => {
                     formData.append(key, value);
                   });
@@ -372,7 +371,7 @@ export const submissionMachine =
                   const formData = new FormData();
                   formData.append(
                     'geometry',
-                    `${context.decimalDegrees.x}, ${context.decimalDegrees.y}`
+                    `${context.decimalDegrees.x}, ${context.decimalDegrees.y}`,
                   );
                   formData.append('geometryType', 'esriGeometryPoint');
                   formData.append('outFields', 'NAME');
@@ -442,7 +441,7 @@ export const submissionMachine =
                         x: context.decimalDegrees.x,
                         y: context.decimalDegrees.y,
                       },
-                    })
+                    }),
                   ).forEach(([key, value]) => {
                     formData.append(key, value);
                   });
@@ -482,7 +481,7 @@ export const submissionMachine =
                   new Promise((resolve) => {
                     const dmsCoords = new DmsCoordinates(
                       context.decimalDegrees.y,
-                      context.decimalDegrees.x
+                      context.decimalDegrees.x,
                     );
 
                     resolve(dmsCoords.dmsArrays);
@@ -577,5 +576,5 @@ export const submissionMachine =
         'is geographic datum': (context) =>
           context.datum.split('-')[0] === 'geographic',
       },
-    }
+    },
   );
