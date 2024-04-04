@@ -19,6 +19,7 @@ You can use this website to view the location of the monuments and the informati
 ### Run locally
 
 1. `npm install`
-1. `firebase login`
-1. `npm run dev`
-1. Once everything is loaded, navigate to `http://localhost:5173/`
+2. `firebase login`
+3. duplicate `.env` to `.env.local` and fill out the empty variables
+4. `npm start`
+5. Once everything is loaded, navigate to `http://localhost:5173/`
