@@ -94,7 +94,7 @@ export const submissionMachine =
                 RESET: {},
                 UPDATE_CONTEXT: {
                   target: 'choosing datum',
-                  internal: false,
+                  reenter: true,
                 },
               },
             },
