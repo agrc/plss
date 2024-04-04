@@ -32,7 +32,7 @@ function geoService() {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 1000,
-      }
+      },
     );
 
     return () => navigator.geolocation.clearWatch(geoWatch);
@@ -47,7 +47,6 @@ export default function () {
       id: 'geolocation',
       context: { error: null, position: null, errorCount: 0 },
       preserveActionOrder: true,
-      predictableActionArguments: true,
       initial: 'initializing',
       states: {
         initializing: {
@@ -108,6 +107,6 @@ export default function () {
         errorThreshold: (context) => context.errorCount < 5,
       },
       services: { geoService },
-    }
+    },
   );
 }
