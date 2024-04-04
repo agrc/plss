@@ -52,7 +52,7 @@ export default function () {
         initializing: {
           always: [
             {
-              cond: 'hasSupport',
+              guard: 'hasSupport',
               target: 'idle',
             },
             'notSupported',
@@ -84,7 +84,7 @@ export default function () {
         error: {
           on: {
             RETRY_TRACKING: {
-              cond: 'errorThreshold',
+              guard: 'errorThreshold',
               target: 'tracking',
               actions: 'clearError',
             },
