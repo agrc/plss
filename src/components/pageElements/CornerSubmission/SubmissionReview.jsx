@@ -91,7 +91,7 @@ const Review = () => {
       </div>
       <div className="mt-8 flex justify-center">
         <Wizard
-          back={() => send('BACK')}
+          back={() => send({ type: 'BACK' })}
           status={mutationStatus}
           finish={() => mutate(state.context)}
         />

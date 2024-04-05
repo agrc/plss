@@ -45,7 +45,7 @@ export const Latitude = () => {
 
   useEffect(() => {
     if (state.matches('form.entering alternate latitude')) {
-      send('SET_COORDINATES');
+      send({ type: 'SET_COORDINATES' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -135,8 +135,8 @@ export const Latitude = () => {
           <NumberedFormSection number={0}>
             <Wizard
               back={() => {
-                send('RESTART');
-                send('BACK');
+                send({ type: 'RESTART' });
+                send({ type: 'BACK' });
               }}
               next={true}
               clear={onReset}
@@ -236,7 +236,11 @@ export const Longitude = () => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+          <Wizard
+            back={() => send({ type: 'BACK' })}
+            next={true}
+            clear={onReset}
+          />
         </NumberedFormSection>
       </NumberedForm>
     </>
@@ -358,7 +362,11 @@ export const GeographicHeight = () => {
           />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+          <Wizard
+            back={() => send({ type: 'BACK' })}
+            next={true}
+            clear={onReset}
+          />
         </NumberedFormSection>
       </NumberedForm>
     </>

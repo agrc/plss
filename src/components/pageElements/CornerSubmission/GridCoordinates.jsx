@@ -45,7 +45,7 @@ const GridCoordinates = () => {
 
   useEffect(() => {
     if (state.matches('form.entering alternate grid coordinates')) {
-      send('SET_COORDINATES');
+      send({ type: 'SET_COORDINATES' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -192,7 +192,11 @@ const GridCoordinates = () => {
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={0}>
-            <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+            <Wizard
+              back={() => send({ type: 'BACK' })}
+              next={true}
+              clear={onReset}
+            />
           </NumberedFormSection>
         </NumberedForm>
       )}

@@ -189,7 +189,7 @@ export default function MonumentImages() {
           </Button>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} />
+          <Wizard back={() => send({ type: 'BACK' })} next={true} />
         </NumberedFormSection>
       </NumberedForm>
     </>

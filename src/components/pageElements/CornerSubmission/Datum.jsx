@@ -135,7 +135,11 @@ const CoordinatePicker = () => {
           </Tab.Group>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard back={() => send('BACK')} next={true} clear={onReset} />
+          <Wizard
+            back={() => send({ type: 'BACK' })}
+            next={true}
+            clear={onReset}
+          />
         </NumberedFormSection>
       </NumberedForm>
     </>
