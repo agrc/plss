@@ -55,7 +55,7 @@ Wizard.defaultProps = {
 
 const getButtonText = (status) => {
   switch (status) {
-    case 'loading':
+    case 'pending':
       return 'Submitting...';
     case 'success':
       return 'Submitted!';
