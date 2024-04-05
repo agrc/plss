@@ -125,7 +125,7 @@ const buttonClasses = (style, buttonGroup) => {
     !buttonGroup && noButtonGroup,
     buttonGroup?.left && buttonGroupLeft,
     buttonGroup?.middle && buttonGroupMiddle,
-    buttonGroup?.right && buttonGroupRight
+    buttonGroup?.right && buttonGroupRight,
   );
 };
 export const Button = ({
@@ -143,11 +143,11 @@ export const Button = ({
       type={type}
       name={name}
       ref={inputRef}
-      disabled={['disabled', 'loading', 'error'].includes(state)}
+      disabled={['disabled', 'pending', 'error'].includes(state)}
       onClick={onClick}
       className={buttonClasses(style, buttonGroup)}
     >
-      {state === 'loading' && (
+      {state === 'pending' && (
         <svg
           className="-ml-1 mr-2 h-5 w-5 animate-spin motion-reduce:hidden"
           xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +193,7 @@ Button.propTypes = {
   /**
    * The state of button
    */
-  state: PropTypes.oneOf(['idle', 'disabled', 'loading', 'success', 'error']),
+  state: PropTypes.oneOf(['idle', 'disabled', 'pending', 'success', 'error']),
   /**
    * The property name used by react hook form
    */

@@ -364,7 +364,7 @@ const MonumentPreview = ({ status, children }) => {
   return (
     <Card>
       <h4 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h4>
-      {status === 'loading' && 'generating preview...'}
+      {status === 'pending' && 'generating preview...'}
       {status === 'success' && (
         <div className="h-[400px] max-w-[300px] justify-self-center border">
           <ErrorBoundary
