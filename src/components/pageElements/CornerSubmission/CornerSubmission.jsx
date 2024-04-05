@@ -92,7 +92,7 @@ export default function CornerSubmission({ submission, dispatch }) {
               state.
             </p>
             <div className="mt-4 flex justify-center">
-              <Button onClick={() => send('BACK')}>Back</Button>
+              <Button onClick={() => send({ type: 'BACK' })}>Back</Button>
             </div>
           </div>
         );
@@ -130,7 +130,7 @@ export default function CornerSubmission({ submission, dispatch }) {
         <ErrorBoundary
           FallbackComponent={DefaultFallback}
           onReset={() => {
-            send('BACK');
+            send({ type: 'BACK' });
             logEvent(analytics, 'submission-error-boundary', { state: state });
           }}
         >

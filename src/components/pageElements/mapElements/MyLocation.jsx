@@ -65,12 +65,12 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
           }
 
           if (state.matches('tracking')) {
-            send('CANCEL_TRACKING');
+            send({ type: 'CANCEL_TRACKING' });
 
             return;
           }
 
-          send('START_TRACKING');
+          send({ type: 'START_TRACKING' });
         }}
         className={clsx(
           'flex flex-1 items-center justify-center rounded-full',
