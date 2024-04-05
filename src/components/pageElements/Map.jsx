@@ -36,8 +36,7 @@ esriConfig.assetsPath = '/assets';
 
 const urls = {
   landownership:
-    'https://gis.trustlands.utah.gov/server/' +
-    '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
+    'https://gis.trustlands.utah.gov/hosting/rest/services/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
   parcels:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer',
   plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
@@ -112,7 +111,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       overlays: [
         'Address Points',
         {
-          Factory: FeatureLayer,
+          Factory: VectorTileLayer,
           url: urls.landownership,
           id: 'Land Ownership',
           opacity: 0.3,
