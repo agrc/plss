@@ -19,24 +19,24 @@ const SubmissionSuccess = lazy(() => import('./SubmissionSuccess.jsx'));
 const GeographicHeight = lazy(() =>
   import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.GeographicHeight,
-  }))
+  })),
 );
 const Latitude = lazy(() =>
   import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.Latitude,
-  }))
+  })),
 );
 const Longitude = lazy(() =>
   import('./GeographicCoordinates.jsx').then((module) => ({
     default: module.Longitude,
-  }))
+  })),
 );
 
 export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useLocalStorage(
     'plssSubmissionNoteVisible',
     false,
-    true
+    true,
   );
   const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
@@ -45,18 +45,19 @@ export default function CornerSubmission({ submission, dispatch }) {
   const pointId = submission.blmPointId;
 
   useEffect(() => {
-    send('start submission');
+    send({ type: 'start submission', submission: submission.type });
     logEvent(analytics, 'submission-start', { type: submission.type });
   }, [submission.type, send, analytics, logEvent]);
 
   useEffect(() => {
-    console.log('current state', state.context);
+    console.log('current state', state);
     scrollContainer.current?.scrollTo(0, 0);
   }, [state]);
 
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
 
   const getFormPart = (state) => {
+    console.log('current state', state.value);
     switch (true) {
       case state.matches('form.uploading existing pdf'):
         return <MonumentPdf dispatch={dispatch} />;

@@ -7,7 +7,7 @@ export const SubmissionContext = createContext({});
 
 export const SubmissionProvider = ({ children, context }) => {
   const [state, send] = useMachine(submissionMachine, {
-    context,
+    input: { ...context },
   });
 
   return (
