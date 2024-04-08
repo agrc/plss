@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.12-3](https://github.com/agrc/plss/compare/v3.5.12-2...v3.5.12-3) (2024-04-08)
+
+
+### 🐛 Bug Fixes
+
+* add missing npm pacakge ([5b55566](https://github.com/agrc/plss/commit/5b55566fd017dd7272c374c0b3d95581edd7759c))
+
 ## [3.5.12-2](https://github.com/agrc/plss/compare/v3.5.12-1...v3.5.12-2) (2024-04-08)
 
 
