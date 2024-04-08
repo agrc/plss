@@ -1,15 +1,13 @@
 import { logger, firestore } from 'firebase-functions/v1';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
-import got from 'got';
+import ky from 'ky';
 import setupFirebase from '../../firebase.mjs';
 
 setupFirebase();
 
-const client = got.extend({
+const client = ky.extend({
   prefixUrl:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services',
-  responseType: 'json',
-  resolveBodyOnly: true,
 });
 
 const getLocationFromId = async (id) => {
