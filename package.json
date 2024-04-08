@@ -6,6 +6,9 @@
   "license": "MIT",
   "author": "UGRC",
   "main": "./src/functions/index.mjs",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "cm": "cz",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
