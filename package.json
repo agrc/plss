@@ -2,7 +2,7 @@
   "name": "@ugrc/plss-app",
   "description": "A React app for the UGRC PLSS",
   "private": true,
-  "version": "3.5.11",
+  "version": "3.5.12-0",
   "license": "MIT",
   "author": "UGRC",
   "main": "./src/functions/index.mjs",
