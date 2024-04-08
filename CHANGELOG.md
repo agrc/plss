@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.12-2](https://github.com/agrc/plss/compare/v3.5.12-1...v3.5.12-2) (2024-04-08)
+
+
+### 🐛 Bug Fixes
+
+* set the node value to one value ([3f80d17](https://github.com/agrc/plss/commit/3f80d1713f8a2559ea8988a076256f149ef311dc))
+
 ## [3.5.12-1](https://github.com/agrc/plss/compare/v3.5.12-0...v3.5.12-1) (2024-04-08)
 
 
