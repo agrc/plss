@@ -33,7 +33,7 @@ const getLocationFromId = async (id) => {
 
   return new GeoPoint(
     featureSet.features[0].geometry.y,
-    featureSet.features[0].geometry.x
+    featureSet.features[0].geometry.x,
   );
 };
 
@@ -50,7 +50,7 @@ const onCreateAddLocation = firestore
 
     if (document.location) {
       logger.debug(
-        'skipping location update. reason: existing submission with coordinates'
+        'skipping location update. reason: existing submission with coordinates',
       );
 
       return;

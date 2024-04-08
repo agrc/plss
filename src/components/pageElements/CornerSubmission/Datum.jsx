@@ -100,7 +100,7 @@ const CoordinatePicker = () => {
                       'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
                       selected
                         ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
-                        : 'text-sky-700 hover:bg-sky-600/20'
+                        : 'text-sky-700 hover:bg-sky-600/20',
                     )
                   }
                 >
