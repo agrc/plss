@@ -53,6 +53,7 @@
     "firebase-admin": "^12.0.0",
     "firebase-function-tools": "^2.0.1",
     "firebase-functions": "^4.9.0",
+    "glob": "^10.3.12",
     "if-env": "^1.0.4",
     "immer": "^10.0.4",
     "ky": "^1.2.3",
