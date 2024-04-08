@@ -7,7 +7,7 @@
   "author": "UGRC",
   "main": "./src/functions/index.mjs",
   "engines": {
-    "node": ">=20"
+    "node": "20"
   },
   "scripts": {
     "cm": "cz",
