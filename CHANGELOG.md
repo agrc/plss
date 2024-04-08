@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.5.12-0](https://github.com/agrc/plss/compare/v3.5.11...v3.5.12-0) (2024-04-08)
+
+
+### 🐛 Bug Fixes
+
+* use SITLA Vector Tile service ([cea9ced](https://github.com/agrc/plss/commit/cea9cedbd3faea68814464030e8bc022a5bd6529))
+
+
+### 🌲 Dependencies
+
+* q4 package updates ([895e091](https://github.com/agrc/plss/commit/895e09113207094183dea168d82fbcdca9525f2a))
+* q4 updates ([15fdb0d](https://github.com/agrc/plss/commit/15fdb0d7776c18e8f4c62c24fc27bc1cf16253c1))
+
+
+### 📖 Documentation Improvements
+
+* update .env requirements ([a36cada](https://github.com/agrc/plss/commit/a36cadad8cff21dcdc2f14575317a8d9425b0cc7))
+
+
+### 🎨 Design Improvements
+
+* formatting ([d54881f](https://github.com/agrc/plss/commit/d54881fb5cc28fd081e7045fcc1db0f0d31846cc))
+
 ## [3.5.11](https://github.com/agrc/plss/compare/v3.5.10...v3.5.11) (2023-12-13)
 
 
