@@ -26,7 +26,7 @@ const Review = () => {
   const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
   const generatePreview = httpsCallable(
     functions,
-    'functions-httpsPostGeneratePreview'
+    'functions-httpsPostGeneratePreview',
   );
   const queryClient = useQueryClient();
 

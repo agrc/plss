@@ -13,7 +13,7 @@ export default function SubmissionNotice({ pointId, county, toggle }) {
 
   const townshipInformation = useMemo(
     () => extractTownshipInformation(pointId),
-    [pointId]
+    [pointId],
   );
 
   const functions = useFunctions();

@@ -13,6 +13,7 @@ import { gridCoordinatesSchema } from './Schema.mjs';
 import Wizard from './Wizard.jsx';
 import { formatDatum } from '../../helpers/index.mjs';
 import usePageView from '../../hooks/usePageView.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
 
 const defaults = {
   zone: '',
@@ -76,7 +77,10 @@ const GridCoordinates = () => {
       </p>
       <Spacer className="my-4" />
       {state.matches('projecting.rejected') && (
-        <div>Error calculating state plane coordinates</div>
+        <>
+          <div>Error calculating state plane coordinates</div>
+          <Button onClick={() => send({ type: 'BACK' })}>Try again</Button>
+        </>
       )}
       {state.matches('form.entering alternate grid coordinates') &&
       !state.matches('projecting.done') ? (

@@ -237,8 +237,8 @@ export const Link = ({
   return <a {...attributes}>{children}</a>;
 };
 Link.propTypes = {
-  href: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  href: PropTypes.string,
   target: PropTypes.string,
   rel: PropTypes.string,
   /**

@@ -91,9 +91,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    const esriMap = new EsriMap({
-      basemap: {},
-    });
+    const esriMap = new EsriMap();
 
     mapView.current = new MapView({
       container: node.current,
@@ -228,7 +226,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         targetGeometry: identifyGraphic.geometry,
         scale: 4500,
       }),
-      { duration: 1000 }
+      { duration: 1000 },
     );
 
     identifyGraphic.layer.featureEffect = {
@@ -265,7 +263,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                   width: 1,
                 },
               },
-            })
+            }),
           );
           logEvent(analytics, 'my-points-set');
           break;
@@ -274,7 +272,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           const response = await mapView.current.hitTest(event);
 
           const hits = response?.results?.filter(
-            (result) => result.layer?.id === 'PLSS Points'
+            (result) => result.layer?.id === 'PLSS Points',
           );
 
           let payload = null;
@@ -287,7 +285,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                   targetGeometry: event.mapPoint,
                   scale: level14,
                 }),
-                { duration: 1000 }
+                { duration: 1000 },
               );
             }
           }
@@ -333,7 +331,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
               width: 1,
             },
           },
-        })
+        }),
       );
     }
   }, [setGraphic, color, analytics]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -350,7 +348,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           new Graphic({
             geometry: point.geometry,
             symbol: point.symbol,
-          })
+          }),
         );
       }
 
@@ -384,7 +382,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           targetGeometry: gpsGraphic.graphic.geometry,
           scale: gpsGraphic.scale ?? mapView.current.scale,
         }),
-        { duration: 1000 }
+        { duration: 1000 },
       );
 
       setGpsGraphic(gpsGraphic.graphic);
@@ -431,7 +429,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           <div
             className={clsx(
               loadingCss,
-              isLoading || mapState === 'loading' ? '' : 'opacity-0'
+              isLoading || mapState === 'loading' ? '' : 'opacity-0',
             )}
           ></div>
           <div ref={node} className="h-screen w-full bg-white"></div>
@@ -459,7 +457,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                         'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
                         selected
                           ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
-                          : 'text-sky-700 hover:bg-sky-600/20'
+                          : 'text-sky-700 hover:bg-sky-600/20',
                       )
                     }
                   >

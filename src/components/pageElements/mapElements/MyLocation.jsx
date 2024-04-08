@@ -79,7 +79,7 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
             'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
             'cursor-progress bg-sky-400': state.matches('tracking.requesting'),
             'cursor-pointer bg-red-700': state.matches('error'),
-          }
+          },
         )}
       >
         {state.matches('tracking.active') && (
@@ -93,7 +93,7 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
             'text-slate-700':
               state.matches('idle') || state.matches('tracking.active'),
             'text-white motion-safe:animate-spin': state.matches(
-              'tracking.requesting'
+              'tracking.requesting',
             ),
             'text-white':
               state.matches('rejected') || state.matches('notSupported'),
