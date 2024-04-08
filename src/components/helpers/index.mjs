@@ -84,6 +84,10 @@ const getGridInputSpatialReference = (zone, unit) => {
     },
   };
 
+  if (!(zone in statePlaneZones)) {
+    throw new Error(`Zone ${zone} not one of north, central, or south.`);
+  }
+
   return statePlaneZones[zone][unit];
 };
 

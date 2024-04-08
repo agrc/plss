@@ -72,161 +72,130 @@ describe('createProjectFormData', () => {
     expect(createProjectFormData({ type: 'unknown' })).toBeNull();
   });
 
-  test('it creates project form data for grid coordinates', () => {
-    test.each([
-      [
-        'north',
-        'm',
-        {
-          inSr: 6620,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'central',
-        'm',
-        {
-          inSr: 6619,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'south',
-        'm',
-        {
-          inSr: 6621,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'north',
-        'ft',
-        {
-          inSr: 103166,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'central',
-        'ft',
-        {
-          inSr: 103167,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'south',
-        'ft',
-        {
-          inSr: 103168,
-          outSr: 6318,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-    ])('createProjectFormData(%s, %s)', (zone, unit, expected) => {
+  test.each([
+    [
+      'north',
+      'm',
+      {
+        inSr: 6620,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'central',
+      'm',
+      {
+        inSr: 6619,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'south',
+      'm',
+      {
+        inSr: 6621,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'north',
+      'ft',
+      {
+        inSr: 103166,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'central',
+      'ft',
+      {
+        inSr: 103167,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'south',
+      'ft',
+      {
+        inSr: 103168,
+        outSr: 6318,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+  ])(
+    'it creates project form data for grid coordinates (%s, %s)',
+    (zone, unit, expected) => {
       const formData = createProjectFormData({
         type: 'grid',
-        coordinates: { zone, unit, easting: 1, northing: 2 },
+        coordinates: { zone, unit, easting: 2, northing: 1 },
       });
 
       expect(formData).toStrictEqual(expected);
-    });
-  });
+    },
+  );
 
-  test('it creates project form data for geographic coordinates', () => {
-    test.each([
-      [
-        'box elder',
-        'm',
-        {
-          inSr: 6318,
-          outSr: 6620,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'carbon',
-        'm',
-        {
-          inSr: 6318,
-          outSr: 6619,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'beaver',
-        'm',
-        {
-          inSr: 6318,
-          outSr: 6621,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'weber',
-        'ft',
-        {
-          inSr: 6318,
-          outSr: 103166,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'wasatch',
-        'ft',
-        {
-          inSr: 6318,
-          outSr: 103167,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-      [
-        'wayne',
-        'ft',
-        {
-          inSr: 6318,
-          outSr: 103168,
-          f: 'json',
-          geometries:
-            '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
-        },
-      ],
-    ])('createProjectFormData(%s, %s)', (zone, unit, expected) => {
+  test.each([
+    [
+      'north',
+      'm',
+      {
+        inSr: 6318,
+        outSr: 6620,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'central',
+      'm',
+      {
+        inSr: 6318,
+        outSr: 6619,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+    [
+      'south',
+      'm',
+      {
+        inSr: 6318,
+        outSr: 6621,
+        f: 'json',
+        geometries:
+          '{"geometryType":"esriGeometryPoint","geometries":[{"x":2,"y":1}]}',
+      },
+    ],
+  ])(
+    'it creates project form data for geographic coordinates (%s, %s)',
+    (zone, unit, expected) => {
       const formData = createProjectFormData({
         type: 'geographic',
-        coordinates: { zone, unit, easting: 1, northing: 2 },
+        coordinates: { zone, unit, y: 1, x: 2 },
       });
 
       expect(formData).toStrictEqual(expected);
-    });
-  });
+    },
+  );
 });
 
 describe('get submission status', () => {
