@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.12-5](https://github.com/agrc/plss/compare/v3.5.12-4...v3.5.12-5) (2024-04-09)
+
+
+### 🐛 Bug Fixes
+
+* correct link to PLSS data on gis.utah.gov ([1261b5d](https://github.com/agrc/plss/commit/1261b5de0ce90d291cc843ad912f4a313dd7f8fc))
+* move shared modules into the functions folder ([e8b395a](https://github.com/agrc/plss/commit/e8b395ab1270ec2b2bd3628c20ff40ce110155ed))
+
+
+### 📖 Documentation Improvements
+
+* document function secrets ([ebecfd2](https://github.com/agrc/plss/commit/ebecfd296b8a7fb19cea539bceb34ebd7054ef5a))
+
 ## [3.5.12-4](https://github.com/agrc/plss/compare/v3.5.12-3...v3.5.12-4) (2024-04-09)
 
 
