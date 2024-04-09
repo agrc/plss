@@ -29,7 +29,7 @@ export const LimitedTextarea = ({
         placeholder={placeholder}
         className={clsx(
           'rounded border border-slate-400 px-2 text-sm text-slate-800 placeholder:text-sm placeholder:text-slate-600',
-          className
+          className,
         )}
         {...field}
         value={field.value ?? value}

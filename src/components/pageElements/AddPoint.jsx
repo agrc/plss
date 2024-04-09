@@ -70,7 +70,7 @@ export default function AddPoint({
       setValue(
         'location',
         { x: geometry.x, y: geometry.y },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [geometry, setValue]);
@@ -82,7 +82,7 @@ export default function AddPoint({
         bgColor: color,
         fgLightColor: '#F3F4F6',
         fgDarkColor: '#4B5563',
-      }
+      },
     ),
     border: `6px solid ${contrastColor.call(
       {},
@@ -90,7 +90,7 @@ export default function AddPoint({
         bgColor: color,
         fgLightColor: '#F3F4F6',
         fgDarkColor: '#4B5563',
-      }
+      },
     )}`,
     backgroundColor: color,
   };

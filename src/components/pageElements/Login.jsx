@@ -121,7 +121,7 @@ Profile.propTypes = {
 
 const Gravatar = ({ email }) => {
   const gravatar = `https://www.gravatar.com/avatar/${md5(
-    email.toLowerCase()
+    email.toLowerCase(),
   )}?s=${size}&default=${fallback}`;
 
   return <img src={gravatar} alt="Gravatar" />;

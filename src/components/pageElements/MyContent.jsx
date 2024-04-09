@@ -79,7 +79,7 @@ const MyContent = ({ dispatch }) => {
                     'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
                     selected
                       ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
-                      : 'text-sky-700 hover:bg-sky-600/20'
+                      : 'text-sky-700 hover:bg-sky-600/20',
                   )
                 }
               >
@@ -217,7 +217,7 @@ const Submissions = ({ items, dispatch }) => {
           .sort(
             sortFunction('New to Old', (a, b) => {
               return { a: a.submitted, b: b.submitted };
-            })
+            }),
           )
           .map((item) => (
             <li key={item.key} className="py-4 first:pt-0 last:pb-0">
@@ -446,7 +446,7 @@ const ItemList = ({ items, dispatch, sortOrder }) => {
             }
 
             return { a: x.attributes.when, b: y.attributes.when };
-          })
+          }),
         )
         .map((item) => {
           return (
@@ -539,7 +539,7 @@ const Item = ({ item, dispatch }) => {
             try {
               setStatus('loading');
               await deleteDoc(
-                doc(db, 'submitters', user.uid, 'points', item.attributes.id)
+                doc(db, 'submitters', user.uid, 'points', item.attributes.id),
               );
               queryClient.invalidateQueries(['my content']);
               setStatus('success');

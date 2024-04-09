@@ -14,7 +14,7 @@ const Toggle = forwardRef(
       yesValue = 'Yes',
       noValue = 'No',
     },
-    ref
+    ref,
   ) => {
     return (
       <div className="inline-flex">
@@ -36,7 +36,7 @@ const Toggle = forwardRef(
                 'translate-x-0 border-slate-500 from-white to-slate-300':
                   !value,
               },
-              'pointer-events-none inline-block h-6 w-6 transform rounded-full border-2 bg-gradient-to-br shadow-lg ring-0 transition duration-200 ease-in-out'
+              'pointer-events-none inline-block h-6 w-6 transform rounded-full border-2 bg-gradient-to-br shadow-lg ring-0 transition duration-200 ease-in-out',
             )}
           />
         </Switch>
@@ -47,7 +47,7 @@ const Toggle = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 export { Toggle as Switch };
 Toggle.displayName = 'Toggle';

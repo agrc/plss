@@ -16,7 +16,7 @@ describe('updateContext', () => {
 
   test('it can update an existing property on an existing object', () => {
     expect(
-      updateContext({ property: 'value' }, 'property', 'new value')
+      updateContext({ property: 'value' }, 'property', 'new value'),
     ).toEqual({
       property: 'new value',
     });
@@ -33,8 +33,8 @@ describe('updateContext', () => {
       updateContext(
         { geography: { northing: { degrees: 1, minutes: 1, seconds: 1 } } },
         'geography',
-        { elevation: 100 }
-      )
+        { elevation: 100 },
+      ),
     ).toEqual({
       geography: {
         northing: {

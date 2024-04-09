@@ -26,7 +26,7 @@ export default function Menu({ dispatch, drawerOpen }) {
     ],
     {
       'menu--open': drawerOpen,
-    }
+    },
   );
 
   return (
