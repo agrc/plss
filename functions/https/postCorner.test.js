@@ -354,24 +354,24 @@ describe('postCorner', () => {
     const func = wrap(postCorner);
 
     test('throws without authentication', async () => {
-      await expect(() => func(undefined, { auth: null })).rejects.toThrowError(
-        'You must log in',
-      );
+      await expect(() =>
+        func({ data: undefined, auth: null }),
+      ).rejects.toThrowError('You must log in');
     });
     test('throws without data', async () => {
-      await expect(() => func(undefined, { auth: user })).rejects.toThrowError(
-        'No data provided',
-      );
+      await expect(() =>
+        func({ data: undefined, auth: user }),
+      ).rejects.toThrowError('No data provided');
     });
     test('throws with an valid submission', async () => {
-      await expect(() => func({}, { auth: user })).rejects.toThrowError(
+      await expect(() => func({ data: {}, auth: user })).rejects.toThrowError(
         'corner submission data is invalid',
       );
     });
     test('returns 1 for a valid submission', async () => {
       await expect(
-        func(
-          {
+        func({
+          data: {
             blmPointId: 'point_id',
             type: 'existing',
             county: 'Beaver',
@@ -394,8 +394,8 @@ describe('postCorner', () => {
               elevation: null,
             },
           },
-          { auth: user },
-        ),
+          auth: user,
+        }),
       ).resolves.toBe(1);
       expect(addMock).toHaveBeenCalledTimes(1);
     });
