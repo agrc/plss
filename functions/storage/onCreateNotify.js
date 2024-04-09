@@ -1,7 +1,7 @@
 import { logger } from 'firebase-functions/v1';
 import { getStorage } from 'firebase-admin/storage';
 import { getFirestore } from 'firebase-admin/firestore';
-import { safelyInitializeApp } from '../firebase.ms';
+import { safelyInitializeApp } from '../firebase.js';
 import {
   getContactsToNotify,
   getBase64EncodedAttachment,

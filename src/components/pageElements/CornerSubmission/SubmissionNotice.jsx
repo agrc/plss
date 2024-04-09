@@ -1,7 +1,7 @@
 import Card from '../../formElements/Card.jsx';
 import Note from '../../formElements/Note.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
-import extractTownshipInformation from './blmPointId.mjs';
+import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
 import { httpsCallable } from 'firebase/functions';
 import { useUser, useFunctions } from 'reactfire';
 import PropTypes from 'prop-types';
