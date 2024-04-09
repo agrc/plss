@@ -21,7 +21,7 @@
     "lint": "eslint ./ --ext .js,.mjs,.jsx --ignore-path ./.eslintignore",
     "lint:fix": "eslint ./ --ext .js,.mjs,.jsx --quiet --fix --ignore-path ./.eslintignore",
     "format": "prettier \"src/**/*.{js,jsx,ts,json,mjs,md,mdx}\" --write",
-    "prepare": "if-env NODE_ENV=production && echo 'Skipping husky install' || husky install",
+    "prepare": "if-env NODE_ENV=production && echo 'Skipping husky install' || npx husky init",
     "fb:serve": "firebase emulators:start --only functions",
     "fb:deploy": "firebase deploy --only functions",
     "storybook": "storybook dev -p 6006",
