@@ -5,7 +5,7 @@ import path from 'path';
 import { PDFDocument } from 'pdf-lib';
 import PdfPrinter from 'pdfmake';
 import { fileURLToPath } from 'url';
-import extractTownshipInformation from '../src/components/pageElements/CornerSubmission/blmPointId.mjs';
+import extractTownshipInformation from './shared/cornerSubmission/blmPointId.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

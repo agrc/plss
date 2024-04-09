@@ -10,8 +10,11 @@ import { Button } from '../../formElements/Buttons.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import ErrorMessageTag from '../ErrorMessage.jsx';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import { geographic, grid } from './Options.mjs';
-import { coordinatePickerSchema } from './Schema.mjs';
+import {
+  geographic,
+  grid,
+} from '../../../../functions/shared/cornerSubmission/Options.js';
+import { coordinatePickerSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import Wizard from './Wizard.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
 

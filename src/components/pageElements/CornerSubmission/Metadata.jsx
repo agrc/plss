@@ -13,7 +13,11 @@ import { Input, Label } from '../../formElements/Inputs.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import { accuracy, status, corner } from './Options.mjs';
+import {
+  accuracy,
+  status,
+  corner,
+} from '../../../../functions/shared/cornerSubmission/Options.js';
 import { metadataSchema as schema } from './Schema';
 import Wizard from './Wizard.jsx';
 import usePageView from '../../hooks/usePageView.jsx';

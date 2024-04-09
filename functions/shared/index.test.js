@@ -5,7 +5,7 @@ import {
   createProjectFormData,
   roundAccurately,
   getStatus,
-} from './index.mjs';
+} from './index.js';
 import { describe, expect, test } from 'vitest';
 
 describe('parseBool', () => {

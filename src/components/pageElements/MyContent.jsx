@@ -24,7 +24,7 @@ import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
-import { timeSince } from '../helpers/index.mjs';
+import { timeSince } from '../../../functions/shared/index.js';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
