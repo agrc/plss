@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.5.12-4](https://github.com/agrc/plss/compare/v3.5.12-3...v3.5.12-4) (2024-04-09)
+
+
+### 🐛 Bug Fixes
+
+* correct import path ([324d025](https://github.com/agrc/plss/commit/324d025fa18d30dc49953967cdf3c67d5c41dc0b))
+
+
+### 🌲 Dependencies
+
+* remove function deps ([48e4065](https://github.com/agrc/plss/commit/48e4065732e815a9ce41b2bdf4694ee1ae740ab1))
+
+
+### 🎨 Design Improvements
+
+* prettier 3 formatting ([a7eb8f2](https://github.com/agrc/plss/commit/a7eb8f233f638e6393573bce333ebb7f96e5e536))
+
 ## [3.5.12-3](https://github.com/agrc/plss/compare/v3.5.12-2...v3.5.12-3) (2024-04-08)
 
 
