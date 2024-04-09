@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.12-6](https://github.com/agrc/plss/compare/v3.5.12-5...v3.5.12-6) (2024-04-09)
+
+
+### 🐛 Bug Fixes
+
+* correct broken imports ([1e4e04c](https://github.com/agrc/plss/commit/1e4e04c268f620f5b8ed918eff8418ff9301abc2))
+
 ## [3.5.12-5](https://github.com/agrc/plss/compare/v3.5.12-4...v3.5.12-5) (2024-04-09)
 
 
