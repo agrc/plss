@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.13-0](https://github.com/agrc/plss/compare/v3.5.12...v3.5.13-0) (2024-04-09)
+
+
+### 🐛 Bug Fixes
+
+* add missing function import ([3ec0fb4](https://github.com/agrc/plss/commit/3ec0fb4c1fd6b9fef6799ea3bce23a2a39a3da85))
+
 ## [3.5.12](https://github.com/agrc/plss/compare/v3.5.11...v3.5.12) (2024-04-09)
 
 
