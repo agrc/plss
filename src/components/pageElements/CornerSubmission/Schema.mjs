@@ -110,7 +110,7 @@ export const metadataSchema = yup.object().shape({
     .required(metadataMessages.status)
     .oneOf(
       options.status.map((x) => x.value),
-      metadataMessages.status
+      metadataMessages.status,
     ),
   collected: yup
     .date()
@@ -124,7 +124,7 @@ export const metadataSchema = yup.object().shape({
     .required(metadataMessages.accuracy)
     .oneOf(
       options.accuracy.map((x) => x.value),
-      metadataMessages.accuracy
+      metadataMessages.accuracy,
     ),
   description: yup
     .string()
@@ -159,9 +159,9 @@ export const coordinatePickerSchema = yup.object().shape({
     .oneOf(
       [].concat(
         options.geographic.map((x) => x.value),
-        options.grid.map((x) => x.value)
+        options.grid.map((x) => x.value),
       ),
-      datumMessage
+      datumMessage,
     ),
 });
 
@@ -180,7 +180,7 @@ const seconds = yup
   .min(0, dmsMessages.seconds)
   .lessThan(60, dmsMessages.seconds)
   .test('fiveDecimalPlaces', dmsMessages.seconds, (number) =>
-    /^\d+(\.\d{0,5})?$/.test(number)
+    /^\d+(\.\d{0,5})?$/.test(number),
   )
   .label('Seconds');
 
@@ -255,7 +255,7 @@ export const gridCoordinatesSchema = yup.object().shape({
     .required(gridMessages.zone)
     .oneOf(
       options.statePlaneZones.map((x) => x.value),
-      gridMessages.zone
+      gridMessages.zone,
     )
     .label('The zone'),
   unit: yup
@@ -264,7 +264,7 @@ export const gridCoordinatesSchema = yup.object().shape({
     .required(gridMessages.unit)
     .oneOf(
       options.units.map((x) => x.value),
-      gridMessages.unit
+      gridMessages.unit,
     )
     .label('The unit'),
   northing: yup
@@ -279,7 +279,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .typeError(gridMessages.northingFeet)
           .required(gridMessages.northingFeet)
           .test('feet', gridMessages.northingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .label('Northing value'),
     })
@@ -291,7 +291,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(6622436)
           .max(7563519)
           .test('feet', gridMessages.northingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .required(gridMessages.northingFeet)
           .typeError(gridMessages.northingFeet)
@@ -305,7 +305,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(9964678)
           .max(10546599)
           .test('feet', gridMessages.northingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.northingFeet)
           .required(gridMessages.northingFeet)
@@ -319,7 +319,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(1023805)
           .max(1187493)
           .test('meters', gridMessages.northingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.northingMeters)
           .required(gridMessages.northingMeters)
@@ -333,7 +333,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(2018522)
           .max(2305365)
           .test('meters', gridMessages.northingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.northingMeters)
           .required(gridMessages.northingMeters)
@@ -347,7 +347,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(3037239)
           .max(3214610)
           .test('meters', gridMessages.northingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.northingMeters)
           .required(gridMessages.northingMeters)
@@ -371,7 +371,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(938853)
           .max(2320842)
           .test('feet', gridMessages.eastingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.eastingFeet)
           .required(gridMessages.eastingFeet)
@@ -385,7 +385,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(911357)
           .max(2338732)
           .test('feet', gridMessages.eastingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.eastingFeet)
           .required(gridMessages.eastingFeet)
@@ -399,7 +399,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(895779)
           .max(2357266)
           .test('feet', gridMessages.eastingFeet, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.eastingFeet)
           .required(gridMessages.eastingFeet)
@@ -413,7 +413,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(286163)
           .max(707394)
           .test('meters', gridMessages.eastingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.eastingMeters)
           .required(gridMessages.eastingMeters)
@@ -427,7 +427,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(277782)
           .max(712847)
           .test('meters', gridMessages.eastingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
+            scaleAndPrecision(number, { precision: 3 }),
           )
           .typeError(gridMessages.eastingMeters)
           .required(gridMessages.eastingMeters)
@@ -443,7 +443,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .test('meters', gridMessages.eastingMeters, (number) =>
             scaleAndPrecision(number, { precision: 3 })
               .typeError(gridMessages.eastingMeters)
-              .required(gridMessages.eastingMeters)
+              .required(gridMessages.eastingMeters),
           )
           .label('Easting value'),
     })
@@ -469,7 +469,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .transform((value, originalValue) =>
             typeof originalValue === 'string' && originalValue.trim() === ''
               ? null
-              : value
+              : value,
           )
           .typeError(gridMessages.elevationFeet)
           .notRequired(),
@@ -486,7 +486,7 @@ export const gridCoordinatesSchema = yup.object().shape({
           .transform((value, originalValue) =>
             typeof originalValue === 'string' && originalValue.trim() === ''
               ? null
-              : value
+              : value,
           )
           .notRequired(),
     })

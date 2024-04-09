@@ -42,7 +42,7 @@ const reduce = (draft, action) => {
 
 expected
 
-{type: 'action', payload: 'data', meta: 'extra data'}`
+{type: 'action', payload: 'data', meta: 'extra data'}`,
     );
     return;
   }
@@ -56,7 +56,7 @@ ${action}
 
 expected
 
-{type: 'action', payload: 'data', meta: 'extra data'}`
+{type: 'action', payload: 'data', meta: 'extra data'}`,
     );
     return;
   }

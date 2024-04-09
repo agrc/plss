@@ -163,7 +163,7 @@ export default function Township({ apiKey, dispatch }) {
         tabs[selectedTabIndex].number,
         selectedTownship,
         selectedRange,
-        selectedSection
+        selectedSection,
       );
 
       logEvent(analytics, 'township-finder', {
@@ -230,7 +230,7 @@ export default function Township({ apiKey, dispatch }) {
                   'ring-white ring-opacity-60 ring-offset-2 ring-offset-slate-400 focus:outline-none focus:ring-2',
                   selected
                     ? 'border border-slate-600 bg-slate-500 text-white shadow hover:border-slate-700 hover:bg-slate-600 focus:border-slate-500 focus:ring-slate-600 active:bg-slate-700'
-                    : 'text-slate-700 hover:bg-slate-600/20'
+                    : 'text-slate-700 hover:bg-slate-600/20',
                 )
               }
             >
@@ -305,7 +305,7 @@ export default function Township({ apiKey, dispatch }) {
                   tabs[selectedTabIndex].value,
                   selectedTownship,
                   selectedRange,
-                  selectedSection
+                  selectedSection,
                 ),
               },
             })

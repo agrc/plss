@@ -57,9 +57,9 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Section must be a whole number from 1 to 36.'
+            'Section must be a whole number from 1 to 36.',
           );
-        }
+        },
       );
     });
     describe('corner', () => {
@@ -88,7 +88,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe('Corner is a required field.');
-        }
+        },
       );
     });
     describe('status', () => {
@@ -117,7 +117,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe('Status is a required field.');
-        }
+        },
       );
     });
     describe('collected', () => {
@@ -178,7 +178,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe('Accuracy is a required field.');
-        }
+        },
       );
     });
     describe('description', () => {
@@ -207,7 +207,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe('Description is a required field.');
-        }
+        },
       );
 
       test('shows proper error message for too much text', () => {
@@ -223,7 +223,7 @@ describe('schema tests', () => {
         }
 
         expect(result.errors[0]).toBe(
-          'Description must be at most 1000 characters.'
+          'Description must be at most 1000 characters.',
         );
       });
     });
@@ -253,7 +253,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe('Notes is a required field.');
-        }
+        },
       );
 
       test('shows proper error message for too much text', () => {
@@ -287,7 +287,7 @@ describe('schema tests', () => {
         }
 
         expect(result.errors[0]).toBe('Coordinate System is a required field.');
-      }
+      },
     );
   });
   describe('geographic coordinates', () => {
@@ -319,7 +319,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Degrees must be a whole number from 36 to 42.'
+            'Degrees must be a whole number from 36 to 42.',
           );
         });
       });
@@ -349,7 +349,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Minutes must be a whole number from 0 to 59.'
+            'Minutes must be a whole number from 0 to 59.',
           );
         });
       });
@@ -379,7 +379,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Seconds must be a number from 0 to 59.99999.'
+            'Seconds must be a number from 0 to 59.99999.',
           );
         });
       });
@@ -412,7 +412,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Degrees must be a whole number from 109 to 114.'
+            'Degrees must be a whole number from 109 to 114.',
           );
         });
       });
@@ -442,7 +442,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Minutes must be a whole number from 0 to 59.'
+            'Minutes must be a whole number from 0 to 59.',
           );
         });
       });
@@ -472,7 +472,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Seconds must be a number from 0 to 59.99999.'
+            'Seconds must be a number from 0 to 59.99999.',
           );
         });
       });
@@ -494,9 +494,9 @@ describe('schema tests', () => {
             }
 
             expect(result.errors[0]).toBe(
-              'Ellipsoid Height (feet) must be a number from 2000 to 14000.'
+              'Ellipsoid Height (feet) must be a number from 2000 to 14000.',
             );
-          }
+          },
         );
       });
       describe('meters', () => {
@@ -515,9 +515,9 @@ describe('schema tests', () => {
             }
 
             expect(result.errors[0]).toBe(
-              'Ellipsoid Height (meters) must be a number from 600 to 4300.'
+              'Ellipsoid Height (meters) must be a number from 600 to 4300.',
             );
-          }
+          },
         );
       });
     });
@@ -545,9 +545,9 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'State Plane Zone is a required field.'
+            'State Plane Zone is a required field.',
           );
-        }
+        },
       );
     });
     describe('unit', () => {
@@ -572,9 +572,9 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Horizontal units is a required field.'
+            'Horizontal units is a required field.',
           );
-        }
+        },
       );
     });
     describe('northing', () => {
@@ -781,7 +781,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Elevation (feet) must be a number from 2000 to 14000.'
+            'Elevation (feet) must be a number from 2000 to 14000.',
           );
         });
       });
@@ -815,7 +815,7 @@ describe('schema tests', () => {
           }
 
           expect(result.errors[0]).toBe(
-            'Elevation (meters) must be a number from 600 to 4300.'
+            'Elevation (meters) must be a number from 600 to 4300.',
           );
         });
       });
@@ -939,14 +939,14 @@ describe('schema tests', () => {
                 ...validProfile,
                 displayName,
               },
-              options
+              options,
             );
           } catch (error) {
             result = error;
           }
 
           expect(result?.errors[0]).toBe('Name is a required field.');
-        }
+        },
       );
 
       test.each([['name'], [1], [createText(250)]])(
@@ -960,14 +960,14 @@ describe('schema tests', () => {
                 ...validProfile,
                 displayName,
               },
-              options
+              options,
             );
           } catch (error) {
             result = error;
           }
 
           expect(result).toBe(undefined);
-        }
+        },
       );
     });
     describe('email', () => {
@@ -987,14 +987,14 @@ describe('schema tests', () => {
                 ...validProfile,
                 email,
               },
-              options
+              options,
             );
           } catch (error) {
             result = error;
           }
 
           expect(result?.errors[0]).toBe('Email is a required field.');
-        }
+        },
       );
 
       test.each([['test@test.com']])('%j is a valid display name', (email) => {
@@ -1006,7 +1006,7 @@ describe('schema tests', () => {
               ...validProfile,
               email,
             },
-            options
+            options,
           );
         } catch (error) {
           result = error;
@@ -1030,14 +1030,14 @@ describe('schema tests', () => {
               ...validProfile,
               license,
             },
-            options
+            options,
           );
         } catch (error) {
           result = error;
         }
 
         expect(result?.errors[0]).toBe(
-          'License must be at most 250 characters'
+          'License must be at most 250 characters',
         );
       });
 
@@ -1052,14 +1052,14 @@ describe('schema tests', () => {
                 ...validProfile,
                 license,
               },
-              options
+              options,
             );
           } catch (error) {
             result = error;
           }
 
           expect(result).toBe(undefined);
-        }
+        },
       );
     });
     describe('seal', () => {
@@ -1079,14 +1079,14 @@ describe('schema tests', () => {
                 ...validProfile,
                 seal,
               },
-              options
+              options,
             );
           } catch (error) {
             result = error;
           }
 
           expect(result?.errors[0]).toBe('Images must be jpeg or png.');
-        }
+        },
       );
 
       test.each([
@@ -1103,7 +1103,7 @@ describe('schema tests', () => {
               ...validProfile,
               seal,
             },
-            options
+            options,
           );
         } catch (error) {
           result = error;

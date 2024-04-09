@@ -12,7 +12,7 @@ import { Button } from './Buttons.jsx';
 
 const validateContentTypes = (contentType, contentTypes) => {
   const found = contentTypes.find(
-    (meta) => contentType === meta.value.toLowerCase()
+    (meta) => contentType === meta.value.toLowerCase(),
   );
 
   if (found) {
@@ -56,7 +56,7 @@ const FileUpload = ({
 
     let [hasValidType, errorMessage] = validateContentTypes(
       fileToUpload.type,
-      contentTypes
+      contentTypes,
     );
     if (!hasValidType) {
       setUploadError(errorMessage);
@@ -72,7 +72,7 @@ const FileUpload = ({
 
     const uploadTask = uploadBytesResumable(
       uploadReference.current,
-      fileToUpload
+      fileToUpload,
     );
 
     uploadTask?.on(
@@ -94,16 +94,16 @@ const FileUpload = ({
                 uploadTask.snapshot.totalBytes /
                 1024 /
                 1024
-              ).toFixed(2)}MB.`
+              ).toFixed(2)}MB.`,
             );
           } else {
             setUploadError(
-              'Permission denied. Check your login status and try again.'
+              'Permission denied. Check your login status and try again.',
             );
           }
         } catch {
           setUploadError(
-            'Permission denied. Check your login status and try again.'
+            'Permission denied. Check your login status and try again.',
           );
         }
       },
@@ -114,7 +114,7 @@ const FileUpload = ({
         const url = await getDownloadURL(uploadReference.current);
 
         setFileUrl(url);
-      }
+      },
     );
   };
 
@@ -173,7 +173,7 @@ FileUpload.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       value: PropTypes.string,
-    })
+    }),
   ),
   maxFileSize: PropTypes.number,
 };

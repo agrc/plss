@@ -26,7 +26,7 @@ const TieSheetList = ({ blmPointId, children }) => {
               url,
               name: item.name,
             };
-          })
+          }),
         );
 
         return urls;

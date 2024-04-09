@@ -15,7 +15,7 @@ const getDefaultValue = (value, placeholder, options) => {
 
   if (Object.keys(options[0]).includes('value')) {
     const label = options.find(
-      (option) => option.value === (value?.value ?? value)
+      (option) => option.value === (value?.value ?? value),
     )?.label;
 
     if (!label) {
@@ -37,7 +37,7 @@ const getDefaultValue = (value, placeholder, options) => {
 export const Select = forwardRef(
   (
     { disabled, label, name, required, options, value, onChange, placeholder },
-    ref
+    ref,
   ) => {
     return (
       <Listbox
@@ -97,7 +97,7 @@ export const Select = forwardRef(
                           'text-sky-900': !active && !option?.disabled,
                           'cursor-not-allowed text-slate-400':
                             option?.disabled ?? false,
-                        }
+                        },
                       )
                     }
                     value={option}
@@ -132,7 +132,7 @@ export const Select = forwardRef(
         </div>
       </Listbox>
     );
-  }
+  },
 );
 Select.displayName = 'Select';
 Select.propTypes = {
@@ -163,7 +163,7 @@ Select.propTypes = {
     PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }),
-    ])
+    ]),
   ),
   value: PropTypes.oneOfType([
     PropTypes.string,

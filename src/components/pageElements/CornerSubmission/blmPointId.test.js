@@ -13,7 +13,7 @@ test('when the principle meridian is 26 expect Salt Lake', () => {
 
 test('when the principle meridian is 30 expect Uintah', () => {
   expect(
-    parseTownshipInformation('UT300060S0020E0_240400').meridian
+    parseTownshipInformation('UT300060S0020E0_240400').meridian,
   ).toStrictEqual({
     name: 'Uintah Special',
     abbr: 'US',
@@ -27,19 +27,19 @@ test('when the township 4th character is a 0 expect a whole township', () => {
 
 test('when the township 4th character is a 1 expect a quarter township', () => {
   expect(parseTownshipInformation('UT260061S0020E0_240400').township).toBe(
-    '06 1/4S'
+    '06 1/4S',
   );
 });
 
 test('when the township 4th character is a 2 expect a half township', () => {
   expect(parseTownshipInformation('UT260062S0020E0_240400').township).toBe(
-    '06 1/2S'
+    '06 1/2S',
   );
 });
 
 test('when the township 4th character is a 3 expect a three quarter township', () => {
   expect(parseTownshipInformation('UT260063S0020E0_240400').township).toBe(
-    '06 3/4S'
+    '06 3/4S',
   );
 });
 
@@ -49,18 +49,18 @@ test('when the range 4th character is a 0 expect a whole range', () => {
 
 test('when the range 4th character is a 1 expect a quarter range', () => {
   expect(parseTownshipInformation('UT260060S0021E0_240400').range).toBe(
-    '02 1/4E'
+    '02 1/4E',
   );
 });
 
 test('when the range 4th character is a 2 expect a half range', () => {
   expect(parseTownshipInformation('UT260060S0022E0_240400').range).toBe(
-    '02 1/2E'
+    '02 1/2E',
   );
 });
 
 test('when the range 4th character is a 3 expect a three quarter range', () => {
   expect(parseTownshipInformation('UT260060S0023E0_240400').range).toBe(
-    '02 3/4E'
+    '02 3/4E',
   );
 });

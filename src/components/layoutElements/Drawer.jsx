@@ -12,10 +12,10 @@ const version = import.meta.env.PACKAGE_VERSION;
 const SubmissionProvider = lazy(() =>
   import('../contexts/SubmissionContext.jsx').then((module) => ({
     default: module.SubmissionProvider,
-  }))
+  })),
 );
-const CornerSubmission = lazy(() =>
-  import('../pageElements/CornerSubmission/CornerSubmission.jsx')
+const CornerSubmission = lazy(
+  () => import('../pageElements/CornerSubmission/CornerSubmission.jsx'),
 );
 const MyContent = lazy(() => import('../pageElements/MyContent.jsx'));
 const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
@@ -63,7 +63,7 @@ export default function Drawer({
     ],
     {
       'drawer--closed': !drawerOpen,
-    }
+    },
   );
 
   const getComponent = (componentName) => {
