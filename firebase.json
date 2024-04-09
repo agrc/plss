@@ -1,39 +1,24 @@
 {
-  "functions": {
-    "source": ".",
-    "codebase": "src",
-    "runtime": "nodejs20",
-    "ignore": [
-      ".emulator-data",
-      ".git",
-      ".github",
-      ".husky",
-      ".storybook",
-      ".vscode",
-      "coverage",
-      "dist",
-      "firebase-export-*",
-      "node_modules",
-      "public",
-      "*.config.js",
-      "*.rules",
-      "*.log",
-      "*.html",
-      "*.jsx",
-      ".eslintcache"
-    ]
-  },
+  "functions": [
+    {
+      "source": "functions",
+      "runtime": "nodejs20",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ],
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "/robots.txt",

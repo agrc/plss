@@ -1,37 +1,20 @@
-import { auth, https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
-import setupFirebase from '../firebase.mjs';
+import { safelyInitializeApp } from '../firebase.js';
 
-const config = setupFirebase();
+const config = safelyInitializeApp();
 const db = getFirestore();
 
-const postCancelCorner = https.onCall(async (data, context) => {
-  if (!context.auth) {
-    logger.warn('unauthenticated request', { structuredData: true });
-
-    throw new auth.HttpsError('unauthenticated', 'You must log in');
-  }
-
-  if (!data) {
-    logger.warn('cancellation data empty', {
-      structuredData: true,
-    });
-
-    throw new https.HttpsError(
-      'invalid-argument',
-      'The cancellation data is missing'
-    );
-  }
-
-  logger.info('validating corner cancellation', data, context.auth.uid, {
+export const cancelCorner = async (data, uid) => {
+  logger.info('validating corner cancellation', data, uid, {
     structuredData: true,
   });
 
   if (!data.key) {
     throw new https.HttpsError(
       'invalid-argument',
-      'corner submission data is invalid'
+      'corner submission data is invalid',
     );
   }
 
@@ -45,9 +28,9 @@ const postCancelCorner = https.onCall(async (data, context) => {
 
     await reference.set(
       { status: { user: { cancelled: new Date() } } },
-      { merge: true }
+      { merge: true },
     );
-    await removeStorage(context.auth.uid, snapshot.data());
+    await removeStorage(uid, snapshot.data());
   } catch (error) {
     logger.error('error finding submission', error, {
       structuredData: true,
@@ -57,7 +40,7 @@ const postCancelCorner = https.onCall(async (data, context) => {
   }
 
   return 1;
-});
+};
 
 export const removeStorage = async (user, submission) => {
   const bucket = getStorage().bucket(config.storageBucket);
@@ -76,8 +59,6 @@ export const removeStorage = async (user, submission) => {
       logger.warn('had trouble deleting file', error, {
         structuredData: true,
       });
-    }
+    },
   );
 };
-
-export default postCancelCorner;

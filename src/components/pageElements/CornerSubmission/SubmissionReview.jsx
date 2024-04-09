@@ -23,11 +23,8 @@ const Review = () => {
   usePageView('screen-submission-review');
 
   const functions = useFunctions();
-  const saveCorner = httpsCallable(functions, 'functions-httpsPostCorner');
-  const generatePreview = httpsCallable(
-    functions,
-    'functions-httpsPostGeneratePreview',
-  );
+  const saveCorner = httpsCallable(functions, 'postCorner');
+  const generatePreview = httpsCallable(functions, 'postGeneratePreview');
   const queryClient = useQueryClient();
 
   const { data, status } = useQuery({

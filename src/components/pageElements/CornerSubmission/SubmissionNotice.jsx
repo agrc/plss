@@ -17,7 +17,7 @@ export default function SubmissionNotice({ pointId, county, toggle }) {
   );
 
   const functions = useFunctions();
-  const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
+  const getProfile = httpsCallable(functions, 'getProfile');
 
   const { data } = useQuery({
     queryKey: ['profile', user.uid],

@@ -1,36 +1,19 @@
-import { auth, https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v1';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import { parseDms } from 'dms-conversion';
-import * as schemas from '../../components/pageElements/CornerSubmission/Schema.mjs';
-import { formatDegrees } from '../../components/helpers/index.mjs';
-import setupFirebase from '../firebase.mjs';
+import * as schemas from '../../src/components/pageElements/CornerSubmission/Schema.mjs';
+import { formatDegrees } from '../../src/components/helpers/index.mjs';
+import { safelyInitializeApp } from '../firebase.js';
 
-setupFirebase();
+safelyInitializeApp();
 const db = getFirestore();
 const options = {
   stripUnknown: true,
   abortEarly: false,
 };
 
-const postCorner = https.onCall(async (data, context) => {
-  if (!context.auth) {
-    logger.warn('unauthenticated request', { structuredData: true });
-
-    throw new auth.HttpsError('unauthenticated', 'You must log in');
-  }
-
-  if (!data) {
-    logger.warn('submission data empty', {
-      structuredData: true,
-    });
-
-    throw new https.HttpsError(
-      'invalid-argument',
-      'The submission data is missing'
-    );
-  }
-
-  logger.info('validating corner submission', data, context.auth.uid, {
+export const saveCorner = async (data, auth) => {
+  logger.info('validating corner submission', data, auth.uid, {
     structuredData: true,
   });
 
@@ -47,7 +30,7 @@ const postCorner = https.onCall(async (data, context) => {
     throw new https.HttpsError(
       'invalid-argument',
       'corner submission data is invalid',
-      error
+      error,
     );
   }
 
@@ -55,9 +38,9 @@ const postCorner = https.onCall(async (data, context) => {
     structuredData: true,
   });
 
-  const doc = formatDataForFirestore(data, context.auth);
+  const doc = formatDataForFirestore(data, auth);
 
-  logger.info('saving corner submission', doc, context.auth, {
+  logger.info('saving corner submission', doc, auth, {
     structuredData: true,
   });
 
@@ -72,7 +55,7 @@ const postCorner = https.onCall(async (data, context) => {
   }
 
   return 1;
-});
+};
 
 export const validateSubmission = async (data) => {
   await schemas.cornerData.validate(data, options);
@@ -259,5 +242,3 @@ export const getLatLon = (data) => {
 
   return dms.map(parseDms);
 };
-
-export default postCorner;

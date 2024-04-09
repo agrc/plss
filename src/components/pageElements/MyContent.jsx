@@ -46,7 +46,7 @@ const MyContent = ({ dispatch }) => {
   const { analytics, logEvent } = usePageView('screen-my-content');
 
   const functions = useFunctions();
-  const myPoints = httpsCallable(functions, 'functions-httpsGetMyContent');
+  const myPoints = httpsCallable(functions, 'getMyContent');
 
   const { data, status } = useQuery({
     queryKey: ['my content'],
@@ -239,10 +239,7 @@ const Submission = ({ item, dispatch }) => {
   const [url, setUrl] = useState('');
 
   const functions = useFunctions();
-  const cancelSubmission = httpsCallable(
-    functions,
-    'functions-httpsPostCancelCorner'
-  );
+  const cancelSubmission = httpsCallable(functions, 'postCancelCorner');
 
   const queryClient = useQueryClient();
   const { mutate, status: mutationStatus } = useMutation({

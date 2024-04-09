@@ -74,7 +74,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const { setViewPoint } = useViewPointZooming(mapView);
 
   const functions = useFunctions();
-  const myContent = httpsCallable(functions, 'functions-httpsGetMyContent');
+  const myContent = httpsCallable(functions, 'getMyContent');
 
   const { data: content, status } = useQuery({
     queryKey: ['my content'],

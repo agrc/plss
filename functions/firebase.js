@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase-admin/app';
 
-const setupFirebase = () => {
+export const safelyInitializeApp = () => {
   let app = {};
   try {
     app = JSON.parse(process.env.FIREBASE_CONFIG);
@@ -20,5 +20,3 @@ const setupFirebase = () => {
 
   return app;
 };
-
-export default setupFirebase;

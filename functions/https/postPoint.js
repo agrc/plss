@@ -1,33 +1,16 @@
-import { auth, https, logger } from 'firebase-functions';
+import { https, logger } from 'firebase-functions';
 import { getFirestore } from 'firebase-admin/firestore';
-import { addPointSchema as schema } from '../../components/pageElements/CornerSubmission/Schema.mjs';
-import setupFirebase from '../firebase.mjs';
+import { addPointSchema as schema } from '../../src/components/pageElements/CornerSubmission/Schema.mjs';
+import { safelyInitializeApp } from '../firebase.js';
 
-setupFirebase();
+safelyInitializeApp();
 const db = getFirestore();
 const options = {
   abortEarly: false,
 };
 
-const postPoint = https.onCall(async (data, context) => {
-  if (!context.auth) {
-    logger.warn('unauthenticated request', { structuredData: true });
-
-    throw new auth.HttpsError('unauthenticated', 'You must log in');
-  }
-
-  if (!data) {
-    logger.warn('reference point data empty', {
-      structuredData: true,
-    });
-
-    throw new https.HttpsError(
-      'invalid-argument',
-      'The reference point data is missing'
-    );
-  }
-
-  logger.info('validating reference point submission', data, context.auth.uid, {
+export const savePoint = async (data, auth) => {
+  logger.info('validating reference point submission', data, auth.uid, {
     structuredData: true,
   });
 
@@ -44,7 +27,7 @@ const postPoint = https.onCall(async (data, context) => {
     throw new https.HttpsError(
       'invalid-argument',
       'reference point data is invalid',
-      error
+      error,
     );
   }
 
@@ -52,37 +35,37 @@ const postPoint = https.onCall(async (data, context) => {
     structuredData: true,
   });
 
-  const doc = formatDataForFirestore(data, context.auth);
+  const doc = formatDataForFirestore(data, auth);
 
-  logger.info('saving reference point', doc, context.auth, {
+  logger.info('saving reference point', doc, auth, {
     structuredData: true,
   });
 
   try {
     await db
       .collection('submitters')
-      .doc(context.auth.uid)
+      .doc(auth.uid)
       .collection('points')
       .add(doc);
   } catch (error) {
-    logger.error('error adding reference point', error, context.auth, {
+    logger.error('error adding reference point', error, auth, {
       structuredData: true,
     });
 
     throw new https.HttpsError(
       'internal',
-      'Your reference point was not saved'
+      'Your reference point was not saved',
     );
   }
 
   return 1;
-});
+};
 
 export const formatDataForFirestore = (data) => {
   const photos = Object.fromEntries(
     Object.entries(data).filter(
-      ([key, value]) => key.startsWith('photo') && (value?.length ?? 0) > 0
-    )
+      ([key, value]) => key.startsWith('photo') && (value?.length ?? 0) > 0,
+    ),
   );
 
   return {
@@ -94,5 +77,3 @@ export const formatDataForFirestore = (data) => {
     photos: Object.values(photos),
   };
 };
-
-export default postPoint;

@@ -37,7 +37,7 @@ export default function AddPoint({
   notes = '',
 }) {
   const functions = useFunctions();
-  const addPoint = httpsCallable(functions, 'functions-httpsPostPoint');
+  const addPoint = httpsCallable(functions, 'postPoint');
   const { data: user } = useUser();
   const [imageCount, setImageCount] = useState(1);
   const uniqueId = useRef(crypto.randomUUID());
