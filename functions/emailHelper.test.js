@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
-import { getContactsToNotify } from './emailHelpers.mjs';
+import { getContactsToNotify } from './emailHelpers.js';
 
 const docMock = vi.fn(() => {
   return {
