@@ -1,5 +1,38 @@
 # Changelog
 
+## [3.5.12](https://github.com/agrc/plss/compare/v3.5.11...v3.5.12) (2024-04-09)
+
+
+### 🐛 Bug Fixes
+
+* add missing npm pacakge ([72f1b9f](https://github.com/agrc/plss/commit/72f1b9f65489851275eb400bbf2f2ad72417071b))
+* correct broken imports ([036244f](https://github.com/agrc/plss/commit/036244f2e54b6ec6ae32b1aca8be611f0d4ae557))
+* correct import path ([fbd5391](https://github.com/agrc/plss/commit/fbd53914b34b04f6bbfa25f57336200fbad8dce5))
+* correct link to PLSS data on gis.utah.gov ([ebaec1e](https://github.com/agrc/plss/commit/ebaec1eb6cf911c369378c4b830c4f8a3c93a9c7))
+* move shared modules into the functions folder ([50bb2d6](https://github.com/agrc/plss/commit/50bb2d650fce7ff9fc9c5d15f2c8c5aea9e0bc59))
+* set the node value to one value ([4f74fa1](https://github.com/agrc/plss/commit/4f74fa174d51855fc4860e23e34572d8d1a70b3d))
+* set the nodejs engine ([539cc6c](https://github.com/agrc/plss/commit/539cc6cc9406d62d233155625ab21077d381b952))
+* use SITLA Vector Tile service ([276320d](https://github.com/agrc/plss/commit/276320dfe091d9858a2504ef53110c414e1e5a05))
+
+
+### 🌲 Dependencies
+
+* q4 package updates ([7c07274](https://github.com/agrc/plss/commit/7c072743634187d03c21f5ce35ac3e6680093ab7))
+* q4 updates ([1e40c39](https://github.com/agrc/plss/commit/1e40c39f5301a6b5f8f33da4ae5a1cc1470de569))
+* remove function deps ([6f8715a](https://github.com/agrc/plss/commit/6f8715ab4490f0bf17afdf862eaaf092f15ff089))
+
+
+### 📖 Documentation Improvements
+
+* document function secrets ([1811969](https://github.com/agrc/plss/commit/181196939c5e331b41e19ae918c150bf4dea20e1))
+* update .env requirements ([b9f9294](https://github.com/agrc/plss/commit/b9f92943d97e0e704e37362950bd880b6556af13))
+
+
+### 🎨 Design Improvements
+
+* formatting ([6f9d3b0](https://github.com/agrc/plss/commit/6f9d3b0f58ccc035d33aec5cc7c69ec6b8bae2a8))
+* prettier 3 formatting ([43b44f0](https://github.com/agrc/plss/commit/43b44f04b5350dd44a9282802b4a870a9d85aea8))
+
 ## [3.5.12-6](https://github.com/agrc/plss/compare/v3.5.12-5...v3.5.12-6) (2024-04-09)
 
 
