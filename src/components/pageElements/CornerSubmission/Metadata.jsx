@@ -18,7 +18,7 @@ import {
   status,
   corner,
 } from '../../../../functions/shared/cornerSubmission/Options.js';
-import { metadataSchema as schema } from './Schema';
+import { metadataSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import Wizard from './Wizard.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
 

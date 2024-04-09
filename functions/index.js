@@ -170,7 +170,7 @@ export const onCreateMonumentRecord = firestore
       '[database::submissions::onCreateMonumentRecord] importing createMonumentRecord',
     );
     const createMonumentRecord = (
-      await import('./database/submissions/onCreateMonumentRecord.js')
+      await import('./database/submissions/onCreateMonument.js')
     ).createMonumentRecord;
 
     const result = await createMonumentRecord(record, context.params.docId);
@@ -214,7 +214,7 @@ export const onCleanUpPointAttachments = firestore
       '[database::submissions::onCleanUpPointAttachments] importing cleanUpPointAttachments',
     );
     const cleanUpPointAttachments = (
-      await import('./database/submissions/onCleanUpPointAttachments.js')
+      await import('./database/submissions/onDelete.js')
     ).cleanUpPointAttachments;
 
     const result = await cleanUpPointAttachments(record.photos);

@@ -10,7 +10,7 @@ import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
-import { existingSheetSchema } from './Schema';
+import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import usePageView from '../../hooks/usePageView.jsx';
 
 export default function MonumentPdf({ dispatch }) {

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';
-import { getDefault } from '../helpers';
+import { getDefault } from '../../../functions/shared/index.js';
 import TieSheetList from './TieSheetList.jsx';
 
 const managed_counties = {
