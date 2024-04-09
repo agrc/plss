@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import * as options from './Options.mjs';
+import * as options from './Options.js';
 
 export const scaleAndPrecision = (number, { precision }) => {
   if (!number) {

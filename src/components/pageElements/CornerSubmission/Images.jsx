@@ -3,7 +3,7 @@ import { useUser } from 'reactfire';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { imagesSchema as schema } from './Schema.mjs';
+import { imagesSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';

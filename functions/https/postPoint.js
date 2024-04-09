@@ -1,6 +1,6 @@
 import { https, logger } from 'firebase-functions';
 import { getFirestore } from 'firebase-admin/firestore';
-import { addPointSchema as schema } from '../../src/components/pageElements/CornerSubmission/Schema.mjs';
+import { addPointSchema as schema } from '../shared/cornerSubmission/Schema.js';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();

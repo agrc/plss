@@ -9,14 +9,14 @@ import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../ErrorMessage.jsx';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import { units } from './Options.mjs';
+import { units } from '../../../../functions/shared/cornerSubmission/Options.js';
 import {
   latitudeSchema,
   longitudeSchema,
   geographicHeightSchema,
-} from './Schema.mjs';
+} from '../../../../functions/shared/cornerSubmission/Schema.js';
 import Wizard from './Wizard.jsx';
-import { formatDatum } from '../../helpers/index.mjs';
+import { formatDatum } from '../../../../functions/shared/index.js';
 import usePageView from '../../hooks/usePageView.jsx';
 
 const defaults = {

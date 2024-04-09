@@ -5,7 +5,7 @@ import {
   units,
   geographic,
   statePlaneZones,
-} from '../pageElements/CornerSubmission/Options.mjs';
+} from './cornerSubmission/Options.js';
 
 export const formatDegrees = (dms) =>
   `${dms.degrees}°${dms.minutes}′${dms.seconds}″`;

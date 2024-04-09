@@ -1,5 +1,5 @@
 import { contrastColor } from 'contrast-color';
-import { getStatus } from '../src/components/helpers/index.mjs';
+import { getStatus } from './shared/index.js';
 
 export const graphicConverter = {
   toFirestore(data) {

@@ -8,10 +8,14 @@ import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import { units, statePlaneZones, verticalDatums } from './Options.mjs';
-import { gridCoordinatesSchema } from './Schema.mjs';
+import {
+  units,
+  statePlaneZones,
+  verticalDatums,
+} from '../../../../functions/shared/cornerSubmission/Options.js';
+import { gridCoordinatesSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import Wizard from './Wizard.jsx';
-import { formatDatum } from '../../helpers/index.mjs';
+import { formatDatum } from '../../../../functions/shared/index.js';
 import usePageView from '../../hooks/usePageView.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 

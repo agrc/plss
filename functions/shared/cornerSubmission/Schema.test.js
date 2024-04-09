@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import * as schemas from './Schema.mjs';
+import * as schemas from './Schema.js';
 
 const createText = (length) => {
   var result = '';

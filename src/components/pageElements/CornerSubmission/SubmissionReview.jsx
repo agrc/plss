@@ -6,12 +6,12 @@ import { httpsCallable } from 'firebase/functions';
 import { useFunctions, useStorage } from 'reactfire';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import Wizard from './Wizard.jsx';
-import { keyMap, formatDatum } from '../../helpers/index.mjs';
+import { keyMap, formatDatum } from '../../../../functions/shared/index.js';
 import Card from '../../formElements/Card.jsx';
 import {
   geographic as geographicOptions,
   grid as gridOptions,
-} from './Options.mjs';
+} from '../../../../functions/shared/cornerSubmission/Options.js';
 import { ObjectPreview } from '../../formElements/FileUpload.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import { getDownloadURL, ref } from 'firebase/storage';
