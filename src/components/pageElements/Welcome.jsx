@@ -44,7 +44,7 @@ export default function Welcome({ dispatch }) {
       <p className="ml-3">
         All of the data in this app and more is made available for{' '}
         <Link
-          href="https://gis.utah.gov/data/cadastre/plss/"
+          href="https://gis.utah.gov/products/sgid/cadastre/"
           target="_blank"
           rel="noreferrer"
         >
