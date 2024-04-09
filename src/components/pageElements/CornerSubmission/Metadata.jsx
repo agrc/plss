@@ -54,11 +54,11 @@ const Metadata = ({ dispatch }) => {
   const onSubmit = (payload) => {
     payload.collected = dateFormatter.format(payload.collected);
 
-    send({ type: 'NEXT', event: { meta, payload } });
+    send({ type: 'NEXT', meta, payload });
   };
 
   const onReset = () => {
-    send({ type: 'RESET', event: { meta, payload: defaults } });
+    send({ type: 'RESET', meta, payload: defaults });
     reset(defaults);
   };
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { splitImagesFromPdfs } from './pdfHelpers.mjs';
+import { splitImagesFromPdfs } from './pdfHelpers.js';
 
 describe('pdfHelpers', () => {
   describe('splitImagesFromPdfs', () => {
@@ -19,7 +19,7 @@ describe('pdfHelpers', () => {
           extra8: '',
           extra9: '',
           extra10: '',
-        })
+        }),
       ).toEqual({
         imagePaths: {},
         pdfPaths: {},
@@ -41,7 +41,7 @@ describe('pdfHelpers', () => {
           extra8: '',
           extra9: '',
           extra10: '',
-        })
+        }),
       ).toEqual({
         imagePaths: {
           map: 'map.png',
@@ -67,7 +67,7 @@ describe('pdfHelpers', () => {
           extra8: '',
           extra9: '',
           extra10: '',
-        })
+        }),
       ).toEqual({
         imagePaths: {
           map: 'map.png',
@@ -95,7 +95,7 @@ describe('pdfHelpers', () => {
           extra8: '',
           extra9: '',
           extra10: '',
-        })
+        }),
       ).toEqual({
         imagePaths: {
           map: 'map.png',

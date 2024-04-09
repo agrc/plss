@@ -5,7 +5,7 @@ import path from 'path';
 import { PDFDocument } from 'pdf-lib';
 import PdfPrinter from 'pdfmake';
 import { fileURLToPath } from 'url';
-import extractTownshipInformation from '../components/pageElements/CornerSubmission/blmPointId.mjs';
+import extractTownshipInformation from '../src/components/pageElements/CornerSubmission/blmPointId.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -86,7 +86,7 @@ const getBase64Images = async (bucket, metadata) => {
     promises.push(
       getImageData(bucket.file(fileName).createReadStream()).then((result) => {
         return { [key]: result };
-      })
+      }),
     );
   });
 
@@ -110,7 +110,7 @@ export const getBinaryPdfs = async (bucket, metadata) => {
     promises.push(
       getPdfData(bucket.file(fileName).createReadStream()).then((result) => {
         return { [key]: result };
-      })
+      }),
     );
   });
 
@@ -170,7 +170,7 @@ export const generatePdfDefinition = (data, surveyor, images, watermark) => {
 
   const addExtraImages = (images) => {
     const extras = Object.keys(images ?? {}).filter((key) =>
-      key.startsWith('extra')
+      key.startsWith('extra'),
     );
 
     if (extras.length === 0) {
@@ -220,7 +220,10 @@ export const generatePdfDefinition = (data, surveyor, images, watermark) => {
     },
     content: [
       { text: 'for', style: ['text-normal', 'bold', 'center', 'sky-800'] },
-      { text: `${data.county ?? 'Unknown'} County`, style: constants.subHeader },
+      {
+        text: `${data.county ?? 'Unknown'} County`,
+        style: constants.subHeader,
+      },
       {
         table: {
           widths: constants.grid,
@@ -674,7 +677,7 @@ export const createPdfDocument = async (definition, extraPdfPages) => {
     Object.keys(extraPdfPages).length,
     {
       structuredData: true,
-    }
+    },
   );
 
   const pdf = await appendPdfPages(partialPdf, extraPdfPages);
@@ -695,7 +698,7 @@ export const appendPdfPages = async (original, metadata) => {
     const extraPages = await PDFDocument.load(pdfs[i]);
     const copiedPages = await source.copyPages(
       extraPages,
-      extraPages.getPageIndices()
+      extraPages.getPageIndices(),
     );
 
     copiedPages.forEach((page) => {

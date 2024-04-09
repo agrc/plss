@@ -1,26 +1,20 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
-import { auth, https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v1';
 import {
   createPdfDocument,
   generatePdfDefinition,
   getPdfAssets,
-} from '../pdfHelpers.mjs';
-import { validateNewSubmission } from './postCorner.f.mjs';
-import setupFirebase from '../firebase.mjs';
+} from '../pdfHelpers.js';
+import { validateNewSubmission } from './postCorner.js';
+import { safelyInitializeApp } from '../firebase.js';
 
-const config = setupFirebase();
+const config = safelyInitializeApp();
 const bucket = getStorage().bucket(config.storageBucket);
 const db = getFirestore();
 const oneDay = 1000 * 60 * 60 * 24;
 
-const postGeneratePreview = https.onCall(async (data, context) => {
-  if (!context.auth) {
-    logger.warn('unauthenticated request', { structuredData: true });
-
-    throw new auth.HttpsError('unauthenticated', 'You must log in');
-  }
-
+export const generatePreview = async (data, auth) => {
   try {
     const result = await validateNewSubmission(data);
     logger.debug('validation result', result, {
@@ -34,25 +28,22 @@ const postGeneratePreview = https.onCall(async (data, context) => {
     throw new https.HttpsError(
       'invalid-argument',
       'pdf preview data is invalid',
-      error
+      error,
     );
   }
 
   let surveyor = {
-    name: context.auth.token.name,
+    name: auth.token.name,
     license: '',
     seal: '',
   };
 
   try {
-    logger.debug('getting surveyor data', context.auth.uid, {
+    logger.debug('getting surveyor data', auth.uid, {
       structuredData: true,
     });
 
-    const snapshot = await db
-      .collection('submitters')
-      .doc(context.auth.uid)
-      .get();
+    const snapshot = await db.collection('submitters').doc(auth.uid).get();
 
     const { license, seal } = snapshot.data();
 
@@ -61,22 +52,22 @@ const postGeneratePreview = https.onCall(async (data, context) => {
   } catch (error) {
     logger.error(
       'error fetching surveyor license. using empty string',
-      context.auth.uid,
+      auth.uid,
       {
         structuredData: true,
-      }
+      },
     );
   }
 
   const { images, pdfs } = await getPdfAssets(
     bucket,
     data.images,
-    surveyor.seal
+    surveyor.seal,
   );
 
   const definition = generatePdfDefinition(data, surveyor, images, true);
 
-  const fileName = `submitters/${context.auth.uid}/new/${data.blmPointId}/preview.pdf`;
+  const fileName = `submitters/${auth.uid}/new/${data.blmPointId}/preview.pdf`;
   const file = bucket.file(fileName);
 
   try {
@@ -94,7 +85,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
 
     throw new https.HttpsError(
       'internal',
-      'There was a problem creating the pdf'
+      'There was a problem creating the pdf',
     );
   }
 
@@ -112,7 +103,7 @@ const postGeneratePreview = https.onCall(async (data, context) => {
 
     await db
       .collection('previews')
-      .doc(context.auth.uid)
+      .doc(auth.uid)
       .collection('documents')
       .add(record);
   } catch (error) {
@@ -122,11 +113,9 @@ const postGeneratePreview = https.onCall(async (data, context) => {
       error,
       {
         structuredData: true,
-      }
+      },
     );
   }
 
   return fileName;
-});
-
-export default postGeneratePreview;
+};

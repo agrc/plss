@@ -1,34 +1,17 @@
-import { auth, https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
-import { profileSchema } from '../../components/pageElements/CornerSubmission/Schema.mjs';
-import setupFirebase from '../firebase.mjs';
+import { profileSchema } from '../../src/components/pageElements/CornerSubmission/Schema.mjs';
+import { safelyInitializeApp } from '../firebase.js';
 
-setupFirebase();
+safelyInitializeApp();
 const db = getFirestore();
 const options = {
   stripUnknown: true,
   abortEarly: false,
 };
 
-const postProfile = https.onCall(async (data, context) => {
-  if (!context.auth) {
-    logger.warn('unauthenticated request', { structuredData: true });
-
-    throw new auth.HttpsError('unauthenticated', 'You must log in');
-  }
-
-  if (!data) {
-    logger.warn('profile data empty', {
-      structuredData: true,
-    });
-
-    throw new https.HttpsError(
-      'invalid-argument',
-      'The profile data is missing'
-    );
-  }
-
-  logger.info('validating profile data', data, context.auth.uid, {
+export const updateProfile = async (data, uid) => {
+  logger.info('validating profile data', data, uid, {
     structuredData: true,
   });
 
@@ -45,18 +28,18 @@ const postProfile = https.onCall(async (data, context) => {
     throw new https.HttpsError(
       'invalid-argument',
       'form data is invalid',
-      error
+      error,
     );
   }
 
   const doc = formatDataForFirestore(data);
 
-  logger.info('saving profile', doc, context.auth, {
+  logger.info('saving profile', doc, uid, {
     structuredData: true,
   });
 
   try {
-    const docRef = await db.collection('submitters').doc(context.auth.uid);
+    const docRef = db.collection('submitters').doc(uid);
     await docRef.update(doc);
   } catch (error) {
     logger.error('error saving profile', error, doc, {
@@ -67,7 +50,7 @@ const postProfile = https.onCall(async (data, context) => {
   }
 
   return doc;
-});
+};
 
 export const validate = async (data) => {
   await profileSchema.validate(data, options);
@@ -81,5 +64,3 @@ const formatDataForFirestore = (data) => {
     seal: data?.seal,
   };
 };
-
-export default postProfile;

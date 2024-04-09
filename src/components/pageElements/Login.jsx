@@ -67,7 +67,7 @@ const SignIn = () => {
 
 const Profile = ({ dispatch }) => {
   const functions = useFunctions();
-  const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
+  const getProfile = httpsCallable(functions, 'getProfile');
   const { data: user } = useUser();
   usePageView('screen-main-profile');
 

@@ -26,8 +26,8 @@ export default function Profile({ dispatch }) {
   const functions = useFunctions();
   const { data } = useUser();
 
-  const getProfile = httpsCallable(functions, 'functions-httpsGetProfile');
-  const updateProfile = httpsCallable(functions, 'functions-httpsPostProfile');
+  const getProfile = httpsCallable(functions, 'getProfile');
+  const updateProfile = httpsCallable(functions, 'postProfile');
 
   const queryClient = useQueryClient();
 

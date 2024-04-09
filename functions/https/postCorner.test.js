@@ -1,7 +1,7 @@
 import { GeoPoint } from 'firebase-admin/firestore';
 import firebaseFunctionsTest from 'firebase-functions-test';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
-import postCorner, {
+import {
   validateSubmission,
   validateNewSubmission,
   validateExistingSubmission,
@@ -9,7 +9,9 @@ import postCorner, {
   formatExistingCorner,
   formatNewCorner,
   getLatLon,
-} from './postCorner.f.mjs';
+} from './postCorner.js';
+import { postCorner } from '../index.js';
+
 const addMock = vi.fn();
 const docMock = vi.fn(() => 'ref');
 // addMock.mockReturnValue(Promise.resolve(true));
@@ -314,13 +316,13 @@ describe('postCorner', () => {
         };
 
         expect(formatExistingCorner(input, { extra: 'metadata' })).toEqual(
-          output
+          output,
         );
       });
     });
     test('it throws on wrong submission type', () => {
       expect(() =>
-        formatDataForFirestore({ type: 'wrong' }, user)
+        formatDataForFirestore({ type: 'wrong' }, user),
       ).toThrowError();
     });
   });
@@ -330,19 +332,19 @@ describe('postCorner', () => {
         getLatLon({
           northing: { degrees: 41, minutes: 44, seconds: 13.0467 },
           easting: { degrees: 111, minutes: 50, seconds: 11.99469 },
-        })
+        }),
       ).toEqual([41.73695741666667, -111.83666519166667]);
     });
     test('it returns null if empty parts', () => {
       expect(
         getLatLon({
           easting: { degrees: 111, minutes: 50, seconds: 11.99469 },
-        })
+        }),
       ).toBeNull();
       expect(
         getLatLon({
           northing: { degrees: 41, minutes: 44, seconds: 13.0467 },
-        })
+        }),
       ).toBeNull();
       expect(getLatLon({})).toBeNull();
     });
@@ -353,17 +355,17 @@ describe('postCorner', () => {
 
     test('throws without authentication', async () => {
       await expect(() => func(undefined, { auth: null })).rejects.toThrowError(
-        'You must log in'
+        'You must log in',
       );
     });
     test('throws without data', async () => {
       await expect(() => func(undefined, { auth: user })).rejects.toThrowError(
-        'The submission data is missing'
+        'No data provided',
       );
     });
     test('throws with an valid submission', async () => {
       await expect(() => func({}, { auth: user })).rejects.toThrowError(
-        'corner submission data is invalid'
+        'corner submission data is invalid',
       );
     });
     test('returns 1 for a valid submission', async () => {
@@ -392,8 +394,8 @@ describe('postCorner', () => {
               elevation: null,
             },
           },
-          { auth: user }
-        )
+          { auth: user },
+        ),
       ).resolves.toBe(1);
       expect(addMock).toHaveBeenCalledTimes(1);
     });
