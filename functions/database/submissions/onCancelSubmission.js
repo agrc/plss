@@ -1,7 +1,7 @@
 import { logger } from 'firebase-functions/v1';
 import { getFirestore } from 'firebase-admin/firestore';
 import { safelyInitializeApp } from '../../firebase.js';
-import { getContactsToNotify, notify } from '../../emailHelpers.mjs';
+import { getContactsToNotify, notify } from '../../emailHelpers.js';
 
 safelyInitializeApp();
 const db = getFirestore();
