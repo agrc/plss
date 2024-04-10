@@ -3,12 +3,9 @@
   "users": [
     {
       "localId": "Y0D4o9od4ojHpGaL9gg6uK3dgNuK",
-      "displayName": "Raccoon Peach",
-      "screenName": "peach_raccoon",
-      "email": "raccoon.peach.90@example.com",
-      "emailVerified": true,
       "createdAt": "1712596581243",
       "lastLoginAt": "1712597381860",
+      "displayName": "Raccoon Peach",
       "providerUserInfo": [
         {
           "providerId": "oidc.utahid",
@@ -19,7 +16,10 @@
           "screenName": "peach_raccoon"
         }
       ],
-      "lastRefreshAt": "2024-04-08T17:29:41.860Z"
+      "validSince": "1712768303",
+      "email": "raccoon.peach.90@example.com",
+      "emailVerified": true,
+      "disabled": false
     }
   ]
 }
