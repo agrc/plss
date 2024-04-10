@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.13-1](https://github.com/agrc/plss/compare/v3.5.13-0...v3.5.13-1) (2024-04-10)
+
+
+### 🐛 Bug Fixes
+
+* return buffer instead of uint8array ([4e1de77](https://github.com/agrc/plss/commit/4e1de77fa9d8d5f53d87aa8a7dc8056c5eb0f8cc))
+
 ## [3.5.13-0](https://github.com/agrc/plss/compare/v3.5.12...v3.5.13-0) (2024-04-09)
 
 
