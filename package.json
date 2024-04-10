@@ -13,16 +13,16 @@
     "cm": "cz",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
     "dev": "cross-env NODE_ENV=development run-p dev:*",
-    "dev:firebase": "firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
-    "save-firebase-state": "firebase emulators:start --import .emulator-data --export-on-exit --only auth,functions,firestore,storage",
+    "dev:firebase": "cross-env NODE_ENV=development firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
+    "save-firebase-state": "cross-env NODE_ENV=development firebase emulators:start --import .emulator-data --export-on-exit --only auth,functions,firestore,storage",
     "dev:vite": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ./ --ext .js,.mjs,.jsx --ignore-path ./.eslintignore",
     "lint:fix": "eslint ./ --ext .js,.mjs,.jsx --quiet --fix --ignore-path ./.eslintignore",
     "format": "prettier \"src/**/*.{js,jsx,ts,json,mjs,md,mdx}\" --write",
-    "prepare": "if-env NODE_ENV=production && echo 'Skipping husky install' || npx husky init",
-    "fb:serve": "firebase emulators:start --only functions",
+    "prepare": "husky",
+    "fb:serve": "cross-env NODE_ENV=development firebase emulators:start --only functions",
     "fb:deploy": "firebase deploy --only functions",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -126,7 +126,7 @@
       "ecmaFeatures": {
         "jsx": true
       },
-      "ecmaVersion": 12,
+      "ecmaVersion": "latest",
       "sourceType": "module"
     },
     "plugins": [
