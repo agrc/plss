@@ -1,0 +1,17 @@
+{
+  "name": "submitters/user_abc/new/point_abc/test.png",
+  "bucket": "test-project",
+  "metageneration": 1,
+  "generation": 1712772290039,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["0d719777-d30b-4395-a945-1b960f496928"],
+  "etag": "Ul/zSGohDD9A/rG5ules+kqN7b4",
+  "customMetadata": {},
+  "timeCreated": "2024-04-10T18:04:50.039Z",
+  "updated": "2024-04-10T18:04:50.039Z",
+  "size": 9837,
+  "md5Hash": "uPE7E01Ncvf72Mk2oo6+nw==",
+  "crc32c": "876944351"
+}
