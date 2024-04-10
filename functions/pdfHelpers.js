@@ -708,7 +708,7 @@ export const appendPdfPages = async (original, metadata) => {
 
   const complete = await source.save();
 
-  return complete;
+  return Buffer.from(complete);
 };
 
 const constants = {
