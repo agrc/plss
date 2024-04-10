@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.13](https://github.com/agrc/plss/compare/v3.5.12...v3.5.13) (2024-04-10)
+
+
+### 🐛 Bug Fixes
+
+* add missing function import ([3ec0fb4](https://github.com/agrc/plss/commit/3ec0fb4c1fd6b9fef6799ea3bce23a2a39a3da85))
+* return buffer instead of uint8array ([d41b1f0](https://github.com/agrc/plss/commit/d41b1f0bc769412d0305ac9cef7ff4b60cad5165))
+
 ## [3.5.13-1](https://github.com/agrc/plss/compare/v3.5.13-0...v3.5.13-1) (2024-04-10)
 
 
