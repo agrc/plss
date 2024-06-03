@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.14](https://github.com/agrc/plss/compare/v3.5.13...v3.5.14) (2024-06-03)
+
+
+### 🌲 Dependencies
+
+* bump the safe-app-dependencies group across 1 directory with 35 updates ([d486f05](https://github.com/agrc/plss/commit/d486f0591369739cbfbfb84ebcf5bd12a9758fcd))
+
 ## [3.5.13](https://github.com/agrc/plss/compare/v3.5.12...v3.5.13) (2024-04-10)
 
 
