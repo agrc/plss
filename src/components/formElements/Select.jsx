@@ -1,6 +1,6 @@
 import { forwardRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Listbox, Transition } from '@headlessui/react';
+import { Listbox, ListboxButton, Label, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 
@@ -55,15 +55,15 @@ export const Select = forwardRef(
         }}
       >
         {label !== false && (
-          <Listbox.Label className="font-semibold">
+          <Label className="font-semibold">
             {label ?? name}
             {required && (
               <span className="not-sr-only ml-0.5 text-rose-300">*</span>
             )}
-          </Listbox.Label>
+          </Label>
         )}
         <div className="relative mt-1">
-          <Listbox.Button
+          <ListboxButton
             ref={ref}
             aria-required={required}
             className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
@@ -77,17 +77,17 @@ export const Select = forwardRef(
                 aria-hidden="true"
               />
             </span>
-          </Listbox.Button>
+          </ListboxButton>
           <Transition
             as={Fragment}
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute z-50 mt-1 max-h-60 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <ListboxOptions className="absolute z-50 mt-1 max-h-60 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {(options?.length ?? 0) > 0 ? (
                 options?.map((option, id) => (
-                  <Listbox.Option
+                  <ListboxOption
                     key={id}
                     className={({ active }) =>
                       clsx(
@@ -120,14 +120,14 @@ export const Select = forwardRef(
                         ) : null}
                       </>
                     )}
-                  </Listbox.Option>
+                  </ListboxOption>
                 ))
               ) : (
                 <div className="relative cursor-default select-none py-2 pl-10 text-center text-slate-500">
                   This list is empty 😶
                 </div>
               )}
-            </Listbox.Options>
+            </ListboxOptions>
           </Transition>
         </div>
       </Listbox>

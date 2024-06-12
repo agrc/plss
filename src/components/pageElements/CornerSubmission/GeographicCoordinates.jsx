@@ -3,7 +3,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
-import { RadioGroup } from '@headlessui/react';
+import { RadioGroup, Label, Radio } from '@headlessui/react';
 import { Input } from '../../formElements/Inputs.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
@@ -76,7 +76,7 @@ export const Latitude = () => {
       </p>
       <Spacer className="my-4" />
       {state.matches('form.entering alternate latitude') &&
-      !state.matches('projecting.done') ? (
+        !state.matches('projecting.done') ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -316,11 +316,11 @@ export const GeographicHeight = () => {
                   setSelected(option);
                 }}
               >
-                <RadioGroup.Label className="sr-only">
+                <Label className="sr-only">
                   Elevation unit
-                </RadioGroup.Label>
+                </Label>
                 {units.map((option) => (
-                  <RadioGroup.Option
+                  <Radio
                     key={option.value}
                     value={option}
                     className={({ checked }) =>
@@ -335,17 +335,16 @@ export const GeographicHeight = () => {
                   >
                     {({ checked }) => (
                       <div className="text-sm">
-                        <RadioGroup.Label
+                        <Label
                           as="p"
-                          className={`font-medium ${
-                            checked ? 'text-white' : 'text-sky-700'
-                          }`}
+                          className={`font-medium ${checked ? 'text-white' : 'text-sky-700'
+                            }`}
                         >
                           {option.label}
-                        </RadioGroup.Label>
+                        </Label>
                       </div>
                     )}
-                  </RadioGroup.Option>
+                  </Radio>
                 ))}
               </RadioGroup>
             )}

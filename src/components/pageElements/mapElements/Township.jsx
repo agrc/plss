@@ -1,4 +1,4 @@
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import ky from 'ky';
@@ -211,7 +211,7 @@ export default function Township({ apiKey, dispatch }) {
 
   return (
     <section className="mx-auto grid max-w-prose gap-2">
-      <Tab.Group
+      <TabGroup
         selectedIndex={selectedTabIndex}
         onChange={(e) => {
           setSelectedTabIndex(e);
@@ -220,7 +220,7 @@ export default function Township({ apiKey, dispatch }) {
           setSelectedSection('');
         }}
       >
-        <Tab.List className="flex space-x-1 rounded-xl bg-slate-500/20 p-1">
+        <TabList className="flex space-x-1 rounded-xl bg-slate-500/20 p-1">
           {tabs.map((item) => (
             <Tab
               key={item.name}
@@ -237,10 +237,10 @@ export default function Township({ apiKey, dispatch }) {
               {item.name}
             </Tab>
           ))}
-        </Tab.List>
-        <Tab.Panels>
+        </TabList>
+        <TabPanels>
           {tabs.map((item) => (
-            <Tab.Panel key={item.name}>
+            <TabPanel key={item.name}>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                 <div className="flex-1">
                   <Select
@@ -288,10 +288,10 @@ export default function Township({ apiKey, dispatch }) {
                   />
                 </div>
               </div>
-            </Tab.Panel>
+            </TabPanel>
           ))}
-        </Tab.Panels>
-      </Tab.Group>
+        </TabPanels>
+      </TabGroup>
       <div className="mt-4 flex justify-center">
         <Button
           state={selectedSection.length < 1 ? 'disabled' : status}

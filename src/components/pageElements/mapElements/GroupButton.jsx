@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '../../formElements/Buttons.jsx';
@@ -41,7 +41,7 @@ export default function GroupButton({ view, width, children }) {
       </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-20" onClose={toggle}>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -51,11 +51,11 @@ export default function GroupButton({ view, width, children }) {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className="fixed left-0 right-0 top-2 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
@@ -64,7 +64,7 @@ export default function GroupButton({ view, width, children }) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-2xl transform rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
+                <DialogPanel className="w-full max-w-2xl transform rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
                   <div>{children}</div>
 
                   <div className="mt-4">
@@ -72,8 +72,8 @@ export default function GroupButton({ view, width, children }) {
                       Close
                     </Button>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </Dialog>
