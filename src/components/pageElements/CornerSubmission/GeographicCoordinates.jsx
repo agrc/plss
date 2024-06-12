@@ -76,7 +76,7 @@ export const Latitude = () => {
       </p>
       <Spacer className="my-4" />
       {state.matches('form.entering alternate latitude') &&
-        !state.matches('projecting.done') ? (
+      !state.matches('projecting.done') ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -316,9 +316,7 @@ export const GeographicHeight = () => {
                   setSelected(option);
                 }}
               >
-                <Label className="sr-only">
-                  Elevation unit
-                </Label>
+                <Label className="sr-only">Elevation unit</Label>
                 {units.map((option) => (
                   <Radio
                     key={option.value}
@@ -337,8 +335,9 @@ export const GeographicHeight = () => {
                       <div className="text-sm">
                         <Label
                           as="p"
-                          className={`font-medium ${checked ? 'text-white' : 'text-sky-700'
-                            }`}
+                          className={`font-medium ${
+                            checked ? 'text-white' : 'text-sky-700'
+                          }`}
                         >
                           {option.label}
                         </Label>

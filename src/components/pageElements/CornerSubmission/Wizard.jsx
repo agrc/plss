@@ -1,7 +1,13 @@
 import { Button } from '../../formElements/Buttons.jsx';
 import PropTypes from 'prop-types';
 
-export default function Wizard({ back = false, next = false, finish, clear, status }) {
+export default function Wizard({
+  back = false,
+  next = false,
+  finish,
+  clear,
+  status,
+}) {
   return (
     <div className="flex justify-center">
       {back && (

@@ -1,6 +1,13 @@
 import { forwardRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Listbox, ListboxButton, Label, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
+import {
+  Listbox,
+  ListboxButton,
+  Label,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 

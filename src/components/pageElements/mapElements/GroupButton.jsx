@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef } from 'react';
-import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '../../formElements/Buttons.jsx';

@@ -1,7 +1,13 @@
 import { Fragment } from 'react';
 import { contrastColor } from 'contrast-color';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import { Popover, PopoverButton, PopoverPanel, PopoverGroup, Transition } from '@headlessui/react';
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  PopoverGroup,
+  Transition,
+} from '@headlessui/react';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
