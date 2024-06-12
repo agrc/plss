@@ -4,14 +4,14 @@ import { ErrorMessage } from '@hookform/error-message';
 import ErrorMessageTag from '../pageElements/ErrorMessage.jsx';
 
 export const LimitedTextarea = ({
-  rows,
+  rows = 3,
   placeholder,
-  value,
-  maxLength,
+  value = '',
+  maxLength = 500,
   field,
   errors,
   className,
-  disabled,
+  disabled = false,
 }) => {
   const { limit, remaining } = useMaxLength({
     value: field.value ?? value,
@@ -74,17 +74,6 @@ LimitedTextarea.propTypes = {
   errors: PropTypes.object,
   className: PropTypes.string,
   disabled: PropTypes.bool,
-};
-
-LimitedTextarea.defaultProps = {
-  name: null,
-  placeholder: null,
-  value: '',
-  rows: 3,
-  limit: 500,
-  inputRef: null,
-  onChange: undefined,
-  disabled: false,
 };
 
 const useMaxLength = ({ value, limit }) => {
