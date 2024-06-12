@@ -6,14 +6,14 @@ export const Input = forwardRef(
   (
     {
       name,
-      type,
+      type = 'text',
       value,
       label,
-      required,
+      required = false,
       placeholder,
-      left,
+      left = false,
       className,
-      step,
+      step = '1',
       min,
       max,
       onChange,
@@ -100,19 +100,6 @@ Input.propTypes = {
   max: PropTypes.string,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
-};
-
-Input.defaultProps = {
-  name: null,
-  type: 'text',
-  label: undefined,
-  required: false,
-  value: null,
-  placeholder: null,
-  left: false,
-  className: null,
-  touched: false,
-  step: '1',
 };
 
 export const Label = ({ children, htmlFor, required, className }) => {

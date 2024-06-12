@@ -7,7 +7,7 @@ import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import Viewpoint from '@arcgis/core/Viewpoint';
 import MapView from '@arcgis/core/views/MapView';
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector';
@@ -446,8 +446,8 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         <GroupButton view={mapView.current} width={onlyWidth}>
           <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
             <h2 className="mb-2 text-2xl font-bold">Quick finder tools</h2>
-            <Tab.Group>
-              <Tab.List className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+            <TabGroup>
+              <TabList className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
                 {tabs.map((item) => (
                   <Tab
                     key={item}
@@ -464,19 +464,19 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                     {item}
                   </Tab>
                 ))}
-              </Tab.List>
-              <Tab.Panels className="mx-4">
-                <Tab.Panel>
+              </TabList>
+              <TabPanels className="mx-4">
+                <TabPanel>
                   <Township
                     dispatch={dispatch}
                     apiKey={import.meta.env.VITE_API_KEY}
                   />
-                </Tab.Panel>
-                <Tab.Panel>
+                </TabPanel>
+                <TabPanel>
                   <MonumentRecord dispatch={dispatch} />
-                </Tab.Panel>
-              </Tab.Panels>
-            </Tab.Group>
+                </TabPanel>
+              </TabPanels>
+            </TabGroup>
           </section>
         </GroupButton>
       </>

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import Spacer from '../../formElements/Spacer.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
@@ -92,8 +92,8 @@ const CoordinatePicker = () => {
       )}
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Coordinate system">
-          <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-            <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+          <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
+            <TabList className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
               {Object.keys(formats).map((category) => (
                 <Tab
                   key={category}
@@ -110,10 +110,10 @@ const CoordinatePicker = () => {
                   {category}
                 </Tab>
               ))}
-            </Tab.List>
-            <Tab.Panels>
+            </TabList>
+            <TabPanels>
               {Object.values(formats).map((options, idx) => (
-                <Tab.Panel key={idx}>
+                <TabPanel key={idx}>
                   <Controller
                     control={control}
                     name="datum"
@@ -132,10 +132,10 @@ const CoordinatePicker = () => {
                     name="datum"
                     as={ErrorMessageTag}
                   />
-                </Tab.Panel>
+                </TabPanel>
               ))}
-            </Tab.Panels>
-          </Tab.Group>
+            </TabPanels>
+          </TabGroup>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
           <Wizard

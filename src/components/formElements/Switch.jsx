@@ -10,7 +10,7 @@ const Toggle = forwardRef(
       value = false,
       onChange,
       screenReader = 'Toggle',
-      hideLabel,
+      hideLabel = false,
       yesValue = 'Yes',
       noValue = 'No',
     },
@@ -59,10 +59,4 @@ Toggle.propTypes = {
   name: PropTypes.string,
   yesValue: PropTypes.string,
   noValue: PropTypes.string,
-};
-
-Toggle.defaultProps = {
-  value: false,
-  hideLabel: false,
-  screenReader: 'Toggle',
 };

@@ -131,8 +131,8 @@ const buttonClasses = (style, buttonGroup) => {
 export const Button = ({
   children,
   name,
-  type,
-  style,
+  type = 'button',
+  style = 'primary',
   state,
   inputRef,
   onClick,
@@ -208,15 +208,6 @@ Button.propTypes = {
   onClick: PropTypes.func,
   dark: PropTypes.bool,
   buttonGroup: PropTypes.object,
-};
-
-Button.defaultProps = {
-  name: null,
-  type: 'button',
-  style: 'primary',
-  inputRef: null,
-  onClick: undefined,
-  buttonGroup: undefined,
 };
 
 export const Link = ({
