@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { contrastColor } from 'contrast-color';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import { Popover, Transition } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel, PopoverGroup, Transition } from '@headlessui/react';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
@@ -16,13 +16,13 @@ export default function Legend() {
         What do the colors mean? Click on the question mark to learn more.
       </p>
       <Spacer />
-      <Popover.Group
+      <PopoverGroup
         as="section"
         className="flex flex-wrap justify-around gap-3"
       >
         {layers.map((layer) => (
           <Popover key={layer.name}>
-            <Popover.Button
+            <PopoverButton
               style={{
                 backgroundColor: layer.color,
                 color: contrastColor.call({}, { bgColor: layer.color }),
@@ -33,7 +33,7 @@ export default function Legend() {
             >
               <span>{layer.name}</span>
               <QuestionMarkCircleIcon className="ml-2 h-5 w-5 transition duration-150 ease-in-out group-hover:text-opacity-80" />
-            </Popover.Button>
+            </PopoverButton>
             <Transition
               as={Fragment}
               enter="transition ease-out duration-200"
@@ -43,7 +43,7 @@ export default function Legend() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute left-1/2 z-20 mt-2 w-60 -translate-x-1/2 transform px-4">
+              <PopoverPanel className="absolute left-1/2 z-20 mt-2 w-60 -translate-x-1/2 transform px-4">
                 {({ open }) => {
                   if (open) {
                     logEvent(analytics, 'legend-item-open', {
@@ -59,11 +59,11 @@ export default function Legend() {
                     </div>
                   );
                 }}
-              </Popover.Panel>
+              </PopoverPanel>
             </Transition>
           </Popover>
         ))}
-      </Popover.Group>
+      </PopoverGroup>
     </Card>
   );
 }

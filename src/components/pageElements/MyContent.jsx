@@ -1,4 +1,4 @@
-import { Tab } from '@headlessui/react';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -60,7 +60,7 @@ const MyContent = ({ dispatch }) => {
       <h2 className="text-2xl font-semibold">My Content</h2>
       <Spacer className="mb-2" />
       <section className="grid gap-2">
-        <Tab.Group
+        <TabGroup
           selectedIndex={selectedTab}
           onChange={(event) => {
             setSelectedTab(event);
@@ -69,7 +69,7 @@ const MyContent = ({ dispatch }) => {
             });
           }}
         >
-          <Tab.List className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+          <TabList className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
             {tabs.map((name) => (
               <Tab
                 key={name}
@@ -86,10 +86,10 @@ const MyContent = ({ dispatch }) => {
                 {name}
               </Tab>
             ))}
-          </Tab.List>
-          <Tab.Panels>
+          </TabList>
+          <TabPanels>
             {tabs.map((name) => (
-              <Tab.Panel key={name}>
+              <TabPanel key={name}>
                 {status !== 'success' && (
                   <Card>
                     <p className="flex">
@@ -135,10 +135,10 @@ const MyContent = ({ dispatch }) => {
                     dispatch={dispatch}
                   />
                 )}
-              </Tab.Panel>
+              </TabPanel>
             ))}
-          </Tab.Panels>
-        </Tab.Group>
+          </TabPanels>
+        </TabGroup>
       </section>
     </>
   );
