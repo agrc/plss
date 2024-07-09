@@ -68,7 +68,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@firebase/rules-unit-testing": "^2.0.7",
+    "@firebase/rules-unit-testing": "^3.0.3",
     "@hookform/devtools": "^4.3.1",
     "@storybook/addon-actions": "^8.1.11",
     "@storybook/addon-essentials": "^8.1.11",
@@ -86,7 +86,7 @@
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.1.3",
