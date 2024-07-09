@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.5.14](https://github.com/agrc/plss/compare/v3.5.13...v3.5.14) (2024-07-09)
+
+
+### Dependencies
+
+* bump the safe-app-dependencies group across 1 directory with 35 updates ([d486f05](https://github.com/agrc/plss/commit/d486f0591369739cbfbfb84ebcf5bd12a9758fcd))
+* q1 package updates ([a222077](https://github.com/agrc/plss/commit/a222077ddf99c5efc77494c1924b015d06310a1d))
+* q4 package updates ([0cff7c8](https://github.com/agrc/plss/commit/0cff7c8cca2e125eadddba3bcaed1c16447a4374))
+* remove unnecessary package ([e8b0f9c](https://github.com/agrc/plss/commit/e8b0f9c71b593f81b725ac523509cf2ea85d0e20))
+
+
+### Styles
+
+* prettier ([8f0af3d](https://github.com/agrc/plss/commit/8f0af3d94d494a5d18d275e28411084268e0891d))
+
 ## [3.5.13](https://github.com/agrc/plss/compare/v3.5.12...v3.5.13) (2024-04-10)
 
 
