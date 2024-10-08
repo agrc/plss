@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.15-1](https://github.com/agrc/plss/compare/v3.5.15-0...v3.5.15-1) (2024-10-08)
+
+
+### Bug Fixes
+
+* **app:** correct usage of useGraphicsManager ([4460645](https://github.com/agrc/plss/commit/44606456eb5cd076caf6e42ae0078e8fa3405f08))
+* **app:** don't set empty points ([cf3f838](https://github.com/agrc/plss/commit/cf3f838b6e0576b019fdd3841f8c37336736b56f))
+
 ## [3.5.15-0](https://github.com/agrc/plss/compare/v3.5.14...v3.5.15-0) (2024-10-08)
 
 
