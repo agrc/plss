@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.15](https://github.com/agrc/plss/compare/v3.5.14...v3.5.15) (2024-10-08)
+
+
+### Bug Fixes
+
+* **app:** correct usage of useGraphicsManager ([4b507ca](https://github.com/agrc/plss/commit/4b507ca08efb9a92564a73ab59d037228d7805dd))
+* **app:** don't set empty points ([e9b2905](https://github.com/agrc/plss/commit/e9b2905fcf607db6e9a22727eb19df8d84829466))
+
+
+### Dependencies
+
+* **app:** bumpt eslint-plugin-react ([ed1602e](https://github.com/agrc/plss/commit/ed1602e43a9cbecfcf06420f2debd08e4a354bbd))
+* fy25 q2 dependency updates ([ae5e41d](https://github.com/agrc/plss/commit/ae5e41d01a646b777562aeca61b576f76be7b76c))
+
 ## [3.5.15-1](https://github.com/agrc/plss/compare/v3.5.15-0...v3.5.15-1) (2024-10-08)
 
 
