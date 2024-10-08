@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.15-0](https://github.com/agrc/plss/compare/v3.5.14...v3.5.15-0) (2024-10-08)
+
+
+### Dependencies
+
+* fy25 q2 dependency updates ([4608b47](https://github.com/agrc/plss/commit/4608b47fdcb20be1447b0e1df0efddaa8ee79575))
+
 ## [3.5.14](https://github.com/agrc/plss/compare/v3.5.13...v3.5.14) (2024-07-09)
 
 
