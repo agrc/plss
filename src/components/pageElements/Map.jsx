@@ -352,8 +352,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         );
       }
 
-      setUserGraphics(points);
-      dispatch({ type: 'map/userPoints', payload: points });
+      if (points.length > 0) {
+        setUserGraphics(points);
+        dispatch({ type: 'map/userPoints', payload: points });
+      }
     }
 
     if (signInCheckResult?.signedIn === false) {
