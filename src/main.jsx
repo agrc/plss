@@ -7,6 +7,20 @@ import App from './components/app/App.jsx';
 import '@arcgis/core/assets/esri/themes/light/main.css';
 import './index.css';
 
+let firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  firebaseConfig = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
+
 createRoot(document.getElementById('root')).render(
   <QueryClientProvider
     client={
@@ -21,16 +35,7 @@ createRoot(document.getElementById('root')).render(
   >
     <StrictMode>
       <FirebaseAppProvider
-        firebaseConfig={{
-          apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-          authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-          databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-          projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-          storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-          messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-          appId: import.meta.env.VITE_FIREBASE_APPID,
-          measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
-        }}
+        firebaseConfig={firebaseConfig}
       >
         <App />
         <ReactQueryDevtools />
