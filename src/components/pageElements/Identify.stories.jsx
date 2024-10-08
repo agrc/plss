@@ -65,7 +65,7 @@ Authenticated.args = {
       point_id: 'UT260060S0020E0_240400',
     },
   },
-  dispatch: () => { },
+  dispatch: () => {},
 };
 
 export const Unauthenticated = Template.bind({});
@@ -76,12 +76,12 @@ Unauthenticated.args = {
       point_id: 'UT260060S0020E0_240400',
     },
   },
-  dispatch: () => { },
+  dispatch: () => {},
 };
 
 export const Empty = Template.bind({});
 Empty.args = {
   authenticated: false,
   graphic: null,
-  dispatch: () => { },
+  dispatch: () => {},
 };

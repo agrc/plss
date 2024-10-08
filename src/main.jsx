@@ -34,9 +34,7 @@ createRoot(document.getElementById('root')).render(
     }
   >
     <StrictMode>
-      <FirebaseAppProvider
-        firebaseConfig={firebaseConfig}
-      >
+      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <App />
         <ReactQueryDevtools />
       </FirebaseAppProvider>
