@@ -14,6 +14,20 @@ import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';
 import AddPoint from './AddPoint.jsx';
 
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
+
 export default {
   title: 'Drawer/AddPoint',
   component: AddPoint,
@@ -22,15 +36,6 @@ export default {
   },
   decorators: [
     (Story) => {
-      const config = {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APPID,
-      };
       const app = initializeApp(config);
       const storage = getStorage(app);
       const functions = getFunctions(app);

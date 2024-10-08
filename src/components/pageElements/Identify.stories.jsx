@@ -5,21 +5,25 @@ import { getStorage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: 'Page Elements/Identify',
   component: Identify,
   decorators: [
     (Story) => {
-      const config = {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APPID,
-      };
       const app = initializeApp(config);
       const storage = getStorage(app);
       const auth = getAuth(app);
@@ -61,7 +65,7 @@ Authenticated.args = {
       point_id: 'UT260060S0020E0_240400',
     },
   },
-  dispatch: () => {},
+  dispatch: () => { },
 };
 
 export const Unauthenticated = Template.bind({});
@@ -72,12 +76,12 @@ Unauthenticated.args = {
       point_id: 'UT260060S0020E0_240400',
     },
   },
-  dispatch: () => {},
+  dispatch: () => { },
 };
 
 export const Empty = Template.bind({});
 Empty.args = {
   authenticated: false,
   graphic: null,
-  dispatch: () => {},
+  dispatch: () => { },
 };
