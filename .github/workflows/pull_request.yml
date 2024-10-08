@@ -1,4 +1,5 @@
 name: Pull Request Events
+
 on: pull_request
 
 permissions:
@@ -44,31 +45,24 @@ jobs:
         run: npm run test:ci
 
   deploy-preview:
-    name: Firebase preview
+    name: Create preview
     runs-on: ubuntu-latest
     needs: [test-unit]
-    if: ${{ github.event.sender.type == 'User' }}
+    if: ${{ github.event.sender.type == 'User' && github.head_ref != 'dev' }}
     environment:
-      name: dev
+      name: preview
 
     steps:
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v1
         with:
-          build-command: npm run build
           preview: yes
+          build-command: npm run build -- --mode dev
           project-id: ${{ secrets.PROJECT_ID }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
         env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_DATABASE_URL: ${{ secrets.VITE_FIREBASE_DATABASE_URL }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APPID: ${{ secrets.VITE_FIREBASE_APPID }}
-          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+          VITE_API_KEY: ${{ secrets.VITE_UGRC_API_KEY }}
           VITE_DISCOVER_KEY: ${{ secrets.VITE_DISCOVER_KEY }}
-          VITE_API_KEY_PREVIEW: ${{ secrets.VITE_UGRC_PREVIEW_API_KEY }}
