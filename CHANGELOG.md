@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.5.16](https://github.com/agrc/plss/compare/v3.5.15...v3.5.16) (2025-01-03)
+
+
+### Dependencies
+
+* bump the safe-app-dependencies group with 37 updates ([6e19edd](https://github.com/agrc/plss/commit/6e19edd6507e82c9667d27320bbc66ae1d7db990))
+* fy25 q3 packages ([759065a](https://github.com/agrc/plss/commit/759065a5b4d69675320ca90518c28573e0ecaace))
+
 ## [3.5.15](https://github.com/agrc/plss/compare/v3.5.14...v3.5.15) (2024-10-08)
 
 
