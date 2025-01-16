@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.17](https://github.com/agrc/plss/compare/v3.5.16...v3.5.17) (2025-01-16)
+
+
+### Bug Fixes
+
+* correct monument finder tool ([e64b7ea](https://github.com/agrc/plss/commit/e64b7ea46609800936e5cca8db60fba1dedbb013)), closes [#400](https://github.com/agrc/plss/issues/400)
+* correct township, range, section map zooming ([cb0db54](https://github.com/agrc/plss/commit/cb0db544495f468f2fdeb0573b1a202f13535274)), closes [#399](https://github.com/agrc/plss/issues/399)
+
+
+### Dependencies
+
+* update packages ([786e27c](https://github.com/agrc/plss/commit/786e27c798f6e0bf8dbcf8ff450aaec4ca346591))
+* update testing packages ([fa745a7](https://github.com/agrc/plss/commit/fa745a7077d942764e4906489385d2be9d5cf29f))
+
 ## [3.5.16](https://github.com/agrc/plss/compare/v3.5.15...v3.5.16) (2025-01-03)
 
 
