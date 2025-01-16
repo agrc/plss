@@ -84,6 +84,7 @@ export default function MonumentRecord({ dispatch }) {
         />
       </div>
       <Transition
+        as="div"
         appear
         show={isOpen}
         enter="ease-out duration-300"
