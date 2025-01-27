@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.18](https://github.com/agrc/plss/compare/v3.5.17...v3.5.18) (2025-01-27)
+
+
+### Bug Fixes
+
+* shrink selects to stop secondary scrolling ([348aeaf](https://github.com/agrc/plss/commit/348aeaf6a48625c6e15ff0f0530f63245a9e8d96)), closes [#403](https://github.com/agrc/plss/issues/403)
+
+
+### Dependencies
+
+* **api:** update function packages ([5199307](https://github.com/agrc/plss/commit/5199307349ed840e5dfcf0894473e5b254f53263))
+* update packages ([7db3557](https://github.com/agrc/plss/commit/7db35579e9d3f41967eb3137d0f53d964df7b661))
+
 ## [3.5.17](https://github.com/agrc/plss/compare/v3.5.16...v3.5.17) (2025-01-16)
 
 
