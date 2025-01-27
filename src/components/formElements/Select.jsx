@@ -96,12 +96,12 @@ export const Select = forwardRef(
                 options?.map((option, id) => (
                   <ListboxOption
                     key={id}
-                    className={({ active }) =>
+                    className={({ focus }) =>
                       clsx(
                         'relative cursor-default select-none py-2 pl-10 pr-4',
                         {
-                          'bg-sky-100 text-sky-900': active,
-                          'text-sky-900': !active && !option?.disabled,
+                          'bg-sky-100 text-sky-900': focus,
+                          'text-sky-900': !focus && !option?.disabled,
                           'cursor-not-allowed text-slate-400':
                             option?.disabled ?? false,
                         },

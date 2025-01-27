@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import ky from 'ky';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import { Input } from '../../formElements/Inputs.jsx';
@@ -84,7 +84,7 @@ export default function MonumentRecord({ dispatch }) {
         />
       </div>
       <Transition
-        as="div"
+        as={Fragment}
         appear
         show={isOpen}
         enter="ease-out duration-300"
