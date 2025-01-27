@@ -71,7 +71,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const { graphic, setGraphic } = useGraphicManager(mapView.current);
   const { setGraphic: setUserGraphics } = useGraphicManager(mapView.current);
   const { setGraphic: setGpsGraphic } = useGraphicManager(mapView.current);
-  const { setViewPoint } = useViewPointZooming(mapView);
+  const { setViewPoint } = useViewPointZooming(mapView.current);
 
   const functions = useFunctions();
   const myContent = httpsCallable(functions, 'getMyContent');
