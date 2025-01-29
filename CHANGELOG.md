@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.19](https://github.com/agrc/plss/compare/v3.5.18...v3.5.19) (2025-01-29)
+
+
+### Bug Fixes
+
+* use a div instead of a fragment ([778ec7f](https://github.com/agrc/plss/commit/778ec7f3fafb624b0f0e94e3d6c117a1f528ed2d))
+
 ## [3.5.18](https://github.com/agrc/plss/compare/v3.5.17...v3.5.18) (2025-01-27)
 
 
