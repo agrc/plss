@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.20-0](https://github.com/agrc/plss/compare/v3.5.19...v3.5.20-0) (2025-02-03)
+
+
+### Features
+
+* display interior points as white ([136a5c4](https://github.com/agrc/plss/commit/136a5c465bb8bb814ae8557090985f5b5fcfbd6b))
+
 ## [3.5.19](https://github.com/agrc/plss/compare/v3.5.18...v3.5.19) (2025-01-29)
 
 
