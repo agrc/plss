@@ -104,4 +104,9 @@ const layers = [
     about:
       'PLSS points with an available monument record sheet that was collected as part of the Monument Replacement and Restoration Committee (MRRC) grant program.',
   },
+  {
+    name: 'Other Calculated',
+    color: '#fff',
+    about: 'Interior points yada yada.',
+  },
 ];
