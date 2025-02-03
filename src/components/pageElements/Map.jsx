@@ -7,6 +7,9 @@ import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
 import Viewpoint from '@arcgis/core/Viewpoint';
 import MapView from '@arcgis/core/views/MapView';
+import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
+import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol.js';
+import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol.js';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
@@ -46,6 +49,141 @@ const urls = {
 
 const loadingCss =
   'z-[1] transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-gradient-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
+
+const white = [0, 0, 0, 255];
+const outline = {
+  color: white,
+  width: 1.25,
+};
+const renderer = new UniqueValueRenderer({
+  valueExpression: `
+    if ($feature.control == 1) {
+      if ($feature.mrrc == 1) {
+        return 'control.mrrc';
+      }
+      if ($feature.monument == 1) {
+        return 'control.monument';
+      }
+
+      if ($feature.primary_corner == 1) {
+        return 'control';
+      }
+
+      return 'interior';
+    }
+
+    if ($feature.mrrc == 1) {
+      return 'mrrc';
+    }
+
+    if ($feature.monument == 1) {
+      if ($feature.mrrc == 1) {
+        return 'mrrc';
+      }
+      return 'monument';
+    }
+
+    if ($feature.primary_corner == 1) {
+      if ($feature.managed_by != null) {
+        return 'county';
+      }
+
+      if (lower($feature.point_category) == 'calculated') {
+        return 'calculated';
+      }
+    }
+
+    return 'interior';
+  `,
+});
+
+renderer.addUniqueValueInfo({
+  value: 'mrrc',
+  symbol: new SimpleMarkerSymbol({
+    style: 'circle',
+    color: [115, 178, 255, 255],
+    size: 5,
+    outline,
+  }),
+  label: 'mrrc',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'monument',
+  symbol: new SimpleMarkerSymbol({
+    style: 'circle',
+    color: [197, 0, 255, 255],
+    size: 5,
+    outline,
+  }),
+  label: 'monument',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'county',
+  symbol: new SimpleMarkerSymbol({
+    style: 'circle',
+    color: [76, 230, 0, 255],
+    size: 5,
+    outline,
+  }),
+  label: 'county',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'calculated',
+  symbol: new SimpleMarkerSymbol({
+    style: 'circle',
+    color: [255, 170, 0, 255],
+    size: 5,
+    outline,
+  }),
+  label: 'calculated',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'interior',
+  symbol: new SimpleMarkerSymbol({
+    style: 'circle',
+    color: [255, 255, 255, 255],
+    size: 3,
+    outline: {
+      color: white,
+      width: 1,
+    },
+  }),
+  label: 'interior',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'control.monument',
+  symbol: new PictureMarkerSymbol({
+    url: 'data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA3klEQVQ4ja2SwQ2CMBiFvwMjeIEJvHNkBYk7eMANuMrZDXSNOoIcGYAFdA3zmtaUigHEl5DQln7533sk/EnJjG9yIAPMWlDjYKtAFbAL3q9rQF6XX0GVs0QEO7IAlLts2FOxIeOOoafz9rq5IF1IzxgKF9GBEy03akrjWpwEaZpKk3iIl9YFZdpiPoIfA1lLsjOmLTktppkCvetWJrITS/uyHf8OISgL6+7pbCZFYE9r7TsNpgpBujGou6ZUJtaOay081lSC2Sg8SNNo4xlbaTH2+SI50GHnQY+xSpfoBa1oOO/atOKEAAAAAElFTkSuQmCC',
+    width: 13,
+    height: 11,
+  }),
+  label: 'control.monument',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'control.mrrc',
+  symbol: new PictureMarkerSymbol({
+    url: 'data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA6ElEQVQ4ja2SMQ6CQBREp6C0sjFQorUNofAENlJYeoH1FEYSTqGXoFhvQfYGYKnhFmZw1yy4CSBOxX7Yl5n5ePiTvAHfRAACAHIqKNWwSSABYGc9X6eAjC6/goSOhA7siBGgSHeD9VZgNg9QFRJ1qUw8NRTEC/7+JBHG74o2hzPuxQ15lki9xV4Q3Qg6MRAjnpdx4leF/CreBWoiMY5Li1XEmGkf6LNudsI4XXHO2N3fwQYF9rrrUjWdhFY8njnXarmyQbzRWneeJezExLEhxhVhTRUGRDccPF1RdByXmIAvlQE9XCsdoxf4ukmzZBHoCQAAAABJRU5ErkJggg==',
+    width: 13,
+    height: 11,
+  }),
+  label: 'control.mrrc',
+});
+
+renderer.addUniqueValueInfo({
+  value: 'control',
+  symbol: new PictureMarkerSymbol({
+    url: 'data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAmElEQVQ4ja2SwQ2AIBRDe3AJWQPHcA5cwzVwDedwDV3D1EBCGlQQeyJ8eGkLHX5SV3DGAjAA1lbQHGBNIAdgTNZLCyjKfwW5EAkCm1ABsqEbVYy3lYJ4ob+ZeQBDCchKN7m5VVc5UC6Sag1/6xaUPveTev0OKci8RIKIzrMgOtHnfnNF2FVFBNENN44KEMUE7GuLoF3Lq9UJVc0X0ImC7HcAAAAASUVORK5CYII=',
+    width: 13,
+    height: 11,
+  }),
+  label: 'control',
+});
 
 const extent = {
   type: 'extent',
@@ -151,6 +289,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
             'control',
             'point_category',
           ],
+          renderer,
           labelingInfo: [
             {
               labelPlacement: 'above-right',
