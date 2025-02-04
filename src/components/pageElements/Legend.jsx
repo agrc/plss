@@ -92,6 +92,7 @@ const layers = [
   {
     name: 'GCDB Points',
     color: '#fff',
-    about: "The BLM's geographic coordinate database points.",
+    about:
+      "The PLSS points within the BLM's Geographic Coordinate Database (GCDB) for quarter-quarter sections, center sections, and some meander and lot points are calculated rather than directly surveyed. These points represent interior breakdowns of sections.",
   },
 ];
