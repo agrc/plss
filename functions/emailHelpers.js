@@ -9,7 +9,7 @@ export const notify = (key, template) => {
       { nodeEnv: process.env.NODE_ENV },
       {
         structuredData: true,
-      }
+      },
     );
 
     return Promise.resolve([

@@ -2,13 +2,13 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import ky from 'ky';
+import naturalCompare from 'natural-compare-lite';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Select } from '../../formElements/Select.jsx';
-import { sl, ub } from './townships.js';
-import naturalCompare from 'natural-compare-lite';
 import { Button } from '../../formElements/Buttons.jsx';
+import { Select } from '../../formElements/Select.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import { sl, ub } from './townships.js';
 
 const client = ky.create({
   prefixUrl: 'https://api.mapserv.utah.gov/api/v1/search',
@@ -97,12 +97,7 @@ export default function Township({ apiKey, dispatch }) {
   });
 
   const { data: sections } = useQuery({
-    queryKey: [
-      'sections',
-      tabs[selectedTabIndex].value,
-      selectedTownship,
-      selectedRange,
-    ],
+    queryKey: ['sections', tabs[selectedTabIndex].value, selectedTownship, selectedRange],
     queryFn: async () => {
       const predicate = `trname='${tabs[selectedTabIndex].value}T${selectedTownship}R${selectedRange}'`;
 
@@ -140,9 +135,7 @@ export default function Township({ apiKey, dispatch }) {
         throw new Error('An incorrect response count was received.', count);
       }
 
-      const data = response.result[0].attributes.pairswith
-        .split('|')
-        .sort(naturalCompare);
+      const data = response.result[0].attributes.pairswith.split('|').sort(naturalCompare);
 
       return data;
     },
@@ -151,13 +144,7 @@ export default function Township({ apiKey, dispatch }) {
   });
 
   const { data: location, status } = useQuery({
-    queryKey: [
-      'location',
-      tabs[selectedTabIndex].value,
-      selectedTownship,
-      selectedRange,
-      selectedSection,
-    ],
+    queryKey: ['location', tabs[selectedTabIndex].value, selectedTownship, selectedRange, selectedSection],
     queryFn: async () => {
       const predicate = composePredicate(
         tabs[selectedTabIndex].number,
@@ -260,11 +247,7 @@ export default function Township({ apiKey, dispatch }) {
                   <Select
                     label="Range"
                     disabled={selectedTownship.length < 1}
-                    placeholder={
-                      selectedTownship
-                        ? 'Select the range'
-                        : 'Select the township'
-                    }
+                    placeholder={selectedTownship ? 'Select the range' : 'Select the township'}
                     options={ranges}
                     value={selectedRange}
                     onChange={(e) => {
@@ -276,11 +259,7 @@ export default function Township({ apiKey, dispatch }) {
                 <div className="flex-1">
                   <Select
                     label="Section"
-                    placeholder={
-                      selectedTownship
-                        ? 'Select the section'
-                        : 'Select the township'
-                    }
+                    placeholder={selectedTownship ? 'Select the section' : 'Select the township'}
                     disabled={selectedRange.length < 1}
                     options={sections}
                     value={selectedSection}
@@ -301,12 +280,7 @@ export default function Township({ apiKey, dispatch }) {
               payload: location,
               meta: {
                 scale: 10000,
-                label: getLabel(
-                  tabs[selectedTabIndex].value,
-                  selectedTownship,
-                  selectedRange,
-                  selectedSection,
-                ),
+                label: getLabel(tabs[selectedTabIndex].value, selectedTownship, selectedRange, selectedSection),
               },
             })
           }
@@ -316,8 +290,7 @@ export default function Township({ apiKey, dispatch }) {
       </div>
       {status === 'error' && (
         <div className="rounded border border-rose-900 p-4 text-sm text-rose-800">
-          There was a problem with this combination. Try again or try something
-          near by to help you find your way.
+          There was a problem with this combination. Try again or try something near by to help you find your way.
         </div>
       )}
     </section>

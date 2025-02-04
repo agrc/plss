@@ -3,10 +3,7 @@ const toggleDrawer = (draft, action) => {
   if (action.payload === '') {
     draft.drawerOpen = false;
     draft.activeComponent = action.payload;
-  } else if (
-    draft.activeComponent === action.payload &&
-    action.payload !== 'identify'
-  ) {
+  } else if (draft.activeComponent === action.payload && action.payload !== 'identify') {
     draft.drawerOpen = !draft.drawerOpen;
     draft.activeComponent = null;
   } else {
@@ -71,8 +68,7 @@ expected
       break;
     }
     case 'add-point/activate': {
-      draft.map.activeTool =
-        draft.map.activeTool !== 'add-point' ? 'add-point' : null;
+      draft.map.activeTool = draft.map.activeTool !== 'add-point' ? 'add-point' : null;
       if (draft.map.activeTool === null) {
         draft.addPoint.geometry = null;
       }
@@ -80,7 +76,7 @@ expected
       break;
     }
     case 'add-point/reset': {
-      draft.map.activeTool === null;
+      draft.map.activeTool = null;
       draft.addPoint = {
         color: '',
         geometry: null,

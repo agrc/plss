@@ -1,20 +1,15 @@
 import { ArrowDownCircleIcon } from '@heroicons/react/20/solid';
-import {
-  CheckIcon,
-  ExclamationCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { CheckIcon, ExclamationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import PropTypes from 'prop-types';
+import { getDefault } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';
-import { getDefault } from '../../../functions/shared/index.js';
 import TieSheetList from './TieSheetList.jsx';
 
 const managed_counties = {
   UTAH: 'https://maps.utahcounty.gov/TieSheets/TieSheet.htm',
-  WASATCH:
-    'https://wasatch.maps.arcgis.com/apps/webappviewer/index.html?id=103db0251a5342f7bbd1462eb7a47440',
+  WASATCH: 'https://wasatch.maps.arcgis.com/apps/webappviewer/index.html?id=103db0251a5342f7bbd1462eb7a47440',
   DAVIS: 'http://www.co.davis.ut.us/surveyor/default.cfm',
   'SALT LAKE': 'https://slco.org/surveyor/apps/surveymonument/map.html',
   WEBER: 'https://www3.co.weber.ut.us/gis/maps/survey/index.html',
@@ -31,9 +26,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
   return (
     <>
       <h2 className="text-2xl font-semibold">PLSS Point Information</h2>
-      <h3 className="ml-2 mt-1 text-xl font-light">
-        {graphic.attributes.point_id}
-      </h3>
+      <h3 className="ml-2 mt-1 text-xl font-light">{graphic.attributes.point_id}</h3>
 
       <main className="inline-grid gap-3 text-sm">
         {graphic?.attributes?.point_id && (
@@ -59,9 +52,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
           </section>
           <section className="flex w-full justify-between">
             <span className="mr-2 font-bold">Elevation</span>
-            <span>
-              {getDefault(graphic.attributes.elevation, 'unknown', ' ft')}
-            </span>
+            <span>{getDefault(graphic.attributes.elevation, 'unknown', ' ft')}</span>
           </section>
           <section className="flex w-full justify-between">
             <span className="mr-2 font-bold">County</span>
@@ -114,9 +105,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             </section>
             <section className="flex flex-col items-center">
               <span className="font-semibold">Category</span>
-              <span className="mt-1">
-                {getDefault(graphic.attributes.point_category)}
-              </span>
+              <span className="mt-1">{getDefault(graphic.attributes.point_category)}</span>
             </section>
           </div>
         </Card>
@@ -135,13 +124,8 @@ export default function Identify({ authenticated, graphic, dispatch }) {
             <section className="flex w-full justify-between">
               <span className="font-semibold">County managed</span>
               <span>
-                <Link
-                  href={managed_counties[graphic.attributes.managed_by]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {getDefault(graphic.attributes.managed_by)} county surveyor
-                  website
+                <Link href={managed_counties[graphic.attributes.managed_by]} target="_blank" rel="noopener noreferrer">
+                  {getDefault(graphic.attributes.managed_by)} county surveyor website
                 </Link>
               </span>
             </section>
@@ -179,8 +163,8 @@ const EmptyIdentify = ({ dispatch }) => {
         </div>
         <h3 className="text-xl">No corner point was found at this location.</h3>
         <p>
-          If you do not see any points, try zooming in and click on the point
-          again. Otherwise try clicking on the corner point again.
+          If you do not see any points, try zooming in and click on the point again. Otherwise try clicking on the
+          corner point again.
         </p>
         <div className="mt-6 flex justify-center">
           <Button
@@ -207,7 +191,7 @@ const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
         <>
           <h5 className="flex items-center justify-center font-light uppercase">
             <ArrowDownCircleIcon className="mr-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
-            <span className=" text-slate-700">Submit your monument record</span>
+            <span className="text-slate-700">Submit your monument record</span>
             <ArrowDownCircleIcon className="ml-1 h-4 w-4 items-center text-sky-400 motion-safe:animate-bounce" />
           </h5>
           <Spacer />

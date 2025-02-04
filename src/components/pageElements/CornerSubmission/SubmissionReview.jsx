@@ -1,21 +1,21 @@
-import { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
+import { getDownloadURL, ref } from 'firebase/storage';
+import PropTypes from 'prop-types';
+import { useContext, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useFunctions, useStorage } from 'reactfire';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import Wizard from './Wizard.jsx';
-import { keyMap, formatDatum } from '../../../../functions/shared/index.js';
-import Card from '../../formElements/Card.jsx';
 import {
   geographic as geographicOptions,
   grid as gridOptions,
 } from '../../../../functions/shared/cornerSubmission/Options.js';
-import { ObjectPreview } from '../../formElements/FileUpload.jsx';
+import { formatDatum, keyMap } from '../../../../functions/shared/index.js';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
-import { getDownloadURL, ref } from 'firebase/storage';
+import Card from '../../formElements/Card.jsx';
+import { ObjectPreview } from '../../formElements/FileUpload.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import Wizard from './Wizard.jsx';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);
@@ -29,11 +29,7 @@ const Review = () => {
 
   const { data, status } = useQuery({
     enabled: state.context.type === 'new',
-    queryKey: [
-      'monument record sheet',
-      state.context.blmPointId,
-      { preview: true },
-    ],
+    queryKey: ['monument record sheet', state.context.blmPointId, { preview: true }],
     queryFn: () => generatePreview(state.context),
     staleTime: 5000, // 5 seconds,
   });
@@ -60,21 +56,11 @@ const Review = () => {
     <>
       <div className="grid gap-2">
         <div className="mb-1 flex flex-col text-center">
-          <h2 className="text-2xl font-bold uppercase">
-            Corner Submission Review
-          </h2>
-          <h3 className="ml-2 text-xl font-light">
-            {state.context.blmPointId}
-          </h3>
+          <h2 className="text-2xl font-bold uppercase">Corner Submission Review</h2>
+          <h3 className="ml-2 text-xl font-light">{state.context.blmPointId}</h3>
         </div>
-        {state.context.type !== 'existing' && (
-          <MetadataReview {...state.context.metadata} />
-        )}
-        <CoordinateReview
-          datum={state.context.datum}
-          grid={state.context.grid}
-          geographic={state.context.geographic}
-        />
+        {state.context.type !== 'existing' && <MetadataReview {...state.context.metadata} />}
+        <CoordinateReview datum={state.context.datum} grid={state.context.grid} geographic={state.context.geographic} />
         {state.context.type === 'existing' ? (
           <AttachmentReview path={state.context.existing.pdf} />
         ) : (
@@ -87,32 +73,19 @@ const Review = () => {
         )}
       </div>
       <div className="mt-8 flex justify-center">
-        <Wizard
-          back={() => send({ type: 'BACK' })}
-          status={mutationStatus}
-          finish={() => mutate(state.context)}
-        />
+        <Wizard back={() => send({ type: 'BACK' })} status={mutationStatus} finish={() => mutate(state.context)} />
       </div>
     </>
   );
 };
 
-const MetadataReview = ({
-  accuracy,
-  collected,
-  corner,
-  description,
-  mrrc,
-  notes,
-  section,
-  status,
-}) => {
+const MetadataReview = ({ accuracy, collected, corner, description, mrrc, notes, section, status }) => {
   return (
     <Card>
       <h4 className="relative -mt-2 text-lg font-bold">
         Metadata
         {mrrc && (
-          <div className="absolute top-0 right-0 rounded border border-sky-800 bg-sky-300 px-2 text-sm uppercase text-sky-800 shadow">
+          <div className="absolute right-0 top-0 rounded border border-sky-800 bg-sky-300 px-2 text-sm uppercase text-sky-800 shadow">
             MRRC
           </div>
         )}
@@ -190,9 +163,7 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
           <span>{formatDatum(datum)}</span>
         </div>
         {coordinates[0]}
-        <h4 className="py-2 text-lg font-bold text-slate-400">
-          Calculated Coordinates
-        </h4>
+        <h4 className="py-2 text-lg font-bold text-slate-400">Calculated Coordinates</h4>
         <div className="flex justify-between">
           <span className="font-semibold">Datum</span>
           <span>{calculated}</span>
@@ -337,18 +308,12 @@ const AttachmentReview = ({ path }) => {
 
   return (
     <Card>
-      <h4 className="-mt-2 text-lg font-bold">
-        Existing Monument Record Sheet
-      </h4>
+      <h4 className="-mt-2 text-lg font-bold">Existing Monument Record Sheet</h4>
       <div className="h-[400px] max-w-[300px] justify-self-center">
         <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
         </Link>
-        {data ? (
-          <ObjectPreview url={data}>preview</ObjectPreview>
-        ) : (
-          'loading...'
-        )}
+        {data ? <ObjectPreview url={data}>preview</ObjectPreview> : 'loading...'}
       </div>
     </Card>
   );
@@ -364,11 +329,7 @@ const MonumentPreview = ({ status, children }) => {
       {status === 'pending' && 'generating preview...'}
       {status === 'success' && (
         <div className="h-[400px] max-w-[300px] justify-self-center border">
-          <ErrorBoundary
-            fallback={<div>The preview could not be accessed.</div>}
-          >
-            {children}
-          </ErrorBoundary>
+          <ErrorBoundary fallback={<div>The preview could not be accessed.</div>}>{children}</ErrorBoundary>
         </div>
       )}
       {status === 'error' && 'error generating preview'}
@@ -389,11 +350,7 @@ const PdfPreview = ({ path }) => {
     return <div className="flex flex-col items-center">Loading...</div>;
   }
 
-  return (
-    <div className="flex flex-col items-center">
-      {data && <ObjectPreview url={data}>preview</ObjectPreview>}
-    </div>
-  );
+  return <div className="flex flex-col items-center">{data && <ObjectPreview url={data}>preview</ObjectPreview>}</div>;
 };
 PdfPreview.propTypes = {
   path: PropTypes.string,

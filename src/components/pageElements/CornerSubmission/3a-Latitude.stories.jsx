@@ -1,5 +1,5 @@
-import { Latitude } from './GeographicCoordinates.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import { Latitude } from './GeographicCoordinates.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
@@ -35,12 +35,7 @@ export default {
     },
     xstate: {
       submission: {
-        events: [
-          { type: 'start submission' },
-          { type: 'NEXT' },
-          { type: 'NEXT' },
-          { type: 'NEXT' },
-        ],
+        events: [{ type: 'start submission' }, { type: 'NEXT' }, { type: 'NEXT' }, { type: 'NEXT' }],
       },
       project: {
         events: { type: 'SET_COORDINATES' },
@@ -57,10 +52,7 @@ const Template = (args) => {
   const data = { ...args };
 
   return (
-    <div
-      className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '450px', maxWidth: '450px' }}
-    >
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
       <Latitude {...data} />
     </div>
   );

@@ -1,13 +1,13 @@
-import { lazy, useContext, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { ErrorBoundary } from 'react-error-boundary';
-import clsx from 'clsx';
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useLocalStorage } from '@ugrc/utilities/hooks';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { lazy, useContext, useEffect, useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
-import DefaultFallback from '../ErrorBoundary.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import DefaultFallback from '../ErrorBoundary.jsx';
 const SubmissionNotice = lazy(() => import('./SubmissionNotice.jsx'));
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
 const Metadata = lazy(() => import('./Metadata.jsx'));
@@ -33,11 +33,7 @@ const Longitude = lazy(() =>
 );
 
 export default function CornerSubmission({ submission, dispatch }) {
-  const [hide, setHide] = useLocalStorage(
-    'plssSubmissionNoteVisible',
-    false,
-    true,
-  );
+  const [hide, setHide] = useLocalStorage('plssSubmissionNoteVisible', false, true);
   const scrollContainer = useRef(null);
   const [state, send] = useContext(SubmissionContext);
   const { analytics, logEvent } = usePageView('screen-submission-start');
@@ -89,8 +85,7 @@ export default function CornerSubmission({ submission, dispatch }) {
           <div role="alert" data-area="drawer">
             <h3 className="text-lg font-bold">Something went wrong</h3>
             <p className="m-4 rounded border p-4">
-              No matching component for {JSON.stringify(state.value, null, 2)}{' '}
-              state.
+              No matching component for {JSON.stringify(state.value, null, 2)} state.
             </p>
             <div className="mt-4 flex justify-center">
               <Button onClick={() => send({ type: 'BACK' })}>Back</Button>

@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import { Button } from '../formElements/Buttons.jsx';
-import { useAnalytics } from 'reactfire';
 import { logEvent } from 'firebase/analytics';
+import PropTypes from 'prop-types';
+import { useAnalytics } from 'reactfire';
+import { Button } from '../formElements/Buttons.jsx';
 
 export default function DefaultFallback({ error, resetErrorBoundary }) {
   const analytics = useAnalytics();

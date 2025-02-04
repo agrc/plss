@@ -1,9 +1,9 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { useMapReady } from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef } from 'react';
 import useGeolocation from './useGeoLocation.js';
-import { useMapReady } from '@ugrc/utilities/hooks';
 
 export default function MyLocation({ view, dispatch, width }) {
   const node = useRef();
@@ -31,7 +31,7 @@ export default function MyLocation({ view, dispatch, width }) {
     }
     const handle = node.current;
 
-    () => view?.ui?.remove(handle);
+    return () => view?.ui?.remove(handle);
   }, [view, ready, width]);
 
   if (!ready) {
@@ -48,10 +48,7 @@ MyLocation.propTypes = {
 
 export const GpsButton = forwardRef(({ state, send }, ref) => {
   return (
-    <div
-      className="relative flex h-8 w-8 rounded-full bg-white shadow-sm"
-      ref={ref}
-    >
+    <div className="relative flex h-8 w-8 rounded-full bg-white shadow-sm" ref={ref}>
       <button
         name="activate geolocation"
         aria-label="activate geolocation"
@@ -72,15 +69,12 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
 
           send({ type: 'START_TRACKING' });
         }}
-        className={clsx(
-          'flex flex-1 items-center justify-center rounded-full',
-          {
-            'cursor-pointer bg-white': state.matches('idle'),
-            'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
-            'cursor-progress bg-sky-400': state.matches('tracking.requesting'),
-            'cursor-pointer bg-red-700': state.matches('error'),
-          },
-        )}
+        className={clsx('flex flex-1 items-center justify-center rounded-full', {
+          'cursor-pointer bg-white': state.matches('idle'),
+          'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
+          'cursor-progress bg-sky-400': state.matches('tracking.requesting'),
+          'cursor-pointer bg-red-700': state.matches('error'),
+        })}
       >
         {state.matches('tracking.active') && (
           <span className="absolute flex h-6 w-6 justify-center">
@@ -90,13 +84,9 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
         )}
         <ViewfinderCircleIcon
           className={clsx('h-6 w-6', {
-            'text-slate-700':
-              state.matches('idle') || state.matches('tracking.active'),
-            'text-white motion-safe:animate-spin': state.matches(
-              'tracking.requesting',
-            ),
-            'text-white':
-              state.matches('rejected') || state.matches('notSupported'),
+            'text-slate-700': state.matches('idle') || state.matches('tracking.active'),
+            'text-white motion-safe:animate-spin': state.matches('tracking.requesting'),
+            'text-white': state.matches('rejected') || state.matches('notSupported'),
           })}
         />
       </button>

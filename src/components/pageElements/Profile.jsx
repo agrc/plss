@@ -1,19 +1,19 @@
+import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { useUser, useFunctions } from 'reactfire';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { ErrorMessage } from '@hookform/error-message';
-import ErrorMessageTag from './ErrorMessage.jsx';
+import { useFunctions, useUser } from 'reactfire';
 import { profileSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
-import { Input, Label } from '../formElements/Inputs.jsx';
-import Card from '../formElements/Card.jsx';
 import { Button } from '../formElements/Buttons.jsx';
+import Card from '../formElements/Card.jsx';
 import FileUpload from '../formElements/FileUpload.jsx';
+import { Input, Label } from '../formElements/Inputs.jsx';
 import Note from '../formElements/Note.jsx';
 import usePageView from '../hooks/usePageView.jsx';
+import ErrorMessageTag from './ErrorMessage.jsx';
 
 const defaultValues = {
   displayName: '',
@@ -46,11 +46,10 @@ export default function Profile({ dispatch }) {
     staleTime: Infinity,
   });
 
-  const { control, formState, handleSubmit, register, reset, setFocus } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues,
-    });
+  const { control, formState, handleSubmit, register, reset, setFocus } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
   const fields = useWatch({ control });
 
   useEffect(() => {
@@ -89,32 +88,12 @@ export default function Profile({ dispatch }) {
             <p>Loading...</p>
           ) : (
             <>
-              <Input
-                label="Name"
-                required={true}
-                {...register('displayName')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="name"
-                as={ErrorMessageTag}
-              />
+              <Input label="Name" required={true} {...register('displayName')} />
+              <ErrorMessage errors={formState.errors} name="name" as={ErrorMessageTag} />
               <Input label="Email" required={true} {...register('email')} />
-              <ErrorMessage
-                errors={formState.errors}
-                name="email"
-                as={ErrorMessageTag}
-              />
-              <Input
-                label="Surveyor License"
-                required={false}
-                {...register('license')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="license"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="email" as={ErrorMessageTag} />
+              <Input label="Surveyor License" required={false} {...register('license')} />
+              <ErrorMessage errors={formState.errors} name="license" as={ErrorMessageTag} />
               <Label htmlFor="seal" className="font-semibold">
                 Surveyor Seal Image
               </Label>
@@ -135,23 +114,16 @@ export default function Profile({ dispatch }) {
                   />
                 )}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="seal"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="seal" as={ErrorMessageTag} />
               <Note>
-                Your surveyor license and seal will be displayed publicly on
-                monument record sheets. No other personal information will be
-                shared or made public.
+                Your surveyor license and seal will be displayed publicly on monument record sheets. No other personal
+                information will be shared or made public.
               </Note>
               <div className="mt-4 flex justify-between">
                 <Button
                   type="button"
                   style="secondary"
-                  onClick={() =>
-                    dispatch({ type: 'menu/toggle', payload: 'login' })
-                  }
+                  onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
                 >
                   Back
                 </Button>

@@ -1,14 +1,12 @@
-import { Longitude } from './GeographicCoordinates.jsx';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import { Longitude } from './GeographicCoordinates.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Longitude,
   decorators: [
     (Story) => (
-      <SubmissionProvider
-        context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}
-      >
+      <SubmissionProvider context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}>
         {Story()}
       </SubmissionProvider>
     ),
@@ -39,10 +37,7 @@ const Template = (args) => {
   const data = { ...args };
 
   return (
-    <div
-      className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '450px', maxWidth: '450px' }}
-    >
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
       <Longitude {...data} />
     </div>
   );

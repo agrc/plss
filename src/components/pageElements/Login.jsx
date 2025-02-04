@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import { httpsCallable } from 'firebase/functions';
-import { useFunctions, useSigninCheck, useUser } from 'reactfire';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { LogInButton, LogOutButton, Button } from '../formElements/Buttons.jsx';
-import Card from '../formElements/Card.jsx';
+import { httpsCallable } from 'firebase/functions';
 import md5 from 'md5';
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useFunctions, useSigninCheck, useUser } from 'reactfire';
+import { Button, LogInButton, LogOutButton } from '../formElements/Buttons.jsx';
+import Card from '../formElements/Card.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
 const size = 160;
@@ -28,9 +28,7 @@ export default function Login({ dispatch }) {
       });
     }
   }, [signedIn, queryClient]);
-  return (
-    <Card>{data?.signedIn ? <Profile dispatch={dispatch} /> : <SignIn />}</Card>
-  );
+  return <Card>{data?.signedIn ? <Profile dispatch={dispatch} /> : <SignIn />}</Card>;
 }
 Login.propTypes = {
   dispatch: PropTypes.func,
@@ -43,19 +41,16 @@ const SignIn = () => {
     <div className="grid flex-1 gap-4">
       <h2 className="text-2xl font-bold">Sign in to your account</h2>
       <p>
-        This app requires a UtahId account to submit monument record sheets.
-        Your name and email address will be shared with this application.
+        This app requires a UtahId account to submit monument record sheets. Your name and email address will be shared
+        with this application.
       </p>
       <p>
-        A surveyor license and seal will be displayed publicly on monument
-        record sheets if you choose to add them on your profile. Otherwise, no
-        other personal information will be shared or made public.
+        A surveyor license and seal will be displayed publicly on monument record sheets if you choose to add them on
+        your profile. Otherwise, no other personal information will be shared or made public.
       </p>
       <div className="flex items-center text-slate-500">
         <span className="h-px flex-1 bg-slate-200"></span>
-        <span className="mx-3 text-xs uppercase tracking-wide">
-          continue with
-        </span>
+        <span className="mx-3 text-xs uppercase tracking-wide">continue with</span>
         <span className="h-px flex-1 bg-slate-200"></span>
       </div>
       <div className="flex justify-center">
@@ -87,9 +82,7 @@ const Profile = ({ dispatch }) => {
 
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      <h2 className="text-3xl font-semibold lg:text-2xl">
-        Welcome back, {response.data.displayName}
-      </h2>
+      <h2 className="text-3xl font-semibold lg:text-2xl">Welcome back, {response.data.displayName}</h2>
       <span className="relative">
         <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100 shadow-lg">
           {status === 'success' && <Gravatar email={response.data.email} />}
@@ -106,11 +99,7 @@ const Profile = ({ dispatch }) => {
       </span>
       <div className="flex w-full justify-around">
         <LogOutButton />
-        <Button
-          onClick={() => dispatch({ type: 'menu/toggle', payload: 'profile' })}
-        >
-          My Profile
-        </Button>
+        <Button onClick={() => dispatch({ type: 'menu/toggle', payload: 'profile' })}>My Profile</Button>
       </div>
     </div>
   );
@@ -120,9 +109,7 @@ Profile.propTypes = {
 };
 
 const Gravatar = ({ email }) => {
-  const gravatar = `https://www.gravatar.com/avatar/${md5(
-    email.toLowerCase(),
-  )}?s=${size}&default=${fallback}`;
+  const gravatar = `https://www.gravatar.com/avatar/${md5(email.toLowerCase())}?s=${size}&default=${fallback}`;
 
   return <img src={gravatar} alt="Gravatar" />;
 };

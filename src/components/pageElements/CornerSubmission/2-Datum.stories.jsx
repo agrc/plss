@@ -4,13 +4,7 @@ import CoordinatePicker from './Datum.jsx';
 export default {
   title: 'Corner/Submission/Parts',
   component: CoordinatePicker,
-  decorators: [
-    (Story) => (
-      <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
-        {Story()}
-      </SubmissionProvider>
-    ),
-  ],
+  decorators: [(Story) => <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>{Story()}</SubmissionProvider>],
   parameters: {
     backgrounds: {
       default: 'drawer',
@@ -37,10 +31,7 @@ const Template = (args) => {
   const data = { ...args };
 
   return (
-    <div
-      className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '450px', maxWidth: '450px' }}
-    >
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
       <CoordinatePicker {...data} />
     </div>
   );

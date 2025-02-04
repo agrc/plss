@@ -2,10 +2,7 @@ import PropTypes from 'prop-types';
 
 export function NumberedForm({ children, onSubmit }) {
   return (
-    <form
-      onSubmit={onSubmit}
-      className="mb-10 flex w-full flex-col items-center justify-center"
-    >
+    <form onSubmit={onSubmit} className="mb-10 flex w-full flex-col items-center justify-center">
       <div className="relative flex w-full flex-col gap-4 pl-6 after:absolute after:h-full after:border-l-2 after:border-sky-100 after:content-['']">
         {children}
       </div>
@@ -26,7 +23,7 @@ export function NumberedFormSection({ children, number, title }) {
         </div>
         <div className="ml-8 flex-1 uppercase">{title ? title : children}</div>
       </div>
-      {title && <div className="ml-8 mb-4 flex flex-col gap-4">{children}</div>}
+      {title && <div className="mb-4 ml-8 flex flex-col gap-4">{children}</div>}
     </>
   );
 }

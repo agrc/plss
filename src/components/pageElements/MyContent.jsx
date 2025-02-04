@@ -2,11 +2,12 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useOpenClosed } from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
+import { logEvent } from 'firebase/analytics';
+import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
-import { logEvent } from 'firebase/analytics';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import {
@@ -19,12 +20,11 @@ import {
   useStorage,
   useUser,
 } from 'reactfire';
-import { useOpenClosed } from '@ugrc/utilities/hooks';
+import { timeSince } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
-import { timeSince } from '../../../functions/shared/index.js';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
@@ -124,16 +124,10 @@ const MyContent = ({ dispatch }) => {
                   </Card>
                 )}
                 {status === 'success' && name === 'Submissions' && (
-                  <Submissions
-                    items={data.data.submissions}
-                    dispatch={dispatch}
-                  />
+                  <Submissions items={data.data.submissions} dispatch={dispatch} />
                 )}
                 {status === 'success' && name === 'Reference Points' && (
-                  <ReferencePoints
-                    items={data.data.points}
-                    dispatch={dispatch}
-                  />
+                  <ReferencePoints items={data.data.points} dispatch={dispatch} />
                 )}
               </TabPanel>
             ))}
@@ -158,10 +152,7 @@ const ReferencePoints = ({ items, dispatch }) => {
         <h4 className="text-xl">Your reference point list is empty</h4>
         <p>
           You can create reference points in the{' '}
-          <Button
-            style="link"
-            onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}
-          >
+          <Button style="link" onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}>
             Add Reference Point
           </Button>{' '}
           section
@@ -174,19 +165,10 @@ const ReferencePoints = ({ items, dispatch }) => {
     <FirestoreProvider sdk={firestore}>
       <section className="inline-grid w-full gap-2">
         <Card>
-          <Select
-            label="Sort order"
-            options={sortOrders}
-            value={sortOrder}
-            onChange={setSortOrder}
-          ></Select>
+          <Select label="Sort order" options={sortOrders} value={sortOrder} onChange={setSortOrder}></Select>
         </Card>
         <Card>
-          <ItemList
-            dispatch={dispatch}
-            items={items}
-            sortOrder={sortOrder}
-          ></ItemList>
+          <ItemList dispatch={dispatch} items={items} sortOrder={sortOrder}></ItemList>
         </Card>
       </section>
     </FirestoreProvider>
@@ -203,8 +185,8 @@ const Submissions = ({ items, dispatch }) => {
       <Card>
         <h4 className="text-xl">Your submission list is empty</h4>
         <p>
-          You haven&apos;t submitted any monument record sheets yet. Start a
-          submission by clicking on the corner points. Get out and survey!
+          You haven&apos;t submitted any monument record sheets yet. Start a submission by clicking on the corner
+          points. Get out and survey!
         </p>
       </Card>
     );
@@ -261,7 +243,7 @@ const Submission = ({ item, dispatch }) => {
 
   try {
     getDownloadURL(ref(storage, attributes.ref)).then(setUrl);
-  } catch (e) {
+  } catch {
     logEvent(analytics, 'download-submission-error', {
       document: item.key,
     });
@@ -271,10 +253,7 @@ const Submission = ({ item, dispatch }) => {
     <div className="relative flex flex-col text-base">
       <span className="font-semibold">{id}</span>
       <div className="absolute right-0 top-0">
-        <span
-          className="flex select-none flex-col text-xs text-slate-500"
-          alt={dateFormatter.format(submission)}
-        >
+        <span className="flex select-none flex-col text-xs text-slate-500" alt={dateFormatter.format(submission)}>
           <span>submitted</span>
           <span>{timeSince(submission)}</span>
         </span>
@@ -282,13 +261,7 @@ const Submission = ({ item, dispatch }) => {
       <SubmissionStatus status={status} label={label} />
       <div className="mt-3 flex justify-center">
         {(url?.length ?? 0) > 0 ? (
-          <Link
-            style="primary"
-            buttonGroup={{ left: true }}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link style="primary" buttonGroup={{ left: true }} href={url} target="_blank" rel="noopener noreferrer">
             Download
           </Link>
         ) : (
@@ -299,9 +272,7 @@ const Submission = ({ item, dispatch }) => {
         <Button
           style="alternate"
           buttonGroup={{ middle: true }}
-          onClick={() =>
-            dispatch({ type: 'map/center-and-zoom', payload: geometry })
-          }
+          onClick={() => dispatch({ type: 'map/center-and-zoom', payload: geometry })}
         >
           Zoom
         </Button>
@@ -356,9 +327,7 @@ const SubmissionStatus = ({ status, label }) => (
     <div className="grid auto-cols-max grid-flow-col items-center text-sm">
       <span className={getClassesForStatus(status.received)}>Received</span>
       <ChevronRightIcon className="h-4 w-4 text-slate-500" />
-      <span className={getClassesForStatus(status.reviewed)}>
-        {getReviewStatus(status.reviewed)}
-      </span>
+      <span className={getClassesForStatus(status.reviewed)}>{getReviewStatus(status.reviewed)}</span>
       <ChevronRightIcon className="h-4 w-4 text-slate-500" />
       <span className={getClassesForStatus(status.published)}>Published</span>
     </div>
@@ -371,10 +340,7 @@ SubmissionStatus.propTypes = {
 
 const SelectedItem = ({ item, dispatch }) => (
   <>
-    <ArrowLeftCircleIcon
-      className="h-10 w-10"
-      onClick={() => dispatch({ type: 'set_selection', payload: null })}
-    />
+    <ArrowLeftCircleIcon className="h-10 w-10" onClick={() => dispatch({ type: 'set_selection', payload: null })} />
     <h3 className="text-lg font-bold">{item.name}</h3>
     <div>{dateFormatter.format(item.when)}</div>
     <div className="flex justify-evenly">
@@ -405,12 +371,7 @@ SelectedItem.propTypes = {
   dispatch: PropTypes.func,
 };
 
-const sortOrders = [
-  'New to Old',
-  'Old to New',
-  'Ascending (0-9 A-Z)',
-  'Descending (Z-A 0-9)',
-];
+const sortOrders = ['New to Old', 'Old to New', 'Ascending (0-9 A-Z)', 'Descending (Z-A 0-9)'];
 
 const sortFunction = (sortOrder, transform) => {
   return (one, two) => {
@@ -438,10 +399,7 @@ const ItemList = ({ items, dispatch, sortOrder }) => {
       {clone
         .sort(
           sortFunction(sortOrder, (x, y) => {
-            if (
-              sortOrder === 'Ascending (0-9 A-Z)' ||
-              sortOrder === 'Descending (Z-A 0-9)'
-            ) {
+            if (sortOrder === 'Ascending (0-9 A-Z)' || sortOrder === 'Descending (Z-A 0-9)') {
               return { a: x.attributes.name, b: y.attributes.name };
             }
 
@@ -482,10 +440,7 @@ const Item = ({ item, dispatch }) => {
         {item.attributes.name}
       </p>
       <div className="absolute right-0 top-0">
-        <span
-          className="flex select-none flex-col text-xs text-slate-500"
-          alt={dateFormatter.format(date)}
-        >
+        <span className="flex select-none flex-col text-xs text-slate-500" alt={dateFormatter.format(date)}>
           <span>created</span>
           <span>{timeSince(date)}</span>
         </span>
@@ -507,9 +462,7 @@ const Item = ({ item, dispatch }) => {
           <div className="flex flex-wrap justify-center gap-2">
             {item.photos.length === 0 && (
               <Card>
-                <p className="text-center">
-                  No photos are attached to this point.
-                </p>
+                <p className="text-center">No photos are attached to this point.</p>
               </Card>
             )}
             {item.photos.map((path) => (
@@ -525,9 +478,7 @@ const Item = ({ item, dispatch }) => {
         <Button
           style="alternate"
           buttonGroup={{ middle: true }}
-          onClick={() =>
-            dispatch({ type: 'map/center-and-zoom', payload: item.geometry })
-          }
+          onClick={() => dispatch({ type: 'map/center-and-zoom', payload: item.geometry })}
         >
           Zoom
         </Button>
@@ -538,9 +489,7 @@ const Item = ({ item, dispatch }) => {
           onClick={async () => {
             try {
               setStatus('loading');
-              await deleteDoc(
-                doc(db, 'submitters', user.uid, 'points', item.attributes.id),
-              );
+              await deleteDoc(doc(db, 'submitters', user.uid, 'points', item.attributes.id));
               queryClient.invalidateQueries(['my content']);
               setStatus('success');
             } catch (error) {

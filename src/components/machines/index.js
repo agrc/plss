@@ -1,8 +1,8 @@
 // @ts-check
 
-import { assign, fromPromise, setup } from 'xstate';
-import ky from 'ky';
 import DmsCoordinates, { parseDms } from 'dms-conversion';
+import ky from 'ky';
+import { assign, fromPromise, setup } from 'xstate';
 import {
   countiesInZone,
   createProjectFormData,
@@ -47,18 +47,14 @@ const project = (grid) => {
   return ky
     .post('project', {
       body: formData,
-      prefixUrl:
-        'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+      prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
     })
     .json();
 };
 
 const coordinateToDecimalDegrees = (geographic) => {
   return new Promise((resolve) => {
-    const dms = [
-      `${formatDegrees(geographic.northing)} N`,
-      `${formatDegrees(geographic.easting)} W`,
-    ];
+    const dms = [`${formatDegrees(geographic.northing)} N`, `${formatDegrees(geographic.easting)} W`];
 
     const [y, x] = dms.map(parseDms);
 
@@ -104,8 +100,7 @@ const projectToStatePlane = (coordinates) => {
   return ky
     .post('project', {
       body: formData,
-      prefixUrl:
-        'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+      prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
     })
     .json();
 };
@@ -132,14 +127,11 @@ export const submissionMachine = setup({
     'is new submission': ({ context }) => context.type === 'new',
     'is existing submission': ({ context }) => context.type === 'existing',
     'is grid datum': ({ context }) => context.datum.split('-')[0] === 'grid',
-    'is geographic datum': ({ context }) =>
-      context.datum.split('-')[0] === 'geographic',
+    'is geographic datum': ({ context }) => context.datum.split('-')[0] === 'geographic',
   },
   actors: {
     project: fromPromise(({ input }) => project(input)),
-    coordinateToDecimalDegrees: fromPromise(({ input }) =>
-      coordinateToDecimalDegrees(input),
-    ),
+    coordinateToDecimalDegrees: fromPromise(({ input }) => coordinateToDecimalDegrees(input)),
     queryForCounty: fromPromise(({ input }) => queryForCounty(input)),
     projectToStatePlane: fromPromise(({ input }) =>
       projectToStatePlane({
@@ -471,10 +463,7 @@ export const submissionMachine = setup({
                       return '';
                     }
 
-                    const county =
-                      event.output.features[0].attributes[
-                        'NAME'
-                      ]?.toLowerCase();
+                    const county = event.output.features[0].attributes['NAME']?.toLowerCase();
 
                     let zone;
 
@@ -534,10 +523,7 @@ export const submissionMachine = setup({
             src: fromPromise(
               ({ input: { decimalDegrees } }) =>
                 new Promise((resolve) => {
-                  const dmsCoords = new DmsCoordinates(
-                    decimalDegrees.y,
-                    decimalDegrees.x,
-                  );
+                  const dmsCoords = new DmsCoordinates(decimalDegrees.y, decimalDegrees.x);
 
                   resolve(dmsCoords.dmsArrays);
                 }),

@@ -3,12 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import {
-  AuthProvider,
-  FirebaseAppProvider,
-  FunctionsProvider,
-  StorageProvider,
-} from 'reactfire';
+import { AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
 import './../../index.css';
 import MyContent from './MyContent.jsx';
 
