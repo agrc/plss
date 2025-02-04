@@ -1,13 +1,7 @@
-import { Button } from '../../formElements/Buttons.jsx';
 import PropTypes from 'prop-types';
+import { Button } from '../../formElements/Buttons.jsx';
 
-export default function Wizard({
-  back = false,
-  next = false,
-  finish,
-  clear,
-  status,
-}) {
+export default function Wizard({ back = false, next = false, finish, clear, status }) {
   return (
     <div className="flex justify-center">
       {back && (
@@ -33,12 +27,7 @@ export default function Wizard({
         </Button>
       )}
       {finish && (
-        <Button
-          buttonGroup={{ right: true }}
-          type="submit"
-          state={status}
-          onClick={finish}
-        >
+        <Button buttonGroup={{ right: true }} type="submit" state={status} onClick={finish}>
           {getButtonText(status)}
         </Button>
       )}

@@ -1,8 +1,8 @@
-import MonumentRecord from './MonumentRecord.jsx';
-import { FirebaseAppProvider, StorageProvider } from 'reactfire';
-import { getStorage } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+import { FirebaseAppProvider, StorageProvider } from 'reactfire';
+import MonumentRecord from './MonumentRecord.jsx';
 
 let config = {
   apiKey: '',

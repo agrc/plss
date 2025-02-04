@@ -1,11 +1,7 @@
-import {
-  assertFails,
-  assertSucceeds,
-  initializeTestEnvironment,
-} from '@firebase/rules-unit-testing';
-import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
-import { readFileSync } from 'fs';
+import { assertFails, assertSucceeds, initializeTestEnvironment } from '@firebase/rules-unit-testing';
 import { Buffer } from 'buffer';
+import { readFileSync } from 'fs';
+import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 let testEnv;
 const userId = 'user_abc';
@@ -20,9 +16,7 @@ const getPaths = (storage) => {
     submitter: storage.ref(`submitters/new`),
     userImage: storage.ref(`submitters/${userId}/new`).child('userFolder.png'),
     user: storage.ref(`submitters/${userId}/new`),
-    pointImage: storage
-      .ref(`submitters/${userId}/new/${blmPoint}`)
-      .child('pointFolder.png'),
+    pointImage: storage.ref(`submitters/${userId}/new/${blmPoint}`).child('pointFolder.png'),
     point: storage.ref(`submitters/${userId}/new/${blmPoint}`),
   };
 };
@@ -67,13 +61,9 @@ describe('storage', () => {
     const storage = testEnv.unauthenticatedContext().storage();
     const { submitter, user, point } = getPaths(storage);
 
-    await assertFails(
-      submitter.child('test.png').put(loadImage(), { contentType })
-    );
+    await assertFails(submitter.child('test.png').put(loadImage(), { contentType }));
     await assertFails(user.child('test.png').put(loadImage(), { contentType }));
-    await assertFails(
-      point.child('test.png').put(loadImage(), { contentType })
-    );
+    await assertFails(point.child('test.png').put(loadImage(), { contentType }));
   });
 
   it('disallows metadata access for unauthorized users', async () => {
@@ -98,42 +88,29 @@ describe('storage', () => {
     const storage = testEnv.authenticatedContext(userId).storage();
     const { submitter, user, point } = getPaths(storage);
 
-    await assertFails(
-      submitter
-        .child('test.doc')
-        .put(loadImage(), { contentType: 'text/plain' })
-    );
-    await assertFails(
-      user.child('test.doc').put(loadImage(), { contentType: 'text/plain' })
-    );
-    await assertFails(
-      point.child('test.doc').put(loadImage(), { contentType: 'text/plain' })
-    );
+    await assertFails(submitter.child('test.doc').put(loadImage(), { contentType: 'text/plain' }));
+    await assertFails(user.child('test.doc').put(loadImage(), { contentType: 'text/plain' }));
+    await assertFails(point.child('test.doc').put(loadImage(), { contentType: 'text/plain' }));
   });
 
   it('allows write access for authorized users to their folder when uploading image files', async () => {
     const storage = testEnv.authenticatedContext(userId).storage();
     const { submitter, user, point } = getPaths(storage);
 
-    await assertFails(
-      submitter.child('test.png').put(loadImage(), { contentType })
-    );
+    await assertFails(submitter.child('test.png').put(loadImage(), { contentType }));
     await assertFails(user.child('test.png').put(loadImage(), { contentType }));
-    await assertSucceeds(
-      point.child('test.png').put(loadImage(), { contentType })
-    );
+    await assertSucceeds(point.child('test.png').put(loadImage(), { contentType }));
   });
 
   it('disallows files greater than 5MB', async () => {
     const storage = testEnv.authenticatedContext(userId).storage();
 
-    const getRef = (submitter, imageName) =>
-      storage.ref(`submitters/${submitter}`).child(imageName);
+    const getRef = (submitter, imageName) => storage.ref(`submitters/${submitter}`).child(imageName);
 
     await assertFails(
       getRef(userId, 'big.png').put(createMBImage(5.1), {
         contentType,
-      })
+      }),
     );
   });
 });

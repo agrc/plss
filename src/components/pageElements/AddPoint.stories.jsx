@@ -3,12 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import {
-  AuthProvider,
-  FirebaseAppProvider,
-  FunctionsProvider,
-  StorageProvider,
-} from 'reactfire';
+import { AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
 import { useImmerReducer } from 'use-immer';
 import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';

@@ -1,6 +1,6 @@
-import { useAnalytics } from 'reactfire';
 import { logEvent } from 'firebase/analytics';
 import { useEffect } from 'react';
+import { useAnalytics } from 'reactfire';
 
 export default function usePageView(page, data) {
   const analytics = useAnalytics();

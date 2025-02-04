@@ -1,6 +1,6 @@
+import { ErrorMessage } from '@hookform/error-message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { ErrorMessage } from '@hookform/error-message';
 import ErrorMessageTag from '../pageElements/ErrorMessage.jsx';
 
 export const LimitedTextarea = ({
@@ -95,8 +95,7 @@ export const CharactersRemaining = ({ remaining, limit }) => {
       className={clsx('absolute bottom-0 right-3', {
         'text-xs text-slate-500': percentage >= 0 && percentage < 0.8,
         'text-xs text-amber-600': percentage >= 0.8 && percentage < 0.9,
-        'border border-red-600 bg-white p-2 text-lg font-black text-red-600':
-          percentage >= 0.9,
+        'border border-red-600 bg-white p-2 text-lg font-black text-red-600': percentage >= 0.9,
       })}
     >
       {remaining} characters left

@@ -1,19 +1,15 @@
-import { StorageProvider, FirebaseAppProvider, AuthProvider } from 'reactfire';
-import { getStorage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import Pdf from './Pdf.jsx';
+import { getStorage } from 'firebase/storage';
+import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import Pdf from './Pdf.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Pdf,
   decorators: [
-    (Story) => (
-      <SubmissionProvider context={{ blmPointId: 1, type: 'existing' }}>
-        {Story()}
-      </SubmissionProvider>
-    ),
+    (Story) => <SubmissionProvider context={{ blmPointId: 1, type: 'existing' }}>{Story()}</SubmissionProvider>,
   ],
   parameters: {
     backgrounds: {
@@ -61,10 +57,7 @@ const Template = (args) => {
     <FirebaseAppProvider firebaseApp={app}>
       <StorageProvider sdk={storage}>
         <AuthProvider sdk={auth}>
-          <div
-            className="relative h-screen overflow-y-auto text-white"
-            style={{ width: '450px', maxWidth: '450px' }}
-          >
+          <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
             <Pdf {...data} />
           </div>
         </AuthProvider>

@@ -1,16 +1,11 @@
-import Metadata from './Metadata.jsx';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import {
-  AuthProvider,
-  FirebaseAppProvider,
-  FunctionsProvider,
-  StorageProvider,
-} from 'reactfire';
+import { AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import Metadata from './Metadata.jsx';
 
 let config = {
   apiKey: '',
@@ -42,9 +37,7 @@ export default {
             <AuthProvider sdk={auth}>
               <FunctionsProvider sdk={functions}>
                 <StorageProvider sdk={storage}>
-                  <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>
-                    {Story()}
-                  </SubmissionProvider>
+                  <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>{Story()}</SubmissionProvider>
                 </StorageProvider>
               </FunctionsProvider>
             </AuthProvider>
@@ -78,10 +71,7 @@ export default {
 const Template = (args) => {
   const data = { ...args };
   return (
-    <div
-      className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '450px', maxWidth: '450px' }}
-    >
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
       <Metadata {...data} />
     </div>
   );

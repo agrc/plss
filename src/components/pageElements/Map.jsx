@@ -5,21 +5,17 @@ import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
 import EsriMap from '@arcgis/core/Map';
-import Viewpoint from '@arcgis/core/Viewpoint';
-import MapView from '@arcgis/core/views/MapView';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol.js';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol.js';
+import Viewpoint from '@arcgis/core/Viewpoint';
+import MapView from '@arcgis/core/views/MapView';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector';
 import '@ugrc/layer-selector/src/LayerSelector.css';
-import {
-  useGraphicManager,
-  useViewLoading,
-  useViewPointZooming,
-} from '@ugrc/utilities/hooks';
+import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { logEvent } from 'firebase/analytics';
@@ -28,23 +24,21 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useAnalytics, useFunctions, useSigninCheck } from 'reactfire';
+import DefaultFallback from './ErrorBoundary.jsx';
 import GroupButton from './mapElements/GroupButton.jsx';
+import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
-import HomeButton from './mapElements/HomeButton.jsx';
 import Township from './mapElements/Township.jsx';
-import DefaultFallback from './ErrorBoundary.jsx';
 
 esriConfig.assetsPath = '/assets';
 
 const urls = {
   landownership:
     'https://gis.trustlands.utah.gov/hosting/rest/services/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
-  parcels:
-    'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer',
+  parcels: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer',
   plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
-  points:
-    'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
+  points: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
 };
 
 const loadingCss =
@@ -372,8 +366,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       filter: {
         objectIds: [identifyGraphic.attributes.OBJECTID],
       },
-      includedEffect:
-        'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
+      includedEffect: 'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
       excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
     };
   }, [identifyGraphic]);
@@ -410,9 +403,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         default: {
           const response = await mapView.current.hitTest(event);
 
-          const hits = response?.results?.filter(
-            (result) => result.layer?.id === 'PLSS Points',
-          );
+          const hits = response?.results?.filter((result) => result.layer?.id === 'PLSS Points');
 
           let payload = null;
           if (hits.length > 0) {
@@ -501,13 +492,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [
-    dispatch,
-    setUserGraphics,
-    content?.data?.points,
-    status,
-    signInCheckResult?.signedIn,
-  ]);
+  }, [dispatch, setUserGraphics, content?.data?.points, status, signInCheckResult?.signedIn]);
 
   // add and zoom to gps location
   useEffect(() => {
@@ -567,23 +552,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     <ErrorBoundary FallbackComponent={DefaultFallback}>
       <>
         <section className="ugrc__map">
-          <div
-            className={clsx(
-              loadingCss,
-              isLoading || mapState === 'loading' ? '' : 'opacity-0',
-            )}
-          ></div>
+          <div className={clsx(loadingCss, isLoading || mapState === 'loading' ? '' : 'opacity-0')}></div>
           <div ref={node} className="h-screen w-full bg-white"></div>
         </section>
-        {selectorOptions ? (
-          <LayerSelector {...selectorOptions}></LayerSelector>
-        ) : null}
+        {selectorOptions ? <LayerSelector {...selectorOptions}></LayerSelector> : null}
         <HomeButton view={mapView.current} extent={extent} width={onlyWidth} />
-        <MyLocation
-          view={mapView.current}
-          dispatch={dispatch}
-          width={onlyWidth}
-        />
+        <MyLocation view={mapView.current} dispatch={dispatch} width={onlyWidth} />
         <GroupButton view={mapView.current} width={onlyWidth}>
           <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
             <h2 className="mb-2 text-2xl font-bold">Quick finder tools</h2>
@@ -608,10 +582,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
               </TabList>
               <TabPanels className="mx-4">
                 <TabPanel>
-                  <Township
-                    dispatch={dispatch}
-                    apiKey={import.meta.env.VITE_API_KEY}
-                  />
+                  <Township dispatch={dispatch} apiKey={import.meta.env.VITE_API_KEY} />
                 </TabPanel>
                 <TabPanel>
                   <MonumentRecord dispatch={dispatch} />

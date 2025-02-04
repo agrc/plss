@@ -1,9 +1,9 @@
-import { StorageProvider, FirebaseAppProvider, AuthProvider } from 'reactfire';
-import { getStorage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import Images from './Images.jsx';
+import { getStorage } from 'firebase/storage';
+import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import Images from './Images.jsx';
 
 export default {
   title: 'Corner/Submission/Parts',
@@ -55,10 +55,7 @@ const Template = (args) => {
     <FirebaseAppProvider firebaseApp={app}>
       <StorageProvider sdk={storage}>
         <AuthProvider sdk={auth}>
-          <div
-            className="relative h-screen overflow-y-auto text-white"
-            style={{ width: '450px', maxWidth: '450px' }}
-          >
+          <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
             <Images {...data} />
           </div>
         </AuthProvider>

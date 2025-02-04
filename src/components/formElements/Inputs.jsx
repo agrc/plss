@@ -22,7 +22,7 @@ export const Input = forwardRef(
     ref,
   ) => {
     const classes = clsx(
-      'border border-slate-400 bg-white py-2 px-3 text-slate-800 placeholder:text-slate-400 shadow-sm transition-all duration-200 ease-in-out focus:border-sky-500 focus:outline-none focus:ring focus:ring-sky-600 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
+      'border border-slate-400 bg-white px-3 py-2 text-slate-800 shadow-sm transition-all duration-200 ease-in-out placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring focus:ring-sky-600 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
       {
         'rounded-md': !left,
         'rounded-l-md': left,
@@ -90,10 +90,7 @@ Input.propTypes = {
   /**
    * Custom css class names to append to the defaults
    */
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  className: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   touched: PropTypes.bool,
   step: PropTypes.string,
   min: PropTypes.string,

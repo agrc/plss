@@ -42,19 +42,12 @@ const TieSheetList = ({ blmPointId, children }) => {
       <div>
         <h4 className="text-xl font-medium">Monument Records</h4>
         {status === 'pending' && <div>Loading...</div>}
-        {status === 'error' && (
-          <div>The monument records are currently not available</div>
-        )}
-        {status === 'success' && (data?.length ?? 0) === 0 && (
-          <div>This point has no monument records</div>
-        )}
+        {status === 'error' && <div>The monument records are currently not available</div>}
+        {status === 'success' && (data?.length ?? 0) === 0 && <div>This point has no monument records</div>}
         {status === 'success' && data.length > 0 && (
           <ul>
             {data.map((x) => (
-              <li
-                key={x.name}
-                className="group hover:rounded hover:bg-slate-100"
-              >
+              <li key={x.name} className="group hover:rounded hover:bg-slate-100">
                 <span className="inline-flex align-middle">
                   <ArrowDownOnSquareIcon className="mr-2 inline-block h-4 w-4 text-sky-600 group-hover:text-sky-800" />
                   <a href={x.url} target="_blank" rel="noopener noreferrer">

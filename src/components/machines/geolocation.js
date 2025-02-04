@@ -1,5 +1,5 @@
-import { assign, fromCallback, setup } from 'xstate';
 import Graphic from '@arcgis/core/Graphic';
+import { assign, fromCallback, setup } from 'xstate';
 
 const updatePosition = assign({
   position: ({ event }) => {

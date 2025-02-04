@@ -1,18 +1,12 @@
-import CornerSubmission from './CornerSubmission.jsx';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
-import { getAnalytics } from 'firebase/analytics';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import {
-  AnalyticsProvider,
-  AuthProvider,
-  FirebaseAppProvider,
-  FunctionsProvider,
-  StorageProvider,
-} from 'reactfire';
+import { AnalyticsProvider, AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import CornerSubmission from './CornerSubmission.jsx';
 
 let config = {
   apiKey: '',
@@ -96,10 +90,7 @@ const Template = (args) => {
   };
 
   return (
-    <div
-      className="relative h-screen overflow-y-auto text-white"
-      style={{ width: '450px', maxWidth: '450px' }}
-    >
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
       <CornerSubmission {...data} />
     </div>
   );

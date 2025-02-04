@@ -55,6 +55,7 @@ export const createMonumentRecord = async (record, id) => {
   } catch (error) {
     logger.error(
       'error fetching surveyor license. using empty string',
+      error,
       record.submitted_by,
       {
         structuredData: true,
@@ -92,7 +93,7 @@ export const createMonumentRecord = async (record, id) => {
 
     await doc.update({ monument: fileName });
   } catch (error) {
-    logger.error('error updating monument record sheet', fileName, {
+    logger.error('error updating monument record sheet', fileName, error, {
       structuredData: true,
     });
   }

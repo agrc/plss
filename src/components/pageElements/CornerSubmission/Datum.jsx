@@ -1,22 +1,19 @@
-import { useContext, useState, useEffect } from 'react';
-import clsx from 'clsx';
-import { Controller, useForm } from 'react-hook-form';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import Spacer from '../../formElements/Spacer.jsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import { Button } from '../../formElements/Buttons.jsx';
-import { Select } from '../../formElements/Select.jsx';
-import ErrorMessageTag from '../ErrorMessage.jsx';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import {
-  geographic,
-  grid,
-} from '../../../../functions/shared/cornerSubmission/Options.js';
+import clsx from 'clsx';
+import { useContext, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { geographic, grid } from '../../../../functions/shared/cornerSubmission/Options.js';
 import { coordinatePickerSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import Wizard from './Wizard.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { Select } from '../../formElements/Select.jsx';
+import Spacer from '../../formElements/Spacer.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import ErrorMessageTag from '../ErrorMessage.jsx';
+import Wizard from './Wizard.jsx';
 
 const formats = { Geographic: geographic, Grid: grid };
 
@@ -80,9 +77,7 @@ const CoordinatePicker = () => {
       {state.context.type === 'existing' && (
         <>
           <div className="flex justify-between">
-            <p className="italic">
-              Coordinates are optional for existing monument uploads
-            </p>
+            <p className="italic">Coordinates are optional for existing monument uploads</p>
             <Button style="secondary" onClick={() => send({ type: 'SKIP' })}>
               Skip
             </Button>
@@ -127,22 +122,14 @@ const CoordinatePicker = () => {
                       />
                     )}
                   />
-                  <ErrorMessage
-                    errors={formState.errors}
-                    name="datum"
-                    as={ErrorMessageTag}
-                  />
+                  <ErrorMessage errors={formState.errors} name="datum" as={ErrorMessageTag} />
                 </TabPanel>
               ))}
             </TabPanels>
           </TabGroup>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            back={() => send({ type: 'BACK' })}
-            next={true}
-            clear={onReset}
-          />
+          <Wizard back={() => send({ type: 'BACK' })} next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>

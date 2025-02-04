@@ -1,29 +1,13 @@
-import PropTypes from 'prop-types';
+import { FolderIcon, HomeModernIcon, PlusCircleIcon, SwatchIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import {
-  FolderIcon,
-  PlusCircleIcon,
-  UserCircleIcon,
-  SwatchIcon,
-  HomeModernIcon,
-} from '@heroicons/react/24/outline';
+import PropTypes from 'prop-types';
 import { useUser } from 'reactfire';
 
 export default function Menu({ dispatch, drawerOpen }) {
   const { data: user } = useUser();
 
   const classes = clsx(
-    [
-      'menu',
-      'z-20',
-      'flex',
-      'py-4',
-      'bg-slate-800/95',
-      'shadow',
-      'menu',
-      'md:justify-between',
-      'justify-evenly',
-    ],
+    ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800/95', 'shadow', 'menu', 'md:justify-between', 'justify-evenly'],
     {
       'menu--open': drawerOpen,
     },
@@ -31,40 +15,23 @@ export default function Menu({ dispatch, drawerOpen }) {
 
   return (
     <nav className={classes}>
-      <MenuItem
-        Icon={HomeModernIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
-      >
+      <MenuItem Icon={HomeModernIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}>
         Home
       </MenuItem>
-      <MenuItem
-        Icon={SwatchIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'legend' })}
-      >
+      <MenuItem Icon={SwatchIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'legend' })}>
         Map Legend
       </MenuItem>
       {user !== null && (
         <>
-          <MenuItem
-            Icon={PlusCircleIcon}
-            onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}
-          >
+          <MenuItem Icon={PlusCircleIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}>
             Add Reference Point
           </MenuItem>
-          <MenuItem
-            Icon={FolderIcon}
-            onClick={() =>
-              dispatch({ type: 'menu/toggle', payload: 'content' })
-            }
-          >
+          <MenuItem Icon={FolderIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'content' })}>
             My Content
           </MenuItem>
         </>
       )}
-      <MenuItem
-        Icon={UserCircleIcon}
-        onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}
-      >
+      <MenuItem Icon={UserCircleIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}>
         {user !== null ? 'Profile' : 'Login/Register'}
       </MenuItem>
     </nav>
