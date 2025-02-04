@@ -1,9 +1,9 @@
 import Extent from '@arcgis/core/geometry/Extent';
 import { HomeModernIcon } from '@heroicons/react/24/outline';
-import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
 import { useMapReady } from '@ugrc/utilities/hooks';
 import { logEvent } from 'firebase/analytics';
+import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 import { useAnalytics } from 'reactfire';
 
 const goHome = async (view, extent) => {
@@ -25,14 +25,11 @@ export default function HomeButton({ view, extent, width }) {
     }
     const handle = me.current;
 
-    () => view?.ui?.remove(handle);
+    return () => view?.ui?.remove(handle);
   }, [view, ready, width]);
 
   return (
-    <div
-      ref={me}
-      className="relative flex h-8 w-8 rounded-full bg-white shadow-sm"
-    >
+    <div ref={me} className="relative flex h-8 w-8 rounded-full bg-white shadow-sm">
       <button
         className="flex flex-1 cursor-pointer items-center justify-center rounded-full bg-white"
         name="default view"

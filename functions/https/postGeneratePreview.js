@@ -53,6 +53,7 @@ export const generatePreview = async (data, auth) => {
     logger.error(
       'error fetching surveyor license. using empty string',
       auth.uid,
+      error,
       {
         structuredData: true,
       },

@@ -1,13 +1,7 @@
-import { Fragment } from 'react';
-import { contrastColor } from 'contrast-color';
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel, Transition } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  PopoverGroup,
-  Transition,
-} from '@headlessui/react';
+import { contrastColor } from 'contrast-color';
+import { Fragment } from 'react';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
@@ -18,14 +12,9 @@ export default function Legend() {
   return (
     <Card>
       <h2 className="text-2xl font-semibold">PLSS Points Legend</h2>
-      <p className="text-sm leading-none">
-        What do the colors mean? Click on the question mark to learn more.
-      </p>
+      <p className="text-sm leading-none">What do the colors mean? Click on the question mark to learn more.</p>
       <Spacer />
-      <PopoverGroup
-        as="section"
-        className="flex flex-wrap justify-around gap-3"
-      >
+      <PopoverGroup as="section" className="flex flex-wrap justify-around gap-3">
         {layers.map((layer) => (
           <Popover key={layer.name}>
             <PopoverButton
@@ -59,9 +48,7 @@ export default function Legend() {
 
                   return (
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="bg-white px-3 py-2 text-sm text-slate-800">
-                        {layer.about}
-                      </div>
+                      <div className="bg-white px-3 py-2 text-sm text-slate-800">{layer.about}</div>
                     </div>
                   );
                 }}
@@ -78,8 +65,7 @@ const layers = [
   {
     name: 'County Managed',
     color: '#7BE144',
-    about:
-      'PLSS points whose monument record sheets and information are managed on a county website.',
+    about: 'PLSS points whose monument record sheets and information are managed on a county website.',
   },
   {
     name: 'Monument Record',
@@ -89,8 +75,7 @@ const layers = [
   {
     name: 'Control',
     color: '#1A1A1A',
-    about:
-      'PLSS points that have been incorporated into the PLSS Fabric as control points.',
+    about: 'PLSS points that have been incorporated into the PLSS Fabric as control points.',
   },
   {
     name: 'Calculated',

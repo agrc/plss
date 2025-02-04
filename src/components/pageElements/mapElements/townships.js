@@ -1,17 +1,4 @@
-export const ub = [
-  '1N',
-  '2N',
-  '3N',
-  '4N',
-  '5N',
-  '1S',
-  '2S',
-  '3S',
-  '4S',
-  '5S',
-  '6S',
-  '7S',
-];
+export const ub = ['1N', '2N', '3N', '4N', '5N', '1S', '2S', '3S', '4S', '5S', '6S', '7S'];
 export const sl = [
   '1N',
   '2N',

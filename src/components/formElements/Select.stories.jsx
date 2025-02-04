@@ -96,10 +96,7 @@ export const ResetInForm = () => {
           />
         )}
       />
-      <button
-        className="border bg-amber-200 p-2"
-        onClick={() => reset(defaultValues)}
-      >
+      <button className="border bg-amber-200 p-2" onClick={() => reset(defaultValues)}>
         Reset
       </button>
     </>

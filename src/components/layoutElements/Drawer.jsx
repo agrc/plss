@@ -14,9 +14,7 @@ const SubmissionProvider = lazy(() =>
     default: module.SubmissionProvider,
   })),
 );
-const CornerSubmission = lazy(
-  () => import('../pageElements/CornerSubmission/CornerSubmission.jsx'),
-);
+const CornerSubmission = lazy(() => import('../pageElements/CornerSubmission/CornerSubmission.jsx'));
 const MyContent = lazy(() => import('../pageElements/MyContent.jsx'));
 const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
@@ -25,15 +23,7 @@ const Profile = lazy(() => import('../pageElements/Profile.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
-export default function Drawer({
-  dispatch,
-  authenticated,
-  map,
-  addPoint,
-  activeComponent,
-  drawerOpen,
-  submission,
-}) {
+export default function Drawer({ dispatch, authenticated, map, addPoint, activeComponent, drawerOpen, submission }) {
   const { data: signInCheckResult } = useSigninCheck();
   const scrollContainer = useRef();
 
@@ -76,11 +66,7 @@ export default function Drawer({
       }
       case 'points': {
         return signInCheckResult?.signedIn ? (
-          <AddPoint
-            {...addPoint}
-            active={map.activeTool === 'add-point'}
-            dispatch={dispatch}
-          />
+          <AddPoint {...addPoint} active={map.activeTool === 'add-point'} dispatch={dispatch} />
         ) : (
           <Login dispatch={dispatch} authenticated={authenticated} />
         );
@@ -99,13 +85,7 @@ export default function Drawer({
         return <Legend />;
       }
       case 'identify': {
-        return (
-          <Identify
-            authenticated={signInCheckResult.signedIn}
-            graphic={map.graphic}
-            dispatch={dispatch}
-          />
-        );
+        return <Identify authenticated={signInCheckResult.signedIn} graphic={map.graphic} dispatch={dispatch} />;
       }
       case 'submission': {
         return (
@@ -121,16 +101,14 @@ export default function Drawer({
     <aside ref={scrollContainer} className={classes}>
       <Logo version={version} t />
       <XCircleIcon
-        className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
+        className="absolute right-4 top-6 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
         onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}
       />
       <ErrorBoundary
         FallbackComponent={DefaultFallback}
         onReset={() => dispatch({ type: 'menu/toggle', payload: 'welcome' })}
       >
-        <Suspense fallback={<div>loading...</div>}>
-          {getComponent(activeComponent)}
-        </Suspense>
+        <Suspense fallback={<div>loading...</div>}>{getComponent(activeComponent)}</Suspense>
       </ErrorBoundary>
     </aside>
   );

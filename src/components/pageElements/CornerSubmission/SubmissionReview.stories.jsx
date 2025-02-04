@@ -1,14 +1,10 @@
-import Review from './SubmissionReview.jsx';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
-import {
-  FirebaseAppProvider,
-  FunctionsProvider,
-  StorageProvider,
-} from 'reactfire';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { initializeApp } from 'firebase/app';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import Review from './SubmissionReview.jsx';
 
 let config = {
   apiKey: '',
@@ -34,7 +30,7 @@ export default {
       const storage = getStorage(app);
 
       return (
-        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl bg-slate-50 px-4 py-4 text-sky-900 shadow-2xl sm:rounded-t-none md:pb-12 ">
+        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl bg-slate-50 px-4 py-4 text-sky-900 shadow-2xl sm:rounded-t-none md:pb-12">
           <QueryClientProvider client={new QueryClient()}>
             <FirebaseAppProvider firebaseConfig={config}>
               <FunctionsProvider sdk={functions}>

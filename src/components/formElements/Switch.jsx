@@ -1,19 +1,11 @@
-import { forwardRef } from 'react';
-import PropTypes from 'prop-types';
 import { Switch } from '@headlessui/react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 
 const Toggle = forwardRef(
   (
-    {
-      name,
-      value = false,
-      onChange,
-      screenReader = 'Toggle',
-      hideLabel = false,
-      yesValue = 'Yes',
-      noValue = 'No',
-    },
+    { name, value = false, onChange, screenReader = 'Toggle', hideLabel = false, yesValue = 'Yes', noValue = 'No' },
     ref,
   ) => {
     return (
@@ -33,17 +25,14 @@ const Toggle = forwardRef(
             className={clsx(
               {
                 'translate-x-8 border-sky-800 from-sky-300 to-sky-800': value,
-                'translate-x-0 border-slate-500 from-white to-slate-300':
-                  !value,
+                'translate-x-0 border-slate-500 from-white to-slate-300': !value,
               },
               'pointer-events-none inline-block h-6 w-6 transform rounded-full border-2 bg-gradient-to-br shadow-lg ring-0 transition duration-200 ease-in-out',
             )}
           />
         </Switch>
         {!hideLabel && (
-          <span className="mt-1 self-center pl-2 text-sm text-slate-500">
-            {value ? yesValue : noValue}
-          </span>
+          <span className="mt-1 self-center pl-2 text-sm text-slate-500">{value ? yesValue : noValue}</span>
         )}
       </div>
     );

@@ -1,8 +1,8 @@
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { OAuthProvider, signInWithPopup } from 'firebase/auth';
-import { useAuth } from 'reactfire';
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
+import { OAuthProvider, signInWithPopup } from 'firebase/auth';
+import PropTypes from 'prop-types';
+import { useAuth } from 'reactfire';
 
 export const LogInButton = () => {
   const auth = useAuth();
@@ -154,14 +154,7 @@ export const Button = ({
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
           <path
             className="opacity-75"
             fill="currentColor"
@@ -169,9 +162,7 @@ export const Button = ({
           ></path>
         </svg>
       )}
-      {state === 'error' && (
-        <ExclamationCircleIcon className="-ml-1 mr-2 h-5 w-5 text-red-500" />
-      )}
+      {state === 'error' && <ExclamationCircleIcon className="-ml-1 mr-2 h-5 w-5 text-red-500" />}
       {children}
     </button>
   );
@@ -210,14 +201,7 @@ Button.propTypes = {
   buttonGroup: PropTypes.object,
 };
 
-export const Link = ({
-  href,
-  children,
-  target,
-  rel,
-  buttonGroup,
-  style = 'link',
-}) => {
+export const Link = ({ href, children, target, rel, buttonGroup, style = 'link' }) => {
   const attributes = {
     target,
     rel,

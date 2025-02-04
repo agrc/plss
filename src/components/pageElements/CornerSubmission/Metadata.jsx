@@ -1,26 +1,22 @@
-import { useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
+import { accuracy, corner, status } from '../../../../functions/shared/cornerSubmission/Options.js';
+import { metadataSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
-import { Select } from '../../formElements/Select.jsx';
-import { Switch } from '../../formElements/Switch.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
-import { Input, Label } from '../../formElements/Inputs.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import {
-  accuracy,
-  status,
-  corner,
-} from '../../../../functions/shared/cornerSubmission/Options.js';
-import { metadataSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import Wizard from './Wizard.jsx';
+import { Input, Label } from '../../formElements/Inputs.jsx';
+import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
+import { Select } from '../../formElements/Select.jsx';
+import Spacer from '../../formElements/Spacer.jsx';
+import { Switch } from '../../formElements/Switch.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
+import Wizard from './Wizard.jsx';
 
 const defaults = {
   section: '',
@@ -49,11 +45,10 @@ const Metadata = ({ dispatch }) => {
     defaultValues.mrrc = false;
   }
 
-  const { control, formState, handleSubmit, register, reset, setFocus } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues,
-    });
+  const { control, formState, handleSubmit, register, reset, setFocus } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
 
   const onSubmit = (payload) => {
     payload.collected = dateFormatter.format(payload.collected);
@@ -86,11 +81,7 @@ const Metadata = ({ dispatch }) => {
               required={true}
               {...register('section')}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="section"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="section" as={ErrorMessageTag} />
           </div>
           <div>
             <Controller
@@ -106,11 +97,7 @@ const Metadata = ({ dispatch }) => {
                 />
               )}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="corner"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="corner" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Condition">
@@ -128,11 +115,7 @@ const Metadata = ({ dispatch }) => {
                 />
               )}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="status"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="status" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Collection">
@@ -144,11 +127,7 @@ const Metadata = ({ dispatch }) => {
               required={true}
               {...register('collected')}
             ></Input>
-            <ErrorMessage
-              errors={formState.errors}
-              name="collected"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="collected" as={ErrorMessageTag} />
           </div>
           <div>
             <Controller
@@ -164,21 +143,14 @@ const Metadata = ({ dispatch }) => {
                 />
               )}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="accuracy"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="accuracy" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={4} title="MRRC">
           <div>
             <label htmlFor="mrrc" className="font-semibold">
               Associated with a{' '}
-              <abbr
-                className="cursor-help"
-                title="Monument Replacement and Restoration Committee"
-              >
+              <abbr className="cursor-help" title="Monument Replacement and Restoration Committee">
                 MRRC
               </abbr>{' '}
               Project
@@ -203,20 +175,12 @@ const Metadata = ({ dispatch }) => {
                 <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
               </Link>
             </div>
-            <ErrorMessage
-              errors={formState.errors}
-              name="mrrc"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="mrrc" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={5} title="Description">
           <div>
-            <Label
-              htmlFor="description"
-              className="font-semibold"
-              required={true}
-            >
+            <Label htmlFor="description" className="font-semibold" required={true}>
               Monument Description
             </Label>
             <Controller
@@ -257,11 +221,7 @@ const Metadata = ({ dispatch }) => {
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            next={true}
-            back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
-            clear={onReset}
-          />
+          <Wizard next={true} back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>

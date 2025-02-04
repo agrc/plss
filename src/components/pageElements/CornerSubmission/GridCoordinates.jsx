@@ -1,23 +1,19 @@
-import { useContext, useEffect } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { statePlaneZones, units, verticalDatums } from '../../../../functions/shared/cornerSubmission/Options.js';
+import { gridCoordinatesSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
+import { formatDatum } from '../../../../functions/shared/index.js';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { Button } from '../../formElements/Buttons.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import {
-  units,
-  statePlaneZones,
-  verticalDatums,
-} from '../../../../functions/shared/cornerSubmission/Options.js';
-import { gridCoordinatesSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import Wizard from './Wizard.jsx';
-import { formatDatum } from '../../../../functions/shared/index.js';
 import usePageView from '../../hooks/usePageView.jsx';
-import { Button } from '../../formElements/Buttons.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
+import Wizard from './Wizard.jsx';
 
 const defaults = {
   zone: '',
@@ -38,11 +34,10 @@ const GridCoordinates = () => {
     defaultValues = defaults;
   }
 
-  const { control, formState, handleSubmit, register, reset, setFocus } =
-    useForm({
-      resolver: yupResolver(gridCoordinatesSchema),
-      defaultValues,
-    });
+  const { control, formState, handleSubmit, register, reset, setFocus } = useForm({
+    resolver: yupResolver(gridCoordinatesSchema),
+    defaultValues,
+  });
 
   useEffect(() => {
     setFocus('zone');
@@ -56,10 +51,7 @@ const GridCoordinates = () => {
   }, []);
 
   useEffect(() => {
-    if (
-      state.matches('form.entering alternate grid coordinates') &&
-      state.matches('projecting.done')
-    ) {
+    if (state.matches('form.entering alternate grid coordinates') && state.matches('projecting.done')) {
       reset({ ...state.context?.grid });
     }
   }, [state, reset]);
@@ -76,9 +68,7 @@ const GridCoordinates = () => {
   return (
     <>
       <h2 className="text-2xl font-semibold">Location Information</h2>
-      <p className="text-sm leading-none">
-        Grid coordinates for {formatDatum(state.context.datum)}
-      </p>
+      <p className="text-sm leading-none">Grid coordinates for {formatDatum(state.context.datum)}</p>
       <Spacer className="my-4" />
       {state.matches('projecting.rejected') && (
         <>
@@ -86,8 +76,7 @@ const GridCoordinates = () => {
           <Button onClick={() => send({ type: 'BACK' })}>Try again</Button>
         </>
       )}
-      {state.matches('form.entering alternate grid coordinates') &&
-      !state.matches('projecting.done') ? (
+      {state.matches('form.entering alternate grid coordinates') && !state.matches('projecting.done') ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -106,61 +95,27 @@ const GridCoordinates = () => {
                   />
                 )}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="zone"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="zone" as={ErrorMessageTag} />
             </div>
             <div>
               <Controller
                 control={control}
                 name="unit"
                 render={({ field }) => (
-                  <Select
-                    label="Units"
-                    placeholder="What are the units"
-                    options={units}
-                    required={true}
-                    {...field}
-                  />
+                  <Select label="Units" placeholder="What are the units" options={units} required={true} {...field} />
                 )}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="unit"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="unit" as={ErrorMessageTag} />
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={3} title="Location">
             <div>
-              <Input
-                label="Northing"
-                type="number"
-                step="0.001"
-                required={true}
-                {...register('northing')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="northing"
-                as={ErrorMessageTag}
-              />
+              <Input label="Northing" type="number" step="0.001" required={true} {...register('northing')} />
+              <ErrorMessage errors={formState.errors} name="northing" as={ErrorMessageTag} />
             </div>
             <div>
-              <Input
-                label="Easting"
-                type="number"
-                step="0.001"
-                required={true}
-                {...register('easting')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="easting"
-                as={ErrorMessageTag}
-              />
+              <Input label="Easting" type="number" step="0.001" required={true} {...register('easting')} />
+              <ErrorMessage errors={formState.errors} name="easting" as={ErrorMessageTag} />
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={4} title="Elevation">
@@ -178,33 +133,15 @@ const GridCoordinates = () => {
                   />
                 )}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="verticalDatum"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="verticalDatum" as={ErrorMessageTag} />
             </div>
             <div>
-              <Input
-                type="number"
-                label="Elevation"
-                step="0.001"
-                required={false}
-                {...register('elevation')}
-              />
-              <ErrorMessage
-                errors={formState.errors}
-                name="elevation"
-                as={ErrorMessageTag}
-              />
+              <Input type="number" label="Elevation" step="0.001" required={false} {...register('elevation')} />
+              <ErrorMessage errors={formState.errors} name="elevation" as={ErrorMessageTag} />
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={0}>
-            <Wizard
-              back={() => send({ type: 'BACK' })}
-              next={true}
-              clear={onReset}
-            />
+            <Wizard back={() => send({ type: 'BACK' })} next={true} clear={onReset} />
           </NumberedFormSection>
         </NumberedForm>
       )}

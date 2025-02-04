@@ -1,13 +1,8 @@
+import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef } from 'react';
-import {
-  Dialog,
-  DialogPanel,
-  Transition,
-  TransitionChild,
-} from '@headlessui/react';
-import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button } from '../../formElements/Buttons.jsx';
 
 export default function GroupButton({ view, width, children }) {
@@ -21,15 +16,12 @@ export default function GroupButton({ view, width, children }) {
     }
     const handle = node.current;
 
-    () => view?.ui?.remove(handle);
+    return () => view?.ui?.remove(handle);
   }, [view, ready, width]);
 
   return (
     <>
-      <div
-        ref={node}
-        className="relative flex h-8 w-8 rounded-full bg-white shadow-sm"
-      >
+      <div ref={node} className="relative flex h-8 w-8 rounded-full bg-white shadow-sm">
         <button
           name="open map finding tools"
           aria-label="open map finding tools"

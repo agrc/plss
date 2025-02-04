@@ -1,26 +1,26 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { contrastColor } from 'contrast-color';
+import { httpsCallable } from 'firebase/functions';
+import PropTypes from 'prop-types';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { useUser, useFunctions } from 'reactfire';
-import { httpsCallable } from 'firebase/functions';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LimitedTextarea } from '../formElements/LimitedTextarea.jsx';
-import { Input } from '../formElements/Inputs.jsx';
-import { Switch } from '../formElements/Switch.jsx';
-import Spacer from '../formElements/Spacer.jsx';
-import { NumberedForm, NumberedFormSection } from '../formElements/Form.jsx';
-import Card from '../formElements/Card.jsx';
+import { useFunctions, useUser } from 'reactfire';
 import { addPointSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { ErrorMessage } from '@hookform/error-message';
-import ErrorMessageTag from './ErrorMessage.jsx';
-import Wizard from './CornerSubmission/Wizard.jsx';
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import FileUpload from '../formElements/FileUpload.jsx';
 import { Button } from '../formElements/Buttons.jsx';
+import Card from '../formElements/Card.jsx';
+import FileUpload from '../formElements/FileUpload.jsx';
+import { NumberedForm, NumberedFormSection } from '../formElements/Form.jsx';
+import { Input } from '../formElements/Inputs.jsx';
+import { LimitedTextarea } from '../formElements/LimitedTextarea.jsx';
+import Spacer from '../formElements/Spacer.jsx';
+import { Switch } from '../formElements/Switch.jsx';
 import usePageView from '../hooks/usePageView.jsx';
+import Wizard from './CornerSubmission/Wizard.jsx';
+import ErrorMessageTag from './ErrorMessage.jsx';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -29,13 +29,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 });
 const limit = 3;
 
-export default function AddPoint({
-  active,
-  color,
-  geometry,
-  dispatch,
-  notes = '',
-}) {
+export default function AddPoint({ active, color, geometry, dispatch, notes = '' }) {
   const functions = useFunctions();
   const addPoint = httpsCallable(functions, 'postPoint');
   const { data: user } = useUser();
@@ -54,11 +48,10 @@ export default function AddPoint({
     [`photo-3-${uniqueId.current}`]: '',
   };
 
-  const { control, formState, handleSubmit, register, reset, setValue, watch } =
-    useForm({
-      resolver: yupResolver(schema),
-      defaultValues,
-    });
+  const { control, formState, handleSubmit, register, reset, setValue, watch } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
 
   const fields = useWatch({ control });
 
@@ -67,11 +60,7 @@ export default function AddPoint({
 
   useEffect(() => {
     if (geometry?.x && geometry?.y) {
-      setValue(
-        'location',
-        { x: geometry.x, y: geometry.y },
-        { shouldValidate: true },
-      );
+      setValue('location', { x: geometry.x, y: geometry.y }, { shouldValidate: true });
     }
   }, [geometry, setValue]);
 
@@ -140,25 +129,15 @@ export default function AddPoint({
         Add Reference Point
       </h2>
       <p className="text-sm leading-tight">
-        Use reference points to help you remember points of interest or other
-        identifying features when out in the field collecting information.
+        Use reference points to help you remember points of interest or other identifying features when out in the field
+        collecting information.
       </p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Name the point">
           <div>
-            <Input
-              label="Name"
-              placeholder="Point Name"
-              type="text"
-              required={true}
-              {...register('name')}
-            />
-            <ErrorMessage
-              errors={formState.errors}
-              name="name"
-              as={ErrorMessageTag}
-            />
+            <Input label="Name" placeholder="Point Name" type="text" required={true} {...register('name')} />
+            <ErrorMessage errors={formState.errors} name="name" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Add notes">
@@ -177,11 +156,7 @@ export default function AddPoint({
               />
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="notes"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="notes" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Add photos">
           {new Array(imageCount).fill().map((_, i) => (
@@ -250,9 +225,7 @@ export default function AddPoint({
                 <>
                   <div className="flex items-center text-slate-500">
                     <span className="h-px flex-1 bg-slate-200"></span>
-                    <span className="mx-3 text-xs uppercase tracking-wide">
-                      selected color
-                    </span>
+                    <span className="mx-3 text-xs uppercase tracking-wide">selected color</span>
                     <span className="h-px flex-1 bg-slate-200"></span>
                   </div>
                   <div className="w-min justify-self-center rounded border border-slate-400 bg-gradient-to-br from-slate-600 via-slate-300 to-slate-50 p-2 shadow-lg">
@@ -262,12 +235,8 @@ export default function AddPoint({
                     >
                       {geometry?.x && (
                         <>
-                          <div className="block text-xs">
-                            {numberFormatter.format(geometry?.x || 0)}
-                          </div>
-                          <div className="block text-xs">
-                            {numberFormatter.format(geometry?.y || 0)}
-                          </div>
+                          <div className="block text-xs">{numberFormatter.format(geometry?.x || 0)}</div>
+                          <div className="block text-xs">{numberFormatter.format(geometry?.y || 0)}</div>
                         </>
                       )}
                     </div>
@@ -275,11 +244,7 @@ export default function AddPoint({
                 </>
               )}
             </Card>
-            <ErrorMessage
-              errors={formState.errors}
-              name="color"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="color" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={5} title="Place the point">
@@ -301,20 +266,11 @@ export default function AddPoint({
                 </p>
               </div>
             </Card>
-            <ErrorMessage
-              errors={formState.errors}
-              name="location"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="location" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            finish={() => mutate}
-            clear={onReset}
-            status={status}
-            back={false}
-          />
+          <Wizard finish={() => mutate} clear={onReset} status={status} back={false} />
         </NumberedFormSection>
       </NumberedForm>
     </>

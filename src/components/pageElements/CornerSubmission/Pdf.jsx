@@ -1,17 +1,17 @@
-import { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { useUser } from 'reactfire';
-import { useForm, useWatch, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useUser } from 'reactfire';
+import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
+import usePageView from '../../hooks/usePageView.jsx';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
-import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import usePageView from '../../hooks/usePageView.jsx';
 
 export default function MonumentPdf({ dispatch }) {
   const { data: user } = useUser();
@@ -51,17 +51,10 @@ export default function MonumentPdf({ dispatch }) {
               />
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="pdf"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="pdf" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            next={true}
-            back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })}
-          />
+          <Wizard next={true} back={() => dispatch({ type: 'menu/toggle', payload: 'identify' })} />
         </NumberedFormSection>
       </NumberedForm>
     </>

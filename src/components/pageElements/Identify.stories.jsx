@@ -1,9 +1,9 @@
-import Identify from './Identify.jsx';
-import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
+import Identify from './Identify.jsx';
 
 let config = {
   apiKey: '',
@@ -29,7 +29,7 @@ export default {
       const auth = getAuth(app);
 
       return (
-        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl border border-sky-700 bg-slate-600 px-4 py-4 text-white shadow-2xl sm:rounded-t-none md:pb-12 ">
+        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl border border-sky-700 bg-slate-600 px-4 py-4 text-white shadow-2xl sm:rounded-t-none md:pb-12">
           <QueryClientProvider client={new QueryClient()}>
             <FirebaseAppProvider firebaseConfig={config}>
               <AuthProvider sdk={auth}>

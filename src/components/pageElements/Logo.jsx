@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 export default function Logo({ version }) {
   return (
     <div className="mb-0 flex sm:mb-6">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 400.9 523.07"
-        className="mr-2 flex w-12 rounded-lg"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.9 523.07" className="mr-2 flex w-12 rounded-lg">
         <g id="wavy_gravy">
           <path
             d="M31.29 442.24a256.8 256.8 0 0 1-1.23-30.45c.1-4.72.33-9.5.7-14.34 1.94-25.24 9.91-48.3 17.62-70.6 6.1-17.66 11.86-34.34 14.84-51.95a92.47 92.47 0 0 0 1.35-14.66c.02-6.69-.92-12.58-2.82-17.47-8.7-22.5-39.37-23.97-61.75-21.74v281.81a20.3 20.3 0 0 0 20.24 20.24h32.43c-9.72-22.38-18.23-49.62-21.38-80.84Z"

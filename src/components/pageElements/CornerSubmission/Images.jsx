@@ -1,17 +1,17 @@
-import { Fragment, useContext, useState } from 'react';
-import { useUser } from 'reactfire';
-import { useForm, useWatch, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Fragment, useContext, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useUser } from 'reactfire';
 import { imagesSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
-import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
-import Wizard from './Wizard.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import Spacer from '../../formElements/Spacer.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
+import Wizard from './Wizard.jsx';
 
 const limit = 10;
 const defaults = {
@@ -90,11 +90,7 @@ export default function MonumentImages() {
               />
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="map"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="map" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Monument area">
           <Controller
@@ -114,11 +110,7 @@ export default function MonumentImages() {
               />
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="monument"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="monument" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
           <Controller
@@ -138,11 +130,7 @@ export default function MonumentImages() {
               />
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="closeUp"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="closeUp" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={4} title="Extra pages">
           {new Array(extraPageCount).fill().map((_, i) => (
@@ -165,11 +153,7 @@ export default function MonumentImages() {
                   />
                 )}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name={`extra${i}`}
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name={`extra${i}`} as={ErrorMessageTag} />
             </Fragment>
           ))}
           {limit - extraPageCount} extra pages are allowed

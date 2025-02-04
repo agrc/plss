@@ -1,23 +1,23 @@
-import { useContext, useEffect, useState } from 'react';
+import { Label, Radio, RadioGroup } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
+import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { RadioGroup, Label, Radio } from '@headlessui/react';
-import { Input } from '../../formElements/Inputs.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import ErrorMessageTag from '../ErrorMessage.jsx';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { units } from '../../../../functions/shared/cornerSubmission/Options.js';
 import {
+  geographicHeightSchema,
   latitudeSchema,
   longitudeSchema,
-  geographicHeightSchema,
 } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import Wizard from './Wizard.jsx';
 import { formatDatum } from '../../../../functions/shared/index.js';
+import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { Input } from '../../formElements/Inputs.jsx';
+import Spacer from '../../formElements/Spacer.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
+import ErrorMessageTag from '../ErrorMessage.jsx';
+import Wizard from './Wizard.jsx';
 
 const defaults = {
   seconds: '',
@@ -51,10 +51,7 @@ export const Latitude = () => {
   }, []);
 
   useEffect(() => {
-    if (
-      state.matches('form.entering alternate latitude') &&
-      state.matches('projecting.done')
-    ) {
+    if (state.matches('form.entering alternate latitude') && state.matches('projecting.done')) {
       reset({ northing: state.context?.geographic?.northing });
     }
   }, [state, reset]);
@@ -71,12 +68,9 @@ export const Latitude = () => {
   return (
     <>
       <h2 className="text-2xl font-semibold">Location Information</h2>
-      <p className="text-sm leading-none">
-        Geographic Northing for {formatDatum(state.context.datum)}
-      </p>
+      <p className="text-sm leading-none">Geographic Northing for {formatDatum(state.context.datum)}</p>
       <Spacer className="my-4" />
-      {state.matches('form.entering alternate latitude') &&
-      !state.matches('projecting.done') ? (
+      {state.matches('form.entering alternate latitude') && !state.matches('projecting.done') ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={handleSubmit(onSubmit)}>
@@ -91,11 +85,7 @@ export const Latitude = () => {
                 required={true}
                 {...register('northing.degrees')}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="northing.degrees"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="northing.degrees" as={ErrorMessageTag} />
             </div>
             <div>
               <Input
@@ -107,11 +97,7 @@ export const Latitude = () => {
                 required={true}
                 {...register('northing.minutes')}
               />
-              <ErrorMessage
-                errors={formState.errors}
-                name="northing.minutes"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="northing.minutes" as={ErrorMessageTag} />
             </div>
             <div>
               <Input
@@ -125,11 +111,7 @@ export const Latitude = () => {
                 {...register('northing.seconds')}
               />
               <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
-              <ErrorMessage
-                errors={formState.errors}
-                name="northing.seconds"
-                as={ErrorMessageTag}
-              />
+              <ErrorMessage errors={formState.errors} name="northing.seconds" as={ErrorMessageTag} />
             </div>
           </NumberedFormSection>
           <NumberedFormSection number={0}>
@@ -178,9 +160,7 @@ export const Longitude = () => {
   return (
     <>
       <h2 className="text-2xl font-semibold">Location Information</h2>
-      <p className="text-sm leading-none">
-        Geographic Easting for {formatDatum(state.context.datum)}
-      </p>
+      <p className="text-sm leading-none">Geographic Easting for {formatDatum(state.context.datum)}</p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={3} title="Longitude">
@@ -194,11 +174,7 @@ export const Longitude = () => {
               required={true}
               {...register('easting.degrees')}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="easting.degrees"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="easting.degrees" as={ErrorMessageTag} />
           </div>
           <div>
             <Input
@@ -210,11 +186,7 @@ export const Longitude = () => {
               required={true}
               {...register('easting.minutes')}
             />
-            <ErrorMessage
-              errors={formState.errors}
-              name="easting.minutes"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="easting.minutes" as={ErrorMessageTag} />
           </div>
           <div>
             <Input
@@ -228,19 +200,11 @@ export const Longitude = () => {
               {...register('easting.seconds')}
             />
             <p className="text-sm text-slate-300">5 Decimals ##.#####</p>
-            <ErrorMessage
-              errors={formState.errors}
-              name="easting.seconds"
-              as={ErrorMessageTag}
-            />
+            <ErrorMessage errors={formState.errors} name="easting.seconds" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            back={() => send({ type: 'BACK' })}
-            next={true}
-            clear={onReset}
-          />
+          <Wizard back={() => send({ type: 'BACK' })} next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>
@@ -273,11 +237,10 @@ export const GeographicHeight = () => {
 
   const selectedUnit = units.find((x) => x.value === defaultValues.unit);
 
-  const { control, formState, handleSubmit, register, reset, setFocus } =
-    useForm({
-      resolver: yupResolver(geographicHeightSchema),
-      defaultValues,
-    });
+  const { control, formState, handleSubmit, register, reset, setFocus } = useForm({
+    resolver: yupResolver(geographicHeightSchema),
+    defaultValues,
+  });
 
   useEffect(() => {
     setFocus('elevation');
@@ -297,9 +260,7 @@ export const GeographicHeight = () => {
   return (
     <>
       <h2 className="text-2xl font-semibold">Location Information</h2>
-      <p className="text-sm leading-none">
-        Geographic height for {formatDatum(state.context.datum)}
-      </p>
+      <p className="text-sm leading-none">Geographic height for {formatDatum(state.context.datum)}</p>
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={4} title="Ellipsoid Height">
@@ -333,12 +294,7 @@ export const GeographicHeight = () => {
                   >
                     {({ checked }) => (
                       <div className="text-sm">
-                        <Label
-                          as="p"
-                          className={`font-medium ${
-                            checked ? 'text-white' : 'text-sky-700'
-                          }`}
-                        >
+                        <Label as="p" className={`font-medium ${checked ? 'text-white' : 'text-sky-700'}`}>
                           {option.label}
                         </Label>
                       </div>
@@ -348,23 +304,11 @@ export const GeographicHeight = () => {
               </RadioGroup>
             )}
           />
-          <ErrorMessage
-            errors={formState.errors}
-            name="elevation"
-            as={ErrorMessageTag}
-          />
-          <ErrorMessage
-            errors={formState.errors}
-            name="unit"
-            as={ErrorMessageTag}
-          />
+          <ErrorMessage errors={formState.errors} name="elevation" as={ErrorMessageTag} />
+          <ErrorMessage errors={formState.errors} name="unit" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard
-            back={() => send({ type: 'BACK' })}
-            next={true}
-            clear={onReset}
-          />
+          <Wizard back={() => send({ type: 'BACK' })} next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>
     </>

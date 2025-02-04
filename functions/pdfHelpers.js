@@ -32,12 +32,16 @@ export const getPdfAssets = async (bucket, metadata, seal) => {
   try {
     images = await getBase64Images(bucket, imagePaths);
   } catch (error) {
-    logger.error('could not get binary images');
+    logger.error('could not get binary images', error, {
+      structuredData: true,
+    });
   }
   try {
     pdfs = await getBinaryPdfs(bucket, pdfPaths);
   } catch (error) {
-    logger.error('could not get binary pdfs');
+    logger.error('could not get binary pdfs', error, {
+      structuredData: true,
+    });
   }
 
   return { images, pdfs };

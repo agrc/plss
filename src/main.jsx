@@ -1,10 +1,10 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import '@arcgis/core/assets/esri/themes/light/main.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { FirebaseAppProvider } from 'reactfire';
 import App from './components/app/App.jsx';
-import '@arcgis/core/assets/esri/themes/light/main.css';
 import './index.css';
 
 let firebaseConfig = {

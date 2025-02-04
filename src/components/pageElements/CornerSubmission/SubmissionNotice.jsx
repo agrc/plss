@@ -1,20 +1,17 @@
-import Card from '../../formElements/Card.jsx';
-import Note from '../../formElements/Note.jsx';
-import { Button } from '../../formElements/Buttons.jsx';
-import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
+import { useQuery } from '@tanstack/react-query';
 import { httpsCallable } from 'firebase/functions';
-import { useUser, useFunctions } from 'reactfire';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useFunctions, useUser } from 'reactfire';
+import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
+import { Button } from '../../formElements/Buttons.jsx';
+import Card from '../../formElements/Card.jsx';
+import Note from '../../formElements/Note.jsx';
 
 export default function SubmissionNotice({ pointId, county, toggle }) {
   const { data: user } = useUser();
 
-  const townshipInformation = useMemo(
-    () => extractTownshipInformation(pointId),
-    [pointId],
-  );
+  const townshipInformation = useMemo(() => extractTownshipInformation(pointId), [pointId]);
 
   const functions = useFunctions();
   const getProfile = httpsCallable(functions, 'getProfile');
@@ -44,9 +41,8 @@ export default function SubmissionNotice({ pointId, county, toggle }) {
     <div className="mb-4 inline-grid">
       <Card>
         <Note>
-          This monument record information will be reviewed by the county
-          surveyor under stewardship of this corner to satisfy the requirements
-          of state code 17-23-17-7a.
+          This monument record information will be reviewed by the county surveyor under stewardship of this corner to
+          satisfy the requirements of state code 17-23-17-7a.
         </Note>
         <div className="flex justify-between">
           <span className="font-semibold">Submitted By</span>
