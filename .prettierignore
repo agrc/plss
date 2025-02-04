@@ -1,0 +1,9 @@
+.vscode
+/data
+/forklift
+/maps
+/mockups
+/scripts
+/dist
+/public/assets
+CHANGELOG.md
