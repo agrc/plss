@@ -26,7 +26,7 @@ export default function Identify({ authenticated, graphic, dispatch }) {
   return (
     <>
       <h2 className="text-2xl font-semibold">PLSS Point Information</h2>
-      <h3 className="ml-2 mt-1 text-xl font-light">{graphic.attributes.point_id}</h3>
+      <h3 className="mt-1 ml-2 text-xl font-light">{graphic.attributes.point_id}</h3>
 
       <main className="inline-grid gap-3 text-sm">
         {graphic?.attributes?.point_id && (

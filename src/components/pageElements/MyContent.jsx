@@ -75,10 +75,10 @@ const MyContent = ({ dispatch }) => {
                 key={name}
                 className={({ selected }) =>
                   clsx(
-                    'w-full rounded-lg py-2.5 font-medium leading-5',
-                    'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                    'w-full rounded-lg py-2.5 leading-5 font-medium',
+                    'ring-white/60 ring-offset-2 ring-offset-sky-400 focus:ring-2 focus:outline-hidden',
                     selected
-                      ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                      ? 'border border-sky-600 bg-sky-500 text-white shadow-sm hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
                       : 'text-sky-700 hover:bg-sky-600/20',
                   )
                 }
@@ -98,7 +98,7 @@ const MyContent = ({ dispatch }) => {
                       ) : (
                         <>
                           <svg
-                            className="-ml-1 mr-2 h-5 w-5 animate-spin motion-reduce:hidden"
+                            className="mr-2 -ml-1 h-5 w-5 animate-spin motion-reduce:hidden"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -252,8 +252,8 @@ const Submission = ({ item, dispatch }) => {
   return (
     <div className="relative flex flex-col text-base">
       <span className="font-semibold">{id}</span>
-      <div className="absolute right-0 top-0">
-        <span className="flex select-none flex-col text-xs text-slate-500" alt={dateFormatter.format(submission)}>
+      <div className="absolute top-0 right-0">
+        <span className="flex flex-col text-xs text-slate-500 select-none" alt={dateFormatter.format(submission)}>
           <span>submitted</span>
           <span>{timeSince(submission)}</span>
         </span>
@@ -346,13 +346,13 @@ const SelectedItem = ({ item, dispatch }) => (
     <div className="flex justify-evenly">
       <button
         type="button"
-        className="ripple inline-block rounded border-2 border-white bg-transparent px-6 py-2 text-center text-xs font-medium uppercase leading-6 text-white transition hover:bg-white hover:text-black focus:outline-none"
+        className="ripple inline-block rounded-sm border-2 border-white bg-transparent px-6 py-2 text-center text-xs leading-6 font-medium text-white uppercase transition hover:bg-white hover:text-black focus:outline-hidden"
       >
         Edit
       </button>
       <button
         type="button"
-        className="ripple inline-block rounded border-2 border-white bg-transparent px-6 py-2 text-center text-xs font-medium uppercase leading-6 text-white transition hover:bg-white hover:text-black focus:outline-none"
+        className="ripple inline-block rounded-sm border-2 border-white bg-transparent px-6 py-2 text-center text-xs leading-6 font-medium text-white uppercase transition hover:bg-white hover:text-black focus:outline-hidden"
       >
         Delete
       </button>
@@ -439,8 +439,8 @@ const Item = ({ item, dispatch }) => {
       >
         {item.attributes.name}
       </p>
-      <div className="absolute right-0 top-0">
-        <span className="flex select-none flex-col text-xs text-slate-500" alt={dateFormatter.format(date)}>
+      <div className="absolute top-0 right-0">
+        <span className="flex flex-col text-xs text-slate-500 select-none" alt={dateFormatter.format(date)}>
           <span>created</span>
           <span>{timeSince(date)}</span>
         </span>
@@ -454,9 +454,9 @@ const Item = ({ item, dispatch }) => {
       </p>
       {isOpen && (
         <div>
-          <div className="mb-4 mt-2 flex items-center text-slate-500">
+          <div className="mt-2 mb-4 flex items-center text-slate-500">
             <span className="h-px flex-1 bg-slate-200"></span>
-            <span className="mx-3 text-xs uppercase tracking-wide">photos</span>
+            <span className="mx-3 text-xs tracking-wide uppercase">photos</span>
             <span className="h-px flex-1 bg-slate-200"></span>
           </div>
           <div className="flex flex-wrap justify-center gap-2">

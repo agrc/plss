@@ -7,7 +7,7 @@ export default function Menu({ dispatch, drawerOpen }) {
   const { data: user } = useUser();
 
   const classes = clsx(
-    ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800/95', 'shadow', 'menu', 'md:justify-between', 'justify-evenly'],
+    ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800/95', 'shadow-sm', 'menu', 'md:justify-between', 'justify-evenly'],
     {
       'menu--open': drawerOpen,
     },
@@ -45,7 +45,7 @@ Menu.propTypes = {
 const MenuItem = ({ Icon, children, onClick }) => {
   return (
     <button
-      className="hover: relative flex select-none flex-col items-center justify-center fill-current text-xs text-sky-500 transition-colors hover:text-sky-300"
+      className="hover: relative flex flex-col items-center justify-center fill-current text-xs text-sky-500 transition-colors select-none hover:text-sky-300"
       onClick={onClick}
     >
       {Icon && <Icon className="h-10 w-10" />}

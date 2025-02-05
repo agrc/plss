@@ -213,10 +213,10 @@ export default function Township({ apiKey, dispatch }) {
               key={item.name}
               className={({ selected }) =>
                 clsx(
-                  'w-full rounded-lg py-2.5 font-medium leading-5',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-slate-400 focus:outline-none focus:ring-2',
+                  'w-full rounded-lg py-2.5 leading-5 font-medium',
+                  'ring-white/60 ring-offset-2 ring-offset-slate-400 focus:ring-2 focus:outline-hidden',
                   selected
-                    ? 'border border-slate-600 bg-slate-500 text-white shadow hover:border-slate-700 hover:bg-slate-600 focus:border-slate-500 focus:ring-slate-600 active:bg-slate-700'
+                    ? 'border border-slate-600 bg-slate-500 text-white shadow-sm hover:border-slate-700 hover:bg-slate-600 focus:border-slate-500 focus:ring-slate-600 active:bg-slate-700'
                     : 'text-slate-700 hover:bg-slate-600/20',
                 )
               }
@@ -289,7 +289,7 @@ export default function Township({ apiKey, dispatch }) {
         </Button>
       </div>
       {status === 'error' && (
-        <div className="rounded border border-rose-900 p-4 text-sm text-rose-800">
+        <div className="rounded-sm border border-rose-900 p-4 text-sm text-rose-800">
           There was a problem with this combination. Try again or try something near by to help you find your way.
         </div>
       )}

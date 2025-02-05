@@ -48,7 +48,7 @@ MyLocation.propTypes = {
 
 export const GpsButton = forwardRef(({ state, send }, ref) => {
   return (
-    <div className="relative flex h-8 w-8 rounded-full bg-white shadow-sm" ref={ref}>
+    <div className="relative flex h-8 w-8 rounded-full bg-white shadow-xs" ref={ref}>
       <button
         name="activate geolocation"
         aria-label="activate geolocation"
@@ -78,7 +78,7 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
       >
         {state.matches('tracking.active') && (
           <span className="absolute flex h-6 w-6 justify-center">
-            <span className="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-sky-200/75"></span>
+            <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-sky-200/75"></span>
             <span className="inline-flex h-1 w-1 self-center rounded-full bg-sky-400"></span>
           </span>
         )}

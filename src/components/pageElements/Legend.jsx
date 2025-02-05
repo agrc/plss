@@ -22,12 +22,12 @@ export default function Legend() {
                 backgroundColor: layer.color,
                 color: contrastColor.call({}, { bgColor: layer.color }),
               }}
-              className="group flex items-center rounded px-3 py-1 text-sm font-semibold shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+              className="group flex items-center rounded-sm px-3 py-1 text-sm font-semibold shadow-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white/75"
               key={layer.name}
               {...layer}
             >
               <span>{layer.name}</span>
-              <QuestionMarkCircleIcon className="ml-2 h-5 w-5 transition duration-150 ease-in-out group-hover:text-opacity-80" />
+              <QuestionMarkCircleIcon className="group-hover:text-opacity-80 ml-2 h-5 w-5 transition duration-150 ease-in-out" />
             </PopoverButton>
             <Transition
               as={Fragment}
@@ -47,7 +47,7 @@ export default function Legend() {
                   }
 
                   return (
-                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div className="overflow-hidden rounded-lg ring-1 shadow-lg ring-black/5">
                       <div className="bg-white px-3 py-2 text-sm text-slate-800">{layer.about}</div>
                     </div>
                   );

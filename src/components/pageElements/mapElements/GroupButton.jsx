@@ -21,7 +21,7 @@ export default function GroupButton({ view, width, children }) {
 
   return (
     <>
-      <div ref={node} className="relative flex h-8 w-8 rounded-full bg-white shadow-sm">
+      <div ref={node} className="relative flex h-8 w-8 rounded-full bg-white shadow-xs">
         <button
           name="open map finding tools"
           aria-label="open map finding tools"
@@ -47,10 +47,10 @@ export default function GroupButton({ view, width, children }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black/25" />
           </TransitionChild>
 
-          <div className="fixed left-0 right-0 top-2 overflow-y-auto">
+          <div className="fixed top-2 right-0 left-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <TransitionChild
                 as={Fragment}

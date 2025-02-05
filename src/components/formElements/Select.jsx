@@ -58,7 +58,7 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
         <ListboxButton
           ref={ref}
           aria-required={required}
-          className="relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+          className="focus-visible:ring-whites/75 relative w-full cursor-default rounded-lg border border-slate-400 bg-white py-2 pr-10 pl-3 text-left focus:outline-hidden focus-visible:border-sky-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
         >
           <span className="block h-5 truncate text-slate-600">{getDefaultValue(value, placeholder, options)}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -66,13 +66,13 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
           </span>
         </ListboxButton>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <ListboxOptions className="absolute z-50 mt-1 max-h-32 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <ListboxOptions className="absolute z-50 mt-1 max-h-32 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden sm:text-sm">
             {(options?.length ?? 0) > 0 ? (
               options?.map((option, id) => (
                 <ListboxOption
                   key={id}
                   className={({ focus }) =>
-                    clsx('relative cursor-default select-none py-2 pl-10 pr-4', {
+                    clsx('relative cursor-default py-2 pr-4 pl-10 select-none', {
                       'bg-sky-100 text-sky-900': focus,
                       'text-sky-900': !focus && !option?.disabled,
                       'cursor-not-allowed text-slate-400': option?.disabled ?? false,
@@ -101,7 +101,7 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
                 </ListboxOption>
               ))
             ) : (
-              <div className="relative cursor-default select-none py-2 pl-10 text-center text-slate-500">
+              <div className="relative cursor-default py-2 pl-10 text-center text-slate-500 select-none">
                 This list is empty 😶
               </div>
             )}

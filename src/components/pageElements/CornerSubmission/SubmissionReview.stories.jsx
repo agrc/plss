@@ -30,7 +30,7 @@ export default {
       const storage = getStorage(app);
 
       return (
-        <aside className="drawer max-w-screen z-10 flex flex-col overflow-scroll rounded-t-2xl bg-slate-50 px-4 py-4 text-sky-900 shadow-2xl sm:rounded-t-none md:pb-12">
+        <aside className="drawer z-10 flex max-w-screen flex-col overflow-scroll rounded-t-2xl bg-slate-50 px-4 py-4 text-sky-900 shadow-2xl sm:rounded-t-none md:pb-12">
           <QueryClientProvider client={new QueryClient()}>
             <FirebaseAppProvider firebaseConfig={config}>
               <FunctionsProvider sdk={functions}>

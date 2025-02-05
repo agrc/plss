@@ -111,7 +111,7 @@ const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, o
         name={defaultFileName}
         id={defaultFileName}
         onChange={uploadFile}
-        className="w-max text-center text-sm text-slate-400 file:flex file:min-h-[2rem] file:cursor-pointer file:rounded-full file:border-2 file:border-solid file:border-sky-600 file:bg-sky-500 file:px-7 file:py-1 file:text-sm file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-sky-600 file:focus:border-sky-500 file:focus:outline-none file:focus:ring-2 file:focus:ring-sky-600 file:focus:ring-opacity-50 file:active:bg-sky-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
+        className="w-max text-center text-sm text-slate-400 file:flex file:min-h-[2rem] file:cursor-pointer file:rounded-full file:border-2 file:border-solid file:border-sky-600 file:bg-sky-500 file:px-7 file:py-1 file:text-sm file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-sky-600 file:focus:border-sky-500 file:focus:ring-2 file:focus:ring-sky-600/50 file:focus:outline-hidden file:active:bg-sky-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
       />
       {uploadPercent !== undefined && (
         <span
@@ -129,7 +129,7 @@ const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, o
         </span>
       )}
       {uploadError && (
-        <p className="m-auto w-4/5 rounded bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow">
+        <p className="m-auto w-4/5 rounded-sm bg-sky-700 px-2 py-1 text-center text-sm font-semibold text-white shadow-sm">
           {uploadError}
         </p>
       )}
@@ -152,7 +152,7 @@ FileUpload.propTypes = {
 
 export const ObjectPreview = ({ url, children }) => {
   return (
-    <div className="flex w-full flex-col rounded border border-slate-400 bg-slate-50 text-slate-400 shadow">
+    <div className="flex w-full flex-col rounded-sm border border-slate-400 bg-slate-50 text-slate-400 shadow-sm">
       {url.search(/\.pdf\?/i) > -1 ? (
         <object className="self-center" data={url} type="application/pdf" width="300" height="375">
           PDF preview
@@ -161,7 +161,7 @@ export const ObjectPreview = ({ url, children }) => {
         <img src={url} alt="upload preview" className="m-2 max-w-[300px] self-center rounded-t" />
       )}
 
-      <span className="flex flex-1 select-none justify-center rounded-b border-t bg-white p-2 text-sm italic">
+      <span className="flex flex-1 justify-center rounded-b border-t bg-white p-2 text-sm italic select-none">
         {children}
       </span>
     </div>

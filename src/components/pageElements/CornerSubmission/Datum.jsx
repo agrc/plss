@@ -94,10 +94,10 @@ const CoordinatePicker = () => {
                   key={category}
                   className={({ selected }) =>
                     clsx(
-                      'w-full rounded-lg py-2.5 font-medium leading-5',
-                      'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                      'w-full rounded-lg py-2.5 leading-5 font-medium',
+                      'ring-white/60 ring-offset-2 ring-offset-sky-400 focus:ring-2 focus:outline-hidden',
                       selected
-                        ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                        ? 'border border-sky-600 bg-sky-500 text-white shadow-sm hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
                         : 'text-sky-700 hover:bg-sky-600/20',
                     )
                   }
