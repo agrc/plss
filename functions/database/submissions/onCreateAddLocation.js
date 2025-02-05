@@ -1,4 +1,4 @@
-import { logger } from 'firebase-functions/v1';
+import { logger } from 'firebase-functions/v2';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import ky from 'ky';
 import { safelyInitializeApp } from '../../firebase.js';
