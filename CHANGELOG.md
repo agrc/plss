@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.20-1](https://github.com/agrc/plss/compare/v3.5.20-0...v3.5.20-1) (2025-02-05)
+
+
+### Bug Fixes
+
+* **api:** add more memory to pdf functions ([ef66f28](https://github.com/agrc/plss/commit/ef66f28e5936bc5ccb7c52a57f393786fd222973))
+
 ## [3.5.20-0](https://github.com/agrc/plss/compare/v3.5.19...v3.5.20-0) (2025-02-04)
 
 
