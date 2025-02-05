@@ -1,4 +1,4 @@
-import { https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
 import { safelyInitializeApp } from '../firebase.js';
 

@@ -1,4 +1,4 @@
-import { https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v2';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import { parseDms } from 'dms-conversion';
 import * as schemas from '../shared/cornerSubmission/Schema.js';

@@ -1,6 +1,6 @@
 import { Base64Encode } from 'base64-stream';
 import { Buffer } from 'buffer';
-import { logger } from 'firebase-functions/v1';
+import { logger } from 'firebase-functions/v2';
 import path from 'path';
 import { PDFDocument } from 'pdf-lib';
 import PdfPrinter from 'pdfmake';

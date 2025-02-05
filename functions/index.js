@@ -1,17 +1,21 @@
+import { logger } from 'firebase-functions/v2';
 import {
-  auth,
-  logger,
-  firestore,
-  runWith,
-  storage,
-} from 'firebase-functions/v1'; // v2 does not support auth triggers as of july/23
+  onDocumentUpdated,
+  onDocumentCreated,
+  onDocumentDeleted,
+} from 'firebase-functions/v2/firestore';
+import {
+  onObjectFinalized,
+  onObjectDeleted,
+} from 'firebase-functions/v2/storage';
+import { beforeUserCreated } from 'firebase-functions/v2/identity';
 import { https } from 'firebase-functions/v2';
-import { safelyInitializeApp } from './firebase.js';
 import { defineSecret } from 'firebase-functions/params';
+import { safelyInitializeApp } from './firebase.js';
 
 const cors = [
   /localhost/,
-  /ut-dts-agrc-web-api-dev-self-service\.web\.app$/,
+  /ut-dts-agrc-plss-dev\.web\.app$/,
   /plss\.(?:dev\.)?utah\.gov/,
 ];
 
@@ -35,11 +39,11 @@ const config = safelyInitializeApp();
 const sendGridApiKey = defineSecret('SENDGRID_API_KEY');
 
 // Firebase authentication
-export const onCreateUser = auth.user().onCreate(async (user) => {
+export const onCreateUser = beforeUserCreated(async (event) => {
   logger.debug('[auth::user::onCreate] importing createUser');
   const createUser = (await import('./auth/onCreate.js')).createUser;
 
-  const result = await createUser(user);
+  const result = await createUser(event.data);
 
   logger.debug('[auth::user::onCreate]', result);
 
@@ -47,15 +51,20 @@ export const onCreateUser = auth.user().onCreate(async (user) => {
 });
 
 // Firestore triggers
-export const onCancelSubmission = runWith({ secrets: [sendGridApiKey] })
-  .firestore.document('/submissions/{docId}')
-  .onUpdate(async (change, context) => {
-    const current = change.after.get('status.user.cancelled');
-    const previous = change.before.get('status.user.cancelled');
+export const onCancelSubmission = onDocumentUpdated(
+  {
+    document: '/submissions/{docId}',
+    secrets: [sendGridApiKey],
+  },
+  async (event) => {
+    const after = event.data.after.data();
+    const current = after.status.user.cancelled;
+    const before = event.data.before.data();
+    const previous = before.status.user.cancelled;
 
     logger.debug(
       '[database::submissions::onCancel] trigger: submission document updated',
-      context.params.docId,
+      event.params.docId,
       {
         structuredData: true,
       },
@@ -99,17 +108,18 @@ export const onCancelSubmission = runWith({ secrets: [sendGridApiKey] })
       structuredData: true,
     });
 
-    const result = await cancelSubmission(change.before);
+    const result = await cancelSubmission(event.data.before);
 
     logger.debug('[database::submissions::onCancel]', result);
 
     return result;
-  });
+  },
+);
 
-export const onCreateAddLocation = firestore
-  .document('/submissions/{docId}')
-  .onCreate(async (snap, context) => {
-    const record = snap.data();
+export const onCreateAddLocation = onDocumentCreated(
+  '/submissions/{docId}',
+  async (event) => {
+    const record = event.data.data();
 
     if (record.type === 'new') {
       logger.debug(
@@ -143,23 +153,27 @@ export const onCreateAddLocation = firestore
     );
 
     const result = await createAddLocation(
-      context.params.docId,
+      event.params.docId,
       record.blm_point_id,
     );
 
     logger.debug('[database::submissions::onCreateAddLocation]', result);
 
     return result;
-  });
+  },
+);
 
-export const onCreateMonumentRecord = runWith({ memory: '512MB' })
-  .firestore.document('/submissions/{docId}')
-  .onCreate(async (snap, context) => {
-    const record = snap.data();
+export const onCreateMonumentRecord = onDocumentCreated(
+  {
+    document: '/submissions/{docId}',
+    memory: '512MiB',
+  },
+  async (event) => {
+    const record = event.data.data();
 
     logger.debug(
       '[database::submissions::onCreateMonumentRecord] trigger: new submission for',
-      context.params.docId,
+      event.params.docId,
       record.type,
       {
         structuredData: true,
@@ -173,21 +187,22 @@ export const onCreateMonumentRecord = runWith({ memory: '512MB' })
       await import('./database/submissions/onCreateMonument.js')
     ).createMonumentRecord;
 
-    const result = await createMonumentRecord(record, context.params.docId);
+    const result = await createMonumentRecord(record, event.params.docId);
 
     logger.debug('[database::submissions::onCreateMonumentRecord]', result);
 
     return result;
-  });
+  },
+);
 
-export const onCleanUpPointAttachments = firestore
-  .document('/submitters/{userId}/points/{docId}')
-  .onDelete(async (snap, context) => {
-    const record = snap.data();
+export const onCleanUpPointAttachments = onDocumentDeleted(
+  '/submitters/{userId}/points/{docId}',
+  async (event) => {
+    const record = event.data.data();
 
     logger.debug(
       '[database::submitters::onCleanUpPointAttachments] trigger: point deleted',
-      context,
+      event,
       record,
       {
         structuredData: true,
@@ -222,7 +237,8 @@ export const onCleanUpPointAttachments = firestore
     logger.debug('[database::submissions::onCleanUpPointAttachments]', result);
 
     return result;
-  });
+  },
+);
 
 // HTTPS triggers
 export const getMyContent = https.onCall({ cors }, async (request) => {
@@ -289,7 +305,7 @@ export const postCorner = https.onCall({ cors }, async ({ data, auth }) => {
 });
 
 export const postGeneratePreview = https.onCall(
-  { cors, memory: '512MB' },
+  { cors, memory: '512MiB' },
   async ({ data, auth }) => {
     logger.debug('[https::postGeneratePreview] starting');
 
@@ -335,11 +351,13 @@ export const postProfile = https.onCall(async ({ data, auth }) => {
 });
 
 // Storage triggers
-export const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
-  .storage.bucket(config.storageBucket)
-  .object()
-  .onFinalize(async (object) => {
-    const { name, contentType, bucket: fileBucket } = object;
+export const onCreateNotify = onObjectFinalized(
+  {
+    secrets: [sendGridApiKey],
+    bucket: config.storageBucket,
+  },
+  async (event) => {
+    const { name, contentType, bucket: fileBucket } = event.data;
 
     logger.debug(
       '[storage::finalize::onCreateNotify] trigger: storage object created',
@@ -382,13 +400,13 @@ export const onCreateNotify = runWith({ secrets: [sendGridApiKey] })
     logger.debug('[storage::finalize::onCreateNotify]', result);
 
     return result;
-  });
+  },
+);
 
-export const syncProfileImage = storage
-  .bucket(config.storageBucket)
-  .object()
-  .onDelete(async (object) => {
-    const { name } = object;
+export const syncProfileImage = onObjectDeleted(
+  { bucket: config.storageBucket },
+  async (event) => {
+    const { name } = event.data;
 
     logger.debug(
       '[storage::onDelete::syncProfileImage] trigger: storage object deleted',
@@ -421,4 +439,5 @@ export const syncProfileImage = storage
     logger.debug('[storage::onDelete::syncProfileImage]', result);
 
     return result;
-  });
+  },
+);

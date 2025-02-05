@@ -1,4 +1,4 @@
-import { logger } from 'firebase-functions/v1';
+import { logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
 import { graphicConverter, myContentConverter } from '../converters.js';
 import { safelyInitializeApp } from '../firebase.js';

@@ -1,6 +1,6 @@
 import client from '@sendgrid/client';
 import { Base64Encode } from 'base64-stream';
-import { logger } from 'firebase-functions/v1';
+import { logger } from 'firebase-functions/v2';
 
 export const notify = (key, template) => {
   if (process.env.NODE_ENV !== 'production') {
