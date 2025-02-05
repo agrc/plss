@@ -46,14 +46,12 @@ export default function CornerSubmission({ submission, dispatch }) {
   }, [submission.type, send, analytics, logEvent]);
 
   useEffect(() => {
-    console.log('current state', state);
     scrollContainer.current?.scrollTo(0, 0);
   }, [state]);
 
   const Icon = !hide ? MinusCircleIcon : PlusCircleIcon;
 
   const getFormPart = (state) => {
-    console.log('current state', state.value);
     switch (true) {
       case state.matches('form.uploading existing pdf'):
         return <MonumentPdf dispatch={dispatch} />;
