@@ -152,8 +152,8 @@ export const onCreateAddLocation = firestore
     return result;
   });
 
-export const onCreateMonumentRecord = firestore
-  .document('/submissions/{docId}')
+export const onCreateMonumentRecord = runWith({ memory: '512MB' })
+  .firestore.document('/submissions/{docId}')
   .onCreate(async (snap, context) => {
     const record = snap.data();
 
@@ -289,7 +289,7 @@ export const postCorner = https.onCall({ cors }, async ({ data, auth }) => {
 });
 
 export const postGeneratePreview = https.onCall(
-  { cors },
+  { cors, memory: '512MB' },
   async ({ data, auth }) => {
     logger.debug('[https::postGeneratePreview] starting');
 
