@@ -1,6 +1,6 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
-import { https, logger } from 'firebase-functions/v1';
+import { https, logger } from 'firebase-functions/v2';
 import {
   createPdfDocument,
   generatePdfDefinition,

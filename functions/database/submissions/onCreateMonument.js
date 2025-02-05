@@ -1,4 +1,4 @@
-import { logger } from 'firebase-functions/v1';
+import { logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import {
