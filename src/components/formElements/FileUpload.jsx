@@ -47,7 +47,7 @@ const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, o
     }
 
     if (defaultFileName) {
-      const [, ext] = fileName.split('.');
+      const ext = fileName.split('.').pop();
       fileName = `${defaultFileName}.${ext}`;
     }
 
