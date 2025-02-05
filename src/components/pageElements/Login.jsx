@@ -9,7 +9,7 @@ import Card from '../formElements/Card.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
 const size = 160;
-const fallback = encodeURI('https://gis.utah.gov/images/plss_gcdb_lg.jpg');
+const fallback = 'mp';
 
 export default function Login({ dispatch }) {
   const { data } = useSigninCheck();
@@ -109,7 +109,7 @@ Profile.propTypes = {
 };
 
 const Gravatar = ({ email }) => {
-  const gravatar = `https://www.gravatar.com/avatar/${md5(email.toLowerCase())}?s=${size}&default=${fallback}`;
+  const gravatar = `https://www.gravatar.com/avatar/${md5(email.toLowerCase())}?r=pg&size=${size}&default=${fallback}`;
 
   return <img src={gravatar} alt="Gravatar" />;
 };
