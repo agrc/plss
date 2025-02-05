@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.5.20](https://github.com/agrc/plss/compare/v3.5.19...v3.5.20) (2025-02-05)
+
+
+### Features
+
+* display interior points as white ([cb8c26e](https://github.com/agrc/plss/commit/cb8c26e2b92c94d943a840034dfc78ade1c2f9b5))
+
+
+### Bug Fixes
+
+* **api:** add more memory to pdf functions ([2143d9e](https://github.com/agrc/plss/commit/2143d9eac7e692bbb3771f2d59e99f7253a282c2))
+
+
+### Dependencies
+
+* **api:** update function packages ([db8a1eb](https://github.com/agrc/plss/commit/db8a1ebf484efb2700bc866c7fb401e84e1d23b5))
+* update react ([5c8d6fc](https://github.com/agrc/plss/commit/5c8d6fc3f5a929578244c237e2e3600b70fb1a90))
+
 ## [3.5.20-1](https://github.com/agrc/plss/compare/v3.5.20-0...v3.5.20-1) (2025-02-05)
 
 
