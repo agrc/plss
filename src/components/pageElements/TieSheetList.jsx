@@ -47,7 +47,7 @@ const TieSheetList = ({ blmPointId, children }) => {
         {status === 'success' && data.length > 0 && (
           <ul>
             {data.map((x) => (
-              <li key={x.name} className="group hover:rounded hover:bg-slate-100">
+              <li key={x.name} className="group hover:rounded-sm hover:bg-slate-100">
                 <span className="inline-flex align-middle">
                   <ArrowDownOnSquareIcon className="mr-2 inline-block h-4 w-4 text-sky-600 group-hover:text-sky-800" />
                   <a href={x.url} target="_blank" rel="noopener noreferrer">

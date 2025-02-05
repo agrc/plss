@@ -101,7 +101,7 @@ export default function Drawer({ dispatch, authenticated, map, addPoint, activeC
     <aside ref={scrollContainer} className={classes}>
       <Logo version={version} t />
       <XCircleIcon
-        className="absolute right-4 top-6 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
+        className="absolute top-6 right-4 h-8 w-8 cursor-pointer text-sky-800 hover:text-sky-400"
         onClick={() => dispatch({ type: 'menu/toggle', payload: '' })}
       />
       <ErrorBoundary

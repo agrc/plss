@@ -284,10 +284,10 @@ export const GeographicHeight = () => {
                     value={option}
                     className={({ checked }) =>
                       clsx(
-                        'flex h-10 w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center font-medium leading-5',
-                        'ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-400 focus:outline-none focus:ring-2',
+                        'flex h-10 w-full cursor-pointer items-center justify-center rounded-lg px-1.5 text-center leading-5 font-medium',
+                        'ring-white/60 ring-offset-2 ring-offset-sky-400 focus:ring-2 focus:outline-hidden',
                         checked
-                          ? 'border border-sky-600 bg-sky-500 text-white shadow hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                          ? 'border border-sky-600 bg-sky-500 text-white shadow-sm hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
                           : 'text-sky-700 hover:bg-sky-600/20',
                       )
                     }

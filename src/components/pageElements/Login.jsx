@@ -50,7 +50,7 @@ const SignIn = () => {
       </p>
       <div className="flex items-center text-slate-500">
         <span className="h-px flex-1 bg-slate-200"></span>
-        <span className="mx-3 text-xs uppercase tracking-wide">continue with</span>
+        <span className="mx-3 text-xs tracking-wide uppercase">continue with</span>
         <span className="h-px flex-1 bg-slate-200"></span>
       </div>
       <div className="flex justify-center">
@@ -88,7 +88,7 @@ const Profile = ({ dispatch }) => {
           {status === 'success' && <Gravatar email={response.data.email} />}
         </span>
         <svg
-          className="absolute bottom-1 right-3 h-6 w-6 fill-current text-slate-800/20"
+          className="absolute right-3 bottom-1 h-6 w-6 fill-current text-slate-800/20"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 27 27"
           role="presentation"

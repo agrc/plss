@@ -225,10 +225,10 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
                 <>
                   <div className="flex items-center text-slate-500">
                     <span className="h-px flex-1 bg-slate-200"></span>
-                    <span className="mx-3 text-xs uppercase tracking-wide">selected color</span>
+                    <span className="mx-3 text-xs tracking-wide uppercase">selected color</span>
                     <span className="h-px flex-1 bg-slate-200"></span>
                   </div>
-                  <div className="w-min justify-self-center rounded border border-slate-400 bg-gradient-to-br from-slate-600 via-slate-300 to-slate-50 p-2 shadow-lg">
+                  <div className="w-min justify-self-center rounded-sm border border-slate-400 bg-linear-to-br from-slate-600 via-slate-300 to-slate-50 p-2 shadow-lg">
                     <div
                       className="mx-auto flex h-32 w-32 flex-col items-center justify-center rounded-full text-center"
                       style={pointStyle}

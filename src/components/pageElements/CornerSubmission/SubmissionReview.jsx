@@ -85,7 +85,7 @@ const MetadataReview = ({ accuracy, collected, corner, description, mrrc, notes,
       <h4 className="relative -mt-2 text-lg font-bold">
         Metadata
         {mrrc && (
-          <div className="absolute right-0 top-0 rounded border border-sky-800 bg-sky-300 px-2 text-sm uppercase text-sky-800 shadow">
+          <div className="absolute top-0 right-0 rounded-sm border border-sky-800 bg-sky-300 px-2 text-sm text-sky-800 uppercase shadow-sm">
             MRRC
           </div>
         )}

@@ -84,7 +84,7 @@ export default function CornerSubmission({ submission, dispatch }) {
         return (
           <div role="alert" data-area="drawer">
             <h3 className="text-lg font-bold">Something went wrong</h3>
-            <p className="m-4 rounded border p-4">
+            <p className="m-4 rounded-sm border p-4">
               No matching component for {JSON.stringify(state.value, null, 2)} state.
             </p>
             <div className="mt-4 flex justify-center">

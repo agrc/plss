@@ -28,7 +28,7 @@ export const LimitedTextarea = ({
         maxLength={limit}
         placeholder={placeholder}
         className={clsx(
-          'rounded border border-slate-400 px-2 text-sm text-slate-800 placeholder:text-sm placeholder:text-slate-600',
+          'rounded-sm border border-slate-400 px-2 text-sm text-slate-800 placeholder:text-sm placeholder:text-slate-600',
           className,
         )}
         {...field}
@@ -92,7 +92,7 @@ export const CharactersRemaining = ({ remaining, limit }) => {
 
   return (
     <span
-      className={clsx('absolute bottom-0 right-3', {
+      className={clsx('absolute right-3 bottom-0', {
         'text-xs text-slate-500': percentage >= 0 && percentage < 0.8,
         'text-xs text-amber-600': percentage >= 0.8 && percentage < 0.9,
         'border border-red-600 bg-white p-2 text-lg font-black text-red-600': percentage >= 0.9,

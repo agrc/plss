@@ -29,7 +29,7 @@ export default function HomeButton({ view, extent, width }) {
   }, [view, ready, width]);
 
   return (
-    <div ref={me} className="relative flex h-8 w-8 rounded-full bg-white shadow-sm">
+    <div ref={me} className="relative flex h-8 w-8 rounded-full bg-white shadow-xs">
       <button
         className="flex flex-1 cursor-pointer items-center justify-center rounded-full bg-white"
         name="default view"
