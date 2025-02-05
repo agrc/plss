@@ -159,7 +159,7 @@ export const formatNewCorner = (data, metadata) => {
       zone: data.grid.zone,
       unit: data.grid.unit,
       elevation: data.grid.elevation,
-      verticalDatum: data.grid.verticalDatum,
+      verticalDatum: data.grid.verticalDatum ?? null,
     },
     geographic: {
       northing: {
@@ -208,7 +208,7 @@ export const formatExistingCorner = (data, metadata) => {
         zone: data.grid.zone,
         unit: data.grid.unit,
         elevation: data.grid.elevation,
-        verticalDatum: data.grid.verticalDatum,
+        verticalDatum: data.grid.verticalDatum ?? null,
       },
       geographic: {
         northing: {
