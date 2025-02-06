@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.6.0-0](https://github.com/agrc/plss/compare/v3.5.20...v3.6.0-0) (2025-02-06)
+
+
+### Features
+
+* **api:** migrate to v2 functions and triggers ([532ef1c](https://github.com/agrc/plss/commit/532ef1c2592b927f9f29397968eeb400bc2e55cc))
+
+
+### Bug Fixes
+
+* **api:** replace undefined as its not a valid type ([ce5d3b5](https://github.com/agrc/plss/commit/ce5d3b53550ba888895c2074388fe984f8499983))
+* correct a bug where files uploaded with periods break the preview ([682ca0b](https://github.com/agrc/plss/commit/682ca0b12985afc26320156a46f1ca833d3e9667))
+* correct login avatar fallback missing image ([60034f2](https://github.com/agrc/plss/commit/60034f248e8ed3ee5516e6379322527fa8acb2ef))
+
+
+### Styles
+
+* add missing bg to text areas ([7f232ac](https://github.com/agrc/plss/commit/7f232ac62b8b1f6d4067f1431b924b5e8093c723))
+
 ## [3.5.20](https://github.com/agrc/plss/compare/v3.5.19...v3.5.20) (2025-02-05)
 
 
