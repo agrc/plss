@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.5.21](https://github.com/agrc/plss/compare/v3.5.20...v3.5.21) (2025-02-06)
+
+
+### Features
+
+* **api:** migrate to v2 functions and triggers ([03e0152](https://github.com/agrc/plss/commit/03e01521f33260b4752a9f2505492aca4af5fe1e))
+
+
+### Bug Fixes
+
+* **api:** replace undefined as its not a valid type ([6cad359](https://github.com/agrc/plss/commit/6cad3590a190f6a6e69d0d80b7568fdabb12024d))
+* correct a bug where files uploaded with periods break the preview ([93c8c23](https://github.com/agrc/plss/commit/93c8c234d67c6e6d333719527f7ba45ee8284a8e))
+* correct login avatar fallback missing image ([b5525a5](https://github.com/agrc/plss/commit/b5525a5dcf1c0961396005071d9e284555cf3166))
+* update to node.js 22 runtime ([4264bfd](https://github.com/agrc/plss/commit/4264bfd874a9bbf1cddc7d74186fb2a61964be9b))
+
+
+### Styles
+
+* add missing bg to text areas ([f1b1ae5](https://github.com/agrc/plss/commit/f1b1ae5af6fd87002a69ec1cc49ee5ba81302065))
+
 ## [3.6.0-1](https://github.com/agrc/plss/compare/v3.5.20...v3.6.0-1) (2025-02-06)
 
 
