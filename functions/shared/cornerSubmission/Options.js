@@ -45,5 +45,8 @@ export const corner = [
   'W 1/4',
   'Center',
   '1/16',
+  'WC',
+  'MC',
+  'RC',
   'Other',
 ];
