@@ -13,7 +13,7 @@
     "cm": "cz",
     "copy:arcgis": "cpy \"./node_modules/@arcgis/core/assets/**\" ./public/assets",
     "coverage": "vitest run --coverage",
-    "dev": "cross-env NODE_ENV=development concurrently 'wait-on http://127.0.0.1:4000 && npm run dev:vite' 'npm run dev:firebase'",
+    "dev": "cross-env NODE_ENV=development concurrently 'wait-on http://127.0.0.1:4000 && pnpm run dev:vite' 'pnpm run dev:firebase'",
     "dev:firebase": "cross-env NODE_ENV=development firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
     "dev:vite": "vite",
     "fb:deploy": "firebase deploy --only functions",
@@ -23,10 +23,10 @@
     "prepare": "husky",
     "preview": "vite preview",
     "save-firebase-state": "cross-env NODE_ENV=development firebase emulators:start --import .emulator-data --export-on-exit --only auth,functions,firestore,storage",
-    "start": "npm run dev",
+    "start": "pnpm run dev",
     "storybook": "storybook dev -p 6006",
     "test": "vitest --silent --coverage --ui --open",
-    "test:ci": "firebase emulators:exec --only storage 'FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 npm run test'"
+    "test:ci": "firebase emulators:exec --only storage 'FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 pnpm run test'"
   },
   "lint-staged": {
     "*.{js,jsx,mjs}": "eslint --cache --fix",
@@ -59,6 +59,7 @@
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "^5.66.0",
     "@ugrc/layer-selector": "^6.2.12",
+    "@ugrc/utah-design-system": "^1.20.3",
     "@ugrc/utilities": "^3.0.0",
     "@xstate/react": "^5.0.2",
     "camelcase": "^8.0.0",
@@ -122,6 +123,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-packagejson": "^2.5.8",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "prop-types": "^15.8.1",
     "storybook": "^8.5.3",
     "tailwindcss": "^4.0.3",
     "typescript-eslint": "^8.23.0",
@@ -133,5 +135,16 @@
   },
   "engines": {
     "node": "22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "@swc/core",
+      "@vaadin/vaadin-usage-statistics",
+      "core-js",
+      "esbuild",
+      "protobufjs",
+      "re2"
+    ]
   }
 }

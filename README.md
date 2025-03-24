@@ -18,9 +18,9 @@ You can use this website to view the location of the monuments and the informati
 
 ### Run locally
 
-1. `npm install`
+1. `pnpm install`
 2. `firebase login`
 3. duplicate `.env` to `.env.local` and fill out the empty variables
-4. duplicate `./funcions/.secret` to `./functions/.secret.local` and fill out the empty variables
-5. `npm start`
+4. duplicate `./functions/.secret` to `./functions/.secret.local` and fill out the empty variables
+5. `pnpm start`
 6. Once everything is loaded, navigate to `http://localhost:5173/`

@@ -11,4 +11,7 @@ export default defineConfig({
     env: 'node',
     provider: 'v8',
   },
+  resolve: {
+    dedupe: ['firebase'],
+  },
 });
