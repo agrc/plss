@@ -11,7 +11,7 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "format": "prettier \"src/**/*.{js,jsx,ts,json,mjs,md,mdx}\" --write",
-    "start": "npm run shell",
+    "start": "pnpm run shell",
     "test": "vitest --silent --coverage --ui --open"
   },
   "dependencies": {
@@ -55,5 +55,12 @@
   },
   "engines": {
     "node": "22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "esbuild",
+      "protobufjs"
+    ]
   }
 }
