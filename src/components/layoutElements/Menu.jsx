@@ -1,10 +1,10 @@
 import { FolderIcon, HomeModernIcon, PlusCircleIcon, SwatchIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useUser } from 'reactfire';
 
 export default function Menu({ dispatch, drawerOpen }) {
-  const { data: user } = useUser();
+  const { currentUser } = useFirebaseAuth();
 
   const classes = clsx(
     ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800/95', 'shadow-sm', 'menu', 'md:justify-between', 'justify-evenly'],
@@ -21,7 +21,7 @@ export default function Menu({ dispatch, drawerOpen }) {
       <MenuItem Icon={SwatchIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'legend' })}>
         Map Legend
       </MenuItem>
-      {user !== null && (
+      {currentUser !== undefined && (
         <>
           <MenuItem Icon={PlusCircleIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'points' })}>
             Add Reference Point
@@ -32,7 +32,7 @@ export default function Menu({ dispatch, drawerOpen }) {
         </>
       )}
       <MenuItem Icon={UserCircleIcon} onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })}>
-        {user !== null ? 'Profile' : 'Login/Register'}
+        {currentUser !== undefined ? 'Profile' : 'Login/Register'}
       </MenuItem>
     </nav>
   );

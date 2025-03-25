@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import usePageView from '../hooks/usePageView.jsx';
+
 export default function Welcome({ dispatch }) {
   usePageView('screen-home');
 

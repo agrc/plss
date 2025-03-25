@@ -1,12 +1,12 @@
-import { logEvent } from 'firebase/analytics';
+import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
 import PropTypes from 'prop-types';
-import { useAnalytics } from 'reactfire';
+
 import { Button } from '../formElements/Buttons.jsx';
 
 export default function DefaultFallback({ error, resetErrorBoundary }) {
-  const analytics = useAnalytics();
+  const logEvent = useFirebaseAnalytics();
 
-  logEvent(analytics, 'error-boundary', {
+  logEvent('error-boundary', {
     error: error.message,
   });
 

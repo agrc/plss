@@ -2,13 +2,13 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { useFunctions, useUser } from 'reactfire';
 import { addPointSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
 import { Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -30,9 +30,9 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 const limit = 3;
 
 export default function AddPoint({ active, color, geometry, dispatch, notes = '' }) {
-  const functions = useFunctions();
+  const { currentUser } = useFirebaseAuth();
+  const { functions } = useFirebaseFunctions();
   const addPoint = httpsCallable(functions, 'postPoint');
-  const { data: user } = useUser();
   const [imageCount, setImageCount] = useState(1);
   const uniqueId = useRef(crypto.randomUUID());
   const scrollContainer = useRef();
@@ -167,7 +167,7 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
                     defaultFileName={name}
-                    path={`submitters/${user.uid}/reference`}
+                    path={`submitters/${currentUser.uid}/reference`}
                     contentTypes={[
                       { name: 'PNG', value: 'image/png' },
                       { name: 'JPEG', value: 'image/jpeg' },

@@ -1,12 +1,12 @@
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
+import { useFirebaseStorage } from '@ugrc/utah-design-system';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import PropTypes from 'prop-types';
-import { useStorage } from 'reactfire';
 import Card from '../formElements/Card.jsx';
 
 const TieSheetList = ({ blmPointId, children }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
 
   const path = `tiesheets/${blmPointId}`;
   const fileRef = ref(storage, path);

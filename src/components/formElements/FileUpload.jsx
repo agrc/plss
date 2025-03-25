@@ -1,8 +1,8 @@
+import { useFirebaseStorage } from '@ugrc/utah-design-system';
 import clsx from 'clsx';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
-import { useStorage } from 'reactfire';
 import { Button } from './Buttons.jsx';
 
 const validateContentTypes = (contentType, contentTypes) => {
@@ -22,11 +22,12 @@ const validateSize = (actualSize, megabytes) => {
 };
 
 const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, onChange }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
   const uploadReference = useRef();
   const [fileUrl, setFileUrl] = useState('');
   const [uploadPercent, setUploadPercent] = useState();
   const [uploadError, setUploadError] = useState();
+
   useEffect(() => {
     if (value) {
       uploadReference.current = ref(storage, value);
