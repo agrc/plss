@@ -30,6 +30,9 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
+          prebuild-command: |
+            cd functions
+            pnpm install
           build-command: pnpm run build
         env:
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
@@ -57,6 +60,9 @@ jobs:
           service-now-username: ${{ secrets.SN_USERNAME }}
           service-now-password: ${{ secrets.SN_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          prebuild-command: |
+            cd functions
+            pnpm install
           build-command: pnpm run build
         env:
           VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
