@@ -107,9 +107,6 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.8.0
         version: 19.8.0
-      '@eslint/js':
-        specifier: ^9.23.0
-        version: 9.23.0
       '@firebase/rules-unit-testing':
         specifier: ^4.0.1
         version: 4.0.1(firebase@11.5.0)
@@ -173,39 +170,12 @@ importers:
       eslint:
         specifier: ^9.23.0
         version: 9.23.0(jiti@2.4.2)
-      eslint-config-prettier:
-        specifier: ^10.1.1
-        version: 10.1.1(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-import:
-        specifier: ^2.31.0
-        version: 2.31.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-jsx-a11y:
-        specifier: ^6.10.2
-        version: 6.10.2(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-prettier:
-        specifier: ^5.2.4
-        version: 5.2.4(@types/eslint@8.56.12)(eslint-config-prettier@10.1.1(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(prettier@3.5.3)
-      eslint-plugin-react:
-        specifier: ^7.37.4
-        version: 7.37.4(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-react-hooks:
-        specifier: ^5.2.0
-        version: 5.2.0(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-react-refresh:
-        specifier: ^0.4.19
-        version: 0.4.19(eslint@9.23.0(jiti@2.4.2))
-      eslint-plugin-storybook:
-        specifier: ^0.11.6
-        version: 0.11.6(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
       firebase-functions-test:
         specifier: ^3.4.1
         version: 3.4.1(firebase-admin@13.2.0(encoding@0.1.13))(firebase-functions@6.3.2(firebase-admin@13.2.0(encoding@0.1.13)))(jest@29.7.0(@types/node@22.13.13)(babel-plugin-macros@3.1.0))
       firebase-tools:
         specifier: ^13.35.1
         version: 13.35.1(encoding@0.1.13)
-      globals:
-        specifier: ^16.0.0
-        version: 16.0.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -233,9 +203,6 @@ importers:
       tailwindcss:
         specifier: ^4.0.15
         version: 4.0.15
-      typescript-eslint:
-        specifier: ^8.28.0
-        version: 8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
       vite:
         specifier: ^6.2.3
         version: 6.2.3(@types/node@22.13.13)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.0)
@@ -1597,11 +1564,6 @@ packages:
       { integrity: sha512-fdDH1LSGfZdTH2sxdpVMw31BanV28K/Gry0cVFxaNP77neJSkd82mM8ErPNYs9e+0O7SdHBLTDzDgwUuy18RnQ== }
     engines: { node: ^12.20.0 || ^14.18.0 || >=16.0.0 }
 
-  '@pkgr/core@0.2.0':
-    resolution:
-      { integrity: sha512-vsJDAkYR6qCPu+ioGScGiMYR7LvZYIXh/dlQeviqoTWNCVfKTLYD/LkNWH4Mxsv2a5vpIRc77FN5DnmK1eBggQ== }
-    engines: { node: ^12.20.0 || ^14.18.0 || >=16.0.0 }
-
   '@pnpm/config.env-replace@1.1.0':
     resolution:
       { integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w== }
@@ -2677,10 +2639,6 @@ packages:
       { integrity: sha512-IQnhyaVUkcRR9e4xiHN83xMQtTMH+lJp472iMifUIqxx/Yw137BTef2DEEp6EnRct4yKrch24+Nl65LWg0mRpQ== }
     peerDependencies:
       storybook: ^8.6.9
-
-  '@storybook/csf@0.1.13':
-    resolution:
-      { integrity: sha512-7xOOwCLGB3ebM87eemep89MYRFTko+D8qE7EdAAq74lgdqRR5cOUtYWJLjO2dLtP94nqoOdHJo6MdLLKzg412Q== }
 
   '@storybook/global@5.0.0':
     resolution:
@@ -4886,21 +4844,6 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-prettier@5.2.4:
-    resolution:
-      { integrity: sha512-SFtuYmnhwYCtuCDTKPoK+CEzCnEgKTU2qTLwoCxvrC0MFBTIXo1i6hDYOI4cwHaE5GZtlWmTN3YfucYi7KJwPw== }
-    engines: { node: ^14.18.0 || >=16.0.0 }
-    peerDependencies:
-      '@types/eslint': '>=8.0.0'
-      eslint: '>=8.0.0'
-      eslint-config-prettier: '*'
-      prettier: '>=3.0.0'
-    peerDependenciesMeta:
-      '@types/eslint':
-        optional: true
-      eslint-config-prettier:
-        optional: true
-
   eslint-plugin-react-hooks@5.2.0:
     resolution:
       { integrity: sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg== }
@@ -4908,25 +4851,12 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
-  eslint-plugin-react-refresh@0.4.19:
-    resolution:
-      { integrity: sha512-eyy8pcr/YxSYjBoqIFSrlbn9i/xvxUFa8CjzAYo9cFjgGXqq1hyjihcpZvxRLalpaWmueWR81xn7vuKmAFijDQ== }
-    peerDependencies:
-      eslint: '>=8.40'
-
   eslint-plugin-react@7.37.4:
     resolution:
       { integrity: sha512-BGP0jRmfYyvOyvMoRX/uoUeW+GqNj9y16bPQzqAHf3AYII/tDs+jMN0dBVkl88/OZwNGwrVFxE7riHsXVfy/LQ== }
     engines: { node: '>=4' }
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-
-  eslint-plugin-storybook@0.11.6:
-    resolution:
-      { integrity: sha512-3WodYD6Bs9ACqnB+TP2TuLh774c/nacAjxSKOP9bHJ2c8rf+nrhocxjjeAWNmO9IPkFIzTKlcl0vNXI2yYpVOw== }
-    engines: { node: '>= 18' }
-    peerDependencies:
-      eslint: '>=8'
 
   eslint-scope@8.3.0:
     resolution:
@@ -5086,10 +5016,6 @@ packages:
   fast-deep-equal@3.1.3:
     resolution:
       { integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q== }
-
-  fast-diff@1.3.0:
-    resolution:
-      { integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw== }
 
   fast-fifo@1.3.2:
     resolution:
@@ -7620,11 +7546,6 @@ packages:
       { integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g== }
     engines: { node: '>= 0.8.0' }
 
-  prettier-linter-helpers@1.0.0:
-    resolution:
-      { integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w== }
-    engines: { node: '>=6.0.0' }
-
   prettier-plugin-organize-imports@4.1.0:
     resolution:
       { integrity: sha512-5aWRdCgv645xaa58X8lOxzZoiHAldAPChljr/MT0crXVOWTZ+Svl4hIWlz+niYSlO6ikE5UXkN1JrRvIP2ut0A== }
@@ -8579,11 +8500,6 @@ packages:
     resolution:
       { integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w== }
     engines: { node: '>= 0.4' }
-
-  synckit@0.10.3:
-    resolution:
-      { integrity: sha512-R1urvuyiTaWfeCggqEvpDJwAlDVdsT9NM+IP//Tk2x7qHCkSvBk/fwFgw/TLAHzZlrAnnazMcRw0ZD8HlYFTEQ== }
-    engines: { node: ^14.18.0 || >=16.0.0 }
 
   synckit@0.9.2:
     resolution:
@@ -10843,8 +10759,6 @@ snapshots:
 
   '@pkgr/core@0.1.2': {}
 
-  '@pkgr/core@0.2.0': {}
-
   '@pnpm/config.env-replace@1.1.0': {}
 
   '@pnpm/network.ca-file@1.0.2':
@@ -12191,10 +12105,6 @@ snapshots:
     dependencies:
       storybook: 8.6.9(prettier@3.5.3)
       unplugin: 1.16.1
-
-  '@storybook/csf@0.1.13':
-    dependencies:
-      type-fest: 2.19.0
 
   '@storybook/global@5.0.0': {}
 
@@ -14303,21 +14213,7 @@ snapshots:
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-prettier@5.2.4(@types/eslint@8.56.12)(eslint-config-prettier@10.1.1(eslint@9.23.0(jiti@2.4.2)))(eslint@9.23.0(jiti@2.4.2))(prettier@3.5.3):
-    dependencies:
-      eslint: 9.23.0(jiti@2.4.2)
-      prettier: 3.5.3
-      prettier-linter-helpers: 1.0.0
-      synckit: 0.10.3
-    optionalDependencies:
-      '@types/eslint': 8.56.12
-      eslint-config-prettier: 10.1.1(eslint@9.23.0(jiti@2.4.2))
-
   eslint-plugin-react-hooks@5.2.0(eslint@9.23.0(jiti@2.4.2)):
-    dependencies:
-      eslint: 9.23.0(jiti@2.4.2)
-
-  eslint-plugin-react-refresh@0.4.19(eslint@9.23.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.23.0(jiti@2.4.2)
 
@@ -14342,16 +14238,6 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.12
       string.prototype.repeat: 1.0.0
-
-  eslint-plugin-storybook@0.11.6(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2):
-    dependencies:
-      '@storybook/csf': 0.1.13
-      '@typescript-eslint/utils': 8.28.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)
-      eslint: 9.23.0(jiti@2.4.2)
-      ts-dedent: 2.2.0
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
 
   eslint-scope@8.3.0:
     dependencies:
@@ -14567,8 +14453,6 @@ snapshots:
   farmhash-modern@1.1.0: {}
 
   fast-deep-equal@3.1.3: {}
-
-  fast-diff@1.3.0: {}
 
   fast-fifo@1.3.2: {}
 
@@ -16955,10 +16839,6 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-linter-helpers@1.0.0:
-    dependencies:
-      fast-diff: 1.3.0
-
   prettier-plugin-organize-imports@4.1.0(prettier@3.5.3)(typescript@5.8.2):
     dependencies:
       prettier: 3.5.3
@@ -17933,11 +17813,6 @@ snapshots:
       supports-color: 7.2.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
-
-  synckit@0.10.3:
-    dependencies:
-      '@pkgr/core': 0.2.0
-      tslib: 2.8.1
 
   synckit@0.9.2:
     dependencies:
