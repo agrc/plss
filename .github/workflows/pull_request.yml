@@ -39,11 +39,8 @@ jobs:
           node-version: lts/*
           cache: pnpm
 
-      - name: 📥 Download dependencies
-        run: |
-          pnpm install
-          cd functions
-          pnpm install
+      - name: 📥 Download app dependencies
+        run: pnpm install
 
       - name: 📥 Download function dependencies
         working-directory: functions
@@ -68,10 +65,6 @@ jobs:
         uses: agrc/firebase-website-deploy-composite-action@v1
         with:
           preview: yes
-          prebuild-command: |
-            cd functions
-            pnpm install
-            cd ..
           build-command: pnpm run build --mode dev
           project-id: ${{ secrets.PROJECT_ID }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
