@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.0-2](https://github.com/agrc/plss/compare/v3.5.21...v3.6.0-2) (2025-03-25)
+
+
+### Features
+
+* add reference corner options ([f7b5062](https://github.com/agrc/plss/commit/f7b5062200ad77f3f328bf63dd785288920a513c)), closes [#438](https://github.com/agrc/plss/issues/438)
+
+
+### Dependencies
+
+* update packages ([18f4461](https://github.com/agrc/plss/commit/18f4461590cfef6ee8beb4b04e733ecd3395720f))
+
 ## [3.5.21](https://github.com/agrc/plss/compare/v3.5.20...v3.5.21) (2025-02-06)
 
 
