@@ -1,14 +1,33 @@
+import { FirebaseAnalyticsProvider, FirebaseAppProvider } from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import { Longitude } from './GeographicCoordinates.jsx';
+
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Longitude,
   decorators: [
     (Story) => (
-      <SubmissionProvider context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}>
-        {Story()}
-      </SubmissionProvider>
+      <FirebaseAppProvider config={config}>
+        <FirebaseAnalyticsProvider>
+          <SubmissionProvider context={{ blmPointId: 1, type: 'new', datum: 'geographic-nad83' }}>
+            {Story()}
+          </SubmissionProvider>
+        </FirebaseAnalyticsProvider>
+      </FirebaseAppProvider>
     ),
   ],
   parameters: {

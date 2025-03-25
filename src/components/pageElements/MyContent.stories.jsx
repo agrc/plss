@@ -1,9 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseAuthProvider,
+  FirebaseFunctionsProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import { AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
 import './../../index.css';
 import MyContent from './MyContent.jsx';
 
@@ -46,12 +52,14 @@ export default {
             })
           }
         >
-          <FirebaseAppProvider firebaseConfig={config}>
-            <AuthProvider sdk={auth}>
-              <FunctionsProvider sdk={functions}>
-                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
-              </FunctionsProvider>
-            </AuthProvider>
+          <FirebaseAppProvider config={config}>
+            <FirebaseAuthProvider sdk={auth}>
+              <FirebaseFunctionsProvider sdk={functions}>
+                <FirebaseAnalyticsProvider>
+                  <FirebaseStorageProvider sdk={storage}>{Story()}</FirebaseStorageProvider>
+                </FirebaseAnalyticsProvider>
+              </FirebaseFunctionsProvider>
+            </FirebaseAuthProvider>
           </FirebaseAppProvider>
         </QueryClientProvider>
       );

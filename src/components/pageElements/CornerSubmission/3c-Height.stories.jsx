@@ -1,10 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseAuthProvider,
+  FirebaseFunctionsProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import { AnalyticsProvider, AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import { GeographicHeight } from './GeographicCoordinates.jsx';
 
@@ -33,11 +39,11 @@ export default {
       const auth = getAuth(app);
       return (
         <QueryClientProvider client={new QueryClient()}>
-          <FirebaseAppProvider firebaseConfig={config}>
-            <AuthProvider sdk={auth}>
-              <FunctionsProvider sdk={functions}>
-                <StorageProvider sdk={storage}>
-                  <AnalyticsProvider sdk={getAnalytics(app)}>
+          <FirebaseAppProvider config={config}>
+            <FirebaseAuthProvider sdk={auth}>
+              <FirebaseFunctionsProvider sdk={functions}>
+                <FirebaseStorageProvider sdk={storage}>
+                  <FirebaseAnalyticsProvider sdk={getAnalytics(app)}>
                     <SubmissionProvider
                       context={{
                         blmPointId: 1,
@@ -49,10 +55,10 @@ export default {
                     >
                       {Story()}
                     </SubmissionProvider>
-                  </AnalyticsProvider>
-                </StorageProvider>
-              </FunctionsProvider>
-            </AuthProvider>
+                  </FirebaseAnalyticsProvider>
+                </FirebaseStorageProvider>
+              </FirebaseFunctionsProvider>
+            </FirebaseAuthProvider>
           </FirebaseAppProvider>
         </QueryClientProvider>
       );

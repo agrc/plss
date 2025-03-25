@@ -1,14 +1,42 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
-import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseAuthProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import Images from './Images.jsx';
+
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Images,
-  decorators: [(Story) => <SubmissionProvider>{Story()}</SubmissionProvider>],
+  decorators: [
+    (Story) => (
+      <FirebaseAppProvider config={config}>
+        <FirebaseStorageProvider>
+          <FirebaseAuthProvider>
+            <FirebaseAnalyticsProvider>
+              <SubmissionProvider>{Story()}</SubmissionProvider>
+            </FirebaseAnalyticsProvider>
+          </FirebaseAuthProvider>
+        </FirebaseStorageProvider>
+      </FirebaseAppProvider>
+    ),
+  ],
   parameters: {
     backgrounds: {
       default: 'drawer',
@@ -31,36 +59,13 @@ export default {
   },
 };
 
-let config = {
-  apiKey: '',
-  authDomain: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
-  measurementId: '',
-};
-
-if (import.meta.env.VITE_FIREBASE_CONFIG) {
-  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
-}
-
 const Template = (args) => {
   const data = { ...args };
-  const app = initializeApp(config);
-  const storage = getStorage(app);
-  const auth = getAuth(app);
 
   return (
-    <FirebaseAppProvider firebaseApp={app}>
-      <StorageProvider sdk={storage}>
-        <AuthProvider sdk={auth}>
-          <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
-            <Images {...data} />
-          </div>
-        </AuthProvider>
-      </StorageProvider>
-    </FirebaseAppProvider>
+    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
+      <Images {...data} />
+    </div>
   );
 };
 
