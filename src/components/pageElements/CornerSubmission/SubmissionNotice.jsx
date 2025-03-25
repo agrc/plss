@@ -1,29 +1,29 @@
 import { useQuery } from '@tanstack/react-query';
+import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { useFunctions, useUser } from 'reactfire';
 import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
 import { Button } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
 import Note from '../../formElements/Note.jsx';
 
 export default function SubmissionNotice({ pointId, county, toggle }) {
-  const { data: user } = useUser();
+  const { currentUser } = useFirebaseAuth();
 
   const townshipInformation = useMemo(() => extractTownshipInformation(pointId), [pointId]);
 
-  const functions = useFunctions();
+  const { functions } = useFirebaseFunctions();
   const getProfile = httpsCallable(functions, 'getProfile');
 
   const { data } = useQuery({
-    queryKey: ['profile', user.uid],
-    enabled: user?.uid?.length > 0,
+    queryKey: ['profile', currentUser.uid],
+    enabled: currentUser !== undefined,
     queryFn: getProfile,
     placeholderData: {
       data: {
-        displayName: user?.displayName ?? '',
-        email: user?.email ?? '',
+        displayName: currentUser?.displayName ?? '',
+        email: currentUser?.email ?? '',
         license: '',
       },
     },

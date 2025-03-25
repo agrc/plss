@@ -1,11 +1,11 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { useFunctions, useUser } from 'reactfire';
 import { profileSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
 import { Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -23,8 +23,8 @@ const defaultValues = {
 };
 
 export default function Profile({ dispatch }) {
-  const functions = useFunctions();
-  const { data } = useUser();
+  const { functions } = useFirebaseFunctions();
+  const { currentUser } = useFirebaseAuth();
 
   const getProfile = httpsCallable(functions, 'getProfile');
   const updateProfile = httpsCallable(functions, 'postProfile');
@@ -34,12 +34,12 @@ export default function Profile({ dispatch }) {
   usePageView('screen-edit-profile');
 
   const { data: response, status: profileStatus } = useQuery({
-    queryKey: ['profile', data.uid],
-    enabled: data?.uid?.length > 0,
+    queryKey: ['profile', currentUser.uid],
+    enabled: currentUser !== undefined,
     queryFn: getProfile,
     placeholderData: {
       data: {
-        displayName: data?.displayName ?? '',
+        displayName: currentUser?.displayName ?? '',
         license: '',
       },
     },
@@ -57,11 +57,11 @@ export default function Profile({ dispatch }) {
   }, [setFocus]);
 
   const { mutate, status } = useMutation({
-    mutationKey: ['update profile', data.uid],
+    mutationKey: ['update profile', currentUser.uid],
     mutationFn: (data) => updateProfile(data),
     onSuccess: (response) => {
       reset(response.data);
-      queryClient.invalidateQueries({ queryKey: ['profile', data.uid] });
+      queryClient.invalidateQueries({ queryKey: ['profile', currentUser.uid] });
     },
     onError: (error) => {
       console.warn('error', error);
@@ -103,7 +103,7 @@ export default function Profile({ dispatch }) {
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
                     defaultFileName={name}
-                    path={`submitters/${data.uid}/profile`}
+                    path={`submitters/${currentUser.uid}/profile`}
                     contentTypes={[
                       { name: 'PNG', value: 'image/png' },
                       { name: 'JPEG', value: 'image/jpeg' },

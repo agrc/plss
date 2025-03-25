@@ -1,14 +1,13 @@
-import { logEvent } from 'firebase/analytics';
+import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
 import { useEffect } from 'react';
-import { useAnalytics } from 'reactfire';
 
 export default function usePageView(page, data) {
-  const analytics = useAnalytics();
+  const logEvent = useFirebaseAnalytics();
 
   useEffect(() => {
-    logEvent(analytics, page, data);
+    logEvent(page, data);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // we only want this to run on load
 
-  return { analytics, logEvent };
+  return { logEvent };
 }

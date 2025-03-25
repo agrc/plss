@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useFirebaseFunctions, useFirebaseStorage } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useFunctions, useStorage } from 'reactfire';
 import {
   geographic as geographicOptions,
   grid as gridOptions,
@@ -22,7 +22,7 @@ const Review = () => {
 
   usePageView('screen-submission-review');
 
-  const functions = useFunctions();
+  const { functions } = useFirebaseFunctions();
   const saveCorner = httpsCallable(functions, 'postCorner');
   const generatePreview = httpsCallable(functions, 'postGeneratePreview');
   const queryClient = useQueryClient();
@@ -287,7 +287,7 @@ ImagesReview.propTypes = {
 };
 
 const Image = ({ path }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
   const [data, setData] = useState();
   getDownloadURL(ref(storage, path)).then(setData);
 
@@ -302,7 +302,7 @@ Image.propTypes = {
 };
 
 const AttachmentReview = ({ path }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
   const [data, setData] = useState();
   getDownloadURL(ref(storage, path)).then(setData);
 
@@ -342,7 +342,7 @@ MonumentPreview.propTypes = {
 };
 
 const PdfPreview = ({ path }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
   const [data, setData] = useState();
   getDownloadURL(ref(storage, path)).then(setData);
 

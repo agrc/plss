@@ -1,9 +1,9 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { useUser } from 'reactfire';
 import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
@@ -14,7 +14,7 @@ import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
 import Wizard from './Wizard.jsx';
 
 export default function MonumentPdf({ dispatch }) {
-  const { data: user } = useUser();
+  const { currentUser } = useFirebaseAuth();
   const [state, send] = useContext(SubmissionContext);
   usePageView('screen-submission-pdf');
 
@@ -43,7 +43,7 @@ export default function MonumentPdf({ dispatch }) {
             render={({ field: { onChange } }) => (
               <FileUpload
                 defaultFileName="existing-sheet"
-                path={`submitters/${user.uid}/existing/${state.context.blmPointId}`}
+                path={`submitters/${currentUser.uid}/existing/${state.context.blmPointId}`}
                 contentTypes={[{ name: 'PDF', value: 'application/pdf' }]}
                 maxFileSize={5}
                 value={value}

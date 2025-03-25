@@ -1,9 +1,9 @@
 import { XCircleIcon } from '@heroicons/react/24/outline';
+import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useSigninCheck } from 'reactfire';
 import DefaultFallback from '../pageElements/ErrorBoundary.jsx';
 import Logo from '../pageElements/Logo.jsx';
 
@@ -24,7 +24,7 @@ const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
 export default function Drawer({ dispatch, authenticated, map, addPoint, activeComponent, drawerOpen, submission }) {
-  const { data: signInCheckResult } = useSigninCheck();
+  const { currentUser } = useFirebaseAuth();
   const scrollContainer = useRef();
 
   useEffect(() => {
@@ -65,14 +65,14 @@ export default function Drawer({ dispatch, authenticated, map, addPoint, activeC
         return <Profile dispatch={dispatch} />;
       }
       case 'points': {
-        return signInCheckResult?.signedIn ? (
+        return currentUser !== undefined ? (
           <AddPoint {...addPoint} active={map.activeTool === 'add-point'} dispatch={dispatch} />
         ) : (
           <Login dispatch={dispatch} authenticated={authenticated} />
         );
       }
       case 'content': {
-        return signInCheckResult?.signedIn ? (
+        return currentUser !== undefined ? (
           <MyContent dispatch={dispatch} />
         ) : (
           <Login dispatch={dispatch} authenticated={authenticated} />
@@ -85,7 +85,7 @@ export default function Drawer({ dispatch, authenticated, map, addPoint, activeC
         return <Legend />;
       }
       case 'identify': {
-        return <Identify authenticated={signInCheckResult.signedIn} graphic={map.graphic} dispatch={dispatch} />;
+        return <Identify authenticated={currentUser !== undefined} graphic={map.graphic} dispatch={dispatch} />;
       }
       case 'submission': {
         return (
