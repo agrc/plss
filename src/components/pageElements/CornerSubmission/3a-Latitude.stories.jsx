@@ -1,26 +1,45 @@
+import { FirebaseAnalyticsProvider, FirebaseAppProvider } from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import { Latitude } from './GeographicCoordinates.jsx';
+
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
 
 export default {
   title: 'Corner/Submission/Parts',
   component: Latitude,
   decorators: [
     (Story) => (
-      <SubmissionProvider
-        context={{
-          blmPointId: 'UT260060S0020E0_240400',
-          type: 'new',
-          datum: 'grid-nad83',
-          grid: {
-            zone: 'north',
-            unit: 'm',
-            northing: 1155931.412,
-            easting: 471992.726,
-          },
-        }}
-      >
-        {Story()}
-      </SubmissionProvider>
+      <FirebaseAppProvider config={config}>
+        <FirebaseAnalyticsProvider>
+          <SubmissionProvider
+            context={{
+              blmPointId: 'UT260060S0020E0_240400',
+              type: 'new',
+              datum: 'grid-nad83',
+              grid: {
+                zone: 'north',
+                unit: 'm',
+                northing: 1155931.412,
+                easting: 471992.726,
+              },
+            }}
+          >
+            {Story()}
+          </SubmissionProvider>
+        </FirebaseAnalyticsProvider>
+      </FirebaseAppProvider>
     ),
   ],
   parameters: {

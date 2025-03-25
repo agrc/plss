@@ -1,7 +1,9 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
-import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseAuthProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import Pdf from './Pdf.jsx';
 
@@ -49,19 +51,18 @@ if (import.meta.env.VITE_FIREBASE_CONFIG) {
 
 const Template = (args) => {
   const data = { ...args };
-  const app = initializeApp(config);
-  const storage = getStorage(app);
-  const auth = getAuth(app);
 
   return (
-    <FirebaseAppProvider firebaseApp={app}>
-      <StorageProvider sdk={storage}>
-        <AuthProvider sdk={auth}>
-          <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
-            <Pdf {...data} />
-          </div>
-        </AuthProvider>
-      </StorageProvider>
+    <FirebaseAppProvider config={config}>
+      <FirebaseStorageProvider>
+        <FirebaseAuthProvider>
+          <FirebaseAnalyticsProvider>
+            <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
+              <Pdf {...data} />
+            </div>
+          </FirebaseAnalyticsProvider>
+        </FirebaseAuthProvider>
+      </FirebaseStorageProvider>
     </FirebaseAppProvider>
   );
 };
