@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-3](https://github.com/agrc/plss/compare/v3.6.0-2...v3.6.0-3) (2025-03-25)
+
+
+### Bug Fixes
+
+* **api:** add missing dependency ([9723865](https://github.com/agrc/plss/commit/97238657e4af2763723ddeb68aaa546735a09848))
+
 ## [3.6.0-2](https://github.com/agrc/plss/compare/v3.5.21...v3.6.0-2) (2025-03-25)
 
 
