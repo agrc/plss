@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { FirebaseAppProvider, FirebaseAuthProvider, FirebaseStorageProvider } from '@ugrc/utah-design-system';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
-import { AuthProvider, FirebaseAppProvider, StorageProvider } from 'reactfire';
 import Identify from './Identify.jsx';
 
 let config = {
@@ -31,10 +31,10 @@ export default {
       return (
         <aside className="drawer z-10 flex max-w-screen flex-col overflow-scroll rounded-t-2xl border border-sky-700 bg-slate-600 px-4 py-4 text-white shadow-2xl sm:rounded-t-none md:pb-12">
           <QueryClientProvider client={new QueryClient()}>
-            <FirebaseAppProvider firebaseConfig={config}>
-              <AuthProvider sdk={auth}>
-                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
-              </AuthProvider>
+            <FirebaseAppProvider config={config}>
+              <FirebaseAuthProvider sdk={auth}>
+                <FirebaseStorageProvider sdk={storage}>{Story()}</FirebaseStorageProvider>
+              </FirebaseAuthProvider>
             </FirebaseAppProvider>
           </QueryClientProvider>
         </aside>

@@ -1,19 +1,13 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
+import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import clsx from 'clsx';
-import { OAuthProvider, signInWithPopup } from 'firebase/auth';
 import PropTypes from 'prop-types';
-import { useAuth } from 'reactfire';
 
 export const LogInButton = () => {
-  const auth = useAuth();
+  const { login } = useFirebaseAuth();
 
   const handleClick = () => {
-    const provider = new OAuthProvider('oidc.utahid');
-    provider.addScope('profile');
-    provider.addScope('email');
-
-    // @see https://firebase.google.com/docs/auth/web/google-signin
-    signInWithPopup(auth, provider);
+    login();
   };
 
   return (
@@ -84,10 +78,10 @@ LogInButton.propTypes = {
 };
 
 export const LogOutButton = () => {
-  const auth = useAuth();
+  const { logout } = useFirebaseAuth();
 
   const handleClick = () => {
-    auth.signOut();
+    logout();
   };
 
   return (

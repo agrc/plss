@@ -15,15 +15,14 @@ import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import LayerSelector from '@ugrc/layer-selector';
 import '@ugrc/layer-selector/src/LayerSelector.css';
+import { useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
 import { contrastColor } from 'contrast-color';
-import { logEvent } from 'firebase/analytics';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useAnalytics, useFunctions, useSigninCheck } from 'reactfire';
 import DefaultFallback from './ErrorBoundary.jsx';
 import GroupButton from './mapElements/GroupButton.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
@@ -187,6 +186,7 @@ const extent = {
   ymin: 4373832.359194187,
   spatialReference: 3857,
 };
+
 const tabs = ['Section Finder', 'Monument Finder'];
 const level14 = 72223;
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
@@ -196,8 +196,8 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const [mapState, setMapState] = useState('idle');
   const onlyWidth = useWindowWidth();
 
-  const { data: signInCheckResult } = useSigninCheck();
-  const analytics = useAnalytics();
+  const { currentUser } = useFirebaseAuth();
+  const logEvent = useFirebaseAnalytics();
 
   const isLoading = useViewLoading(mapView.current);
   const { graphic, setGraphic } = useGraphicManager(mapView.current);
@@ -205,13 +205,13 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const { setGraphic: setGpsGraphic } = useGraphicManager(mapView.current);
   const { setViewPoint } = useViewPointZooming(mapView.current);
 
-  const functions = useFunctions();
+  const { functions } = useFirebaseFunctions();
   const myContent = httpsCallable(functions, 'getMyContent');
 
   const { data: content, status } = useQuery({
     queryKey: ['my content'],
     queryFn: myContent,
-    enabled: signInCheckResult?.signedIn === true,
+    enabled: currentUser !== undefined,
     staleTime: Infinity,
   });
 
@@ -397,7 +397,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
               },
             }),
           );
-          logEvent(analytics, 'my-points-set');
+          logEvent('my-points-set');
           break;
         }
         default: {
@@ -420,7 +420,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
             }
           }
 
-          logEvent(analytics, 'identify', {
+          logEvent('identify', {
             hits: hits.length,
             scale: mapView.current.scale,
           });
@@ -432,7 +432,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     });
 
     return () => clickHandler?.remove();
-  }, [state, dispatch, color, setGraphic, analytics]);
+  }, [state, dispatch, color, setGraphic, logEvent]);
 
   // update graphic on color change
   useEffect(() => {
@@ -440,7 +440,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    logEvent(analytics, 'my-points-color-change', {
+    logEvent('my-points-color-change', {
       color: color,
     });
 
@@ -464,7 +464,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         }),
       );
     }
-  }, [setGraphic, color, analytics]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setGraphic, color, logEvent]); // eslint-disable-line react-hooks/exhaustive-deps
   // ignore graphic
 
   // add and remove points on login and logout
@@ -472,7 +472,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     setMapState(status);
     const points = [];
 
-    if (signInCheckResult?.signedIn === true && status === 'success') {
+    if (currentUser !== undefined && status === 'success') {
       for (const point of content?.data?.points ?? []) {
         points.push(
           new Graphic({
@@ -488,11 +488,11 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       }
     }
 
-    if (signInCheckResult?.signedIn === false) {
+    if (currentUser === undefined) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [dispatch, setUserGraphics, content?.data?.points, status, signInCheckResult?.signedIn]);
+  }, [dispatch, setUserGraphics, content?.data?.points, status, currentUser]);
 
   // add and zoom to gps location
   useEffect(() => {
@@ -500,7 +500,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    logEvent(analytics, 'gps-on');
+    logEvent('gps-on');
 
     mapView.current.when(async () => {
       await mapView.current.goTo(
@@ -513,14 +513,14 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       setGpsGraphic(gpsGraphic.graphic);
     });
-  }, [gpsGraphic, setGpsGraphic, analytics]);
+  }, [gpsGraphic, setGpsGraphic, logEvent]);
 
   // zoom to the center state object
   useEffect(() => {
     if (state.center) {
       let targetGeometry = state.center.geometry;
 
-      logEvent(analytics, 'zooming', {
+      logEvent('zooming', {
         type: state.center.geometry?.type,
       });
 
@@ -546,7 +546,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       setViewPoint(vp);
     }
-  }, [state.center, setViewPoint, analytics]);
+  }, [state.center, setViewPoint, logEvent]);
 
   return (
     <ErrorBoundary FallbackComponent={DefaultFallback}>

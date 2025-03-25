@@ -2,24 +2,20 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useFirebaseAnalytics,
+  useFirebaseAuth,
+  useFirebaseFunctions,
+  useFirebaseStorage,
+  useFirestore,
+} from '@ugrc/utah-design-system';
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import clsx from 'clsx';
-import { logEvent } from 'firebase/analytics';
-import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import {
-  FirestoreProvider,
-  useAnalytics,
-  useFirebaseApp,
-  useFirestore,
-  useFunctions,
-  useSigninCheck,
-  useStorage,
-  useUser,
-} from 'reactfire';
 import { timeSince } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -40,18 +36,18 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 const tabs = ['Submissions', 'Reference Points'];
 
 const MyContent = ({ dispatch }) => {
-  const { data: signInCheckResult } = useSigninCheck();
+  const { currentUser } = useFirebaseAuth();
   const [selectedTab, setSelectedTab] = useState();
 
   const { analytics, logEvent } = usePageView('screen-my-content');
 
-  const functions = useFunctions();
+  const { functions } = useFirebaseFunctions();
   const myPoints = httpsCallable(functions, 'getMyContent');
 
   const { data, status } = useQuery({
     queryKey: ['my content'],
     queryFn: myPoints,
-    enabled: signInCheckResult?.signedIn === true,
+    enabled: currentUser !== undefined,
     staleTime: Infinity,
   });
 
@@ -143,8 +139,6 @@ MyContent.propTypes = {
 
 const ReferencePoints = ({ items, dispatch }) => {
   const [sortOrder, setSortOrder] = useState(sortOrders[0]);
-  const app = useFirebaseApp();
-  const firestore = getFirestore(app);
 
   if ((items?.length ?? 0) < 1) {
     return (
@@ -162,16 +156,14 @@ const ReferencePoints = ({ items, dispatch }) => {
   }
 
   return (
-    <FirestoreProvider sdk={firestore}>
-      <section className="inline-grid w-full gap-2">
-        <Card>
-          <Select label="Sort order" options={sortOrders} value={sortOrder} onChange={setSortOrder}></Select>
-        </Card>
-        <Card>
-          <ItemList dispatch={dispatch} items={items} sortOrder={sortOrder}></ItemList>
-        </Card>
-      </section>
-    </FirestoreProvider>
+    <section className="inline-grid w-full gap-2">
+      <Card>
+        <Select label="Sort order" options={sortOrders} value={sortOrder} onChange={setSortOrder}></Select>
+      </Card>
+      <Card>
+        <ItemList dispatch={dispatch} items={items} sortOrder={sortOrder}></ItemList>
+      </Card>
+    </section>
   );
 };
 ReferencePoints.propTypes = {
@@ -216,11 +208,11 @@ Submissions.propTypes = {
 };
 
 const Submission = ({ item, dispatch }) => {
-  const analytics = useAnalytics();
-  const storage = useStorage();
+  const logEvent = useFirebaseAnalytics();
+  const { storage } = useFirebaseStorage();
   const [url, setUrl] = useState('');
 
-  const functions = useFunctions();
+  const { functions } = useFirebaseFunctions();
   const cancelSubmission = httpsCallable(functions, 'postCancelCorner');
 
   const queryClient = useQueryClient();
@@ -244,7 +236,7 @@ const Submission = ({ item, dispatch }) => {
   try {
     getDownloadURL(ref(storage, attributes.ref)).then(setUrl);
   } catch {
-    logEvent(analytics, 'download-submission-error', {
+    logEvent('download-submission-error', {
       document: item.key,
     });
   }
@@ -426,9 +418,9 @@ const Item = ({ item, dispatch }) => {
   const date = Date.parse(item.attributes.when);
   const [isOpen, { toggle }] = useOpenClosed(false);
   const [status, setStatus] = useState('idle');
-  const db = useFirestore();
+  const { firestore } = useFirestore();
   const queryClient = useQueryClient();
-  const { data: user } = useUser();
+  const { currentUser } = useFirebaseAuth();
 
   return (
     <div className="relative flex flex-col gap-2 text-base">
@@ -489,7 +481,7 @@ const Item = ({ item, dispatch }) => {
           onClick={async () => {
             try {
               setStatus('loading');
-              await deleteDoc(doc(db, 'submitters', user.uid, 'points', item.attributes.id));
+              await deleteDoc(doc(firestore, 'submitters', currentUser.uid, 'points', item.attributes.id));
               queryClient.invalidateQueries(['my content']);
               setStatus('success');
             } catch (error) {
@@ -510,7 +502,7 @@ Item.propTypes = {
 };
 
 const Image = ({ path }) => {
-  const storage = useStorage();
+  const { storage } = useFirebaseStorage();
   const [data, setData] = useState();
   getDownloadURL(ref(storage, path)).then(setData);
 

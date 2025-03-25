@@ -1,8 +1,8 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import { Fragment, useContext, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { useUser } from 'reactfire';
 import { imagesSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
@@ -31,7 +31,7 @@ const defaults = {
 };
 
 export default function MonumentImages() {
-  const { data: user } = useUser();
+  const { currentUser } = useFirebaseAuth();
   const [state, send] = useContext(SubmissionContext);
   usePageView('screen-submission-images');
 
@@ -79,7 +79,7 @@ export default function MonumentImages() {
             render={({ field: { onChange, name } }) => (
               <FileUpload
                 defaultFileName={name}
-                path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
+                path={`submitters/${currentUser.uid}/new/${state.context.blmPointId}`}
                 contentTypes={[
                   { name: 'PNG', value: 'image/png' },
                   { name: 'JPEG', value: 'image/jpeg' },
@@ -99,7 +99,7 @@ export default function MonumentImages() {
             render={({ field: { onChange, name } }) => (
               <FileUpload
                 defaultFileName={name}
-                path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
+                path={`submitters/${currentUser.uid}/new/${state.context.blmPointId}`}
                 contentTypes={[
                   { name: 'PNG', value: 'image/png' },
                   { name: 'JPEG', value: 'image/jpeg' },
@@ -119,7 +119,7 @@ export default function MonumentImages() {
             render={({ field: { onChange, name } }) => (
               <FileUpload
                 defaultFileName={name}
-                path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
+                path={`submitters/${currentUser.uid}/new/${state.context.blmPointId}`}
                 contentTypes={[
                   { name: 'PNG', value: 'image/png' },
                   { name: 'JPEG', value: 'image/jpeg' },
@@ -141,7 +141,7 @@ export default function MonumentImages() {
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
                     defaultFileName={name}
-                    path={`submitters/${user.uid}/new/${state.context.blmPointId}`}
+                    path={`submitters/${currentUser.uid}/new/${state.context.blmPointId}`}
                     contentTypes={[
                       { name: 'PDF', value: 'application/pdf' },
                       { name: 'PNG', value: 'image/png' },
