@@ -1,9 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFunctions } from 'firebase/functions';
-import { getStorage } from 'firebase/storage';
-import { AuthProvider, FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseAuthProvider,
+  FirebaseFunctionsProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { useImmerReducer } from 'use-immer';
 import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';
@@ -31,19 +33,16 @@ export default {
   },
   decorators: [
     (Story) => {
-      const app = initializeApp(config);
-      const storage = getStorage(app);
-      const functions = getFunctions(app);
-      const auth = getAuth(app);
-
       return (
         <QueryClientProvider client={new QueryClient()}>
-          <FirebaseAppProvider firebaseConfig={config}>
-            <AuthProvider sdk={auth}>
-              <FunctionsProvider sdk={functions}>
-                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
-              </FunctionsProvider>
-            </AuthProvider>
+          <FirebaseAppProvider config={config}>
+            <FirebaseAuthProvider>
+              <FirebaseFunctionsProvider>
+                <FirebaseAnalyticsProvider>
+                  <FirebaseStorageProvider>{Story()}</FirebaseStorageProvider>
+                </FirebaseAnalyticsProvider>
+              </FirebaseFunctionsProvider>
+            </FirebaseAuthProvider>
           </FirebaseAppProvider>
         </QueryClientProvider>
       );

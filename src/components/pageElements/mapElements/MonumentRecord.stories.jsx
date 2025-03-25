@@ -1,7 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { initializeApp } from 'firebase/app';
-import { getStorage } from 'firebase/storage';
-import { FirebaseAppProvider, StorageProvider } from 'reactfire';
+import { FirebaseAnalyticsProvider, FirebaseAppProvider, FirebaseStorageProvider } from '@ugrc/utah-design-system';
 import MonumentRecord from './MonumentRecord.jsx';
 
 let config = {
@@ -24,9 +22,6 @@ export default {
   component: MonumentRecord,
   decorators: [
     (Story) => {
-      const app = initializeApp(config);
-      const storage = getStorage(app);
-
       return (
         <QueryClientProvider
           client={
@@ -39,8 +34,10 @@ export default {
             })
           }
         >
-          <FirebaseAppProvider firebaseConfig={config}>
-            <StorageProvider sdk={storage}>{Story()}</StorageProvider>
+          <FirebaseAppProvider config={config}>
+            <FirebaseAnalyticsProvider>
+              <FirebaseStorageProvider>{Story()}</FirebaseStorageProvider>
+            </FirebaseAnalyticsProvider>
           </FirebaseAppProvider>
         </QueryClientProvider>
       );

@@ -1,10 +1,33 @@
+import { FirebaseAnalyticsProvider, FirebaseAppProvider } from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import CoordinatePicker from './Datum.jsx';
+
+let config = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  config = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
 
 export default {
   title: 'Corner/Submission/Parts',
   component: CoordinatePicker,
-  decorators: [(Story) => <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>{Story()}</SubmissionProvider>],
+  decorators: [
+    (Story) => (
+      <FirebaseAppProvider config={config}>
+        <FirebaseAnalyticsProvider>
+          <SubmissionProvider context={{ blmPointId: 1, type: 'new' }}>{Story()}</SubmissionProvider>
+        </FirebaseAnalyticsProvider>
+      </FirebaseAppProvider>
+    ),
+  ],
   parameters: {
     backgrounds: {
       default: 'drawer',

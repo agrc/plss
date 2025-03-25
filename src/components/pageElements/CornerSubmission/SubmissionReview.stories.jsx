@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { initializeApp } from 'firebase/app';
-import { getFunctions } from 'firebase/functions';
-import { getStorage } from 'firebase/storage';
-import { FirebaseAppProvider, FunctionsProvider, StorageProvider } from 'reactfire';
+import {
+  FirebaseAnalyticsProvider,
+  FirebaseAppProvider,
+  FirebaseFunctionsProvider,
+  FirebaseStorageProvider,
+} from '@ugrc/utah-design-system';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import Review from './SubmissionReview.jsx';
 
@@ -25,17 +27,15 @@ export default {
   component: Review,
   decorators: [
     (Story) => {
-      const app = initializeApp(config);
-      const functions = getFunctions(app);
-      const storage = getStorage(app);
-
       return (
         <aside className="drawer z-10 flex max-w-screen flex-col overflow-scroll rounded-t-2xl bg-slate-50 px-4 py-4 text-sky-900 shadow-2xl sm:rounded-t-none md:pb-12">
           <QueryClientProvider client={new QueryClient()}>
-            <FirebaseAppProvider firebaseConfig={config}>
-              <FunctionsProvider sdk={functions}>
-                <StorageProvider sdk={storage}>{Story()}</StorageProvider>
-              </FunctionsProvider>
+            <FirebaseAppProvider config={config}>
+              <FirebaseFunctionsProvider>
+                <FirebaseAnalyticsProvider>
+                  <FirebaseStorageProvider>{Story()}</FirebaseStorageProvider>
+                </FirebaseAnalyticsProvider>
+              </FirebaseFunctionsProvider>
             </FirebaseAppProvider>
           </QueryClientProvider>
         </aside>
