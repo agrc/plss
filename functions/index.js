@@ -1,4 +1,4 @@
-import { logger } from 'firebase-functions/v2';
+import { logger, https } from 'firebase-functions/v2';
 import {
   onDocumentUpdated,
   onDocumentCreated,
@@ -9,7 +9,6 @@ import {
   onObjectDeleted,
 } from 'firebase-functions/v2/storage';
 import { beforeUserCreated } from 'firebase-functions/v2/identity';
-import { https } from 'firebase-functions/v2';
 import { defineSecret } from 'firebase-functions/params';
 import { safelyInitializeApp } from './firebase.js';
 
