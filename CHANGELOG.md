@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-4](https://github.com/agrc/plss/compare/v3.6.0-3...v3.6.0-4) (2025-04-14)
+
+
+### Features
+
+* add social share card ([8b5661a](https://github.com/agrc/plss/commit/8b5661ac9c2ec22fd142e4b7507e75d5f2cb3096))
+
 ## [3.6.0-3](https://github.com/agrc/plss/compare/v3.6.0-2...v3.6.0-3) (2025-03-25)
 
 
