@@ -12,6 +12,7 @@ export const createUser = async (user) => {
     email: user.email,
     displayName: user.displayName,
     created_at: new Date(),
+    elevated: false,
   };
 
   try {
