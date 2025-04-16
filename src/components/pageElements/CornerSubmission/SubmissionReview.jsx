@@ -304,12 +304,13 @@ Image.propTypes = {
 const AttachmentReview = ({ path }) => {
   const { storage } = useFirebaseStorage();
   const [data, setData] = useState();
+
   getDownloadURL(ref(storage, path)).then(setData);
 
   return (
     <Card>
       <h4 className="-mt-2 text-lg font-bold">Existing Monument Record Sheet</h4>
-      <div className="h-[400px] max-w-[300px] justify-self-center">
+      <div className="contents h-[400px] max-w-[300px] justify-self-center">
         <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
         </Link>
@@ -328,7 +329,7 @@ const MonumentPreview = ({ status, children }) => {
       <h4 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h4>
       {status === 'pending' && 'generating preview...'}
       {status === 'success' && (
-        <div className="h-[400px] max-w-[300px] justify-self-center border">
+        <div className="contents h-[400px] max-w-[300px] justify-self-center border">
           <ErrorBoundary fallback={<div>The preview could not be accessed.</div>}>{children}</ErrorBoundary>
         </div>
       )}
