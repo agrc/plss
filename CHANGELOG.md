@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-6](https://github.com/agrc/plss/compare/v3.6.0-5...v3.6.0-6) (2025-04-16)
+
+
+### Bug Fixes
+
+* synchronize app indexes ([c6c4af2](https://github.com/agrc/plss/commit/c6c4af2521bd81fd73059aaab75ab1f6b016b833))
+
 ## [3.6.0-5](https://github.com/agrc/plss/compare/v3.6.0-4...v3.6.0-5) (2025-04-16)
 
 
