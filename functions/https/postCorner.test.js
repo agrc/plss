@@ -144,6 +144,7 @@ describe('postCorner', () => {
         type: 'existing',
         existing: {
           pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
+          mrrc: false,
         },
         datum: 'geographic-nad83',
         geographic: {
@@ -171,6 +172,7 @@ describe('postCorner', () => {
         county: 'Beaver',
         type: 'existing',
         existing: {
+          mrrc: false,
           pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
         },
       };
@@ -286,6 +288,7 @@ describe('postCorner', () => {
         },
         existing: {
           pdf: 'submitters/user_id/new/point_id/map.png',
+          mrrc: false,
         },
       };
 
@@ -296,6 +299,9 @@ describe('postCorner', () => {
           grid: parts.grid,
           datum: parts.datum,
           location: new GeoPoint(41.73695741666667, -111.83666519166667),
+          metadata: {
+            mrrc: false,
+          },
           ...metadata,
           type: 'existing',
         };
@@ -313,6 +319,9 @@ describe('postCorner', () => {
           pdf: parts.existing.pdf,
           extra: 'metadata',
           type: 'existing',
+          metadata: {
+            mrrc: false,
+          },
         };
 
         expect(formatExistingCorner(input, { extra: 'metadata' })).toEqual(
@@ -377,6 +386,7 @@ describe('postCorner', () => {
             county: 'Beaver',
             existing: {
               pdf: 'submitters/uid/existing/point_id/existing-sheet.pdf',
+              mrrc: true,
             },
             datum: 'geographic-nad83',
             geographic: {
