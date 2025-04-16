@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.6.0-7](https://github.com/agrc/plss/compare/v3.6.0-6...v3.6.0-7) (2025-04-16)
+
+
+### Features
+
+* add mrrc option to existing submissions ([0a8bc00](https://github.com/agrc/plss/commit/0a8bc005227b7f936785fdf014211bb5777f86c2))
+
+
+### Bug Fixes
+
+* deactivate drawing after adding a reference point ([d2c8fce](https://github.com/agrc/plss/commit/d2c8fce6086b9dda8391e90abe4accb6a751b1d3))
+
+
+### Dependencies
+
+* update packages ([e153726](https://github.com/agrc/plss/commit/e153726b4e7b6ca92a3b4eb3b5f9a980b6857f04))
+* update packages ([ecb0de9](https://github.com/agrc/plss/commit/ecb0de940b53b811f2d2d36f3310672b91354bb4))
+
+
+### Styles
+
+* make pdf embeds fit within the card ([50bbc2f](https://github.com/agrc/plss/commit/50bbc2f7630ce679a448e6147f26862c932a13e6))
+
 ## [3.6.0-6](https://github.com/agrc/plss/compare/v3.6.0-5...v3.6.0-6) (2025-04-16)
 
 
