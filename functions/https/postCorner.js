@@ -196,6 +196,11 @@ export const formatNewCorner = (data, metadata) => {
 export const formatExistingCorner = (data, metadata) => {
   let record = { ...metadata, pdf: data.existing.pdf, type: 'existing' };
 
+  if (!record.metadata) {
+    record.metadata = {};
+  }
+  record.metadata.mrrc = data.existing.mrrc;
+
   if (data.datum) {
     const [y, x] = getLatLon(data.geographic);
 
