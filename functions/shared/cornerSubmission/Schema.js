@@ -441,10 +441,10 @@ export const gridCoordinatesSchema = yup.object().shape({
           .min(273034)
           .max(718496)
           .test('meters', gridMessages.eastingMeters, (number) =>
-            scaleAndPrecision(number, { precision: 3 })
-              .typeError(gridMessages.eastingMeters)
-              .required(gridMessages.eastingMeters),
+            scaleAndPrecision(number, { precision: 3 }),
           )
+          .typeError(gridMessages.eastingMeters)
+          .required(gridMessages.eastingMeters)
           .label('Easting value'),
     })
     .when('unit', {
