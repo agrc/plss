@@ -47,7 +47,7 @@ export default function Township({ apiKey, dispatch }) {
   const { analytics, logEvent } = usePageView('screen-township-finder');
 
   const { data: ranges } = useQuery({
-    queryKey: ['ranges', tabs[selectedTabIndex].value, selectedTownship],
+    queryKey: ['ranges', tabs[selectedTabIndex].value, selectedTownship, analytics, apiKey],
     queryFn: async () => {
       const predicate = `torrname='${tabs[selectedTabIndex].value}T${selectedTownship}'`;
 
@@ -97,7 +97,7 @@ export default function Township({ apiKey, dispatch }) {
   });
 
   const { data: sections } = useQuery({
-    queryKey: ['sections', tabs[selectedTabIndex].value, selectedTownship, selectedRange],
+    queryKey: ['sections', tabs[selectedTabIndex].value, selectedTownship, selectedRange, analytics, apiKey],
     queryFn: async () => {
       const predicate = `trname='${tabs[selectedTabIndex].value}T${selectedTownship}R${selectedRange}'`;
 
@@ -144,7 +144,15 @@ export default function Township({ apiKey, dispatch }) {
   });
 
   const { data: location, status } = useQuery({
-    queryKey: ['location', tabs[selectedTabIndex].value, selectedTownship, selectedRange, selectedSection],
+    queryKey: [
+      'location',
+      tabs[selectedTabIndex].value,
+      selectedTownship,
+      selectedRange,
+      selectedSection,
+      analytics,
+      apiKey,
+    ],
     queryFn: async () => {
       const predicate = composePredicate(
         tabs[selectedTabIndex].number,

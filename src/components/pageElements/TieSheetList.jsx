@@ -13,7 +13,7 @@ const TieSheetList = ({ blmPointId, children }) => {
 
   const { data, status } = useQuery({
     enabled: blmPointId != null,
-    queryKey: ['identify', blmPointId],
+    queryKey: ['identify', blmPointId, fileRef],
     queryFn: async () => {
       const response = await listAll(fileRef);
 

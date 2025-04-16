@@ -29,7 +29,7 @@ const Review = () => {
 
   const { data, status } = useQuery({
     enabled: state.context.type === 'new',
-    queryKey: ['monument record sheet', state.context.blmPointId, { preview: true }],
+    queryKey: ['monument record sheet', state.context.blmPointId, { preview: true }, state.context],
     queryFn: () => generatePreview(state.context),
     staleTime: 5000, // 5 seconds,
   });
