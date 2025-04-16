@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-5](https://github.com/agrc/plss/compare/v3.6.0-4...v3.6.0-5) (2025-04-16)
+
+
+### Bug Fixes
+
+* **api:** add tenant to user table ([b6115a3](https://github.com/agrc/plss/commit/b6115a31ed05e6793ee9e4c657d8465da9a7ce69))
+
 ## [3.6.0-4](https://github.com/agrc/plss/compare/v3.6.0-3...v3.6.0-4) (2025-04-14)
 
 
