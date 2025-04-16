@@ -92,20 +92,20 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
     reset: mutateReset,
   } = useMutation({
     mutationFn: (data) => addPoint(data),
-    onSuccess: (response) => {
+    onSuccess: () => {
       scrollContainer.current?.scrollTo(0, 0);
-      console.log('success', response);
       uniqueId.current = crypto.randomUUID();
 
-      dispatch({ type: 'add-point/reset' });
+      reset(defaultValues);
+
       if (active) {
         dispatch({ type: 'add-point/activate' });
       }
 
+      dispatch({ type: 'add-point/reset' });
+
       queryClient.invalidateQueries({ queryKey: ['my content'] });
       setTimeout(() => mutateReset(), 3000);
-
-      reset(defaultValues);
     },
   });
 
