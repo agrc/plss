@@ -895,20 +895,21 @@ describe('schema tests', () => {
   });
   describe('existing', () => {
     test.each([
-      ['garbage'],
-      ['/submitters/abc/existing/cdf/existing-sheet.png'],
-      ['/submitters/abc/new/cdf/existing-sheet.pdf'],
-      ['/submitters/existing/cdf/existing-sheet.pdf'],
-      ['/submitters/existing/existing-sheet.pdf'],
-      [0],
-      [100],
-      [10.1],
-    ])('%s is not a valid pdf', (pdf) => {
+      ['garbage', 0],
+      ['/submitters/abc/existing/cdf/existing-sheet.png', 0],
+      ['/submitters/abc/new/cdf/existing-sheet.pdf', 0],
+      ['/submitters/existing/cdf/existing-sheet.pdf', 0],
+      ['/submitters/existing/existing-sheet.pdf', 0],
+      [0, 0],
+      [100, 0],
+      [10.1, 0],
+    ])('%s is not a valid pdf', (pdf, mrrc) => {
       let result;
 
       try {
         schemas.existingSheetSchema.validateSync({
           pdf,
+          mrrc,
         });
       } catch (error) {
         result = error;
