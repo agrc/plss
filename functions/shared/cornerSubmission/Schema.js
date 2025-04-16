@@ -506,6 +506,7 @@ export const existingSheetSchema = yup.object().shape({
       message: pdfMessage,
     })
     .required(pdfMessage),
+  mrrc: yup.boolean().required(),
 });
 
 export const imagesSchema = yup.object().shape({

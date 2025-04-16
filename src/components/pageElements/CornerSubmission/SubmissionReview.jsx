@@ -61,6 +61,13 @@ const Review = () => {
         </div>
         {state.context.type !== 'existing' && <MetadataReview {...state.context.metadata} />}
         <CoordinateReview datum={state.context.datum} grid={state.context.grid} geographic={state.context.geographic} />
+        {state.context.type === 'existing' && state.context.existing.mrrc && (
+          <div className="relative">
+            <div className="absolute top-0 right-0 rounded-sm border border-sky-800 bg-sky-300 px-2 text-sm text-sky-800 uppercase shadow-sm">
+              MRRC
+            </div>
+          </div>
+        )}
         {state.context.type === 'existing' ? (
           <AttachmentReview path={state.context.existing.pdf} />
         ) : (
