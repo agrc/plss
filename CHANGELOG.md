@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-8](https://github.com/agrc/plss/compare/v3.6.0-7...v3.6.0-8) (2025-04-16)
+
+
+### Bug Fixes
+
+* correct grid coordinate schema in the state plane south zone ([12ae909](https://github.com/agrc/plss/commit/12ae9097df3b16cf90538431865aa43e59286a1c))
+
 ## [3.6.0-7](https://github.com/agrc/plss/compare/v3.6.0-6...v3.6.0-7) (2025-04-16)
 
 
