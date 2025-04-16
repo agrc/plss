@@ -19,7 +19,7 @@ export default function MonumentRecord({ dispatch }) {
   const { analytics, logEvent } = usePageView('screen-monument-record-finder');
 
   const { data } = useQuery({
-    queryKey: [pointId, 'location'],
+    queryKey: [pointId, 'location', analytics],
     queryFn: async () => {
       logEvent(analytics, 'monument-record', { pointId });
 
