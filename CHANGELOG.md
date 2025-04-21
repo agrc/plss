@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0-9](https://github.com/agrc/plss/compare/v3.6.0-8...v3.6.0-9) (2025-04-21)
+
+
+### Bug Fixes
+
+* handle all undefined values ([2a8a4ac](https://github.com/agrc/plss/commit/2a8a4ace103b98055ad8de7f95378f2e7899a450)), closes [#452](https://github.com/agrc/plss/issues/452)
+
 ## [3.6.0-8](https://github.com/agrc/plss/compare/v3.6.0-7...v3.6.0-8) (2025-04-16)
 
 
