@@ -138,7 +138,7 @@ export const formatDataForFirestore = (data, user) => {
 export const formatNewCorner = (data, metadata) => {
   const [y, x] = getLatLon(data.geographic);
 
-  return {
+  let record = {
     type: 'new',
     ...metadata,
     location: new GeoPoint(y, x),
@@ -159,7 +159,7 @@ export const formatNewCorner = (data, metadata) => {
       zone: data.grid.zone,
       unit: data.grid.unit,
       elevation: data.grid.elevation,
-      verticalDatum: data.grid.verticalDatum ?? null,
+      verticalDatum: data.grid.verticalDatum,
     },
     geographic: {
       northing: {
@@ -191,6 +191,36 @@ export const formatNewCorner = (data, metadata) => {
       extra10: data.images.extra10,
     },
   };
+
+  record = convertUndefinedToNull(record);
+
+  return record;
+};
+
+export const convertUndefinedToNull = (obj) => {
+  if (obj === null || typeof obj !== 'object') {
+    return obj === undefined ? null : obj;
+  }
+
+  // Handle arrays
+  if (Array.isArray(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      obj[i] = convertUndefinedToNull(obj[i]);
+    }
+    return obj;
+  }
+
+  // Handle objects
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (obj[key] === undefined) {
+        obj[key] = null;
+      } else {
+        obj[key] = convertUndefinedToNull(obj[key]);
+      }
+    }
+  }
+  return obj;
 };
 
 export const formatExistingCorner = (data, metadata) => {
@@ -213,7 +243,7 @@ export const formatExistingCorner = (data, metadata) => {
         zone: data.grid.zone,
         unit: data.grid.unit,
         elevation: data.grid.elevation,
-        verticalDatum: data.grid.verticalDatum ?? null,
+        verticalDatum: data.grid.verticalDatum,
       },
       geographic: {
         northing: {
@@ -231,6 +261,8 @@ export const formatExistingCorner = (data, metadata) => {
       },
     });
   }
+
+  record = convertUndefinedToNull(record);
 
   return record;
 };
