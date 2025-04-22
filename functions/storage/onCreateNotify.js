@@ -50,6 +50,12 @@ export const createNotify = async (
   // TODO add document.county to add the county contacts #199
   const to = await getContactsToNotify(db, null);
 
+  if (!to || to.length === 0) {
+    logger.error('no contacts to notify', { structuredData: true });
+
+    return;
+  }
+
   const template = {
     method: 'post',
     url: '/v3/mail/send',
