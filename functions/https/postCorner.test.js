@@ -9,6 +9,7 @@ import {
   formatExistingCorner,
   formatNewCorner,
   getLatLon,
+  convertUndefinedToNull,
 } from './postCorner.js';
 import { postCorner } from '../index.js';
 
@@ -268,52 +269,49 @@ describe('postCorner', () => {
 
       test('it handles undefined values', () => {
         expect(
-          formatNewCorner(
-            {
-              type: 'new',
-              metadata: {
-                status: undefined,
-                accuracy: undefined,
-                collected: undefined,
-                description: undefined,
-                notes: undefined,
-                mrrc: undefined,
-                section: undefined,
-                corner: undefined,
-              },
-              datum: 'geographic-nad83',
-              grid: {
-                northing: 1142613.184,
-                easting: 470654.258,
-                zone: 'north',
-                unit: 'm',
-                elevation: undefined,
-                verticalDatum: null,
-              },
-              geographic: {
-                northing: { degrees: 41, minutes: 37, seconds: 1.19 },
-                easting: { degrees: 111, minutes: 51, seconds: 7.58 },
-                unit: 'm',
-                elevation: 765,
-              },
-              images: {
-                map: '',
-                monument: '',
-                closeUp: '',
-                extra1: '',
-                extra2: '',
-                extra3: '',
-                extra4: '',
-                extra5: '',
-                extra6: '',
-                extra7: '',
-                extra8: '',
-                extra9: '',
-                extra10: '',
-              },
+          convertUndefinedToNull({
+            type: 'new',
+            metadata: {
+              status: undefined,
+              accuracy: undefined,
+              collected: undefined,
+              description: undefined,
+              notes: undefined,
+              mrrc: undefined,
+              section: undefined,
+              corner: undefined,
             },
-            { extra: 'metadata' },
-          ),
+            datum: 'geographic-nad83',
+            grid: {
+              northing: 1142613.184,
+              easting: 470654.258,
+              zone: 'north',
+              unit: 'm',
+              elevation: undefined,
+              verticalDatum: null,
+            },
+            geographic: {
+              northing: { degrees: 41, minutes: 37, seconds: 1.19 },
+              easting: { degrees: 111, minutes: 51, seconds: 7.58 },
+              unit: 'm',
+              elevation: 765,
+            },
+            images: {
+              map: '',
+              monument: '',
+              closeUp: '',
+              extra1: '',
+              extra2: '',
+              extra3: '',
+              extra4: '',
+              extra5: '',
+              extra6: '',
+              extra7: '',
+              extra8: '',
+              extra9: '',
+              extra10: '',
+            },
+          }),
         ).toEqual({
           type: 'new',
           metadata: {
@@ -326,7 +324,6 @@ describe('postCorner', () => {
             section: null,
             corner: null,
           },
-          location: new GeoPoint(41.616997222222224, -111.85210555555555),
           datum: 'geographic-nad83',
           grid: {
             northing: 1142613.184,
@@ -357,7 +354,6 @@ describe('postCorner', () => {
             extra9: '',
             extra10: '',
           },
-          extra: 'metadata',
         });
       });
     });
