@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.0-12](https://github.com/agrc/plss/compare/v3.6.0-11...v3.6.0-12) (2025-04-22)
+
+
+### Bug Fixes
+
+* **api:** protect from empty county contacts ([4c33375](https://github.com/agrc/plss/commit/4c33375bf661056249baaaf0913bcdaf4beab0dc))
+* **api:** skip email if recipients are empty ([bdeed9e](https://github.com/agrc/plss/commit/bdeed9e3d2da6945e67681c9bf81201dc536eb17))
+* synchronize cloud storage rules ([c5fb77f](https://github.com/agrc/plss/commit/c5fb77fe4c36a6a6e7a1a893d82eca3098675e41))
+
 ## [3.6.0-11](https://github.com/agrc/plss/compare/v3.6.0-9...v3.6.0-11) (2025-04-22)
 
 
