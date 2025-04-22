@@ -1,5 +1,37 @@
 # Changelog
 
+## [3.5.22](https://github.com/agrc/plss/compare/v3.5.21...v3.5.22) (2025-04-22)
+
+
+### Features
+
+* add mrrc option to existing submissions ([b1624f3](https://github.com/agrc/plss/commit/b1624f3557b3cd1446ea2251cb9a8061b8e67f7f))
+* add reference corner options ([eac7d74](https://github.com/agrc/plss/commit/eac7d7407cad85615629ea96dae8e49f53c7f63c)), closes [#438](https://github.com/agrc/plss/issues/438)
+* add social share card ([7a9d1c9](https://github.com/agrc/plss/commit/7a9d1c97d8c224153beaf1eabffb0f3b3ceba18d))
+
+
+### Bug Fixes
+
+* **api:** add missing dependency ([440f8b0](https://github.com/agrc/plss/commit/440f8b0cef0aa8b1fdc6cb0c80a464fedf5ead13))
+* **api:** add tenant to user table ([9a398b8](https://github.com/agrc/plss/commit/9a398b8dbc9cf47a9dabc24d52ea82c6b367c931))
+* correct grid coordinate schema in the state plane south zone ([f0c4f00](https://github.com/agrc/plss/commit/f0c4f0085ac1030fa667cf723f040e4f2106e96b))
+* deactivate drawing after adding a reference point ([52d3976](https://github.com/agrc/plss/commit/52d3976b58cf57d6899e124ac7b1bffeab5a1cb8))
+* handle all undefined values ([31078bb](https://github.com/agrc/plss/commit/31078bb189f843302fd07ccdca0f3749df1cdc32)), closes [#452](https://github.com/agrc/plss/issues/452)
+* synchronize app indexes ([51688b9](https://github.com/agrc/plss/commit/51688b9ab6fd3d613e0e5f63c1f8c4b468b5d6db))
+
+
+### Dependencies
+
+* update non-breaking packages ([e849cd6](https://github.com/agrc/plss/commit/e849cd6237394605f6b9d82a44ca1d0c2e6e59fd))
+* update packages ([b77033b](https://github.com/agrc/plss/commit/b77033ba3d926fcbf66f2f734cc12ff622d5595d))
+* update packages ([b9f6725](https://github.com/agrc/plss/commit/b9f67250d0ab17634a423fed353188e6ef0c17f8))
+* update packages ([5a5a555](https://github.com/agrc/plss/commit/5a5a55565a4f4c7b436b96d34ca2d4afe8a89b18))
+
+
+### Styles
+
+* make pdf embeds fit within the card ([0dd75da](https://github.com/agrc/plss/commit/0dd75da394d9332e7cfb9a3cf1cdb7e69e2ac201))
+
 ## [3.6.0-10](https://github.com/agrc/plss/compare/v3.6.0-9...v3.6.0-10) (2025-04-22)
 
 
