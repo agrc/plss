@@ -56,12 +56,5 @@
   },
   "engines": {
     "node": "22"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@firebase/util",
-      "esbuild",
-      "protobufjs"
-    ]
   }
 }

@@ -42,10 +42,6 @@ jobs:
       - name: 📥 Download app dependencies
         run: pnpm install
 
-      - name: 📥 Download function dependencies
-        working-directory: functions
-        run: pnpm install
-
       - name: 🧪 Run tests
         run: pnpm run test:ci
 
