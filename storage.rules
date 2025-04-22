@@ -23,6 +23,9 @@ service firebase.storage {
   function hasAttachment() {
     return request.resource != null;
   }
+  function isElevatedUser() {
+    return firestore.get(/databases/(default)/documents/submitters/$(request.auth.uid)).data.elevated == true;
+  }
 
   match /b/{bucket}/o {
     match /submitters/{uid}/{allPaths=**} {
@@ -46,9 +49,14 @@ service firebase.storage {
         allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
       }
     }
-    match /under-review/{point_id}/{uid}/{file} {
-      allow get: if isAuthenticated() && isCurrentUser(uid);
+    match /under-review/{allPaths=**} {
+      allow get: if isAuthenticated() && isElevatedUser();
+
+      match /{point_id}/{uid}/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
+      }
     }
+
     match /tiesheets/{allPaths=**} {
       allow list: if true;
       allow get: if true;
