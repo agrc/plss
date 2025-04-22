@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.0-11](https://github.com/agrc/plss/compare/v3.6.0-9...v3.6.0-11) (2025-04-22)
+
+
+### Bug Fixes
+
+* **api:** limit the reach of undefined conversion ([2446f1e](https://github.com/agrc/plss/commit/2446f1e2c6b750d9d0b289cafd7c79a45bfbc10b))
+
+
+### Dependencies
+
+* update non-breaking packages ([9e9f3f5](https://github.com/agrc/plss/commit/9e9f3f510e61ade7c314387500f65df5097ecbaa))
+
 ## [3.6.0-9](https://github.com/agrc/plss/compare/v3.6.0-8...v3.6.0-9) (2025-04-21)
 
 
