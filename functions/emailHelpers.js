@@ -31,6 +31,7 @@ export const notify = (key, template) => {
 export const getContactsToNotify = async (db, county) => {
   const documentReference = db.collection('contacts').doc('admin');
   const documentSnapshot = await documentReference.get();
+
   if (!documentSnapshot.exists) {
     logger.error('contacts document does not exist', {
       structuredData: true,

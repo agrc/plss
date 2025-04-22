@@ -10,6 +10,12 @@ export const cancelSubmission = async (before) => {
   // only email ugrc with empty county
   const to = await getContactsToNotify(db, null);
 
+  if (!to || to.length === 0) {
+    logger.error('no contacts to notify', { structuredData: true });
+
+    return;
+  }
+
   const template = {
     method: 'post',
     url: '/v3/mail/send',

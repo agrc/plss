@@ -11,6 +11,7 @@ const docMock = vi.fn(() => {
             beaver: [{ name: 'beaver', email: 'beaver-email' }],
           };
         }),
+        exists: true,
       };
     }),
   };
