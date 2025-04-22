@@ -153,15 +153,15 @@ export const formatNewCorner = (data, metadata) => {
       corner: data.metadata.corner,
     },
     datum: data.datum,
-    grid: {
+    grid: convertUndefinedToNull({
       northing: data.grid.northing,
       easting: data.grid.easting,
       zone: data.grid.zone,
       unit: data.grid.unit,
       elevation: data.grid.elevation,
       verticalDatum: data.grid.verticalDatum,
-    },
-    geographic: {
+    }),
+    geographic: convertUndefinedToNull({
       northing: {
         degrees: data.geographic.northing.degrees,
         minutes: data.geographic.northing.minutes,
@@ -174,7 +174,7 @@ export const formatNewCorner = (data, metadata) => {
       },
       unit: data.geographic.unit,
       elevation: data.geographic.elevation,
-    },
+    }),
     images: {
       map: data.images.map,
       monument: data.images.monument,
@@ -191,8 +191,6 @@ export const formatNewCorner = (data, metadata) => {
       extra10: data.images.extra10,
     },
   };
-
-  record = convertUndefinedToNull(record);
 
   return record;
 };
@@ -237,15 +235,15 @@ export const formatExistingCorner = (data, metadata) => {
     record = Object.assign(record, {
       datum: data.datum,
       location: new GeoPoint(y, x),
-      grid: {
+      grid: convertUndefinedToNull({
         northing: data.grid.northing,
         easting: data.grid.easting,
         zone: data.grid.zone,
         unit: data.grid.unit,
         elevation: data.grid.elevation,
         verticalDatum: data.grid.verticalDatum,
-      },
-      geographic: {
+      }),
+      geographic: convertUndefinedToNull({
         northing: {
           degrees: data.geographic.northing.degrees,
           minutes: data.geographic.northing.minutes,
@@ -258,11 +256,9 @@ export const formatExistingCorner = (data, metadata) => {
         },
         unit: data.geographic.unit,
         elevation: data.geographic.elevation,
-      },
+      }),
     });
   }
-
-  record = convertUndefinedToNull(record);
 
   return record;
 };
