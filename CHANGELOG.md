@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.0](https://github.com/agrc/plss/compare/v3.5.23...v3.6.0) (2025-04-23)
+
+
+### Features
+
+* downgrade firebase tools to fix ci ([9aba2f6](https://github.com/agrc/plss/commit/9aba2f69f218571715be8a09f37c8f84f0dd63ed))
+
 ## [3.5.23](https://github.com/agrc/plss/compare/v3.5.22...v3.5.23) (2025-04-23)
 
 
