@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.23](https://github.com/agrc/plss/compare/v3.5.22...v3.5.23) (2025-04-23)
+
+
+### Dependencies
+
+* update firebase tools package ([6a99f12](https://github.com/agrc/plss/commit/6a99f12f0b2084c22b836c1ffb70b8ee3cf80124))
+
 ## [3.5.22](https://github.com/agrc/plss/compare/v3.5.21...v3.5.22) (2025-04-22)
 
 
