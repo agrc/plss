@@ -45,7 +45,10 @@ export const saveCorner = async (data, auth) => {
   });
 
   try {
-    await db.collection('submissions').add(doc);
+    const reference = await db.collection('submissions').add(doc);
+    logger.info('firestore doc', reference.id, {
+      structuredData: true,
+    });
   } catch (error) {
     logger.error('error saving corner', error, doc, {
       structuredData: true,
