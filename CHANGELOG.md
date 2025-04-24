@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.6.1](https://github.com/agrc/plss/compare/v3.6.0...v3.6.1) (2025-04-24)
+
+
+### Bug Fixes
+
+* **api:** limit the reach of undefined conversion ([50e474a](https://github.com/agrc/plss/commit/50e474a1ec5b68fcd3eac3d8155f1781c5aa7fc5))
+* **api:** protect from empty county contacts ([db2cd25](https://github.com/agrc/plss/commit/db2cd258ec018af3cd57839bdf9c8131b92e9e55))
+* **api:** skip email if recipients are empty ([288e156](https://github.com/agrc/plss/commit/288e1563e1884cda2c9cb8790b8ed4348b266747))
+* sync dev with main ([c10633a](https://github.com/agrc/plss/commit/c10633adc67f3187ab9d6fb1c4b48b3cb5fe69c6))
+* synchronize cloud storage rules ([409681e](https://github.com/agrc/plss/commit/409681ef3c1c779949e016bcf07b7459d7169f28))
+
+
+### Dependencies
+
+* update packages ([8095bf3](https://github.com/agrc/plss/commit/8095bf3eb129917955e743e46864ba86bcee40c1))
+
 ## [3.6.0](https://github.com/agrc/plss/compare/v3.5.23...v3.6.0) (2025-04-23)
 
 
