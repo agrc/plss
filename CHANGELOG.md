@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.6.2](https://github.com/agrc/plss/compare/v3.6.0-12...v3.6.2) (2025-04-25)
+
+
+### Features
+
+* downgrade firebase tools to fix ci ([962c75f](https://github.com/agrc/plss/commit/962c75f520e894bea06f55051564a19e0d9aef8d))
+
+
+### Bug Fixes
+
+* sync dev with main ([056310d](https://github.com/agrc/plss/commit/056310d1875e99204cb023f3800e4a0bfda5a9d6))
+
+
+### Dependencies
+
+* update deps ([efdecfa](https://github.com/agrc/plss/commit/efdecfab1ddc4078636e7159751e34572cd7b138))
+* update firebase tools package ([d7df656](https://github.com/agrc/plss/commit/d7df656d1285d947f190e7f9b3b35eda02c8a721))
+* update packages ([98065e3](https://github.com/agrc/plss/commit/98065e39b9019e54ad70792a7bd13b20e20b6f8b))
+
 ## [3.6.1](https://github.com/agrc/plss/compare/v3.6.0...v3.6.1) (2025-04-24)
 
 
