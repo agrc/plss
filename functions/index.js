@@ -102,7 +102,7 @@ export const onCancelSubmission = onDocumentUpdated(
       await import('./database/submissions/onCancelSubmission.js')
     ).cancelSubmission;
 
-    const apiSnippet = (process.env.SENDGRID_API_KEY ?? 'null').slice(0, 4);
+    const apiSnippet = (sendGridApiKey.value() ?? 'null').slice(0, 4);
 
     logger.debug('runWith', apiSnippet, {
       structuredData: true,
@@ -191,7 +191,7 @@ export const onCreateMonumentRecord = onDocumentCreated(
     const result = await createMonumentRecord(
       record,
       event.params.docId,
-      process.env.SHARED_DRIVE_ID,
+      sharedDriveId.value(),
     );
 
     logger.debug('[database::submissions::onCreateMonumentRecord]', result);
