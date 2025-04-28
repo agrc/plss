@@ -36,6 +36,7 @@ const throwIfNoFormData = (data) => {
 
 const config = safelyInitializeApp();
 const sendGridApiKey = defineSecret('SENDGRID_API_KEY');
+const sharedDriveId = defineSecret('SHARED_DRIVE_ID');
 
 // Firebase authentication
 export const onCreateUser = beforeUserCreated(async (event) => {
@@ -166,6 +167,7 @@ export const onCreateMonumentRecord = onDocumentCreated(
   {
     document: '/submissions/{docId}',
     memory: '512MiB',
+    secrets: [sharedDriveId],
   },
   async (event) => {
     const record = event.data.data();
@@ -186,7 +188,11 @@ export const onCreateMonumentRecord = onDocumentCreated(
       await import('./database/submissions/onCreateMonument.js')
     ).createMonumentRecord;
 
-    const result = await createMonumentRecord(record, event.params.docId);
+    const result = await createMonumentRecord(
+      record,
+      event.params.docId,
+      process.env.SHARED_DRIVE_ID,
+    );
 
     logger.debug('[database::submissions::onCreateMonumentRecord]', result);
 
