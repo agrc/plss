@@ -47,7 +47,6 @@ export const createNotify = async (
     bucket.file(name).createReadStream(),
   );
 
-  // TODO add document.county to add the county contacts #199
   const to = await getContactsToNotify(db, null);
 
   if (!to || to.length === 0) {
