@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.3-1](https://github.com/agrc/plss/compare/v3.6.3-0...v3.6.3-1) (2025-04-28)
+
+
+### Bug Fixes
+
+* **api:** remove extra lock file ([a484f6c](https://github.com/agrc/plss/commit/a484f6c93aafa88c2b4a10eba30e855ee64e2fb2))
+
 ## [3.6.3-0](https://github.com/agrc/plss/compare/v3.6.2...v3.6.3-0) (2025-04-28)
 
 
