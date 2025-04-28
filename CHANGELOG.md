@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.3-0](https://github.com/agrc/plss/compare/v3.6.2...v3.6.3-0) (2025-04-28)
+
+
+### Features
+
+* **api:** sync monument records to shared google drive ([1634b7a](https://github.com/agrc/plss/commit/1634b7a2b04658952edcfed426da3ca6cf637a07)), closes [#462](https://github.com/agrc/plss/issues/462)
+
 ## [3.6.2](https://github.com/agrc/plss/compare/v3.6.0-12...v3.6.2) (2025-04-25)
 
 
