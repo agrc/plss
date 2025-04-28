@@ -8,22 +8,39 @@ import {
   getPdfAssets,
 } from '../../pdfHelpers.js';
 import { safelyInitializeApp } from '../../firebase.js';
+import { uploadFile } from '../../drive.js';
 
 const config = safelyInitializeApp();
 const db = getFirestore();
 const bucket = getStorage().bucket(config.storageBucket);
 
-export const createMonumentRecord = async (record, id) => {
+const getFiscalYear = (now) => {
+  const july = 6; // July is month 6 (0-indexed)
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+
+  let fiscalYear = currentYear;
+  if (currentMonth >= july) {
+    fiscalYear += 1;
+  }
+
+  return fiscalYear.toString().slice(-2);
+};
+
+const fiscalYear = getFiscalYear(new Date());
+
+export const createMonumentRecord = async (record, id, sharedDriveId) => {
   logger.debug('trigger: new submission for', id, record.type, {
     structuredData: true,
   });
 
   if (record.type === 'existing') {
+    let data;
     try {
       const fileName = `under-review/${record.blm_point_id}/${record.submitted_by.id}/${id}.pdf`;
       const file = bucket.file(fileName);
 
-      const data = await getBinaryPdfs(bucket, { pdf: record.pdf });
+      data = await getBinaryPdfs(bucket, { pdf: record.pdf });
 
       await file.save(data.pdf);
       await file.setMetadata({
@@ -32,6 +49,35 @@ export const createMonumentRecord = async (record, id) => {
       });
     } catch (error) {
       logger.error('error generating monument', error, record, id, {
+        structuredData: true,
+      });
+    }
+
+    if (!record.metadata.mrrc) {
+      return true;
+    }
+
+    try {
+      if (data) {
+        await uploadFile(
+          sharedDriveId,
+          data.pdf,
+          record.blm_point_id,
+          record.county,
+          fiscalYear,
+        );
+      } else {
+        logger.error(
+          'error placing file in drive: pdf not created',
+          record,
+          id,
+          {
+            structuredData: true,
+          },
+        );
+      }
+    } catch (error) {
+      logger.error('error placing file in drive', error, record, id, {
         structuredData: true,
       });
     }
@@ -74,8 +120,9 @@ export const createMonumentRecord = async (record, id) => {
   const fileName = `under-review/${record.blm_point_id}/${record.submitted_by.id}/${id}.pdf`;
   const file = bucket.file(fileName);
 
+  let pdf = null;
   try {
-    let pdf = await createPdfDocument(definition, pdfs);
+    pdf = await createPdfDocument(definition, pdfs);
 
     await file.save(pdf);
     await file.setMetadata({
@@ -94,6 +141,30 @@ export const createMonumentRecord = async (record, id) => {
     await doc.update({ monument: fileName });
   } catch (error) {
     logger.error('error updating monument record sheet', fileName, error, {
+      structuredData: true,
+    });
+  }
+
+  if (!record.metadata.mrrc) {
+    return true;
+  }
+
+  try {
+    if (pdf) {
+      await uploadFile(
+        sharedDriveId,
+        pdf,
+        record.blm_point_id,
+        record.county,
+        fiscalYear,
+      );
+    } else {
+      logger.error('error placing file in drive: pdf not created', record, id, {
+        structuredData: true,
+      });
+    }
+  } catch (error) {
+    logger.error('error placing file in drive', error, record, id, {
       structuredData: true,
     });
   }
