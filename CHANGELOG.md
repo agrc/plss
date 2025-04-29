@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.3](https://github.com/agrc/plss/compare/v3.6.2...v3.6.3) (2025-04-29)
+
+
+### Features
+
+* **api:** sync monument records to shared google drive ([653b61e](https://github.com/agrc/plss/commit/653b61e962ee16d8aa30f6fa66a7550fb9892a37)), closes [#462](https://github.com/agrc/plss/issues/462)
+
+
+### Bug Fixes
+
+* **api:** remove extra lock file ([8d4d336](https://github.com/agrc/plss/commit/8d4d33630cddde9dccdc0c09123b5c925341018c))
+
 ## [3.6.3-1](https://github.com/agrc/plss/compare/v3.6.3-0...v3.6.3-1) (2025-04-28)
 
 
