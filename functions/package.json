@@ -15,7 +15,7 @@
     "test": "vitest --silent --coverage --ui --open"
   },
   "dependencies": {
-    "@google-cloud/functions-framework": "^3.5.1",
+    "@google-cloud/functions-framework": "^4.0.0",
     "@sendgrid/client": "^8.1.5",
     "base64-stream": "^1.0.0",
     "contrast-color": "^1.0.1",
