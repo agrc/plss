@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.4](https://github.com/agrc/plss/compare/v3.6.3...v3.6.4) (2025-05-01)
+
+
+### Bug Fixes
+
+* **api:** correct profile updates when optional fields are not supplied ([fdb5520](https://github.com/agrc/plss/commit/fdb55207ae3c5e58c63eb21e87868e525d8db2ae))
+
 ## [3.6.3](https://github.com/agrc/plss/compare/v3.6.2...v3.6.3) (2025-04-29)
 
 
