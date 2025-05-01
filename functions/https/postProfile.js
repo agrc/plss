@@ -60,7 +60,7 @@ const formatDataForFirestore = (data) => {
   return {
     displayName: data.displayName,
     email: data.email,
-    license: data?.license,
-    seal: data?.seal,
+    license: data?.license ?? null,
+    seal: data?.seal ?? null,
   };
 };
