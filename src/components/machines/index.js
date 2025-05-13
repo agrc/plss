@@ -112,6 +112,11 @@ export const submissionMachine = setup({
 
       return context;
     }),
+    clearDatum: assign(({ context }) => {
+      delete context.datum;
+
+      return context;
+    }),
     clearGeographicCoordinates: assign(({ context }) => {
       delete context.geographic;
 
@@ -201,6 +206,7 @@ export const submissionMachine = setup({
             SKIP: {
               target: 'reviewing',
               guard: 'is existing submission',
+              actions: ['clearDatum', 'clearGridCoordinates', 'clearGeographicCoordinates'],
             },
             RESET: {},
             UPDATE_CONTEXT: {
