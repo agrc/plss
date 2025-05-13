@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.5](https://github.com/agrc/plss/compare/v3.6.4...v3.6.5) (2025-05-13)
+
+
+### Bug Fixes
+
+* correct submission when partial coordinates are entered and then skipped ([bf1b3b3](https://github.com/agrc/plss/commit/bf1b3b34b08599b1e28d525df5e610baa1cd9c6b))
+
 ## [3.6.4](https://github.com/agrc/plss/compare/v3.6.3...v3.6.4) (2025-05-01)
 
 
