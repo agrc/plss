@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.6](https://github.com/agrc/plss/compare/v3.6.5...v3.6.6) (2025-05-14)
+
+
+### Dependencies
+
+* fy25q4 package udpates ([4f3f2c6](https://github.com/agrc/plss/commit/4f3f2c6795ac8b3d9ac88d0621a4c3095fcf312a))
+
 ## [3.6.5](https://github.com/agrc/plss/compare/v3.6.4...v3.6.5) (2025-05-13)
 
 
