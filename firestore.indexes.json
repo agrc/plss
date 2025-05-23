@@ -23,6 +23,52 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "status.user.cancelled",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "blm_point_id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "submissions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status.ugrc.approved",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "blm_point_id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "submissions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status.user.cancelled",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "blm_point_id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "submissions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status.county.approved",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "blm_point_id",
           "order": "ASCENDING"
         }
