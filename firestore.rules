@@ -14,7 +14,7 @@ service cloud.firestore {
       allow read, update: if isAuthenticated() && isAuthorized();
     }
 
-    match /stats/mrrc {
+    match /stats/{document=**} {
       allow read, update: if isAuthenticated() && isAuthorized();
     }
   }
