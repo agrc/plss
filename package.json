@@ -1,6 +1,6 @@
 {
   "name": "@ugrc/plss-app",
-  "version": "3.6.6",
+  "version": "3.6.7-0",
   "private": true,
   "description": "A React app for the UGRC PLSS",
   "license": "MIT",
