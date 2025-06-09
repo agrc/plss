@@ -104,13 +104,15 @@ export const formatDataForFirestore = (data, user) => {
     status: {
       ugrc: {
         approved: null,
-        rejected: null,
         comments: null,
+        reviewedAt: null,
+        reviewedBy: null,
       },
       county: {
         approved: null,
-        rejected: null,
         comments: null,
+        reviewedAt: null,
+        reviewedBy: null,
       },
       sgid: {
         approved: null,
