@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.7](https://github.com/agrc/plss/compare/v3.6.6...v3.6.7) (2025-06-12)
+
+
+### Bug Fixes
+
+* migrate status schema ([340809d](https://github.com/agrc/plss/commit/340809d1c4b02b3d16b9d8367dbbc8596db6d740))
+
 ## [3.6.7-0](https://github.com/agrc/plss/compare/v3.6.6...v3.6.7-0) (2025-06-09)
 
 
