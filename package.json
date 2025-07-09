@@ -129,9 +129,15 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@firebase/util",
-      "@tailwindcss/oxide",
+      "@swc/core",
+      "core-js",
       "esbuild",
-      "protobufjs"
+      "protobufjs",
+      "re2",
+      "unrs-resolver"
+    ],
+    "ignoredBuiltDependencies": [
+      "@vaadin/vaadin-usage-statistics"
     ]
   }
 }
