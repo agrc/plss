@@ -27,6 +27,7 @@ describe('postCorner', () => {
     created_at: date,
     blm_point_id: 'point_id',
     county: 'Beaver',
+    published: false,
     submitted_by: {
       id: user.uid,
       name: user.displayName,
