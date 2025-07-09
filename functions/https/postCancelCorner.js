@@ -7,9 +7,7 @@ const config = safelyInitializeApp();
 const db = getFirestore();
 
 export const cancelCorner = async (data, uid) => {
-  logger.info('validating corner cancellation', data, uid, {
-    structuredData: true,
-  });
+  logger.info('validating corner cancellation', { data, uid });
 
   if (!data.key) {
     throw new https.HttpsError(
@@ -22,9 +20,7 @@ export const cancelCorner = async (data, uid) => {
     const reference = db.collection('submissions').doc(data.key);
     const snapshot = await reference.get();
 
-    logger.debug('cancelling submission', data.key, {
-      structuredData: true,
-    });
+    logger.debug('cancelling submission', { key: data.key });
 
     await reference.set(
       { status: { user: { cancelled: new Date() } } },
@@ -32,9 +28,7 @@ export const cancelCorner = async (data, uid) => {
     );
     await removeStorage(uid, snapshot.data());
   } catch (error) {
-    logger.error('error finding submission', error, {
-      structuredData: true,
-    });
+    logger.error('error finding submission', { error });
 
     throw new https.HttpsError('internal', 'The submission was not cancelled');
   }
@@ -46,9 +40,7 @@ export const removeStorage = async (user, submission) => {
   const bucket = getStorage().bucket(config.storageBucket);
   const prefix = `submitters/${user}/${submission.type}/${submission.blm_point_id}/`;
 
-  logger.debug('deleting submission files', prefix, {
-    structuredData: true,
-  });
+  logger.debug('deleting submission files', { prefix });
 
   await bucket.deleteFiles(
     {
@@ -56,9 +48,7 @@ export const removeStorage = async (user, submission) => {
       prefix,
     },
     (error) => {
-      logger.warn('had trouble deleting file', error, {
-        structuredData: true,
-      });
+      logger.warn('had trouble deleting file', { error });
     },
   );
 };

@@ -30,9 +30,7 @@ const getFiscalYear = (now) => {
 const fiscalYear = getFiscalYear(new Date());
 
 export const createMonumentRecord = async (record, id, sharedDriveId) => {
-  logger.debug('trigger: new submission for', id, record.type, {
-    structuredData: true,
-  });
+  logger.debug('trigger: new submission for', { id, type: record.type });
 
   if (record.type === 'existing') {
     let data;
@@ -48,9 +46,7 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
         contentDisposition: 'inline',
       });
     } catch (error) {
-      logger.error('error generating monument', error, record, id, {
-        structuredData: true,
-      });
+      logger.error('error generating monument', { error, record, id });
     }
 
     if (!record.metadata.mrrc) {
@@ -67,19 +63,13 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
           fiscalYear,
         );
       } else {
-        logger.error(
-          'error placing file in drive: pdf not created',
+        logger.error('error placing file in drive: pdf not created', {
           record,
           id,
-          {
-            structuredData: true,
-          },
-        );
+        });
       }
     } catch (error) {
-      logger.error('error placing file in drive', error, record, id, {
-        structuredData: true,
-      });
+      logger.error('error placing file in drive', { error, record, id });
     }
 
     return true;
@@ -99,14 +89,10 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
     surveyor.license = surveyorDoc.license;
     surveyor.seal = surveyorDoc.seal;
   } catch (error) {
-    logger.error(
-      'error fetching surveyor license. using empty string',
+    logger.error('error fetching surveyor license. using empty string', {
       error,
-      record.submitted_by,
-      {
-        structuredData: true,
-      },
-    );
+      submittedBy: record.submitted_by,
+    });
   }
 
   const { images, pdfs } = await getPdfAssets(
@@ -130,9 +116,7 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
       contentDisposition: 'inline',
     });
   } catch (error) {
-    logger.error('error generating monument', error, record, id, {
-      structuredData: true,
-    });
+    logger.error('error generating monument', { error, record, id });
   }
 
   try {
@@ -140,9 +124,7 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
 
     await doc.update({ monument: fileName });
   } catch (error) {
-    logger.error('error updating monument record sheet', fileName, error, {
-      structuredData: true,
-    });
+    logger.error('error updating monument record sheet', { fileName, error });
   }
 
   if (!record.metadata.mrrc) {
@@ -159,14 +141,13 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
         fiscalYear,
       );
     } else {
-      logger.error('error placing file in drive: pdf not created', record, id, {
-        structuredData: true,
+      logger.error('error placing file in drive: pdf not created', {
+        record,
+        id,
       });
     }
   } catch (error) {
-    logger.error('error placing file in drive', error, record, id, {
-      structuredData: true,
-    });
+    logger.error('error placing file in drive', { error, record, id });
   }
 
   return true;

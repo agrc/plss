@@ -4,13 +4,9 @@ import { logger } from 'firebase-functions/v2';
 
 export const notify = (key, template) => {
   if (process.env.NODE_ENV !== 'production') {
-    logger.warn(
-      'Skipping mail send and returning a fake promise',
-      { nodeEnv: process.env.NODE_ENV },
-      {
-        structuredData: true,
-      },
-    );
+    logger.warn('Skipping mail send and returning a fake promise', {
+      nodeEnv: process.env.NODE_ENV,
+    });
 
     return Promise.resolve([
       {
@@ -33,9 +29,7 @@ export const getContactsToNotify = async (db, county) => {
   const documentSnapshot = await documentReference.get();
 
   if (!documentSnapshot.exists) {
-    logger.error('contacts document does not exist', {
-      structuredData: true,
-    });
+    logger.error('contacts document does not exist');
 
     return [];
   }
@@ -61,10 +55,10 @@ export const getBase64EncodedAttachment = (stream) => {
   const chunks = new Base64Encode();
 
   return new Promise((resolve, reject) => {
-    stream.on('error', (err) => {
-      logger.error('get pdf error', err, { structuredData: true });
+    stream.on('error', (error) => {
+      logger.error('get pdf error', { error });
 
-      return reject(err);
+      return reject(error);
     });
     stream.on('data', (chunk) => chunks.write(chunk));
     stream.on('end', () => {

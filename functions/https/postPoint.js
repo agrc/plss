@@ -10,19 +10,13 @@ const options = {
 };
 
 export const savePoint = async (data, auth) => {
-  logger.info('validating reference point submission', data, auth.uid, {
-    structuredData: true,
-  });
+  logger.info('validating reference point submission', { data, uid: auth.uid });
 
   try {
     const result = await schema.validate(data, options);
-    logger.debug('reference point validation result', result, {
-      structuredData: true,
-    });
+    logger.debug('reference point validation result', { result });
   } catch (error) {
-    logger.error('reference point validation error', error, {
-      structuredData: true,
-    });
+    logger.error('reference point validation error', { error });
 
     throw new https.HttpsError(
       'invalid-argument',
@@ -31,15 +25,11 @@ export const savePoint = async (data, auth) => {
     );
   }
 
-  logger.debug('formatting reference point document', data.type, {
-    structuredData: true,
-  });
+  logger.debug('formatting reference point document', { type: data.type });
 
   const doc = formatDataForFirestore(data, auth);
 
-  logger.info('saving reference point', doc, auth, {
-    structuredData: true,
-  });
+  logger.info('saving reference point', { doc, auth });
 
   try {
     await db
@@ -48,9 +38,7 @@ export const savePoint = async (data, auth) => {
       .collection('points')
       .add(doc);
   } catch (error) {
-    logger.error('error adding reference point', error, auth, {
-      structuredData: true,
-    });
+    logger.error('error adding reference point', { error, auth });
 
     throw new https.HttpsError(
       'internal',

@@ -64,10 +64,7 @@ export const onCancelSubmission = onDocumentUpdated(
 
     logger.debug(
       '[database::submissions::onCancel] trigger: submission document updated',
-      event.params.docId,
-      {
-        structuredData: true,
-      },
+      { id: event.params.docId },
     );
 
     if (current === null) {
@@ -88,11 +85,7 @@ export const onCancelSubmission = onDocumentUpdated(
 
     logger.debug(
       '[database::submissions::onCancel] cancelled before and after',
-      previous,
-      current,
-      {
-        structuredData: true,
-      },
+      { previous, current },
     );
 
     logger.debug(
@@ -104,9 +97,7 @@ export const onCancelSubmission = onDocumentUpdated(
 
     const apiSnippet = (sendGridApiKey.value() ?? 'null').slice(0, 4);
 
-    logger.debug('runWith', apiSnippet, {
-      structuredData: true,
-    });
+    logger.debug('runWith', { apiSnippet });
 
     const result = await cancelSubmission(event.data.before);
 
@@ -146,10 +137,7 @@ export const onCreateAddLocation = onDocumentCreated(
 
     logger.info(
       '[database::submissions::onCreateAddLocation] getting location for submission',
-      record.blm_point_id,
-      {
-        structuredData: true,
-      },
+      { blmId: record.blm_point_id },
     );
 
     const result = await createAddLocation(
@@ -174,11 +162,7 @@ export const onCreateMonumentRecord = onDocumentCreated(
 
     logger.debug(
       '[database::submissions::onCreateMonumentRecord] trigger: new submission for',
-      event.params.docId,
-      record.type,
-      {
-        structuredData: true,
-      },
+      { document: event.params.docId, type: record.type },
     );
 
     logger.debug(
@@ -207,11 +191,7 @@ export const onCleanUpPointAttachments = onDocumentDeleted(
 
     logger.debug(
       '[database::submitters::onCleanUpPointAttachments] trigger: point deleted',
-      event,
-      record,
-      {
-        structuredData: true,
-      },
+      { event, record },
     );
 
     if ((record.photos?.length ?? 0) < 1) {
@@ -224,9 +204,8 @@ export const onCleanUpPointAttachments = onDocumentDeleted(
 
     logger.info(
       '[database::submitters::onCleanUpPointAttachments] deleting reference point blobs',
-      record.photos,
       {
-        structuredData: true,
+        photos: record.photos,
       },
     );
 
@@ -239,7 +218,9 @@ export const onCleanUpPointAttachments = onDocumentDeleted(
 
     const result = await cleanUpPointAttachments(record.photos);
 
-    logger.debug('[database::submissions::onCleanUpPointAttachments]', result);
+    logger.debug('[database::submissions::onCleanUpPointAttachments]', {
+      result,
+    });
 
     return result;
   },
@@ -366,9 +347,8 @@ export const onCreateNotify = onObjectFinalized(
 
     logger.debug(
       '[storage::finalize::onCreateNotify] trigger: storage object created',
-      name,
       {
-        structuredData: true,
+        name,
       },
     );
 
@@ -387,9 +367,7 @@ export const onCreateNotify = onObjectFinalized(
 
     const apiSnippet = (process.env.SENDGRID_API_KEY ?? 'null').slice(0, 4);
 
-    logger.debug('runWith', apiSnippet, {
-      structuredData: true,
-    });
+    logger.debug('runWith', { apiSnippet });
 
     logger.debug('[storage::finalize::onCreateNotify] importing body');
     const createNotify = (await import('./storage/onCreateNotify.js'))
@@ -415,9 +393,8 @@ export const syncProfileImage = onObjectDeleted(
 
     logger.debug(
       '[storage::onDelete::syncProfileImage] trigger: storage object deleted',
-      name,
       {
-        structuredData: true,
+        name,
       },
     );
 

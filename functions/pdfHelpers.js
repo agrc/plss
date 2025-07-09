@@ -32,16 +32,12 @@ export const getPdfAssets = async (bucket, metadata, seal) => {
   try {
     images = await getBase64Images(bucket, imagePaths);
   } catch (error) {
-    logger.error('could not get binary images', error, {
-      structuredData: true,
-    });
+    logger.error('could not get binary images', { error });
   }
   try {
     pdfs = await getBinaryPdfs(bucket, pdfPaths);
   } catch (error) {
-    logger.error('could not get binary pdfs', error, {
-      structuredData: true,
-    });
+    logger.error('could not get binary pdfs', { error });
   }
 
   return { images, pdfs };
@@ -79,9 +75,7 @@ const getBase64Images = async (bucket, metadata) => {
   const promises = [];
 
   Object.entries(metadata).forEach(([key, fileName]) => {
-    logger.debug('creating stream for', key, {
-      structuredData: true,
-    });
+    logger.debug('creating stream for', { key });
 
     if (!fileName) {
       return { [key]: null };
@@ -107,9 +101,7 @@ export const getBinaryPdfs = async (bucket, metadata) => {
   const promises = [];
 
   Object.entries(metadata).forEach(([key, fileName]) => {
-    logger.debug('creating stream for', key, {
-      structuredData: true,
-    });
+    logger.debug('creating stream for', { key });
 
     promises.push(
       getPdfData(bucket.file(fileName).createReadStream()).then((result) => {
@@ -157,10 +149,10 @@ const getPdfData = (stream) => {
   return new Promise((resolve, reject) => {
     stream.on('data', (chunk) => chunks.push(chunk));
     stream.on('end', () => resolve(Buffer.concat(chunks)));
-    stream.on('error', (err) => {
-      logger.error('getPdfData error', err, { structuredData: true });
+    stream.on('error', (error) => {
+      logger.error('getPdfData error', { error });
 
-      return reject(err);
+      return reject(error);
     });
   });
 };
@@ -676,13 +668,9 @@ export const createPdfDocument = async (definition, extraPdfPages) => {
     stream.end();
   });
 
-  logger.debug(
-    'saved front page now appending extra pages',
-    Object.keys(extraPdfPages).length,
-    {
-      structuredData: true,
-    },
-  );
+  logger.debug('saved front page now appending extra pages', {
+    length: Object.keys(extraPdfPages).length,
+  });
 
   const pdf = await appendPdfPages(partialPdf, extraPdfPages);
 

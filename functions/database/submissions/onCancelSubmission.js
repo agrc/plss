@@ -11,7 +11,7 @@ export const cancelSubmission = async (before) => {
   const to = await getContactsToNotify(db, null);
 
   if (!to || to.length === 0) {
-    logger.error('no contacts to notify', { structuredData: true });
+    logger.error('no contacts to notify');
 
     return;
   }
@@ -40,9 +40,7 @@ export const cancelSubmission = async (before) => {
 
   const templateData = template.body.personalizations[0].dynamic_template_data;
 
-  logger.debug('sending notification email to', to, templateData, {
-    structuredData: true,
-  });
+  logger.debug('sending notification email to', { to, templateData });
 
   try {
     const result = await notify(
@@ -50,15 +48,11 @@ export const cancelSubmission = async (before) => {
       template,
     );
 
-    logger.debug('mail sent with status', result[0].statusCode, {
-      structuredData: true,
-    });
+    logger.debug('mail sent with status', { statusCode: result[0].statusCode });
 
     return result;
   } catch (error) {
-    logger.error('mail failed', error, {
-      structuredData: true,
-    });
+    logger.error('mail failed', { error });
 
     throw error;
   }

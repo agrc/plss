@@ -21,9 +21,7 @@ const getDocument = async (documentId) => {
 
     return { type, submitted_by, blm_point_id, county };
   } catch (error) {
-    logger.error('error querying for submission', error, documentId, {
-      structuredData: true,
-    });
+    logger.error('error querying for submission', { error, documentId });
   }
 
   return {
@@ -50,7 +48,7 @@ export const createNotify = async (
   const to = await getContactsToNotify(db, null);
 
   if (!to || to.length === 0) {
-    logger.error('no contacts to notify', { structuredData: true });
+    logger.error('no contacts to notify');
 
     return;
   }
@@ -88,22 +86,16 @@ export const createNotify = async (
 
   const templateData = template.body.personalizations[0].dynamic_template_data;
 
-  logger.debug('sending notification email to', to, templateData, {
-    structuredData: true,
-  });
+  logger.debug('sending notification email to', { to, templateData });
 
   try {
     const result = await notify(process.env.SENDGRID_API_KEY, template);
 
-    logger.debug('mail sent with status', result[0].statusCode, {
-      structuredData: true,
-    });
+    logger.debug('mail sent with status', { statusCode: result[0].statusCode });
 
     return result;
   } catch (error) {
-    logger.error('mail failed', error, {
-      structuredData: true,
-    });
+    logger.error('mail failed', { error });
 
     throw error;
   }

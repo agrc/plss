@@ -17,13 +17,9 @@ const oneDay = 1000 * 60 * 60 * 24;
 export const generatePreview = async (data, auth) => {
   try {
     const result = await validateNewSubmission(data);
-    logger.debug('validation result', result, {
-      structuredData: true,
-    });
+    logger.debug('validation result', { result });
   } catch (error) {
-    logger.error('validation error', error, {
-      structuredData: true,
-    });
+    logger.error('validation error', { error });
 
     throw new https.HttpsError(
       'invalid-argument',
@@ -39,9 +35,7 @@ export const generatePreview = async (data, auth) => {
   };
 
   try {
-    logger.debug('getting surveyor data', auth.uid, {
-      structuredData: true,
-    });
+    logger.debug('getting surveyor data', { uid: auth.uid });
 
     const snapshot = await db.collection('submitters').doc(auth.uid).get();
 
@@ -50,14 +44,10 @@ export const generatePreview = async (data, auth) => {
     surveyor.seal = seal;
     surveyor.license = license;
   } catch (error) {
-    logger.error(
-      'error fetching surveyor license. using empty string',
-      auth.uid,
+    logger.error('error fetching surveyor license. using empty string', {
+      uid: auth.uid,
       error,
-      {
-        structuredData: true,
-      },
-    );
+    });
   }
 
   const { images, pdfs } = await getPdfAssets(
@@ -80,9 +70,7 @@ export const generatePreview = async (data, auth) => {
       contentDisposition: 'inline',
     });
   } catch (error) {
-    logger.error('error generating preview', error, data, {
-      structuredData: true,
-    });
+    logger.error('error generating preview', { error, data });
 
     throw new https.HttpsError(
       'internal',
@@ -98,9 +86,7 @@ export const generatePreview = async (data, auth) => {
   };
 
   try {
-    logger.debug('updating firestore', record, {
-      structuredData: true,
-    });
+    logger.debug('updating firestore', { record });
 
     await db
       .collection('previews')
@@ -110,11 +96,7 @@ export const generatePreview = async (data, auth) => {
   } catch (error) {
     logger.error(
       'error storing preview record. you will need to clean up the storage',
-      fileName,
-      error,
-      {
-        structuredData: true,
-      },
+      { fileName, error },
     );
   }
 
