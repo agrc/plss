@@ -19,9 +19,7 @@ export const myContent = async (uid) => {
       .get();
 
     if (snapshot.empty) {
-      logger.debug('user points are empty', uid, {
-        structuredData: true,
-      });
+      logger.debug('user points are empty', { uid });
     } else {
       snapshot.forEach((doc) => {
         const item = doc.data();
@@ -29,9 +27,7 @@ export const myContent = async (uid) => {
       });
     }
   } catch (error) {
-    logger.error('error querying points', error, uid, {
-      structuredData: true,
-    });
+    logger.error('error querying points', { error, uid });
   }
 
   try {
@@ -43,18 +39,14 @@ export const myContent = async (uid) => {
     const snapshot = await filter.withConverter(myContentConverter).get();
 
     if (snapshot.empty) {
-      logger.debug('user submissions are empty', uid, {
-        structuredData: true,
-      });
+      logger.debug('user submissions are empty', { uid });
     } else {
       snapshot.forEach((doc) => {
         submissions.push(doc.data());
       });
     }
   } catch (error) {
-    logger.error('error querying submissions', error, uid, {
-      structuredData: true,
-    });
+    logger.error('error querying submissions', { error, uid });
   }
 
   return { submissions, points };

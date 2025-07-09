@@ -13,19 +13,13 @@ const options = {
 };
 
 export const saveCorner = async (data, auth) => {
-  logger.info('validating corner submission', data, auth.uid, {
-    structuredData: true,
-  });
+  logger.info('validating corner submission', { data, uid: auth.uid });
 
   try {
     const result = await validateSubmission(data);
-    logger.debug('corner validation result', result, {
-      structuredData: true,
-    });
+    logger.debug('corner validation result', { result });
   } catch (error) {
-    logger.error('corner validation error', error, {
-      structuredData: true,
-    });
+    logger.error('corner validation error', { error });
 
     throw new https.HttpsError(
       'invalid-argument',
@@ -34,22 +28,16 @@ export const saveCorner = async (data, auth) => {
     );
   }
 
-  logger.debug('formatting corner document', data.type, {
-    structuredData: true,
-  });
+  logger.debug('formatting corner document', { type: data.type });
 
   const doc = formatDataForFirestore(data, auth);
 
-  logger.info('saving corner submission', doc, auth, {
-    structuredData: true,
-  });
+  logger.info('saving corner submission', { doc, auth });
 
   try {
     await db.collection('submissions').add(doc);
   } catch (error) {
-    logger.error('error saving corner', error, doc, {
-      structuredData: true,
-    });
+    logger.error('error saving corner', { error, doc });
 
     throw new https.HttpsError('internal', 'The corner was not saved');
   }

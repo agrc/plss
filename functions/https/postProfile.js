@@ -11,19 +11,13 @@ const options = {
 };
 
 export const updateProfile = async (data, uid) => {
-  logger.info('validating profile data', data, uid, {
-    structuredData: true,
-  });
+  logger.info('validating profile data', { data, uid });
 
   try {
     const result = await validate(data);
-    logger.debug('validation result', result, {
-      structuredData: true,
-    });
+    logger.debug('validation result', { result });
   } catch (error) {
-    logger.error('validation error', error, {
-      structuredData: true,
-    });
+    logger.error('validation error', { error });
 
     throw new https.HttpsError(
       'invalid-argument',
@@ -34,17 +28,13 @@ export const updateProfile = async (data, uid) => {
 
   const doc = formatDataForFirestore(data);
 
-  logger.info('saving profile', doc, uid, {
-    structuredData: true,
-  });
+  logger.info('saving profile', { doc, uid });
 
   try {
     const docRef = db.collection('submitters').doc(uid);
     await docRef.update(doc);
   } catch (error) {
-    logger.error('error saving profile', error, doc, {
-      structuredData: true,
-    });
+    logger.error('error saving profile', { error, doc });
 
     throw new https.HttpsError('internal', 'The profile was not saved');
   }

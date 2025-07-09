@@ -18,15 +18,11 @@ export const myProfile = async (auth) => {
 
     profile = snapshot.data();
   } catch (error) {
-    logger.error('error querying profile', error, auth, {
-      structuredData: true,
-    });
+    logger.error('error querying profile', { error, auth });
   }
 
   if (!profile) {
-    logger.warn('profile is empty', profile, {
-      structuredData: true,
-    });
+    logger.warn('profile is empty', { profile });
 
     throw new https.HttpsError(
       'failed-precondition',

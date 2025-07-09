@@ -25,7 +25,7 @@ const getLocationFromId = async (id) => {
     })
     .json();
 
-  logger.debug('featureSet', featureSet, { structuredData: true });
+  logger.debug('featureSet', { featureSet });
 
   if (featureSet.features.length === 0) {
     return {};
@@ -45,9 +45,8 @@ export const createAddLocation = async (id, blmPointId) => {
 
   logger.debug(
     '[database::submissions::onCreateAddLocation] setting location',
-    location,
     {
-      structuredData: true,
+      location,
     },
   );
 

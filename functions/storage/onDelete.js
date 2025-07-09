@@ -11,9 +11,7 @@ export const syncProfileImage = async (uid) => {
     await docRef.update({ seal: '' });
     logger.info('seal path removed');
   } catch (error) {
-    logger.error('error syncing seal photo', error, {
-      structuredData: true,
-    });
+    logger.error('error syncing seal photo', { error });
 
     throw new https.HttpsError('internal', 'error syncing seal photo');
   }

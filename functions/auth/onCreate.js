@@ -4,9 +4,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 const db = getFirestore();
 
 export const createUser = async (user) => {
-  logger.info('[auth::user::onCreate] creating user', user, {
-    structuredData: true,
-  });
+  logger.info('[auth::user::onCreate] creating user', { user });
 
   const data = {
     email: user.email,
@@ -19,12 +17,10 @@ export const createUser = async (user) => {
   try {
     await db.collection('submitters').doc(user.uid).set(data);
   } catch (error) {
-    logger.error('[auth::user::onCreate] error creating user', error, user, {
-      structuredData: true,
-    });
+    logger.error('[auth::user::onCreate] error creating user', { error, user });
   }
 
-  logger.info('[auth::user::onCreate] created user', { structuredData: true });
+  logger.info('[auth::user::onCreate] created user');
 
   return true;
 };
