@@ -8,7 +8,10 @@ import loadVersion from 'vite-plugin-package-version';
 export default defineConfig({
   plugins: [react(), eslintPlugin(), loadVersion(), tailwindcss()],
   test: {
-    env: 'node',
+    environment: 'node',
     provider: 'v8',
+    env: {
+      FIREBASE_STORAGE_EMULATOR_HOST: '127.0.0.1:9199',
+    },
   },
 });
