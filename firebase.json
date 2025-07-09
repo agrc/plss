@@ -7,10 +7,6 @@
       "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log"]
     }
   ],
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
@@ -106,9 +102,6 @@
         ]
       }
     ]
-  },
-  "storage": {
-    "rules": "storage.rules"
   },
   "emulators": {
     "auth": {
