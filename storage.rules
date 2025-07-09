@@ -1,0 +1,66 @@
+rules_version = '2';
+service firebase.storage {
+  function isAuthenticated() {
+    return request.auth != null;
+  }
+  function isCurrentUser(uid) {
+    return request.auth.uid == uid;
+  }
+  function lessThan(megabytes) {
+    return request.resource != null && request.resource.size < (megabytes * 1024 * 1024);
+  }
+  function isAcceptableFile(file) {
+    return (file.matches("^extra[0-9].(pdf|png|jpe?g)$") && (isImage() || isPdf())) ||
+         !file.matches("^extra[0-9].(pdf|png|jpe?g)$") && isImage();
+  }
+  function isImage() {
+    return request.resource.contentType.matches('image/png') ||
+        request.resource.contentType.matches('image/jpeg');
+  }
+  function isPdf() {
+    return request.resource.contentType.matches('application/pdf');
+  }
+  function hasAttachment() {
+    return request.resource != null;
+  }
+  function isElevatedUser() {
+    return firestore.get(/databases/(default)/documents/submitters/$(request.auth.uid)).data.elevated == true;
+  }
+
+  match /b/{bucket}/o {
+    match /submitters/{uid}/{allPaths=**} {
+    	allow list: if false;
+      allow delete, get: if isAuthenticated() && isCurrentUser(uid);
+      allow create, update: if false;
+
+      match /profile/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
+      }
+
+      match /reference/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isImage() && lessThan(5);
+      }
+
+      match /new/{point_id}/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
+      }
+
+      match /existing/{point_id}/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isPdf() && lessThan(5);
+      }
+    }
+    match /under-review/{allPaths=**} {
+      allow get: if isAuthenticated() && isElevatedUser();
+
+      match /{point_id}/{uid}/{file} {
+        allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
+      }
+    }
+
+    match /tiesheets/{allPaths=**} {
+      allow list: if true;
+      allow get: if true;
+      allow create, update, delete: if false;
+    }
+  }
+}
