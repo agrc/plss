@@ -66,7 +66,7 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
           </span>
         </ListboxButton>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <ListboxOptions className="absolute z-50 mt-1 max-h-32 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden sm:text-sm">
+          <ListboxOptions className="absolute z-50 mt-1 max-h-32 min-h-full w-full overflow-auto rounded-md border border-slate-400 bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm">
             {(options?.length ?? 0) > 0 ? (
               options?.map((option, id) => (
                 <ListboxOption
