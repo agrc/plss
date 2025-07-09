@@ -85,10 +85,11 @@ export const validateExistingSubmission = async (data) => {
 };
 
 export const formatDataForFirestore = (data, user) => {
-  const metadata = {
+  const defaults = {
     created_at: new Date(),
     blm_point_id: data.blmPointId,
     county: data.county,
+    published: false,
     status: {
       ugrc: {
         approved: null,
@@ -117,20 +118,20 @@ export const formatDataForFirestore = (data, user) => {
   };
 
   if (data.type === 'new') {
-    return formatNewCorner(data, metadata);
+    return formatNewCorner(data, defaults);
   } else if (data.type === 'existing') {
-    return formatExistingCorner(data, metadata);
+    return formatExistingCorner(data, defaults);
   }
 
   throw Error('Invalid submission type');
 };
 
-export const formatNewCorner = (data, metadata) => {
+export const formatNewCorner = (data, defaults) => {
   const [y, x] = getLatLon(data.geographic);
 
   let record = {
     type: 'new',
-    ...metadata,
+    ...defaults,
     location: new GeoPoint(y, x),
     metadata: {
       status: data.metadata.status,
@@ -211,8 +212,8 @@ export const convertUndefinedToNull = (obj) => {
   return obj;
 };
 
-export const formatExistingCorner = (data, metadata) => {
-  let record = { ...metadata, pdf: data.existing.pdf, type: 'existing' };
+export const formatExistingCorner = (data, defaults) => {
+  let record = { ...defaults, pdf: data.existing.pdf, type: 'existing' };
 
   if (!record.metadata) {
     record.metadata = {};
