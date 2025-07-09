@@ -26,7 +26,7 @@
     "start": "pnpm run dev",
     "storybook": "storybook dev -p 6006",
     "test": "vitest --silent --coverage --ui --open",
-    "test:ci": "firebase emulators:exec --only storage 'FIREBASE_STORAGE_EMULATOR_HOST=127.0.0.1:9199 pnpm run test'"
+    "test:ci": "firebase emulators:exec --only storage 'pnpm test'"
   },
   "lint-staged": {
     "*.{js,jsx,mjs}": "eslint --cache --fix",
