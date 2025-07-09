@@ -47,7 +47,7 @@ export default function Legend() {
                   }
 
                   return (
-                    <div className="overflow-hidden rounded-lg ring-1 shadow-lg ring-black/5">
+                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5">
                       <div className="bg-white px-3 py-2 text-sm text-slate-800">{layer.about}</div>
                     </div>
                   );
