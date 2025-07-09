@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.8-0](https://github.com/agrc/plss/compare/v3.6.7...v3.6.8-0) (2025-07-09)
+
+
+### Bug Fixes
+
+* correct structured logging ([52167b3](https://github.com/agrc/plss/commit/52167b370e5aca3f10e54e3e1df35f83d1e5dac4))
+* manage storage and firebase rules in the plss-review project ([7d59c01](https://github.com/agrc/plss/commit/7d59c012229780c4c330f5222114b701d8c58018))
+* update defaults for monument submissions ([bdee1a9](https://github.com/agrc/plss/commit/bdee1a98954f0618c3d315cf0e6f234ca3306ee6))
+
 ## [3.6.7](https://github.com/agrc/plss/compare/v3.6.6...v3.6.7) (2025-06-12)
 
 
