@@ -1,6 +1,6 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import ky from 'ky';
 import naturalCompare from 'natural-compare-lite';
 import PropTypes from 'prop-types';

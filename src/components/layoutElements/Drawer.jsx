@@ -1,6 +1,6 @@
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
