@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import ErrorMessageTag from '../pageElements/ErrorMessage.jsx';
 

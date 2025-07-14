@@ -1,6 +1,6 @@
 import { FolderIcon, HomeModernIcon, PlusCircleIcon, SwatchIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 
 export default function Menu({ dispatch, drawerOpen }) {

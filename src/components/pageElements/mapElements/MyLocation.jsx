@@ -1,6 +1,6 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import { useMapReady } from '@ugrc/utilities/hooks';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef } from 'react';
 import useGeolocation from './useGeoLocation.js';

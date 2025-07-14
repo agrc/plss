@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 

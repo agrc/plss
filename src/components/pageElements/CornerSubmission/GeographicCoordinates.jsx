@@ -1,7 +1,7 @@
 import { Label, Radio, RadioGroup } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { units } from '../../../../functions/shared/cornerSubmission/Options.js';

@@ -17,7 +17,7 @@ import LayerSelector from '@ugrc/layer-selector';
 import '@ugrc/layer-selector/src/LayerSelector.css';
 import { useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import PropTypes from 'prop-types';

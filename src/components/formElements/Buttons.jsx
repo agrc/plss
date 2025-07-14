@@ -1,6 +1,6 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import PropTypes from 'prop-types';
 
 export const LogInButton = () => {
