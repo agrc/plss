@@ -203,146 +203,217 @@ describe('get submission status', () => {
     {
       state: 'initial submission',
       values: {
+        published: false,
         ugrc: {
           approved: null,
-          rejected: null,
           comments: null,
+          reviewedAt: null,
+          reviewedBy: null,
         },
         county: {
-          received: null,
           approved: null,
-          rejected: null,
           comments: null,
+          reviewedAt: null,
+          reviewedBy: null,
         },
         sgid: {
           approved: null,
+        },
+        user: {
+          cancelled: null,
         },
       },
       result: {
         label: 'Pending UGRC review',
         received: 'yes',
         reviewed: 'waiting',
-        published: 'pending',
+        sheetPublished: 'pending',
+        dataPublished: 'pending',
       },
     },
     {
       state: 'ugrc approved',
       values: {
+        published: false,
         ugrc: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: null,
         },
         county: {
           approved: null,
-          rejected: null,
           comments: null,
+          reviewedAt: null,
+          reviewedBy: null,
         },
         sgid: {
           approved: null,
+        },
+        user: {
+          cancelled: null,
         },
       },
       result: {
         label: 'Pending county review',
         received: 'yes',
         reviewed: 'waiting',
-        published: 'pending',
+        sheetPublished: 'pending',
+        dataPublished: 'pending',
       },
     },
     {
       state: 'ugrc rejected',
       values: {
+        published: false,
         ugrc: {
-          approved: null,
-          rejected: new Date(),
+          approved: false,
           comments: 'ugrc comment',
+          reviewedAt: new Date(),
+          reviewedBy: 'ugrc reviewer',
         },
         county: {
           approved: null,
-          rejected: null,
           comments: null,
+          reviewedAt: null,
+          reviewedBy: null,
         },
         sgid: {
           approved: null,
+        },
+        user: {
+          cancelled: null,
         },
       },
       result: {
         label: 'UGRC rejected submission. ugrc comment',
         received: 'yes',
         reviewed: 'rejected',
-        published: 'pending',
+        sheetPublished: 'rejected',
+        dataPublished: 'rejected',
       },
     },
     {
       state: 'county approved',
       values: {
+        published: false,
         ugrc: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'ugrc reviewer',
         },
         county: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'auto approved',
         },
         sgid: {
           approved: null,
         },
+        user: {
+          cancelled: null,
+        },
       },
       result: {
-        label: 'Pending PLSS data updates',
+        label: 'Pending monument record sheet publishing',
         received: 'yes',
         reviewed: 'approved',
-        published: 'waiting',
+        sheetPublished: 'waiting',
+        dataPublished: 'pending',
       },
     },
     {
       state: 'county rejected',
       values: {
         ugrc: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: null,
         },
         county: {
-          approved: null,
-          rejected: new Date(),
+          approved: false,
           comments: 'county comment',
+          reviewedAt: new Date(),
+          reviewedBy: null,
         },
         sgid: {
           approved: null,
+        },
+        user: {
+          cancelled: null,
         },
       },
       result: {
         label: 'The county rejected the submission. county comment',
         received: 'yes',
         reviewed: 'rejected',
-        published: 'pending',
+        sheetPublished: 'rejected',
+        dataPublished: 'rejected',
       },
     },
     {
-      state: 'data updates complete',
+      state: 'sheet published',
       values: {
+        published: true,
         ugrc: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'test reviewer',
         },
         county: {
-          approved: new Date(),
-          rejected: null,
+          approved: true,
           comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'test reviewer',
         },
         sgid: {
-          approved: new Date(),
+          approved: null,
+        },
+        user: {
+          cancelled: null,
         },
       },
       result: {
-        label: 'Data is live',
+        label: 'Pending PLSS geometry corrections',
         received: 'yes',
         reviewed: 'approved',
-        published: 'yes',
+        sheetPublished: 'yes',
+        dataPublished: 'waiting',
+      },
+    },
+    {
+      state: 'geometry corrections complete',
+      values: {
+        published: true,
+        ugrc: {
+          approved: true,
+          comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'test reviewer',
+        },
+        county: {
+          approved: true,
+          comments: null,
+          reviewedAt: new Date(),
+          reviewedBy: 'test reviewer',
+        },
+        sgid: {
+          approved: true,
+        },
+        user: {
+          cancelled: null,
+        },
+      },
+      result: {
+        label: 'Sheet and geometry corrections are live',
+        received: 'yes',
+        reviewed: 'approved',
+        sheetPublished: 'yes',
+        dataPublished: 'yes',
       },
     },
   ])('getStatus returns $result.label on $state', ({ values, result }) => {

@@ -45,8 +45,8 @@ const colors = {
   'Pending county review': '#86198f',
   'The county rejected the submission.': '#f43f5e',
   'UGRC rejected submission.': '#f43f5e',
-  'Pending PLSS data updates': '#10b981',
-  'Data is live': '#f0fdfa',
+  'Pending PLSS geometry corrections': '#10b981',
+  'Sheet and geometry corrections are live': '#f0fdfa',
 };
 
 export const myContentConverter = {
