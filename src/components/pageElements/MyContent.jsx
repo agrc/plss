@@ -1,39 +1,25 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  useFirebaseAnalytics,
-  useFirebaseAuth,
-  useFirebaseFunctions,
-  useFirebaseStorage,
-  useFirestore,
-} from '@ugrc/utah-design-system';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useFirebaseAuth, useFirebaseFunctions, useFirebaseStorage, useFirestore } from '@ugrc/utah-design-system';
 import { useOpenClosed } from '@ugrc/utilities/hooks';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { timeSince } from '../../../functions/shared/index.js';
-import { Button, Link } from '../formElements/Buttons.jsx';
+import { Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { ObjectPreview } from '../formElements/FileUpload.jsx';
 import { Select } from '../formElements/Select.jsx';
 import Spacer from '../formElements/Spacer.jsx';
 import usePageView from '../hooks/usePageView.jsx';
-
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  timeZone: 'MST',
-});
-
+import { Submissions } from './Submissions.jsx';
+import { dateFormatter, sortFunction } from './utils.js';
 const tabs = ['Submissions', 'Reference Points'];
+const sortOrders = ['New to Old', 'Old to New', 'Ascending (0-9 A-Z)', 'Descending (Z-A 0-9)'];
 
 const MyContent = ({ dispatch }) => {
   const { currentUser } = useFirebaseAuth();
@@ -171,165 +157,6 @@ ReferencePoints.propTypes = {
   dispatch: PropTypes.func,
 };
 
-const Submissions = ({ items, dispatch }) => {
-  if (items?.length < 1) {
-    return (
-      <Card>
-        <h4 className="text-xl">Your submission list is empty</h4>
-        <p>
-          You haven&apos;t submitted any monument record sheets yet. Start a submission by clicking on the corner
-          points. Get out and survey!
-        </p>
-      </Card>
-    );
-  }
-
-  return (
-    <Card>
-      <ul className="divide-y divide-slate-200">
-        {items
-          .sort(
-            sortFunction('New to Old', (a, b) => {
-              return { a: a.submitted, b: b.submitted };
-            }),
-          )
-          .map((item) => (
-            <li key={item.key} className="py-4 first:pt-0 last:pb-0">
-              <Submission item={item} dispatch={dispatch} />
-            </li>
-          ))}
-      </ul>
-    </Card>
-  );
-};
-Submissions.propTypes = {
-  items: PropTypes.array,
-  dispatch: PropTypes.func,
-};
-
-const Submission = ({ item, dispatch }) => {
-  const logEvent = useFirebaseAnalytics();
-  const { storage } = useFirebaseStorage();
-  const [url, setUrl] = useState('');
-
-  const { functions } = useFirebaseFunctions();
-  const cancelSubmission = httpsCallable(functions, 'postCancelCorner');
-
-  const queryClient = useQueryClient();
-  const { mutate, status: mutationStatus } = useMutation({
-    mutationFn: (data) => cancelSubmission(data),
-    onSuccess: async (response) => {
-      console.log('success', response);
-      await queryClient.cancelQueries();
-
-      queryClient.invalidateQueries({ queryKey: ['my content'] });
-      queryClient.removeQueries({ queryKey: ['monument record sheet'] });
-    },
-    onError: (error) => {
-      console.warn('error', error);
-    },
-  });
-
-  const { label, submitted, id, status, geometry, attributes } = item;
-  const submission = Date.parse(submitted);
-
-  try {
-    getDownloadURL(ref(storage, attributes.ref)).then(setUrl);
-  } catch {
-    logEvent('download-submission-error', {
-      document: item.key,
-    });
-  }
-
-  return (
-    <div className="relative flex flex-col text-base">
-      <span className="font-semibold">{id}</span>
-      <div className="absolute top-0 right-0">
-        <span className="flex flex-col text-xs text-slate-500 select-none" alt={dateFormatter.format(submission)}>
-          <span>submitted</span>
-          <span>{timeSince(submission)}</span>
-        </span>
-      </div>
-      <SubmissionStatus status={status} label={label} />
-      <div className="mt-3 flex justify-center">
-        {(url?.length ?? 0) > 0 ? (
-          <Link style="primary" buttonGroup={{ left: true }} href={url} target="_blank" rel="noopener noreferrer">
-            Download
-          </Link>
-        ) : (
-          <Button style="primary" buttonGroup={{ left: true }} state="disabled">
-            Download
-          </Button>
-        )}
-        <Button
-          style="alternate"
-          buttonGroup={{ middle: true }}
-          onClick={() => dispatch({ type: 'map/center-and-zoom', payload: geometry })}
-        >
-          Zoom
-        </Button>
-        <Button
-          style="secondary"
-          state={mutationStatus}
-          buttonGroup={{ right: true }}
-          onClick={() => mutate({ key: item.key })}
-        >
-          Cancel
-        </Button>
-      </div>
-    </div>
-  );
-};
-Submission.propTypes = {
-  item: PropTypes.object,
-  dispatch: PropTypes.func,
-};
-
-const getClassesForStatus = (status) => {
-  switch (status) {
-    case 'yes':
-    case 'Approved':
-      return 'font-bold text-emerald-500';
-    case 'Rejected':
-      return 'font-bold text-red-500';
-    case 'waiting':
-      return 'font-bold text-sky-500';
-    case 'pending':
-      return 'text-slate-500';
-    default:
-      return 'text-slate-500';
-  }
-};
-
-const getReviewStatus = (status) => {
-  switch (status) {
-    case 'pending':
-    case 'waiting':
-      return 'Under Review';
-    case 'approved':
-      return 'Approved';
-    case 'rejected':
-      return 'Rejected';
-  }
-};
-
-const SubmissionStatus = ({ status, label }) => (
-  <>
-    <span className="text-sm">{label}</span>
-    <div className="grid auto-cols-max grid-flow-col items-center text-sm">
-      <span className={getClassesForStatus(status.received)}>Received</span>
-      <ChevronRightIcon className="h-4 w-4 text-slate-500" />
-      <span className={getClassesForStatus(status.reviewed)}>{getReviewStatus(status.reviewed)}</span>
-      <ChevronRightIcon className="h-4 w-4 text-slate-500" />
-      <span className={getClassesForStatus(status.published)}>Published</span>
-    </div>
-  </>
-);
-SubmissionStatus.propTypes = {
-  status: PropTypes.object,
-  label: PropTypes.string,
-};
-
 const SelectedItem = ({ item, dispatch }) => (
   <>
     <ArrowLeftCircleIcon className="h-10 w-10" onClick={() => dispatch({ type: 'set_selection', payload: null })} />
@@ -361,26 +188,6 @@ const SelectedItem = ({ item, dispatch }) => (
 SelectedItem.propTypes = {
   item: PropTypes.object,
   dispatch: PropTypes.func,
-};
-
-const sortOrders = ['New to Old', 'Old to New', 'Ascending (0-9 A-Z)', 'Descending (Z-A 0-9)'];
-
-const sortFunction = (sortOrder, transform) => {
-  return (one, two) => {
-    const { a, b } = transform(one, two);
-    switch (sortOrder) {
-      case 'New to Old':
-        return Date.parse(b) - Date.parse(a);
-      case 'Old to New':
-        return Date.parse(a) - Date.parse(b);
-      case 'Ascending (0-9 A-Z)':
-        return a.localeCompare(b);
-      case 'Descending (Z-A 0-9)':
-        return b.localeCompare(a);
-      default:
-        return 0;
-    }
-  };
 };
 
 const ItemList = ({ items, dispatch, sortOrder }) => {
