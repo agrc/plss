@@ -178,74 +178,92 @@ export const roundAccurately = (number, decimalPlaces) =>
   Number(Math.round(number + 'e' + decimalPlaces) + 'e-' + decimalPlaces);
 
 export const getStatus = (status) => {
+  // Default status for unknown/null cases
+  const defaultStatus = {
+    label: 'Unknown',
+    received: 'pending',
+    reviewed: 'pending',
+    sheetPublished: 'pending',
+    dataPublished: 'pending',
+  };
+
   if (!status) {
-    return {
-      label: 'Unknown',
-      received: 'pending',
-      reviewed: 'pending',
-      published: 'pending',
-    };
+    return defaultStatus;
   }
 
-  if (status.sgid.approved) {
+  const { ugrc, county, sgid, published } = status;
+
+  // Final state: Sheet and geometry corrections are live
+  if (sgid.approved === true) {
     return {
-      label: 'Data is live',
+      label: 'Sheet and geometry corrections are live',
       received: 'yes',
       reviewed: 'approved',
-      published: 'yes',
+      sheetPublished: published ? 'yes' : 'waiting',
+      dataPublished: 'yes',
     };
   }
 
-  if (status.county.approved && !status.sgid.approved) {
+  // County approved cases
+  if (county.approved === true && sgid.approved === null) {
     return {
-      label: 'Pending PLSS data updates',
+      label: published
+        ? 'Pending PLSS geometry corrections'
+        : 'Pending monument record sheet publishing',
       received: 'yes',
       reviewed: 'approved',
-      published: 'waiting',
+      sheetPublished: published ? 'yes' : 'waiting',
+      dataPublished: published ? 'waiting' : 'pending',
     };
   }
 
-  if (status.county.rejected && !status.sgid.approved) {
-    return {
-      label: `The county rejected the submission. ${status.county.comments}`,
-      received: 'yes',
-      reviewed: 'rejected',
-      published: 'pending',
-    };
-  }
-
+  // Rejection cases
   if (
-    !(status.county.approved || status.county.rejected) &&
-    status.ugrc.rejected
+    county.approved === false &&
+    county.reviewedAt !== null &&
+    !sgid.reviewedAt
   ) {
     return {
-      label: `UGRC rejected submission. ${status.ugrc.comments}`,
+      label: `The county rejected the submission. ${county.comments}`,
       received: 'yes',
       reviewed: 'rejected',
-      published: 'pending',
+      sheetPublished: 'rejected',
+      dataPublished: 'rejected',
     };
   }
 
-  if (
-    !(status.county.approved || status.county.rejected) &&
-    status.ugrc.approved
-  ) {
+  if (ugrc.approved === false && county.reviewedAt === null) {
+    return {
+      label: `UGRC rejected submission. ${ugrc.comments}`,
+      received: 'yes',
+      reviewed: 'rejected',
+      sheetPublished: 'rejected',
+      dataPublished: 'rejected',
+    };
+  }
+
+  // Waiting states
+  if (ugrc.approved === true && county.reviewedAt === null) {
     return {
       label: 'Pending county review',
       received: 'yes',
       reviewed: 'waiting',
-      published: 'pending',
+      sheetPublished: 'pending',
+      dataPublished: 'pending',
     };
   }
 
-  if (!(status.ugrc.approved || status.ugrc.rejected)) {
+  if (ugrc.reviewedAt === null) {
     return {
       label: 'Pending UGRC review',
       received: 'yes',
       reviewed: 'waiting',
-      published: 'pending',
+      sheetPublished: 'pending',
+      dataPublished: 'pending',
     };
   }
+
+  return defaultStatus;
 };
 
 const pluralRules = new Intl.PluralRules('en-US');
