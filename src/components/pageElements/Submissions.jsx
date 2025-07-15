@@ -111,9 +111,9 @@ const Submission = ({ item, dispatch }) => {
         </Button>
         <Button
           style="secondary"
-          state={mutationStatus}
+          state={['approved', 'rejected'].includes(item.status.reviewed) ? 'disabled' : mutationStatus}
           buttonGroup={{ right: true }}
-          onClick={() => mutate({ key: item.key })}
+          onClick={() => !['approved', 'rejected'].includes(item.status.reviewed) && mutate({ key: item.key })}
         >
           Cancel
         </Button>
