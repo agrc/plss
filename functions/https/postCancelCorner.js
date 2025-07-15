@@ -39,7 +39,7 @@ export const cancelCorner = async (data, uid) => {
       return 0; // Already reviewed, cannot cancel
     }
 
-    logger.debug('cancelling submission', { key: record.key });
+    logger.debug('cancelling submission', { key: data.key });
 
     await reference.set(
       { status: { user: { cancelled: new Date() } } },
