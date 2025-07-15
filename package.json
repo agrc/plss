@@ -15,6 +15,7 @@
     "coverage": "vitest run --coverage",
     "dev": "cross-env NODE_ENV=development concurrently 'wait-on http://127.0.0.1:4000 && pnpm run dev:vite' 'pnpm run dev:firebase'",
     "dev:firebase": "cross-env NODE_ENV=development firebase emulators:start --import .emulator-data --only auth,functions,firestore,storage",
+    "dev:firebase-state": "cross-env NODE_ENV=development concurrently 'firebase emulators:start --import=.emulator-data --export-on-exit=.emulator-data --only auth,functions,firestore,storage' 'pnpm run dev:vite'",
     "dev:vite": "vite",
     "fb:deploy": "firebase deploy --only functions",
     "fb:serve": "cross-env NODE_ENV=development firebase emulators:start --only functions",
