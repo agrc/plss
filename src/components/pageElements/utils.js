@@ -4,7 +4,7 @@ export const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   hour: 'numeric',
   minute: 'numeric',
-  timeZone: 'MST',
+  timeZone: 'America/Denver',
 });
 
 export const sortFunction = (sortOrder, transform) => {
