@@ -4,7 +4,7 @@ import { useFirebaseAnalytics, useFirebaseFunctions, useFirebaseStorage } from '
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { timeSince } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -72,13 +72,19 @@ const Submission = ({ item, dispatch }) => {
   const { label, submitted, id, status, geometry, attributes } = item;
   const submission = Date.parse(submitted);
 
-  try {
-    getDownloadURL(ref(storage, attributes.ref)).then(setUrl);
-  } catch {
-    logEvent('download-submission-error', {
-      document: item.key,
-    });
-  }
+  useEffect(() => {
+    console.log('getting storage download URL for', attributes?.ref);
+    if (attributes?.ref) {
+      getDownloadURL(ref(storage, attributes.ref))
+        .then(setUrl)
+        .catch((error) => {
+          console.error('error getting download URL for', error, attributes.ref);
+          logEvent('download-submission-error', {
+            document: item.key,
+          });
+        });
+    }
+  }, [attributes.ref, item.key, logEvent, storage]);
 
   console.log('submission', { status, label, attributes });
 
@@ -111,7 +117,13 @@ const Submission = ({ item, dispatch }) => {
         </Button>
         <Button
           style="secondary"
-          state={['approved', 'rejected'].includes(item.status.reviewed) ? 'disabled' : (mutationStatus === 'loading' ? 'pending' : mutationStatus)}
+          state={
+            ['approved', 'rejected'].includes(item.status.reviewed)
+              ? 'disabled'
+              : mutationStatus === 'loading'
+                ? 'pending'
+                : mutationStatus
+          }
           buttonGroup={{ right: true }}
           onClick={() => !['approved', 'rejected'].includes(item.status.reviewed) && mutate({ key: item.key })}
         >
