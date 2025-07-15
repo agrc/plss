@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.8-3](https://github.com/agrc/plss/compare/v3.6.8-2...v3.6.8-3) (2025-07-15)
+
+
+### Bug Fixes
+
+* use data.key ([c2f6bc7](https://github.com/agrc/plss/commit/c2f6bc797f1053571942f9bbc8c0cdda7da66ebc))
+
 ## [3.6.8-2](https://github.com/agrc/plss/compare/v3.6.8-1...v3.6.8-2) (2025-07-15)
 
 
