@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.8-2](https://github.com/agrc/plss/compare/v3.6.8-1...v3.6.8-2) (2025-07-15)
+
+
+### Bug Fixes
+
+* update storage rules to allow submission previews ([9f30112](https://github.com/agrc/plss/commit/9f301125d2a76d5e391437c1c762b0f840c6dc03))
+
 ## [3.6.8-1](https://github.com/agrc/plss/compare/v3.6.8-0...v3.6.8-1) (2025-07-15)
 
 
