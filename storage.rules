@@ -53,6 +53,7 @@ service firebase.storage {
       allow get: if isAuthenticated() && isElevatedUser();
 
       match /{point_id}/{uid}/{file} {
+        allow get: if isAuthenticated() && isCurrentUser(uid)
         allow create, update: if isAuthenticated() && isCurrentUser(uid) && hasAttachment() && isAcceptableFile(file) && lessThan(5);
       }
     }
