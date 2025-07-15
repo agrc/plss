@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.6.8-1](https://github.com/agrc/plss/compare/v3.6.8-0...v3.6.8-1) (2025-07-15)
+
+
+### Bug Fixes
+
+* disable cancel button for specific status ([f5ef46c](https://github.com/agrc/plss/commit/f5ef46cf70fec7b07796df5a31ef014f74c38025))
+* if submission has been reviewed do not allow cancellation ([2192527](https://github.com/agrc/plss/commit/2192527fd16ab03a3ec2fd9b478b22cb999d20a3))
+* update submission status values ([3a3757d](https://github.com/agrc/plss/commit/3a3757d6add4d870567fe9b44310c6ed1e69d5f1))
+
+
+### Dependencies
+
+* update packages ([760024b](https://github.com/agrc/plss/commit/760024b7ddb8a4d602f5219dea588a412ffff3ab))
+* upgrade storybook ([5b7ad0f](https://github.com/agrc/plss/commit/5b7ad0f4d89d6bb3a5733ac1409d22c6e9c08a27))
+
 ## [3.6.8-0](https://github.com/agrc/plss/compare/v3.6.7...v3.6.8-0) (2025-07-09)
 
 
