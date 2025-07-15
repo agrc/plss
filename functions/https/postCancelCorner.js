@@ -20,7 +20,26 @@ export const cancelCorner = async (data, uid) => {
     const reference = db.collection('submissions').doc(data.key);
     const snapshot = await reference.get();
 
-    logger.debug('cancelling submission', { key: data.key });
+    if (!snapshot.exists) {
+      throw new https.HttpsError('not-found', 'corner submission not found');
+    }
+
+    const record = snapshot.data();
+    if (
+      record.status?.ugrc?.reviewedAt ||
+      record.status?.county?.reviewedAt ||
+      record.published === true ||
+      record.sgid.approved === true
+    ) {
+      logger.info('skipping cancellation because of status', {
+        status: record.status,
+        published: record.published,
+      });
+
+      return 0; // Already reviewed, cannot cancel
+    }
+
+    logger.debug('cancelling submission', { key: record.key });
 
     await reference.set(
       { status: { user: { cancelled: new Date() } } },
