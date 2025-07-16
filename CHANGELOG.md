@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.6.8](https://github.com/agrc/plss/compare/v3.6.7...v3.6.8) (2025-07-16)
+
+
+### Bug Fixes
+
+* correct structured logging ([9852a22](https://github.com/agrc/plss/commit/9852a22462c0a388290edbbb76cff3022f3af6a3))
+* disable cancel button for specific status ([be0f89a](https://github.com/agrc/plss/commit/be0f89a0af6f4a260680e05a4333fed8216e77af))
+* if submission has been reviewed do not allow cancellation ([be30cbc](https://github.com/agrc/plss/commit/be30cbc99ee870063a9fb7d20ce9bbfa4d037dbf))
+* manage storage and firebase rules in the plss-review project ([81a146f](https://github.com/agrc/plss/commit/81a146f3e86145ca1ecab83feda8b6edc3280d77))
+* update defaults for monument submissions ([675b060](https://github.com/agrc/plss/commit/675b060ddd2ec25287254e59407205c971bd2727))
+* update storage rules to allow submission previews ([e7e26d1](https://github.com/agrc/plss/commit/e7e26d1413fc8ff64f5da2e8ee4b2452f2dd26ba))
+* update submission status values ([ba50eb9](https://github.com/agrc/plss/commit/ba50eb92a2a18e66a0d870c0c5aad5913e2da33c))
+* use data.key ([df9df53](https://github.com/agrc/plss/commit/df9df53ec28c1644f4d48788cc4bcf7e699b42d5))
+
+
+### Dependencies
+
+* update packages ([99dbb6b](https://github.com/agrc/plss/commit/99dbb6b1e16f3278277e4683f33876f05e8b1677))
+* upgrade storybook ([7e592a4](https://github.com/agrc/plss/commit/7e592a49634e4bc9549e681b9a9f41685baad4ea))
+
 ## [3.6.8-3](https://github.com/agrc/plss/compare/v3.6.8-2...v3.6.8-3) (2025-07-15)
 
 
