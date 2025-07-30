@@ -134,6 +134,12 @@
       "re2",
       "unrs-resolver"
     ],
+    "overrides": {
+      "@eslint/plugin-kit@<0.3.4": ">=0.3.4",
+      "form-data@>=4.0.0 <4.0.4": ">=4.0.4",
+      "form-data@<2.5.4": ">=2.5.4",
+      "on-headers@<1.1.0": ">=1.1.0"
+    },
     "ignoredBuiltDependencies": [
       "@vaadin/vaadin-usage-statistics"
     ]
