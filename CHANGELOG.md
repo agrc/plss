@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.6.9](https://github.com/agrc/plss/compare/v3.6.8...v3.6.9) (2025-07-30)
+
+
+### Dependencies
+
+* audit fix ([de66215](https://github.com/agrc/plss/commit/de66215445140c28e0bcce90c390b43ec5bd8b85))
+* bump googleapis in the major-app-dependencies group ([6bed2f7](https://github.com/agrc/plss/commit/6bed2f7a151e62b7695d6cd91401100eb6160b91))
+* bump the safe-app-dependencies group with 2 updates ([9455b59](https://github.com/agrc/plss/commit/9455b59fb35923c1d8d4701dee4dd855f2f389c4))
+* bump the safe-app-dependencies group with 9 updates ([596015a](https://github.com/agrc/plss/commit/596015aca82dacc18de97b7dc8df200de3209ce4))
+
 ## [3.6.8](https://github.com/agrc/plss/compare/v3.6.7...v3.6.8) (2025-07-16)
 
 
