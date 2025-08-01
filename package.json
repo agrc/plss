@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@arcgis/core": "^4.33.10",
-    "@headlessui/react": "^2.2.5",
+    "@headlessui/react": "^2.2.6",
     "@heroicons/react": "^2.2.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.1.1",
@@ -95,7 +95,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@ugrc/eslint-config": "^1.2.3",
-    "@vitejs/plugin-react-swc": "^3.10.2",
+    "@vitejs/plugin-react-swc": "^3.11.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "commitizen": "^4.3.1",
@@ -105,7 +105,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.31.0",
     "firebase-functions-test": "^3.4.1",
-    "firebase-tools": "^14.10.1",
+    "firebase-tools": "^14.11.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
@@ -115,11 +115,11 @@
     "prop-types": "^15.8.1",
     "storybook": "^9.0.18",
     "tailwindcss": "^4.1.11",
-    "vite": "^7.0.5",
+    "vite": "^7.0.6",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-package-version": "^1.1.0",
     "vitest": "^3.2.4",
-    "wait-on": "^8.0.3"
+    "wait-on": "^8.0.4"
   },
   "engines": {
     "node": "22"
