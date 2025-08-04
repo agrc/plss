@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.10](https://github.com/agrc/plss/compare/v3.6.9...v3.6.10) (2025-08-04)
+
+
+### Bug Fixes
+
+* remove system generated index name ([5dade2d](https://github.com/agrc/plss/commit/5dade2df613b4904d1b380a8888a3156a9ed1e6f))
+
+
+### Dependencies
+
+* bump the safe-app-dependencies group with 5 updates ([f81c330](https://github.com/agrc/plss/commit/f81c330c52b1832f61c82782299a4aa68f3df3c6))
+
 ## [3.6.9](https://github.com/agrc/plss/compare/v3.6.8...v3.6.9) (2025-07-30)
 
 
