@@ -11,10 +11,6 @@
         {
           "fieldPath": "submitted_by.id",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "ASCENDING"
         }
       ]
     },
@@ -33,10 +29,6 @@
         {
           "fieldPath": "blm_point_id",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "ASCENDING"
         }
       ]
     },
@@ -51,10 +43,6 @@
         {
           "fieldPath": "blm_point_id",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "ASCENDING"
         }
       ]
     },
@@ -68,10 +56,6 @@
         },
         {
           "fieldPath": "blm_point_id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
           "order": "ASCENDING"
         }
       ]
@@ -86,10 +70,6 @@
         },
         {
           "fieldPath": "blm_point_id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
           "order": "ASCENDING"
         }
       ]
