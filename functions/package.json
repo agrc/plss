@@ -27,7 +27,7 @@
     "pdf-lib": "^1.17.1",
     "pdfmake": "^0.2.20",
     "uuid": "^11.1.0",
-    "yup": "^1.6.1"
+    "yup": "^1.7.0"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.1.3",
