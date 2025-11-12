@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.6.11](https://github.com/agrc/plss/compare/v3.6.10...v3.6.11) (2025-11-12)
+
+
+### Dependencies
+
+* bump the major-app-dependencies group across 1 directory with 6 updates ([4f53889](https://github.com/agrc/plss/commit/4f538896c7f99a79d202e935e46a15095a06cc0b))
+* bump the safe-app-dependencies group across 1 directory with 32 updates ([d6ca35a](https://github.com/agrc/plss/commit/d6ca35ab450ca5d93783bd0cb8d894e245c623be))
+
 ## [3.6.10](https://github.com/agrc/plss/compare/v3.6.9...v3.6.10) (2025-08-04)
 
 
