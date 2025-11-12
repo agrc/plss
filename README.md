@@ -1,6 +1,6 @@
 # Public Lands Survey System (PLSS)
 
-[![Push Events](https://github.com/agrc/plss/actions/workflows/push.yml/badge.svg)](https://github.com/agrc/plss/actions/workflows/push.yml)
+[![Release Events](https://github.com/agrc/plss/actions/workflows/release.yml/badge.svg)](https://github.com/agrc/plss/actions/workflows/release.yml)
 
 ## What is the PLSS
 
