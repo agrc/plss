@@ -68,7 +68,7 @@
     "contrast-color": "^1.0.1",
     "cors": "^2.8.5",
     "dms-conversion": "^3.1.4",
-    "firebase": "^11.10.0",
+    "firebase": "^12.5.0",
     "if-env": "^1.0.4",
     "immer": "^10.2.0",
     "ky": "^1.13.0",
@@ -78,7 +78,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^19.2.0",
     "react-error-boundary": "^6.0.0",
-    "react-hook-form": "^7.65.0",
+    "react-hook-form": "^7.66.0",
     "use-immer": "^0.11.0",
     "xstate": "^5.23.0",
     "yup": "^1.7.1"
