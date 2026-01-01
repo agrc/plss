@@ -15,17 +15,17 @@
     "test": "vitest --silent --coverage --ui --open"
   },
   "dependencies": {
-    "@google-cloud/functions-framework": "^4.0.0",
+    "@google-cloud/functions-framework": "^4.0.1",
     "@sendgrid/client": "^8.1.6",
     "base64-stream": "^1.0.0",
     "contrast-color": "^1.0.1",
     "dms-conversion": "^3.1.4",
-    "firebase-admin": "^13.5.0",
+    "firebase-admin": "^13.6.0",
     "firebase-functions": "^6.6.0",
     "googleapis": "^159.0.0",
-    "ky": "^1.13.0",
+    "ky": "^1.14.1",
     "pdf-lib": "^1.17.1",
-    "pdfmake": "^0.2.20",
+    "pdfmake": "^0.2.21",
     "uuid": "^13.0.0",
     "yup": "^1.7.1"
   },
