@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.13-rc.1](https://github.com/agrc/plss/compare/v3.6.12...v3.6.13-rc.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* test new authentication provider ([19c6d16](https://github.com/agrc/plss/commit/19c6d169b4d0d3fb38a4cb1ff17538898142a26d))
+
 ## [3.6.12](https://github.com/agrc/plss/compare/v3.6.11...v3.6.12) (2025-11-13)
 
 
