@@ -1,13 +1,14 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import { clsx } from 'clsx';
+import { signInWithRedirect } from 'firebase/auth';
 import PropTypes from 'prop-types';
 
 export const LogInButton = () => {
-  const { login } = useFirebaseAuth();
+  const { auth, provider } = useFirebaseAuth();
 
   const handleClick = () => {
-    login();
+    signInWithRedirect(auth, provider);
   };
 
   return (
