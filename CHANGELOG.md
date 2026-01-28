@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.13-rc.3](https://github.com/agrc/plss/compare/v3.6.13-rc.2...v3.6.13-rc.3) (2026-01-28)
+
+
+### Bug Fixes
+
+* allow provider to be selected ([939709d](https://github.com/agrc/plss/commit/939709d79fdd63d23cacd72f323b27aba140c70e))
+
 ## [3.6.13-rc.2](https://github.com/agrc/plss/compare/v3.6.13-rc.1...v3.6.13-rc.2) (2026-01-28)
 
 
