@@ -25,7 +25,7 @@ let firebaseConfig = {
   measurementId: '',
 };
 
-const provider = new OAuthProvider('oidc.utahid');
+const provider = new OAuthProvider('oidc.ping');
 provider.addScope('profile');
 provider.addScope('email');
 
