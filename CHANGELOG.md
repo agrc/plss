@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.13-rc.2](https://github.com/agrc/plss/compare/v3.6.13-rc.1...v3.6.13-rc.2) (2026-01-28)
+
+
+### Bug Fixes
+
+* try sign in with redirect ([31e39da](https://github.com/agrc/plss/commit/31e39daa8a8ef41e9a80794233fa83892eb3dbd8))
+
 ## [3.6.13-rc.1](https://github.com/agrc/plss/compare/v3.6.12...v3.6.13-rc.1) (2026-01-28)
 
 
