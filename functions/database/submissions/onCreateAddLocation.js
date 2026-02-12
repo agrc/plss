@@ -8,7 +8,7 @@ safelyInitializeApp();
 const client = ky.extend({
   prefixUrl:
     'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services',
-  timeout: 30000,
+  timeout: 40000,
   retry: 3,
 });
 

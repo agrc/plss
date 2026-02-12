@@ -10,6 +10,11 @@ import {
   roundAccurately,
 } from '../../../functions/shared/index.js';
 
+const client = ky.extend({
+  timeout: 40000,
+  retry: 3,
+});
+
 export const updateContext = (context, field, value) => {
   if (!field) {
     return context;
@@ -44,7 +49,7 @@ const project = (grid) => {
     formData.append(key, value);
   });
 
-  return ky
+  return client
     .post('project', {
       body: formData,
       prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
@@ -72,7 +77,7 @@ const queryForCounty = (decimalDegrees) => {
   formData.append('inSR', '6318');
   formData.append('f', 'json');
 
-  return ky
+  return client
     .post('query', {
       body: formData,
       prefixUrl:
@@ -97,7 +102,7 @@ const projectToStatePlane = (coordinates) => {
     formData.append(key, value);
   });
 
-  return ky
+  return client
     .post('project', {
       body: formData,
       prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
