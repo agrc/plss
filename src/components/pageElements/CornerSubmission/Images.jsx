@@ -73,6 +73,9 @@ export default function MonumentImages() {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Map view or sketch">
+          <label htmlFor="map" className="sr-only">
+            Map view or sketch
+          </label>
           <Controller
             name="map"
             control={control}
@@ -93,6 +96,9 @@ export default function MonumentImages() {
           <ErrorMessage errors={formState.errors} name="map" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Monument area">
+          <label htmlFor="monument" className="sr-only">
+            Monument area
+          </label>
           <Controller
             name="monument"
             control={control}
@@ -113,6 +119,9 @@ export default function MonumentImages() {
           <ErrorMessage errors={formState.errors} name="monument" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Monument close-up">
+          <label htmlFor="closeUp" className="sr-only">
+            Monument close-up
+          </label>
           <Controller
             name="closeUp"
             control={control}
@@ -135,6 +144,9 @@ export default function MonumentImages() {
         <NumberedFormSection number={4} title="Extra pages">
           {new Array(extraPageCount).fill().map((_, i) => (
             <Fragment key={i}>
+              <label htmlFor={`extra${i + 1}`} className="sr-only">
+                Extra page {i + 1}
+              </label>
               <Controller
                 name={`extra${i + 1}`}
                 control={control}

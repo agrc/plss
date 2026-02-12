@@ -39,31 +39,33 @@ export default {
       const auth = getAuth(app);
 
       return (
-        <QueryClientProvider client={new QueryClient()}>
-          <FirebaseAppProvider config={config}>
-            <FirebaseAuthProvider sdk={auth}>
-              <FirebaseFunctionsProvider sdk={functions}>
-                <FirebaseStorageProvider sdk={storage}>
-                  <FirebaseAnalyticsProvider sdk={getAnalytics(app)}>
-                    <SubmissionProvider
-                      context={{
-                        section: 1,
-                        corner: 'NW',
-                        status: 'new',
-                        collected: '2022-01-01',
-                        accuracy: 'surveyor',
-                        description: 'test',
-                        notes: 'notes',
-                      }}
-                    >
-                      {Story()}
-                    </SubmissionProvider>
-                  </FirebaseAnalyticsProvider>
-                </FirebaseStorageProvider>
-              </FirebaseFunctionsProvider>
-            </FirebaseAuthProvider>
-          </FirebaseAppProvider>
-        </QueryClientProvider>
+        <div className="bg-slate-50 text-sky-900">
+          <QueryClientProvider client={new QueryClient()}>
+            <FirebaseAppProvider config={config}>
+              <FirebaseAuthProvider sdk={auth}>
+                <FirebaseFunctionsProvider sdk={functions}>
+                  <FirebaseStorageProvider sdk={storage}>
+                    <FirebaseAnalyticsProvider sdk={getAnalytics(app)}>
+                      <SubmissionProvider
+                        context={{
+                          section: 1,
+                          corner: 'NW',
+                          status: 'new',
+                          collected: '2022-01-01',
+                          accuracy: 'surveyor',
+                          description: 'test',
+                          notes: 'notes',
+                        }}
+                      >
+                        {Story()}
+                      </SubmissionProvider>
+                    </FirebaseAnalyticsProvider>
+                  </FirebaseStorageProvider>
+                </FirebaseFunctionsProvider>
+              </FirebaseAuthProvider>
+            </FirebaseAppProvider>
+          </QueryClientProvider>
+        </div>
       );
     },
   ],

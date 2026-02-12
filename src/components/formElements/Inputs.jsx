@@ -31,7 +31,7 @@ export const Input = forwardRef(
     );
 
     return (
-      <div className="flex flex-col gap-[2px]">
+      <div className="flex flex-col gap-0.5">
         {label !== false && (
           <Label htmlFor={name} required={required} className="font-semibold">
             {label ?? name}

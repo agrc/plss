@@ -264,6 +264,9 @@ export const GeographicHeight = () => {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={4} title="Ellipsoid Height">
+          <label htmlFor="elevation" className="sr-only">
+            Ellipsoid Height
+          </label>
           <Input label={false} required={true} {...register('elevation')} />
           <Controller
             control={control}

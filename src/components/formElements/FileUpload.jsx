@@ -21,7 +21,7 @@ const validateSize = (actualSize, megabytes) => {
   return actualSize > megabytes * 1024 * 1024;
 };
 
-const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, onChange }) => {
+const FileUpload = ({ id, defaultFileName, path, contentTypes, maxFileSize, value, onChange }) => {
   const { storage } = useFirebaseStorage();
   const uploadReference = useRef();
   const [fileUrl, setFileUrl] = useState('');
@@ -96,23 +96,26 @@ const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, o
   };
 
   return fileUrl ? (
-    <ObjectPreview url={fileUrl}>
-      <Attachment
-        onClick={async () => {
-          await deleteObject(uploadReference.current);
-          onChange();
-          setFileUrl();
-        }}
-      />
-    </ObjectPreview>
+    <>
+      <input type="hidden" id={id || defaultFileName} name={defaultFileName} value={value || ''} readOnly />
+      <ObjectPreview url={fileUrl}>
+        <Attachment
+          onClick={async () => {
+            await deleteObject(uploadReference.current);
+            onChange();
+            setFileUrl();
+          }}
+        />
+      </ObjectPreview>
+    </>
   ) : (
     <div className="relative">
       <input
         type="file"
         name={defaultFileName}
-        id={defaultFileName}
+        id={id || defaultFileName}
         onChange={uploadFile}
-        className="w-max text-center text-sm text-slate-400 file:flex file:min-h-[2rem] file:cursor-pointer file:rounded-full file:border-2 file:border-solid file:border-sky-600 file:bg-sky-500 file:px-7 file:py-1 file:text-sm file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-sky-600 file:focus:border-sky-500 file:focus:ring-2 file:focus:ring-sky-600/50 file:focus:outline-hidden file:active:bg-sky-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
+        className="w-max text-center text-sm text-slate-400 file:flex file:min-h-8 file:cursor-pointer file:rounded-full file:border-2 file:border-solid file:border-sky-600 file:bg-sky-500 file:px-7 file:py-1 file:text-sm file:font-semibold file:text-white file:transition-all file:duration-200 file:ease-in-out hover:file:bg-sky-600 file:focus:border-sky-500 file:focus:ring-2 file:focus:ring-sky-600/50 file:focus:outline-hidden file:active:bg-sky-700 file:disabled:cursor-not-allowed file:disabled:opacity-50"
       />
       {uploadPercent !== undefined && (
         <span
@@ -138,6 +141,7 @@ const FileUpload = ({ defaultFileName, path, contentTypes, maxFileSize, value, o
   );
 };
 FileUpload.propTypes = {
+  id: PropTypes.string,
   path: PropTypes.string.isRequired,
   defaultFileName: PropTypes.string,
   onChange: PropTypes.func,
@@ -159,7 +163,7 @@ export const ObjectPreview = ({ url, children }) => {
           PDF preview
         </object>
       ) : (
-        <img src={url} alt="upload preview" className="m-2 max-w-[300px] self-center rounded-t" />
+        <img src={url} alt="upload preview" className="m-2 max-w-75 self-center rounded-t" />
       )}
 
       <span className="flex flex-1 justify-center rounded-b border-t bg-white p-2 text-sm italic select-none">

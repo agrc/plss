@@ -1,3 +1,4 @@
+import { Field, Label as HeadlessLabel } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -148,33 +149,36 @@ const Metadata = ({ dispatch }) => {
         </NumberedFormSection>
         <NumberedFormSection number={4} title="MRRC">
           <div>
-            <label htmlFor="mrrc" className="font-semibold">
+            <div className="font-semibold">
               Associated with a{' '}
               <abbr className="cursor-help" title="Monument Replacement and Restoration Committee">
                 MRRC
               </abbr>{' '}
               Project
-            </label>
-            <div className="flex justify-between">
-              <Controller
-                control={control}
-                name="mrrc"
-                render={({ field }) => (
-                  <Switch
-                    screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    {...field}
-                  />
-                )}
-              />
-              <Link
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
-              >
-                Help
-                <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
-              </Link>
             </div>
+            <Field>
+              <HeadlessLabel className="sr-only">MRRC Project</HeadlessLabel>
+              <div className="flex justify-between">
+                <Controller
+                  control={control}
+                  name="mrrc"
+                  render={({ field }) => (
+                    <Switch
+                      screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
+                      {...field}
+                    />
+                  )}
+                />
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
+                >
+                  Help
+                  <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
+                </Link>
+              </div>
+            </Field>
             <ErrorMessage errors={formState.errors} name="mrrc" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>

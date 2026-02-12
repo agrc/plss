@@ -74,6 +74,7 @@ export default function MonumentRecord({ dispatch }) {
       <div className="flex-1">
         <Input
           label="BLM Point Id"
+          name="pointId"
           placeholder="UT260010S0130W0_600100"
           value={pointId}
           onChange={(e) => {

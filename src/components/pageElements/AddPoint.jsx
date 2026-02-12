@@ -141,6 +141,9 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={2} title="Add notes">
+          <label htmlFor="notes" className="sr-only">
+            Notes
+          </label>
           <Controller
             control={control}
             name="notes"
@@ -159,6 +162,9 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
           <ErrorMessage errors={formState.errors} name="notes" as={ErrorMessageTag} />
         </NumberedFormSection>
         <NumberedFormSection number={3} title="Add photos">
+          <label htmlFor="photos" className="sr-only">
+            Add photos
+          </label>
           {new Array(imageCount).fill().map((_, i) => (
             <Fragment key={`photo-${i + 1}-${uniqueId.current}`}>
               <Controller
@@ -166,6 +172,7 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
+                    id={`photo-${i + 1}-${uniqueId.current}`}
                     defaultFileName={name}
                     path={`submitters/${currentUser.uid}/reference`}
                     contentTypes={[

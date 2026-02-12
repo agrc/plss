@@ -79,7 +79,7 @@ export default {
 const Template = (args) => {
   const data = { ...args };
   return (
-    <div className="relative h-screen overflow-y-auto text-white" style={{ width: '450px', maxWidth: '450px' }}>
+    <div className="relative h-screen overflow-y-auto" style={{ width: '450px', maxWidth: '450px' }}>
       <Metadata {...data} />
     </div>
   );

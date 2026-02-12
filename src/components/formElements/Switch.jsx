@@ -1,8 +1,22 @@
 import { Switch } from '@headlessui/react';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
+/**
+ * @typedef {Object} ToggleProps
+ * @property {string} [name] - The name of the form field
+ * @property {boolean} [value=false] - The current checked state
+ * @property {function(boolean): void} [onChange] - Callback when the value changes
+ * @property {string} [screenReader='Toggle'] - Screen reader text
+ * @property {boolean} [hideLabel=false] - Whether to hide the yes/no label
+ * @property {string} [yesValue='Yes'] - Text to display when checked
+ * @property {string} [noValue='No'] - Text to display when unchecked
+ */
+
+/**
+ * Toggle switch component
+ * @type {React.ForwardRefExoticComponent<ToggleProps & React.RefAttributes<any>>}
+ */
 const Toggle = forwardRef(
   (
     { name, value = false, onChange, screenReader = 'Toggle', hideLabel = false, yesValue = 'Yes', noValue = 'No' },
@@ -17,7 +31,7 @@ const Toggle = forwardRef(
           onChange={(newValue) => {
             onChange(newValue);
           }}
-          className="relative mt-1 flex h-[26px] w-[58px] shrink-0 cursor-pointer rounded-full border border-slate-400 bg-white transition-colors duration-200 ease-in-out focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white/75"
+          className="relative mt-1 flex h-6.5 w-14.5 shrink-0 cursor-pointer rounded-full border border-slate-400 bg-white transition-colors duration-200 ease-in-out focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white/75"
         >
           <span className="sr-only">{screenReader}</span>
           <span
@@ -40,12 +54,3 @@ const Toggle = forwardRef(
 );
 export { Toggle as Switch };
 Toggle.displayName = 'Toggle';
-Toggle.propTypes = {
-  value: PropTypes.bool,
-  onChange: PropTypes.func,
-  screenReader: PropTypes.string,
-  hideLabel: PropTypes.bool,
-  name: PropTypes.string,
-  yesValue: PropTypes.string,
-  noValue: PropTypes.string,
-};

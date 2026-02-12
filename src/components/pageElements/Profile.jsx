@@ -102,6 +102,7 @@ export default function Profile({ dispatch }) {
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <FileUpload
+                    id="seal"
                     defaultFileName={name}
                     path={`submitters/${currentUser.uid}/profile`}
                     contentTypes={[
