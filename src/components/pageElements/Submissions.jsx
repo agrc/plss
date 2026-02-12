@@ -3,13 +3,21 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseAnalytics, useFirebaseFunctions, useFirebaseStorage } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { timeSince } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { dateFormatter, sortFunction } from './utils.js';
 
+/**
+ * @typedef {Object} SubmissionsProps
+ * @property {Array} [items]
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<SubmissionsProps>}
+ */
 export const Submissions = ({ items, dispatch }) => {
   if (items?.length < 1) {
     return (
@@ -41,10 +49,12 @@ export const Submissions = ({ items, dispatch }) => {
     </Card>
   );
 };
-Submissions.propTypes = {
-  items: PropTypes.array,
-  dispatch: PropTypes.func,
-};
+
+/**
+ * @typedef {Object} SubmissionProps
+ * @property {Object} [item]
+ * @property {function} [dispatch]
+ */
 
 const Submission = ({ item, dispatch }) => {
   const logEvent = useFirebaseAnalytics();
@@ -133,10 +143,12 @@ const Submission = ({ item, dispatch }) => {
     </div>
   );
 };
-Submission.propTypes = {
-  item: PropTypes.object,
-  dispatch: PropTypes.func,
-};
+
+/**
+ * @typedef {Object} SubmissionStatusProps
+ * @property {Object} [status]
+ * @property {string} [label]
+ */
 
 const SubmissionStatus = ({ status, label }) => (
   <>
@@ -152,10 +164,6 @@ const SubmissionStatus = ({ status, label }) => (
     </div>
   </>
 );
-SubmissionStatus.propTypes = {
-  status: PropTypes.object,
-  label: PropTypes.string,
-};
 
 const getClassesForStatus = (status) => {
   switch (status) {

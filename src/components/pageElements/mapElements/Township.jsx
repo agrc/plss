@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import ky from 'ky';
 import naturalCompare from 'natural-compare-lite';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Button } from '../../formElements/Buttons.jsx';
 import { Select } from '../../formElements/Select.jsx';
@@ -38,6 +37,15 @@ const composePredicate = (meridian, township, range, section) => {
   return `basemeridian='${meridian}' AND label='T${township} R${range}' AND section='${padded}'`;
 };
 
+/**
+ * @typedef {Object} TownshipProps
+ * @property {string} apiKey
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<TownshipProps>}
+ */
 export default function Township({ apiKey, dispatch }) {
   // TODO: move this to a reducer or an object
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -305,7 +313,3 @@ export default function Township({ apiKey, dispatch }) {
   );
 }
 Township.displayName = 'Township';
-Township.propTypes = {
-  apiKey: PropTypes.string.isRequired,
-  dispatch: PropTypes.func,
-};

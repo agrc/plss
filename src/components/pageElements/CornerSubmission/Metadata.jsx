@@ -2,7 +2,6 @@ import { Field, Label as HeadlessLabel } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import PropTypes from 'prop-types';
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { accuracy, corner, status } from '../../../../functions/shared/cornerSubmission/Options.js';
@@ -32,6 +31,14 @@ const defaults = {
 
 const dateFormatter = new Intl.DateTimeFormat('sv-SE');
 
+/**
+ * @typedef {Object} MetadataProps
+ * @property {function} dispatch
+ */
+
+/**
+ * @type {React.FC<MetadataProps>}
+ */
 const Metadata = ({ dispatch }) => {
   const meta = 'metadata';
   const [state, send] = useContext(SubmissionContext);
@@ -233,7 +240,3 @@ const Metadata = ({ dispatch }) => {
 };
 
 export default Metadata;
-
-Metadata.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};

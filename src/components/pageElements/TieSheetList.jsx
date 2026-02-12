@@ -2,9 +2,17 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
 import { useFirebaseStorage } from '@ugrc/utah-design-system';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import Card from '../formElements/Card.jsx';
 
+/**
+ * @typedef {Object} TieSheetListProps
+ * @property {string} blmPointId
+ * @property {React.ReactNode} [children]
+ */
+
+/**
+ * @type {React.FC<TieSheetListProps>}
+ */
 const TieSheetList = ({ blmPointId, children }) => {
   const { storage } = useFirebaseStorage();
 
@@ -62,10 +70,6 @@ const TieSheetList = ({ blmPointId, children }) => {
       {children && <div className="mt-4">{children}</div>}
     </Card>
   );
-};
-TieSheetList.propTypes = {
-  blmPointId: PropTypes.string.isRequired,
-  children: PropTypes.node,
 };
 
 export default TieSheetList;

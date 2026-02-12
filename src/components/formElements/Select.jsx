@@ -1,7 +1,6 @@
 import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { forwardRef, Fragment } from 'react';
 
 const getDefaultValue = (value, placeholder, options) => {
@@ -32,6 +31,21 @@ const getDefaultValue = (value, placeholder, options) => {
   return option;
 };
 
+/**
+ * @typedef {Object} SelectProps
+ * @property {string} [name] - The property name used by react hook form
+ * @property {string|boolean} [label] - The text of the accompanied label otherwise it will be the name of the input
+ * @property {boolean} [required] - If the input is required in the form
+ * @property {string} [placeholder] - The help text to display
+ * @property {boolean} [disabled] - If the input is disabled
+ * @property {Array<string|Object>} [options] - The options to place inside the select
+ * @property {string|Object} [value]
+ * @property {function} [onChange]
+ */
+
+/**
+ * @type {React.ForwardRefExoticComponent<SelectProps>}
+ */
 export const Select = forwardRef(({ disabled, label, name, required, options, value, onChange, placeholder }, ref) => {
   return (
     <Listbox
@@ -112,33 +126,3 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
   );
 });
 Select.displayName = 'Select';
-Select.propTypes = {
-  /**
-   * The property name used by react hook form
-   */
-  name: PropTypes.string,
-  /**
-   * The text of the accompanied label otherwise it will be the name of the input
-   */
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  /**
-   * If the input is required in the form
-   */
-  required: PropTypes.bool,
-  /**
-   * The help text to display
-   */
-  placeholder: PropTypes.string,
-  /**
-   * If the input is disabled
-   */
-  disabled: PropTypes.bool,
-  /**
-   * The options to place inside the select
-   */
-  options: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })]),
-  ),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })]),
-  onChange: PropTypes.func,
-};

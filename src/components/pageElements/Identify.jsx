@@ -1,6 +1,5 @@
 import { ArrowDownCircleIcon } from '@heroicons/react/20/solid';
 import { CheckIcon, ExclamationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import PropTypes from 'prop-types';
 import { getDefault } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -18,6 +17,16 @@ const managed_counties = {
   CACHE: 'https://www.cachecounty.org/surveyor/find-a-survey.html',
 };
 
+/**
+ * @typedef {Object} IdentifyProps
+ * @property {boolean} [authenticated]
+ * @property {Object} [graphic]
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<IdentifyProps>}
+ */
 export default function Identify({ authenticated, graphic, dispatch }) {
   if (!graphic) {
     return <EmptyIdentify dispatch={dispatch} />;
@@ -146,11 +155,11 @@ export default function Identify({ authenticated, graphic, dispatch }) {
     </>
   );
 }
-Identify.propTypes = {
-  graphic: PropTypes.object,
-  dispatch: PropTypes.func,
-  authenticated: PropTypes.bool,
-};
+
+/**
+ * @typedef {Object} EmptyIdentifyProps
+ * @property {function} [dispatch]
+ */
 
 const EmptyIdentify = ({ dispatch }) => {
   return (
@@ -180,9 +189,15 @@ const EmptyIdentify = ({ dispatch }) => {
     </>
   );
 };
-EmptyIdentify.propTypes = {
-  dispatch: PropTypes.func,
-};
+
+/**
+ * @typedef {Object} SubmissionPickerProps
+ * @property {boolean} [authenticated]
+ * @property {function} [dispatch]
+ * @property {Object} metadata
+ * @property {string} [metadata.blmPointId]
+ * @property {string} [metadata.county]
+ */
 
 const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
   return (
@@ -233,12 +248,4 @@ const SubmissionPicker = ({ authenticated, metadata, dispatch }) => {
       )}
     </div>
   );
-};
-SubmissionPicker.propTypes = {
-  authenticated: PropTypes.bool,
-  dispatch: PropTypes.func,
-  metadata: PropTypes.shape({
-    blmPointId: PropTypes.string,
-    county: PropTypes.string,
-  }).isRequired,
 };

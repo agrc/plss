@@ -1,8 +1,26 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import ErrorMessageTag from '../pageElements/ErrorMessage.jsx';
 
+/**
+ * @typedef {Object} LimitedTextareaProps
+ * @property {string} [name] - The property name used by react hook form
+ * @property {string} [placeholder] - The help text to display
+ * @property {string} [value] - The value to preset the input to
+ * @property {string} [rows] - The number of rows to have in the textarea
+ * @property {number} limit - The character count limit
+ * @property {Object|function} [inputRef] - The ref property for use with registering with react hook form
+ * @property {function} [onChange] - The function to execute when the text area value changes
+ * @property {number} [maxLength]
+ * @property {Object} [field]
+ * @property {Object} [errors]
+ * @property {string} [className]
+ * @property {boolean} [disabled]
+ */
+
+/**
+ * @type {React.FC<LimitedTextareaProps>}
+ */
 export const LimitedTextarea = ({
   rows = 3,
   placeholder,
@@ -40,42 +58,6 @@ export const LimitedTextarea = ({
   );
 };
 
-LimitedTextarea.propTypes = {
-  /**
-   * The property name used by react hook form
-   */
-  name: PropTypes.string,
-  /**
-   * The help text to display
-   */
-  placeholder: PropTypes.string,
-  /**
-   * The value to preset the input to
-   */
-  value: PropTypes.string,
-  /**
-   * The number of rows to have in the textarea
-   */
-  rows: PropTypes.string,
-  /**
-   * The character count limit
-   */
-  limit: PropTypes.number.isRequired,
-  /**
-   * The ref property for use with registering with react hook form
-   */
-  inputRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-  /**
-   * The function to execute when the text area value changes
-   */
-  onChange: PropTypes.func,
-  maxLength: PropTypes.number,
-  field: PropTypes.object,
-  errors: PropTypes.object,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
-};
-
 const useMaxLength = ({ value, limit }) => {
   return {
     limit,
@@ -83,6 +65,15 @@ const useMaxLength = ({ value, limit }) => {
   };
 };
 
+/**
+ * @typedef {Object} CharactersRemainingProps
+ * @property {number} remaining
+ * @property {number} limit
+ */
+
+/**
+ * @type {React.FC<CharactersRemainingProps>}
+ */
 export const CharactersRemaining = ({ remaining, limit }) => {
   if (remaining === limit) {
     return null;
@@ -101,9 +92,4 @@ export const CharactersRemaining = ({ remaining, limit }) => {
       {remaining} characters left
     </span>
   );
-};
-
-CharactersRemaining.propTypes = {
-  remaining: PropTypes.number.isRequired,
-  limit: PropTypes.number.isRequired,
 };

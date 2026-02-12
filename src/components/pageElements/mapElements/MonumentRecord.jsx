@@ -3,16 +3,26 @@ import { Transition } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useOpenClosed } from '@ugrc/utilities/hooks';
 import ky from 'ky';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Button } from '../../formElements/Buttons.jsx';
 import { Input } from '../../formElements/Inputs.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
 import TieSheetList from '../TieSheetList.jsx';
+
 const client = ky.create({
   prefixUrl: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
+  timeout: 40000,
+  retry: 3,
 });
 
+/**
+ * @typedef {Object} MonumentRecordProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<MonumentRecordProps>}
+ */
 export default function MonumentRecord({ dispatch }) {
   const [pointId, setPointId] = useState('');
   const [isOpen, { open, close }] = useOpenClosed(false);
@@ -103,6 +113,3 @@ export default function MonumentRecord({ dispatch }) {
   );
 }
 MonumentRecord.displayName = 'MonumentRecord';
-MonumentRecord.propTypes = {
-  dispatch: PropTypes.func,
-};

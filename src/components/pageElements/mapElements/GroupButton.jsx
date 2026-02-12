@@ -1,10 +1,19 @@
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useMapReady, useOpenClosed } from '@ugrc/utilities/hooks';
-import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef } from 'react';
 import { Button } from '../../formElements/Buttons.jsx';
 
+/**
+ * @typedef {Object} GroupButtonProps
+ * @property {Object} [view]
+ * @property {number} [width]
+ * @property {React.ReactNode} [children]
+ */
+
+/**
+ * @type {React.FC<GroupButtonProps>}
+ */
 export default function GroupButton({ view, width, children }) {
   const node = useRef();
   const ready = useMapReady(view);
@@ -79,8 +88,3 @@ export default function GroupButton({ view, width, children }) {
   );
 }
 GroupButton.displayName = 'GroupButton';
-GroupButton.propTypes = {
-  view: PropTypes.object,
-  width: PropTypes.number,
-  children: PropTypes.node,
-};

@@ -1,5 +1,11 @@
-import PropTypes from 'prop-types';
+/**
+ * @typedef {Object} LogoProps
+ * @property {string} [version]
+ */
 
+/**
+ * @type {React.FC<LogoProps>}
+ */
 export default function Logo({ version }) {
   return (
     <div className="mb-0 flex sm:mb-6">
@@ -49,6 +55,3 @@ export default function Logo({ version }) {
     </div>
   );
 }
-Logo.propTypes = {
-  version: PropTypes.string,
-};

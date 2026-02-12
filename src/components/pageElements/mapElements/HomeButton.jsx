@@ -2,7 +2,6 @@ import Extent from '@arcgis/core/geometry/Extent';
 import { HomeModernIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
 import { useMapReady } from '@ugrc/utilities/hooks';
-import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 
 const goHome = async (view, extent) => {
@@ -13,6 +12,16 @@ const goHome = async (view, extent) => {
   return await view.goTo(extent);
 };
 
+/**
+ * @typedef {Object} HomeButtonProps
+ * @property {Object} [view]
+ * @property {number} [width]
+ * @property {Object} extent
+ */
+
+/**
+ * @type {React.FC<HomeButtonProps>}
+ */
 export default function HomeButton({ view, extent, width }) {
   const ready = useMapReady(view);
   const me = useRef();
@@ -44,9 +53,3 @@ export default function HomeButton({ view, extent, width }) {
     </div>
   );
 }
-
-HomeButton.propTypes = {
-  view: PropTypes.object,
-  width: PropTypes.number,
-  extent: PropTypes.object.isRequired,
-};

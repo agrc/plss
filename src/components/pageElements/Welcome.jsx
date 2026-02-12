@@ -1,7 +1,14 @@
-import PropTypes from 'prop-types';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import usePageView from '../hooks/usePageView.jsx';
 
+/**
+ * @typedef {Object} WelcomeProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<WelcomeProps>}
+ */
 export default function Welcome({ dispatch }) {
   usePageView('screen-home');
 
@@ -47,6 +54,3 @@ export default function Welcome({ dispatch }) {
     </main>
   );
 }
-Welcome.propTypes = {
-  dispatch: PropTypes.func,
-};

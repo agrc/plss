@@ -1,7 +1,14 @@
-import PropTypes from 'prop-types';
 import { Button } from '../../formElements/Buttons.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
 
+/**
+ * @typedef {Object} SubmissionSuccessProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<SubmissionSuccessProps>}
+ */
 export default function SubmissionSuccess({ dispatch }) {
   usePageView('screen-submission-success');
 
@@ -35,6 +42,3 @@ export default function SubmissionSuccess({ dispatch }) {
     </main>
   );
 }
-SubmissionSuccess.propTypes = {
-  dispatch: PropTypes.func,
-};

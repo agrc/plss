@@ -20,7 +20,6 @@ import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/ut
 import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
-import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from './ErrorBoundary.jsx';
@@ -189,6 +188,18 @@ const extent = {
 
 const tabs = ['Section Finder', 'Monument Finder'];
 const level14 = 72223;
+
+/**
+ * @typedef {Object} PlssMapProps
+ * @property {string} color
+ * @property {function} dispatch
+ * @property {boolean} drawerOpen
+ * @property {Object} state
+ */
+
+/**
+ * @type {React.FC<PlssMapProps>}
+ */
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
@@ -595,10 +606,3 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     </ErrorBoundary>
   );
 }
-
-PlssMap.propTypes = {
-  state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  color: PropTypes.string.isRequired,
-  drawerOpen: PropTypes.bool.isRequired,
-};

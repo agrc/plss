@@ -1,8 +1,15 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 
+/**
+ * @typedef {Object} LogInButtonProps
+ * @property {string} [className]
+ */
+
+/**
+ * @type {React.FC<LogInButtonProps>}
+ */
 export const LogInButton = () => {
   const { login } = useFirebaseAuth();
 
@@ -73,10 +80,15 @@ export const LogInButton = () => {
     </Button>
   );
 };
-LogInButton.propTypes = {
-  className: PropTypes.string,
-};
 
+/**
+ * @typedef {Object} LogOutButtonProps
+ * @property {string} [className]
+ */
+
+/**
+ * @type {React.FC<LogOutButtonProps>}
+ */
 export const LogOutButton = () => {
   const { logout } = useFirebaseAuth();
 
@@ -89,9 +101,6 @@ export const LogOutButton = () => {
       Sign Out
     </Button>
   );
-};
-LogOutButton.propTypes = {
-  className: PropTypes.string,
 };
 
 const primaryClasses =
@@ -111,7 +120,7 @@ const buttonGroupMiddle = 'border-x-0';
 const buttonClasses = (style, buttonGroup) => {
   return clsx(
     style !== 'link' &&
-      'flex min-h-[2rem] w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:ring-2 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+      'flex min-h-8 w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:ring-2 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
     style === 'primary' && primaryClasses,
     style === 'secondary' && secondaryClasses,
     style === 'alternate' && alternateClasses,
@@ -122,6 +131,23 @@ const buttonClasses = (style, buttonGroup) => {
     buttonGroup?.right && buttonGroupRight,
   );
 };
+
+/**
+ * @typedef {Object} ButtonProps
+ * @property {string} [name] - The property name used by react hook form
+ * @property {React.ReactNode} children - The children to display on the button
+ * @property {'primary'|'secondary'|'alternate'|'link'} [style] - The style of button
+ * @property {'idle'|'disabled'|'pending'|'success'|'error'} [state] - The state of button
+ * @property {'button'|'submit'|'reset'} [type] - The property name used by react hook form
+ * @property {function} [inputRef] - The ref property for use with registering with react hook form
+ * @property {function} [onClick] - The function to execute when the button is clicked
+ * @property {boolean} [dark]
+ * @property {Object} [buttonGroup]
+ */
+
+/**
+ * @type {React.FC<ButtonProps>}
+ */
 export const Button = ({
   children,
   name,
@@ -162,39 +188,19 @@ export const Button = ({
   );
 };
 
-Button.propTypes = {
-  /**
-   * The property name used by react hook form
-   */
-  name: PropTypes.string,
-  /**
-   * The children to display on the button
-   */
-  children: PropTypes.node.isRequired,
-  /**
-   * The style of button
-   */
-  style: PropTypes.oneOf(['primary', 'secondary', 'alternate', 'link']),
-  /**
-   * The state of button
-   */
-  state: PropTypes.oneOf(['idle', 'disabled', 'pending', 'success', 'error']),
-  /**
-   * The property name used by react hook form
-   */
-  type: PropTypes.oneOf(['button', 'submit', 'reset']),
-  /**
-   * The ref property for use with registering with react hook form
-   */
-  inputRef: PropTypes.func,
-  /**
-   * The function to execute when the button is clicked
-   */
-  onClick: PropTypes.func,
-  dark: PropTypes.bool,
-  buttonGroup: PropTypes.object,
-};
+/**
+ * @typedef {Object} LinkProps
+ * @property {React.ReactNode} children
+ * @property {string} [href]
+ * @property {string} [target]
+ * @property {string} [rel]
+ * @property {'primary'|'secondary'|'alternate'|'link'} [style] - The style of button
+ * @property {Object} [buttonGroup]
+ */
 
+/**
+ * @type {React.FC<LinkProps>}
+ */
 export const Link = ({ href, children, target, rel, buttonGroup, style = 'link' }) => {
   const attributes = {
     target,
@@ -204,15 +210,4 @@ export const Link = ({ href, children, target, rel, buttonGroup, style = 'link' 
   };
 
   return <a {...attributes}>{children}</a>;
-};
-Link.propTypes = {
-  children: PropTypes.node.isRequired,
-  href: PropTypes.string,
-  target: PropTypes.string,
-  rel: PropTypes.string,
-  /**
-   * The style of button
-   */
-  style: PropTypes.oneOf(['primary', 'secondary', 'alternate', 'link']),
-  buttonGroup: PropTypes.object,
 };

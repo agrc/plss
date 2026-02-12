@@ -1,13 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
-import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
 import { Button } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
 import Note from '../../formElements/Note.jsx';
 
+/**
+ * @typedef {Object} SubmissionNoticeProps
+ * @property {string} pointId
+ * @property {string} county
+ * @property {function} toggle
+ */
+
+/**
+ * @type {React.FC<SubmissionNoticeProps>}
+ */
 export default function SubmissionNotice({ pointId, county, toggle }) {
   const { currentUser } = useFirebaseAuth();
 
@@ -75,8 +84,3 @@ export default function SubmissionNotice({ pointId, county, toggle }) {
     </div>
   );
 }
-SubmissionNotice.propTypes = {
-  pointId: PropTypes.string.isRequired,
-  county: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
-};

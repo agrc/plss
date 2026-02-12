@@ -1,10 +1,19 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import { useMapReady } from '@ugrc/utilities/hooks';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef } from 'react';
 import useGeolocation from './useGeoLocation.js';
 
+/**
+ * @typedef {Object} MyLocationProps
+ * @property {function} [dispatch]
+ * @property {Object} [view]
+ * @property {number} [width]
+ */
+
+/**
+ * @type {React.FC<MyLocationProps>}
+ */
 export default function MyLocation({ view, dispatch, width }) {
   const node = useRef();
   const count = useRef(1);
@@ -40,11 +49,13 @@ export default function MyLocation({ view, dispatch, width }) {
 
   return <GpsButton ref={node} state={state} send={send} />;
 }
-MyLocation.propTypes = {
-  dispatch: PropTypes.func,
-  view: PropTypes.object,
-  width: PropTypes.number,
-};
+
+/**
+ * @typedef {Object} GpsButtonProps
+ * @property {Object} [state]
+ * @property {function} [send]
+ * @property {Object} [error]
+ */
 
 export const GpsButton = forwardRef(({ state, send }, ref) => {
   return (
@@ -94,8 +105,3 @@ export const GpsButton = forwardRef(({ state, send }, ref) => {
   );
 });
 GpsButton.displayName = 'GpsButton';
-GpsButton.propTypes = {
-  state: PropTypes.object,
-  send: PropTypes.func,
-  error: PropTypes.object,
-};

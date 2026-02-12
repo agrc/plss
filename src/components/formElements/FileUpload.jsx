@@ -1,7 +1,6 @@
 import { useFirebaseStorage } from '@ugrc/utah-design-system';
 import { clsx } from 'clsx';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './Buttons.jsx';
 
@@ -21,6 +20,20 @@ const validateSize = (actualSize, megabytes) => {
   return actualSize > megabytes * 1024 * 1024;
 };
 
+/**
+ * @typedef {Object} FileUploadProps
+ * @property {string} [id]
+ * @property {string} path
+ * @property {string} [defaultFileName]
+ * @property {function} [onChange]
+ * @property {string} [value]
+ * @property {Array<{name: string, value: string}>} [contentTypes]
+ * @property {number} [maxFileSize]
+ */
+
+/**
+ * @type {React.FC<FileUploadProps>}
+ */
 const FileUpload = ({ id, defaultFileName, path, contentTypes, maxFileSize, value, onChange }) => {
   const { storage } = useFirebaseStorage();
   const uploadReference = useRef();
@@ -140,21 +153,16 @@ const FileUpload = ({ id, defaultFileName, path, contentTypes, maxFileSize, valu
     </div>
   );
 };
-FileUpload.propTypes = {
-  id: PropTypes.string,
-  path: PropTypes.string.isRequired,
-  defaultFileName: PropTypes.string,
-  onChange: PropTypes.func,
-  value: PropTypes.string,
-  contentTypes: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
-  maxFileSize: PropTypes.number,
-};
 
+/**
+ * @typedef {Object} ObjectPreviewProps
+ * @property {string} url
+ * @property {React.ReactNode} [children]
+ */
+
+/**
+ * @type {React.FC<ObjectPreviewProps>}
+ */
 export const ObjectPreview = ({ url, children }) => {
   return (
     <div className="flex w-full flex-col rounded-sm border border-slate-400 bg-slate-50 text-slate-400 shadow-sm">
@@ -172,11 +180,15 @@ export const ObjectPreview = ({ url, children }) => {
     </div>
   );
 };
-ObjectPreview.propTypes = {
-  url: PropTypes.string.isRequired,
-  children: PropTypes.node,
-};
 
+/**
+ * @typedef {Object} AttachmentProps
+ * @property {function} [onClick]
+ */
+
+/**
+ * @type {React.FC<AttachmentProps>}
+ */
 export const Attachment = ({ onClick }) => (
   <div className="flex justify-between">
     <Button style="secondary" onClick={onClick}>
@@ -184,8 +196,5 @@ export const Attachment = ({ onClick }) => (
     </Button>
   </div>
 );
-Attachment.propTypes = {
-  onClick: PropTypes.func,
-};
 
 export default FileUpload;

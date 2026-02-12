@@ -1,6 +1,17 @@
-import PropTypes from 'prop-types';
 import { Button } from '../../formElements/Buttons.jsx';
 
+/**
+ * @typedef {Object} WizardProps
+ * @property {function|boolean} [back]
+ * @property {boolean} [next]
+ * @property {function} [finish]
+ * @property {function} [clear]
+ * @property {string} [status]
+ */
+
+/**
+ * @type {React.FC<WizardProps>}
+ */
 export default function Wizard({ back = false, next = false, finish, clear, status }) {
   return (
     <div className="flex justify-center">
@@ -34,14 +45,6 @@ export default function Wizard({ back = false, next = false, finish, clear, stat
     </div>
   );
 }
-
-Wizard.propTypes = {
-  back: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
-  next: PropTypes.bool,
-  finish: PropTypes.func,
-  clear: PropTypes.func,
-  status: PropTypes.string,
-};
 
 const getButtonText = (status) => {
   switch (status) {

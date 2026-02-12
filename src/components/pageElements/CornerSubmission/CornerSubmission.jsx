@@ -1,7 +1,6 @@
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useLocalStorage } from '@ugrc/utilities/hooks';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { lazy, useContext, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
@@ -32,6 +31,18 @@ const Longitude = lazy(() =>
   })),
 );
 
+/**
+ * @typedef {Object} CornerSubmissionProps
+ * @property {Object} submission
+ * @property {string} submission.blmPointId
+ * @property {string} submission.type
+ * @property {string} [submission.county]
+ * @property {function} dispatch
+ */
+
+/**
+ * @type {React.FC<CornerSubmissionProps>}
+ */
 export default function CornerSubmission({ submission, dispatch }) {
   const [hide, setHide] = useLocalStorage('plssSubmissionNoteVisible', false, true);
   const scrollContainer = useRef(null);
@@ -134,11 +145,3 @@ export default function CornerSubmission({ submission, dispatch }) {
     </>
   );
 }
-CornerSubmission.propTypes = {
-  submission: PropTypes.shape({
-    blmPointId: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    county: PropTypes.string,
-  }),
-  dispatch: PropTypes.func.isRequired,
-};

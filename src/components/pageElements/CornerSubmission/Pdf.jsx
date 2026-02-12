@@ -1,8 +1,8 @@
+import { Field, Label as HeadlessLabel } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
-import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
@@ -21,6 +21,14 @@ const defaults = {
   mrrc: false,
 };
 
+/**
+ * @typedef {Object} MonumentPdfProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<MonumentPdfProps>}
+ */
 export default function MonumentPdf({ dispatch }) {
   const { currentUser } = useFirebaseAuth();
   const [state, send] = useContext(SubmissionContext);
@@ -52,6 +60,9 @@ export default function MonumentPdf({ dispatch }) {
       <Spacer className="my-4" />
       <NumberedForm onSubmit={handleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Existing sheet">
+          <label htmlFor="existing-sheet" className="sr-only">
+            Existing sheet
+          </label>
           <Controller
             name="pdf"
             control={control}
@@ -70,33 +81,36 @@ export default function MonumentPdf({ dispatch }) {
         </NumberedFormSection>
         <NumberedFormSection number={2} title="MRRC">
           <div>
-            <label htmlFor="mrrc" className="font-semibold">
+            <div className="font-semibold">
               Associated with a{' '}
               <abbr className="cursor-help" title="Monument Replacement and Restoration Committee">
                 MRRC
               </abbr>{' '}
               Project
-            </label>
-            <div className="flex justify-between">
-              <Controller
-                control={control}
-                name="mrrc"
-                render={({ field }) => (
-                  <Switch
-                    screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
-                    {...field}
-                  />
-                )}
-              />
-              <Link
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
-              >
-                Help
-                <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
-              </Link>
             </div>
+            <Field>
+              <HeadlessLabel className="sr-only">MRRC Project</HeadlessLabel>
+              <div className="flex justify-between">
+                <Controller
+                  control={control}
+                  name="mrrc"
+                  render={({ field }) => (
+                    <Switch
+                      screenReader="Toggle that this associated with a Monument Replacement and Restoration Committee project?"
+                      {...field}
+                    />
+                  )}
+                />
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://le.utah.gov/xcode/Title63A/Chapter16/63A-16-S509.html"
+                >
+                  Help
+                  <ArrowTopRightOnSquareIcon className="align-center not-sr-only ml-1 inline-flex h-5 w-5" />
+                </Link>
+              </div>
+            </Field>
             <ErrorMessage errors={formState.errors} name="mrrc" as={ErrorMessageTag} />
           </div>
         </NumberedFormSection>
@@ -107,6 +121,3 @@ export default function MonumentPdf({ dispatch }) {
     </>
   );
 }
-MonumentPdf.propTypes = {
-  dispatch: PropTypes.func,
-};

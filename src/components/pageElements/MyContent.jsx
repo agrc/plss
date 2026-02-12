@@ -1,5 +1,4 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseAuth, useFirebaseFunctions, useFirebaseStorage, useFirestore } from '@ugrc/utah-design-system';
 import { useOpenClosed } from '@ugrc/utilities/hooks';
@@ -7,7 +6,6 @@ import { clsx } from 'clsx';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { timeSince } from '../../../functions/shared/index.js';
 import { Button } from '../formElements/Buttons.jsx';
@@ -21,6 +19,14 @@ import { dateFormatter, sortFunction } from './utils.js';
 const tabs = ['Submissions', 'Reference Points'];
 const sortOrders = ['New to Old', 'Old to New', 'Ascending (0-9 A-Z)', 'Descending (Z-A 0-9)'];
 
+/**
+ * @typedef {Object} MyContentProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<MyContentProps>}
+ */
 const MyContent = ({ dispatch }) => {
   const { currentUser } = useFirebaseAuth();
   const [selectedTab, setSelectedTab] = useState();
@@ -119,9 +125,12 @@ const MyContent = ({ dispatch }) => {
     </>
   );
 };
-MyContent.propTypes = {
-  dispatch: PropTypes.func,
-};
+
+/**
+ * @typedef {Object} ReferencePointsProps
+ * @property {Array} [items]
+ * @property {function} [dispatch]
+ */
 
 const ReferencePoints = ({ items, dispatch }) => {
   const [sortOrder, setSortOrder] = useState(sortOrders[0]);
@@ -152,43 +161,13 @@ const ReferencePoints = ({ items, dispatch }) => {
     </section>
   );
 };
-ReferencePoints.propTypes = {
-  items: PropTypes.array,
-  dispatch: PropTypes.func,
-};
 
-const SelectedItem = ({ item, dispatch }) => (
-  <>
-    <ArrowLeftCircleIcon className="h-10 w-10" onClick={() => dispatch({ type: 'set_selection', payload: null })} />
-    <h3 className="text-lg font-bold">{item.name}</h3>
-    <div>{dateFormatter.format(item.when)}</div>
-    <div className="flex justify-evenly">
-      <button
-        type="button"
-        className="ripple inline-block rounded-sm border-2 border-white bg-transparent px-6 py-2 text-center text-xs leading-6 font-medium text-white uppercase transition hover:bg-white hover:text-black focus:outline-hidden"
-      >
-        Edit
-      </button>
-      <button
-        type="button"
-        className="ripple inline-block rounded-sm border-2 border-white bg-transparent px-6 py-2 text-center text-xs leading-6 font-medium text-white uppercase transition hover:bg-white hover:text-black focus:outline-hidden"
-      >
-        Delete
-      </button>
-    </div>
-    <input type="checkbox" />
-    <span>Hide on map</span>
-    <div>{item.location}</div>
-    <h2 className="text-lg">Notes</h2>
-    <div>{item.notes}</div>
-    <h2 className="text-lg">Photos</h2>
-    <div>photo1</div>
-  </>
-);
-SelectedItem.propTypes = {
-  item: PropTypes.object,
-  dispatch: PropTypes.func,
-};
+/**
+ * @typedef {Object} ItemListProps
+ * @property {Array} [items]
+ * @property {function} [dispatch]
+ * @property {string} [sortOrder]
+ */
 
 const ItemList = ({ items, dispatch, sortOrder }) => {
   const clone = items.map((item) => item);
@@ -215,11 +194,12 @@ const ItemList = ({ items, dispatch, sortOrder }) => {
     </ul>
   );
 };
-ItemList.propTypes = {
-  items: PropTypes.array,
-  dispatch: PropTypes.func,
-  sortOrder: PropTypes.string,
-};
+
+/**
+ * @typedef {Object} ItemProps
+ * @property {Object} [item]
+ * @property {function} [dispatch]
+ */
 
 const Item = ({ item, dispatch }) => {
   const date = Date.parse(item.attributes.when);
@@ -303,10 +283,11 @@ const Item = ({ item, dispatch }) => {
     </div>
   );
 };
-Item.propTypes = {
-  item: PropTypes.object,
-  dispatch: PropTypes.func,
-};
+
+/**
+ * @typedef {Object} ImageProps
+ * @property {string} [path]
+ */
 
 const Image = ({ path }) => {
   const { storage } = useFirebaseStorage();
@@ -318,9 +299,6 @@ const Image = ({ path }) => {
       {data ? <ObjectPreview url={data}>preview</ObjectPreview> : 'Loading...'}
     </div>
   );
-};
-Image.propTypes = {
-  path: PropTypes.string,
 };
 
 export default MyContent;

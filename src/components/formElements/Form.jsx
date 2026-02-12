@@ -1,5 +1,12 @@
-import PropTypes from 'prop-types';
+/**
+ * @typedef {Object} NumberedFormProps
+ * @property {React.ReactNode} children
+ * @property {function} [onSubmit]
+ */
 
+/**
+ * @type {React.FC<NumberedFormProps>}
+ */
 export function NumberedForm({ children, onSubmit }) {
   return (
     <form onSubmit={onSubmit} className="mb-10 flex w-full flex-col items-center justify-center">
@@ -9,11 +16,17 @@ export function NumberedForm({ children, onSubmit }) {
     </form>
   );
 }
-NumberedForm.propTypes = {
-  children: PropTypes.node.isRequired,
-  onSubmit: PropTypes.func,
-};
 
+/**
+ * @typedef {Object} NumberedFormSectionProps
+ * @property {React.ReactNode} children
+ * @property {number} number
+ * @property {string} [title]
+ */
+
+/**
+ * @type {React.FC<NumberedFormSectionProps>}
+ */
 export function NumberedFormSection({ children, number, title }) {
   return (
     <>
@@ -27,8 +40,3 @@ export function NumberedFormSection({ children, number, title }) {
     </>
   );
 }
-NumberedFormSection.propTypes = {
-  children: PropTypes.node.isRequired,
-  number: PropTypes.number.isRequired,
-  title: PropTypes.string,
-};

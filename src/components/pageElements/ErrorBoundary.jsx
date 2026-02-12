@@ -1,8 +1,16 @@
 import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
-import PropTypes from 'prop-types';
 
 import { Button } from '../formElements/Buttons.jsx';
 
+/**
+ * @typedef {Object} DefaultFallbackProps
+ * @property {Object} error
+ * @property {function} resetErrorBoundary
+ */
+
+/**
+ * @type {React.FC<DefaultFallbackProps>}
+ */
 export default function DefaultFallback({ error, resetErrorBoundary }) {
   const logEvent = useFirebaseAnalytics();
 
@@ -20,7 +28,3 @@ export default function DefaultFallback({ error, resetErrorBoundary }) {
     </div>
   );
 }
-DefaultFallback.propTypes = {
-  error: PropTypes.object.isRequired,
-  resetErrorBoundary: PropTypes.func.isRequired,
-};

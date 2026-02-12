@@ -3,7 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { profileSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
@@ -22,6 +21,14 @@ const defaultValues = {
   seal: '',
 };
 
+/**
+ * @typedef {Object} ProfileProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<ProfileProps>}
+ */
 export default function Profile({ dispatch }) {
   const { functions } = useFirebaseFunctions();
   const { currentUser } = useFirebaseAuth();
@@ -139,6 +146,3 @@ export default function Profile({ dispatch }) {
     </div>
   );
 }
-Profile.propTypes = {
-  dispatch: PropTypes.func,
-};

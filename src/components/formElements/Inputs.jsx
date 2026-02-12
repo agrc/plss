@@ -1,7 +1,27 @@
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
+/**
+ * @typedef {Object} InputProps
+ * @property {string} [name] - The property name used by react hook form
+ * @property {string} [type] - The type of input, text, password, etc
+ * @property {string|boolean} [label] - The text of the accompanied label otherwise it will be the name of the input
+ * @property {boolean} [required] - If the input is required in the form
+ * @property {string|number} [value] - The value to preset the input to
+ * @property {string} [placeholder] - The help text to display
+ * @property {boolean} [left] - For input group rounding
+ * @property {string|string[]} [className] - Custom css class names to append to the defaults
+ * @property {boolean} [touched]
+ * @property {string} [step]
+ * @property {string} [min]
+ * @property {string} [max]
+ * @property {function} [onChange]
+ * @property {function} [onBlur]
+ */
+
+/**
+ * @type {React.ForwardRefExoticComponent<InputProps & React.RefAttributes<any>>}
+ */
 export const Input = forwardRef(
   (
     {
@@ -58,46 +78,6 @@ export const Input = forwardRef(
   },
 );
 Input.displayName = 'Input';
-Input.propTypes = {
-  /**
-   * The property name used by react hook form
-   */
-  name: PropTypes.string,
-  /**
-   * The type of input, text, password, etc
-   */
-  type: PropTypes.string,
-  /**
-   * The text of the accompanied label otherwise it will be the name of the input
-   */
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  /**
-   * If the input is required in the form
-   */
-  required: PropTypes.bool,
-  /**
-   * The value to preset the input to
-   */
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /**
-   * The help text to display
-   */
-  placeholder: PropTypes.string,
-  /**
-   * For input group rounding
-   */
-  left: PropTypes.bool,
-  /**
-   * Custom css class names to append to the defaults
-   */
-  className: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  touched: PropTypes.bool,
-  step: PropTypes.string,
-  min: PropTypes.string,
-  max: PropTypes.string,
-  onChange: PropTypes.func,
-  onBlur: PropTypes.func,
-};
 
 export const Label = ({ children, htmlFor, required, className }) => {
   return (
@@ -106,10 +86,4 @@ export const Label = ({ children, htmlFor, required, className }) => {
       {required && <span className="not-sr-only ml-0.5 text-rose-300">*</span>}
     </label>
   );
-};
-Label.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  htmlFor: PropTypes.string,
-  required: PropTypes.bool,
 };

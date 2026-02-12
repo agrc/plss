@@ -5,7 +5,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
-import PropTypes from 'prop-types';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -29,6 +28,18 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 });
 const limit = 3;
 
+/**
+ * @typedef {Object} AddPointProps
+ * @property {boolean} [active]
+ * @property {string} [color]
+ * @property {Object} [geometry]
+ * @property {function} [dispatch]
+ * @property {string} [notes]
+ */
+
+/**
+ * @type {React.FC<AddPointProps>}
+ */
 export default function AddPoint({ active, color, geometry, dispatch, notes = '' }) {
   const { currentUser } = useFirebaseAuth();
   const { functions } = useFirebaseFunctions();
@@ -283,11 +294,3 @@ export default function AddPoint({ active, color, geometry, dispatch, notes = ''
     </>
   );
 }
-
-AddPoint.propTypes = {
-  active: PropTypes.bool,
-  color: PropTypes.string,
-  geometry: PropTypes.object,
-  dispatch: PropTypes.func,
-  notes: PropTypes.string,
-};

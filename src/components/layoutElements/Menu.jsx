@@ -1,8 +1,16 @@
 import { FolderIcon, HomeModernIcon, PlusCircleIcon, SwatchIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 
+/**
+ * @typedef {Object} MenuProps
+ * @property {function} [dispatch]
+ * @property {boolean} [drawerOpen]
+ */
+
+/**
+ * @type {React.FC<MenuProps>}
+ */
 export default function Menu({ dispatch, drawerOpen }) {
   const { currentUser } = useFirebaseAuth();
 
@@ -37,11 +45,17 @@ export default function Menu({ dispatch, drawerOpen }) {
     </nav>
   );
 }
-Menu.propTypes = {
-  dispatch: PropTypes.func,
-  drawerOpen: PropTypes.bool,
-};
 
+/**
+ * @typedef {Object} MenuItemProps
+ * @property {Object} [Icon]
+ * @property {string} [children]
+ * @property {function} [onClick]
+ */
+
+/**
+ * @type {React.FC<MenuItemProps>}
+ */
 const MenuItem = ({ Icon, children, onClick }) => {
   return (
     <button
@@ -52,10 +66,4 @@ const MenuItem = ({ Icon, children, onClick }) => {
       <p className="pt-1">{children}</p>
     </button>
   );
-};
-
-MenuItem.propTypes = {
-  Icon: PropTypes.object,
-  children: PropTypes.string,
-  onClick: PropTypes.func,
 };

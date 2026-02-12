@@ -1,7 +1,6 @@
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAuth } from '@ugrc/utah-design-system';
 import { clsx } from 'clsx';
-import PropTypes from 'prop-types';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from '../pageElements/ErrorBoundary.jsx';
@@ -23,6 +22,21 @@ const Profile = lazy(() => import('../pageElements/Profile.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
 const Legend = lazy(() => import('../pageElements/Legend.jsx'));
 
+/**
+ * @typedef {Object} DrawerProps
+ * @property {function} [dispatch]
+ * @property {boolean} [authenticated]
+ * @property {Object} [graphic]
+ * @property {Object} [map]
+ * @property {Object} [addPoint]
+ * @property {string} [activeComponent]
+ * @property {boolean} [drawerOpen]
+ * @property {{blmPointId: string, type: string}} [submission]
+ */
+
+/**
+ * @type {React.FC<DrawerProps>}
+ */
 export default function Drawer({ dispatch, authenticated, map, addPoint, activeComponent, drawerOpen, submission }) {
   const { currentUser } = useFirebaseAuth();
   const scrollContainer = useRef();
@@ -113,16 +127,3 @@ export default function Drawer({ dispatch, authenticated, map, addPoint, activeC
     </aside>
   );
 }
-Drawer.propTypes = {
-  dispatch: PropTypes.func,
-  authenticated: PropTypes.bool,
-  graphic: PropTypes.object,
-  map: PropTypes.object,
-  addPoint: PropTypes.object,
-  activeComponent: PropTypes.string,
-  drawerOpen: PropTypes.bool,
-  submission: PropTypes.shape({
-    blmPointId: PropTypes.string,
-    type: PropTypes.string,
-  }),
-};

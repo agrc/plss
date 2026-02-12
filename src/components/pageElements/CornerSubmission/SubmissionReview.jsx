@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseFunctions, useFirebaseStorage } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
@@ -124,16 +123,18 @@ const MetadataReview = ({ accuracy, collected, corner, description, mrrc, notes,
     </Card>
   );
 };
-MetadataReview.propTypes = {
-  status: PropTypes.string,
-  notes: PropTypes.string,
-  description: PropTypes.string,
-  accuracy: PropTypes.string,
-  collected: PropTypes.string,
-  section: PropTypes.number,
-  corner: PropTypes.string,
-  mrrc: PropTypes.bool,
-};
+
+/**
+ * @typedef {Object} MetadataReviewProps
+ * @property {string} [status]
+ * @property {string} [notes]
+ * @property {string} [description]
+ * @property {string} [accuracy]
+ * @property {string} [collected]
+ * @property {number} [section]
+ * @property {string} [corner]
+ * @property {boolean} [mrrc]
+ */
 
 const CoordinateReview = ({ datum, grid, geographic }) => {
   if (!datum) {
@@ -180,30 +181,28 @@ const CoordinateReview = ({ datum, grid, geographic }) => {
     </>
   );
 };
-CoordinateReview.propTypes = {
-  datum: PropTypes.string,
-  grid: PropTypes.shape({
-    zone: PropTypes.string,
-    northing: PropTypes.number,
-    easting: PropTypes.number,
-    elevation: PropTypes.number,
-    unit: PropTypes.string,
-  }),
-  geographic: PropTypes.shape({
-    northing: PropTypes.shape({
-      degrees: PropTypes.number,
-      minutes: PropTypes.number,
-      seconds: PropTypes.number,
-    }),
-    easting: PropTypes.shape({
-      degrees: PropTypes.number,
-      minutes: PropTypes.number,
-      seconds: PropTypes.number,
-    }),
-    elevation: PropTypes.number,
-    unit: PropTypes.string,
-  }),
-};
+
+/**
+ * @typedef {Object} CoordinateReviewProps
+ * @property {string} [datum]
+ * @property {Object} [grid]
+ * @property {string} [grid.zone]
+ * @property {number} [grid.northing]
+ * @property {number} [grid.easting]
+ * @property {number} [grid.elevation]
+ * @property {string} [grid.unit]
+ * @property {Object} [geographic]
+ * @property {Object} [geographic.northing]
+ * @property {number} [geographic.northing.degrees]
+ * @property {number} [geographic.northing.minutes]
+ * @property {number} [geographic.northing.seconds]
+ * @property {Object} [geographic.easting]
+ * @property {number} [geographic.easting.degrees]
+ * @property {number} [geographic.easting.minutes]
+ * @property {number} [geographic.easting.seconds]
+ * @property {number} [geographic.elevation]
+ * @property {string} [geographic.unit]
+ */
 
 const GridCoordinateReview = ({ grid }) => (
   <>
@@ -227,16 +226,17 @@ const GridCoordinateReview = ({ grid }) => (
     )}
   </>
 );
-GridCoordinateReview.propTypes = {
-  grid: PropTypes.shape({
-    zone: PropTypes.string,
-    northing: PropTypes.number,
-    easting: PropTypes.number,
-    elevation: PropTypes.number,
-    unit: PropTypes.string,
-    verticalDatum: PropTypes.string,
-  }),
-};
+
+/**
+ * @typedef {Object} GridCoordinateReviewProps
+ * @property {Object} [grid]
+ * @property {string} [grid.zone]
+ * @property {number} [grid.northing]
+ * @property {number} [grid.easting]
+ * @property {number} [grid.elevation]
+ * @property {string} [grid.unit]
+ * @property {string} [grid.verticalDatum]
+ */
 
 const GeographicCoordinateReview = ({ geographic }) => (
   <>
@@ -253,22 +253,21 @@ const GeographicCoordinateReview = ({ geographic }) => (
     </div>
   </>
 );
-GeographicCoordinateReview.propTypes = {
-  geographic: PropTypes.shape({
-    northing: PropTypes.shape({
-      degrees: PropTypes.number,
-      minutes: PropTypes.number,
-      seconds: PropTypes.number,
-    }),
-    easting: PropTypes.shape({
-      degrees: PropTypes.number,
-      minutes: PropTypes.number,
-      seconds: PropTypes.number,
-    }),
-    elevation: PropTypes.number,
-    unit: PropTypes.string,
-  }),
-};
+
+/**
+ * @typedef {Object} GeographicCoordinateReviewProps
+ * @property {Object} [geographic]
+ * @property {Object} [geographic.northing]
+ * @property {number} [geographic.northing.degrees]
+ * @property {number} [geographic.northing.minutes]
+ * @property {number} [geographic.northing.seconds]
+ * @property {Object} [geographic.easting]
+ * @property {number} [geographic.easting.degrees]
+ * @property {number} [geographic.easting.minutes]
+ * @property {number} [geographic.easting.seconds]
+ * @property {number} [geographic.elevation]
+ * @property {string} [geographic.unit]
+ */
 
 const ImagesReview = ({ images }) => {
   return (
@@ -289,9 +288,11 @@ const ImagesReview = ({ images }) => {
     </Card>
   );
 };
-ImagesReview.propTypes = {
-  images: PropTypes.object,
-};
+
+/**
+ * @typedef {Object} ImagesReviewProps
+ * @property {Object} [images]
+ */
 
 const Image = ({ path }) => {
   const { storage } = useFirebaseStorage();
@@ -304,9 +305,11 @@ const Image = ({ path }) => {
     </div>
   );
 };
-Image.propTypes = {
-  path: PropTypes.string,
-};
+
+/**
+ * @typedef {Object} ImageProps
+ * @property {string} [path]
+ */
 
 const AttachmentReview = ({ path }) => {
   const { storage } = useFirebaseStorage();
@@ -326,9 +329,11 @@ const AttachmentReview = ({ path }) => {
     </Card>
   );
 };
-AttachmentReview.propTypes = {
-  path: PropTypes.string,
-};
+
+/**
+ * @typedef {Object} AttachmentReviewProps
+ * @property {string} [path]
+ */
 
 const MonumentPreview = ({ status, children }) => {
   return (
@@ -344,10 +349,12 @@ const MonumentPreview = ({ status, children }) => {
     </Card>
   );
 };
-MonumentPreview.propTypes = {
-  status: PropTypes.string,
-  children: PropTypes.node,
-};
+
+/**
+ * @typedef {Object} MonumentPreviewProps
+ * @property {string} [status]
+ * @property {React.ReactNode} [children]
+ */
 
 const PdfPreview = ({ path }) => {
   const { storage } = useFirebaseStorage();
@@ -360,8 +367,10 @@ const PdfPreview = ({ path }) => {
 
   return <div className="flex flex-col items-center">{data && <ObjectPreview url={data}>preview</ObjectPreview>}</div>;
 };
-PdfPreview.propTypes = {
-  path: PropTypes.string,
-};
+
+/**
+ * @typedef {Object} PdfPreviewProps
+ * @property {string} [path]
+ */
 
 export default Review;

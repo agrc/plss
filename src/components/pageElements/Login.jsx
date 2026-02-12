@@ -2,7 +2,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { httpsCallable } from 'firebase/functions';
 import md5 from 'md5';
-import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { Button, LogInButton, LogOutButton } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -11,6 +10,14 @@ import usePageView from '../hooks/usePageView.jsx';
 const size = 160;
 const fallback = 'mp';
 
+/**
+ * @typedef {Object} LoginProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<LoginProps>}
+ */
 export default function Login({ dispatch }) {
   const { currentUser } = useFirebaseAuth();
   const queryClient = useQueryClient();
@@ -29,9 +36,6 @@ export default function Login({ dispatch }) {
   }, [currentUser, queryClient]);
   return <Card>{currentUser ? <Profile dispatch={dispatch} /> : <SignIn />}</Card>;
 }
-Login.propTypes = {
-  dispatch: PropTypes.func,
-};
 
 const SignIn = () => {
   usePageView('screen-sign-in');
@@ -59,6 +63,14 @@ const SignIn = () => {
   );
 };
 
+/**
+ * @typedef {Object} ProfileProps
+ * @property {function} [dispatch]
+ */
+
+/**
+ * @type {React.FC<ProfileProps>}
+ */
 const Profile = ({ dispatch }) => {
   const { functions } = useFirebaseFunctions();
   const getProfile = httpsCallable(functions, 'getProfile');
@@ -103,15 +115,17 @@ const Profile = ({ dispatch }) => {
     </div>
   );
 };
-Profile.propTypes = {
-  dispatch: PropTypes.func,
-};
 
+/**
+ * @typedef {Object} GravatarProps
+ * @property {string} email
+ */
+
+/**
+ * @type {React.FC<GravatarProps>}
+ */
 const Gravatar = ({ email }) => {
   const gravatar = `https://www.gravatar.com/avatar/${md5(email.toLowerCase())}?r=pg&size=${size}&default=${fallback}`;
 
   return <img src={gravatar} alt="Gravatar" />;
-};
-Gravatar.propTypes = {
-  email: PropTypes.string.isRequired,
 };
