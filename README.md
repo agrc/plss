@@ -24,3 +24,7 @@ You can use this website to view the location of the monuments and the informati
 4. duplicate `./functions/.secret` to `./functions/.secret.local` and fill out the empty variables
 5. `pnpm start`
 6. Once everything is loaded, navigate to `http://localhost:5173/`
+
+## Attribution
+
+This project was developed with the assistance of [GitHub Copilot](https://github.com/features/copilot).
