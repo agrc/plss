@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.14](https://github.com/agrc/plss/compare/v3.6.13...v3.6.14) (2026-02-13)
+
+
+### Features
+
+* display third party notices ([03416d2](https://github.com/agrc/plss/commit/03416d2f2d86229d892f16ddb35e7bcade807161))
+
+
+### Documentation
+
+* add attribution ([1955fd6](https://github.com/agrc/plss/commit/1955fd69768f1eb875d68c8f03650e6fb149fdcc))
+
 ## [3.6.13](https://github.com/agrc/plss/compare/v3.6.12...v3.6.13) (2026-02-13)
 
 
