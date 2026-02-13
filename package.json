@@ -70,7 +70,7 @@
     "dms-conversion": "^3.1.4",
     "firebase": "^12.5.0",
     "if-env": "^1.0.4",
-    "immer": "^10.2.0",
+    "immer": "^11.0.1",
     "ky": "^1.14.3",
     "md5": "^2.3.0",
     "natural-compare-lite": "^1.4.0",
@@ -118,7 +118,7 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-package-version": "^1.1.0",
     "vitest": "^4.0.18",
-    "wait-on": "^8.0.5"
+    "wait-on": "^9.0.3"
   },
   "engines": {
     "node": "22"
