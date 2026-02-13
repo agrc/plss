@@ -51,6 +51,12 @@ export default function Welcome({ dispatch }) {
         </Link>
         .
       </p>
+      <h2 className="text-2xl font-semibold">Notices</h2>
+      <p className="ml-3">
+        <Link href="/ThirdPartyNotices.txt" target="_blank" rel="noreferrer">
+          Third-party notices
+        </Link>
+      </p>
     </main>
   );
 }
