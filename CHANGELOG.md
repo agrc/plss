@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.13](https://github.com/agrc/plss/compare/v3.6.12...v3.6.13) (2026-02-13)
+
+
+### Dependencies
+
+* bump the major-app-dependencies group across 1 directory with 3 updates ([470f242](https://github.com/agrc/plss/commit/470f242d0d98a49e773a075db438435484af5715))
+* bump the safe-app-dependencies group with 23 updates ([65d2a21](https://github.com/agrc/plss/commit/65d2a21867fef8b5b32ebeb835db1b1548b65bce))
+* fy26 q3 dependency updates ([e5510ef](https://github.com/agrc/plss/commit/e5510ef64be31a35f23aee6a302a25ff62294d6a))
+
 ## [3.6.12](https://github.com/agrc/plss/compare/v3.6.11...v3.6.12) (2025-11-13)
 
 
