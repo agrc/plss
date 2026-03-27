@@ -1,8 +1,82 @@
 @import 'tailwindcss';
+@source '../node_modules/@ugrc/utah-design-system';
+
+/* TODO: Remove these custom variants and colors once @ugrc/utah-design-system upgrades to Tailwind v4.
+   The package currently uses variants from the tailwindcss-react-aria-components plugin (Tailwind v3)
+   and expects custom color palettes from @ugrc/tailwind-preset. These shims replicate that behavior for Tailwind v4. */
+@custom-variant group-orientation-vertical {
+  .group[data-orientation='vertical'] & {
+    @slot;
+  }
+}
+@custom-variant group-orientation-horizontal {
+  .group[data-orientation='horizontal'] & {
+    @slot;
+  }
+}
+@custom-variant group-pressed {
+  .group[data-pressed] & {
+    @slot;
+  }
+}
+@custom-variant group-disabled {
+  .group[data-disabled] & {
+    @slot;
+  }
+}
+@custom-variant pressed (&[data-pressed]);
 
 @theme {
   --animate-gradient-x: gradient-x 5s ease infinite;
   --animate-ping-slow: ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  /* @ugrc/tailwind-preset colors */
+  --color-primary-50: #faf7fc;
+  --color-primary-100: #f6edfa;
+  --color-primary-200: #ebdbf3;
+  --color-primary-300: #ddbee9;
+  --color-primary-400: #ca97db;
+  --color-primary-500: #b16ec7;
+  --color-primary-600: #964faa;
+  --color-primary-700: #7c3f8c;
+  --color-primary-800: #673573;
+  --color-primary-900: #4d2a54;
+  --color-primary-950: #36163c;
+
+  --color-secondary-50: #f2f9f9;
+  --color-secondary-100: #ddeef0;
+  --color-secondary-200: #bedce3;
+  --color-secondary-300: #91c3cf;
+  --color-secondary-400: #5da1b3;
+  --color-secondary-500: #428698;
+  --color-secondary-600: #396e81;
+  --color-secondary-700: #345b6a;
+  --color-secondary-800: #33505d;
+  --color-secondary-900: #2c424d;
+  --color-secondary-950: #192933;
+
+  --color-accent-50: #fdfae6;
+  --color-accent-100: #fbf4cc;
+  --color-accent-200: #f7ea99;
+  --color-accent-300: #f2df66;
+  --color-accent-400: #eed533;
+  --color-accent-500: #eaca00;
+  --color-accent-600: #bba200;
+  --color-accent-700: #8c7900;
+  --color-accent-800: #5e5100;
+  --color-accent-900: #2f2800;
+
+  --color-warning-50: #fff1f2;
+  --color-warning-100: #ffe4e6;
+  --color-warning-200: #fecdd3;
+  --color-warning-300: #fda4af;
+  --color-warning-400: #fb7185;
+  --color-warning-500: #f43f5e;
+  --color-warning-600: #e11d48;
+  --color-warning-700: #be123c;
+  --color-warning-800: #9f1239;
+  --color-warning-900: #881337;
+  --color-warning-950: #4c0519;
 
   @keyframes gradient-x {
     0%,
@@ -14,6 +88,18 @@
       background-size: 200% 200%;
       background-position: right center;
     }
+  }
+}
+
+/* Tailwind v4 no longer auto-wraps bare CSS variables in var() for arbitrary values.
+   The design system emits bg-[--color] and border-[--color] (v3 syntax) which need
+   to be bg-[var(--color)] in v4. These overrides bridge that gap. */
+@layer utilities {
+  .bg-\[--color\] {
+    background-color: var(--color);
+  }
+  .border-\[--color\] {
+    border-color: var(--color);
   }
 }
 
