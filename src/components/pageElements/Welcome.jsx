@@ -14,6 +14,7 @@ export default function Welcome({ dispatch }) {
 
   return (
     <main className="mt-3 inline-grid gap-4">
+      <h1 className="sr-only">Utah PLSS Corner Points</h1>
       <h2 className="text-2xl font-semibold">What is the PLSS</h2>
       <p className="ml-3">
         Section corners in the Public Land Survey System (PLSS) form the foundation for all descriptions of private
