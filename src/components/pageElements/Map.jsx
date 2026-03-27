@@ -186,6 +186,7 @@ const extent = {
 
 const tabs = ['Section Finder', 'Monument Finder'];
 const level14 = 72223;
+const plssPointsLayerId = 'PLSS Points';
 
 /**
  * @typedef {Object} PlssMapProps
@@ -271,21 +272,22 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           },
           {
             label: 'PLSS',
+            defaultSelected: true,
             function: () => {
               return new VectorTileLayer({
                 url: urls.plss,
                 opacity: 0.5,
-                selected: true,
                 minScale: 2000000,
               });
             },
           },
           {
-            label: 'PLSS Points',
+            label: plssPointsLayerId,
+            defaultSelected: true,
             function: () => {
               return new FeatureLayer({
+                id: plssPointsLayerId,
                 url: urls.points,
-                selected: true,
                 outFields: [
                   'point_id',
                   'plss_id',
@@ -300,7 +302,6 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
                   'managed_by',
                   'mrrc',
                   'monument',
-                  'control',
                   'point_category',
                 ],
                 renderer,
@@ -371,7 +372,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     }
 
     if (!identifyGraphic) {
-      const plssPoints = mapView.current.map.findLayerById('PLSS Points');
+      const plssPoints = mapView.current.map.findLayerById(plssPointsLayerId);
       plssPoints.featureEffect = null;
 
       return;
@@ -426,7 +427,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         default: {
           const response = await mapView.current.hitTest(event);
 
-          const hits = response?.results?.filter((result) => result.layer?.id === 'PLSS Points');
+          const hits = response?.results?.filter((result) => result.layer?.id === plssPointsLayerId);
 
           let payload = null;
           if (hits.length > 0) {
