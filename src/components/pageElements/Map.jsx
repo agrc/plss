@@ -13,9 +13,7 @@ import MapView from '@arcgis/core/views/MapView';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
-import LayerSelector from '@ugrc/layer-selector';
-import '@ugrc/layer-selector/src/LayerSelector.css';
-import { useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
+import { LayerSelector, useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
 import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
 import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
@@ -246,80 +244,94 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     });
 
     setSelectorOptions({
-      view: mapView.current,
-      quadWord: import.meta.env.VITE_DISCOVER_KEY,
-      baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR'],
-      overlays: [
-        'Address Points',
-        {
-          Factory: VectorTileLayer,
-          url: urls.landownership,
-          id: 'Land Ownership',
-          opacity: 0.3,
-        },
-        {
-          Factory: FeatureLayer,
-          url: urls.parcels,
-          id: 'Parcels',
-          opacity: 0.5,
-          minScale: 55000,
-        },
-        {
-          Factory: VectorTileLayer,
-          url: urls.plss,
-          id: 'PLSS',
-          opacity: 0.5,
-          selected: true,
-          minScale: 2000000,
-        },
-        {
-          Factory: FeatureLayer,
-          url: urls.points,
-          id: 'PLSS Points',
-          selected: true,
-          outFields: [
-            'point_id',
-            'plss_id',
-            'label',
-            'control',
-            'longitude',
-            'latitude',
-            'county',
-            'elevation',
-            'steward',
-            'steward_second',
-            'managed_by',
-            'mrrc',
-            'monument',
-            'control',
-            'point_category',
-          ],
-          renderer,
-          labelingInfo: [
-            {
-              labelPlacement: 'above-right',
-              minScale: 20000,
-              labelExpressionInfo: {
-                expression: '$feature.point_id',
-              },
-              where: 'primary_corner=1 or mrrc=1 or monument=1',
-              font: {
-                family: 'Helvetica',
-                size: 14,
-                weight: 'bold',
-              },
-              symbol: {
-                type: 'text',
-                color: '#1e293b',
-                haloColor: [255, 255, 255, 0.8],
-                haloSize: 3,
-              },
+      options: {
+        view: mapView.current,
+        quadWord: import.meta.env.VITE_DISCOVER_KEY,
+        basemaps: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR', 'High Contrast'],
+        operationalLayers: [
+          'Address Points',
+          {
+            label: 'Land Ownership',
+            function: () => {
+              return new VectorTileLayer({
+                url: urls.landownership,
+                opacity: 0.3,
+              });
             },
-          ],
-          minScale: level14 + 10000,
-        },
-      ],
-      position: 'top-right',
+          },
+          {
+            label: 'Parcels',
+            function: () => {
+              return new FeatureLayer({
+                url: urls.parcels,
+                opacity: 0.5,
+                minScale: 55000,
+              });
+            },
+          },
+          {
+            label: 'PLSS',
+            function: () => {
+              return new VectorTileLayer({
+                url: urls.plss,
+                opacity: 0.5,
+                selected: true,
+                minScale: 2000000,
+              });
+            },
+          },
+          {
+            label: 'PLSS Points',
+            function: () => {
+              return new FeatureLayer({
+                url: urls.points,
+                selected: true,
+                outFields: [
+                  'point_id',
+                  'plss_id',
+                  'label',
+                  'control',
+                  'longitude',
+                  'latitude',
+                  'county',
+                  'elevation',
+                  'steward',
+                  'steward_second',
+                  'managed_by',
+                  'mrrc',
+                  'monument',
+                  'control',
+                  'point_category',
+                ],
+                renderer,
+                labelingInfo: [
+                  {
+                    labelPlacement: 'above-right',
+                    minScale: 20000,
+                    labelExpressionInfo: {
+                      expression: '$feature.point_id',
+                    },
+                    where: 'primary_corner=1 or mrrc=1 or monument=1',
+                    font: {
+                      family: 'Helvetica',
+                      size: 14,
+                      weight: 'bold',
+                    },
+                    symbol: {
+                      type: 'text',
+                      color: '#1e293b',
+                      haloColor: [255, 255, 255, 0.8],
+                      haloSize: 3,
+                    },
+                  },
+                ],
+                minScale: level14 + 10000,
+              });
+            },
+          },
+        ],
+        position: 'top-right',
+      },
     });
 
     return () => {
