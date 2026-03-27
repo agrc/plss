@@ -8,7 +8,7 @@ export default function App() {
   const [state, dispatch] = useImmerReducer(reduce, defaults);
 
   return (
-    <main className="app grid h-full w-screen">
+    <main id="main-content" tabIndex="-1" className="app grid h-full w-screen">
       <Map state={state.map} color={state.addPoint.color} drawerOpen={state.drawerOpen} dispatch={dispatch} />
       <Menu drawerOpen={state.drawerOpen} dispatch={dispatch}>
         menu
