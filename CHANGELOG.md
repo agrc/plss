@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.6.15](https://github.com/agrc/plss/compare/v3.6.14...v3.6.15) (2026-03-30)
+
+
+### Features
+
+* **app:** add high contrast base map ([9cb76a4](https://github.com/agrc/plss/commit/9cb76a4e3c9c3a63201c7bedb81e1d34103537ec))
+
+
+### Bug Fixes
+
+* **app:** accessibility improvements ([cbca6d9](https://github.com/agrc/plss/commit/cbca6d9c50304d9f5347ed3bf949b3c426d3a472))
+
 ## [3.6.14](https://github.com/agrc/plss/compare/v3.6.13...v3.6.14) (2026-02-13)
 
 
