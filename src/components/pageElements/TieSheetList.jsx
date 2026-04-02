@@ -2,7 +2,12 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
 import { useFirebaseStorage } from '@ugrc/utah-design-system';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
+import Note from '../formElements/Note.jsx';
+
+const accessibleDisclaimerPrefix =
+  'This site serves as a repository for County Monument Record Sheets. While copies are available here for reference, the County remains the official steward and custodian of the monument records. An accessible version of the Monument Record Sheet may be obtained directly from the County or by sending a request to ';
 
 /**
  * @typedef {Object} TieSheetListProps
@@ -49,6 +54,15 @@ const TieSheetList = ({ blmPointId, children }) => {
     <Card>
       <div>
         <h4 className="text-xl font-medium">Monument Records</h4>
+        {status === 'success' && data.length > 0 && (
+          <div className="mt-2 mb-3">
+            <Note>
+              {accessibleDisclaimerPrefix}
+              <Link href="mailto:ugrc-plss-administrators@utah.gov">ugrc-plss-administrators@utah.gov</Link>
+              .
+            </Note>
+          </div>
+        )}
         {status === 'pending' && <div>Loading...</div>}
         {status === 'error' && <div>The monument records are currently not available</div>}
         {status === 'success' && (data?.length ?? 0) === 0 && <div>This point has no monument records</div>}
