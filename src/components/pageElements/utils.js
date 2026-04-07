@@ -24,3 +24,11 @@ export const sortFunction = (sortOrder, transform) => {
     }
   };
 };
+
+export const normalizePointId = (pointId) => {
+  return pointId?.trim() ?? '';
+};
+
+export const getPointIdWhereClause = (pointId) => {
+  return `point_id='${pointId.replaceAll("'", "''")}'`;
+};

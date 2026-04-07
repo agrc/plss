@@ -14,6 +14,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import { LayerSelector, useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
+import { getUrlParameter, setUrlParameter } from '@ugrc/utilities';
 import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
 import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
@@ -21,6 +22,7 @@ import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from './ErrorBoundary.jsx';
+import { getPointIdWhereClause, normalizePointId } from './utils.js';
 import GroupButton from './mapElements/GroupButton.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
@@ -202,6 +204,7 @@ const plssPointsLayerId = 'PLSS Points';
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
   const mapView = useRef();
+  const pointFromUrlLoaded = useRef(false);
   const [selectorOptions, setSelectorOptions] = useState();
   const [mapState, setMapState] = useState('idle');
   const onlyWidth = useWindowWidth();
@@ -371,9 +374,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
+    const plssPoints = mapView.current.map.findLayerById(plssPointsLayerId);
+
     if (!identifyGraphic) {
-      const plssPoints = mapView.current.map.findLayerById(plssPointsLayerId);
-      plssPoints.featureEffect = null;
+      if (plssPoints) {
+        plssPoints.featureEffect = null;
+      }
 
       return;
     }
@@ -386,13 +392,15 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       { duration: 1000 },
     );
 
-    identifyGraphic.layer.featureEffect = {
-      filter: {
-        objectIds: [identifyGraphic.attributes.OBJECTID],
-      },
-      includedEffect: 'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
-      excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
-    };
+    if (plssPoints) {
+      plssPoints.featureEffect = {
+        filter: {
+          objectIds: [identifyGraphic.attributes.OBJECTID],
+        },
+        includedEffect: 'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
+        excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
+      };
+    }
   }, [identifyGraphic]);
 
   // handle clicks
@@ -449,6 +457,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
             scale: mapView.current.scale,
           });
 
+          setUrlParameter('POINT_ID', payload?.attributes?.point_id ?? null);
           dispatch({ type: 'map/identify', payload });
           dispatch({ type: 'menu/toggle', payload: 'identify' });
         }
@@ -457,6 +466,59 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
     return () => clickHandler?.remove();
   }, [state, dispatch, color, setGraphic, logEvent]);
+
+  useEffect(() => {
+    const pointId = normalizePointId(getUrlParameter('POINT_ID', 'string'));
+
+    if (!mapView.current || pointFromUrlLoaded.current || pointId.length < 1) {
+      return;
+    }
+
+    pointFromUrlLoaded.current = true;
+
+    let cancelled = false;
+
+    const identifyPointFromUrl = async () => {
+      await mapView.current.when();
+
+      let features = [];
+
+      try {
+        const response = await new FeatureLayer({
+          url: urls.points,
+        }).queryFeatures({
+          where: getPointIdWhereClause(pointId),
+          outFields: ['*'],
+          returnGeometry: true,
+        });
+
+        features = response?.features ?? [];
+      } catch {
+        features = [];
+      }
+
+      if (cancelled) {
+        return;
+      }
+
+      const payload = features.length === 1 ? features[0] : null;
+
+      logEvent('identify', {
+        hits: features.length,
+        scale: mapView.current.scale,
+        source: 'url',
+      });
+
+      dispatch({ type: 'map/identify', payload });
+      dispatch({ type: 'menu/toggle', payload: 'identify' });
+    };
+
+    void identifyPointFromUrl();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dispatch, logEvent]);
 
   // update graphic on color change
   useEffect(() => {
