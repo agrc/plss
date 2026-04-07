@@ -512,6 +512,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       const payload = features.length === 1 ? features[0] : null;
 
+      if (features.length > 1) {
+        console.warn(`Multiple PLSS points matched POINT_ID=${pointId}`);
+      }
+
       logEvent('identify', {
         hits: features.length,
         scale: mapView.current.scale,
