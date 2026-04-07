@@ -22,7 +22,7 @@ import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from './ErrorBoundary.jsx';
-import { getPointIdWhereClause, normalizePointId } from './utils.js';
+import { normalizePointId } from './utils.js';
 import GroupButton from './mapElements/GroupButton.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
@@ -495,7 +495,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           });
 
         const response = await pointLayer.queryFeatures({
-          where: getPointIdWhereClause(pointId),
+          where: `point_id='${pointId}'`,
           outFields: ['*'],
           returnGeometry: true,
         });
