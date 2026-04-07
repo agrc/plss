@@ -30,5 +30,5 @@ export const normalizePointId = (pointId) => {
 };
 
 export const getPointIdWhereClause = (pointId) => {
-  return `point_id='${pointId.replaceAll("'", "''")}'`;
+  return `point_id='${pointId}'`;
 };
