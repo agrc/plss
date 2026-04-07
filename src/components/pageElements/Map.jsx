@@ -501,7 +501,8 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         });
 
         features = response?.features ?? [];
-      } catch {
+      } catch (error) {
+        console.error('Error querying POINT_ID from URL', error);
         features = [];
       }
 
