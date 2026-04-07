@@ -481,12 +481,20 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     const identifyPointFromUrl = async () => {
       await mapView.current.when();
 
+      if (cancelled) {
+        return;
+      }
+
       let features = [];
 
       try {
-        const response = await new FeatureLayer({
-          url: urls.points,
-        }).queryFeatures({
+        const pointLayer =
+          mapView.current?.map.findLayerById(plssPointsLayerId) ??
+          new FeatureLayer({
+            url: urls.points,
+          });
+
+        const response = await pointLayer.queryFeatures({
           where: getPointIdWhereClause(pointId),
           outFields: ['*'],
           returnGeometry: true,
@@ -508,6 +516,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         scale: mapView.current.scale,
         source: 'url',
       });
+
+      if (cancelled) {
+        return;
+      }
 
       dispatch({ type: 'map/identify', payload });
       dispatch({ type: 'menu/toggle', payload: 'identify' });
