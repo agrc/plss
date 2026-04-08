@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.6.16](https://github.com/agrc/plss/compare/v3.6.15...v3.6.16) (2026-04-08)
+
+
+### Features
+
+* **app:** add accessible disclaimer to TieSheetList component ([1cb2f81](https://github.com/agrc/plss/commit/1cb2f81dc5ed157e14acfdd999590e6bd22d65eb)), closes [#519](https://github.com/agrc/plss/issues/519)
+* sync POINT_ID url parameter with identify state ([22bdaec](https://github.com/agrc/plss/commit/22bdaeccbff9e53b241f710e63ae7a6cec30bc80))
+
+
+### Bug Fixes
+
+* tighten POINT_ID url identify handling ([2017e56](https://github.com/agrc/plss/commit/2017e564b26b557c7594b9b260546b08e10b02f2))
+
 ## [3.6.15](https://github.com/agrc/plss/compare/v3.6.14...v3.6.15) (2026-03-30)
 
 
