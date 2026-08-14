@@ -10,7 +10,7 @@ import usePageView from '../../hooks/usePageView.jsx';
 import { sl, ub } from './townships.js';
 
 const client = ky.create({
-  prefixUrl: 'https://api.mapserv.utah.gov/api/v1/search',
+  prefix: 'https://api.mapserv.utah.gov/api/v1/search',
 });
 
 const tabs = [

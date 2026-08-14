@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import { logger } from 'firebase-functions/v2';
 import path from 'path';
 import { PDFDocument } from 'pdf-lib';
-import PdfPrinter from 'pdfmake';
+import pdfmake from 'pdfmake';
 import { fileURLToPath } from 'url';
 import extractTownshipInformation from './shared/cornerSubmission/blmPointId.js';
 
@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 const empty = {};
 const span = (int) => Array(int).fill(empty);
 
-const printer = new PdfPrinter({
+pdfmake.addFonts({
   Roboto: {
     normal: __dirname + '/fonts/Roboto-Regular.ttf',
     bold: __dirname + '/fonts/Roboto-Medium.ttf',
@@ -658,15 +658,7 @@ ${data.metadata.description} `,
 };
 
 export const createPdfDocument = async (definition, extraPdfPages) => {
-  const partialPdf = await new Promise((resolve, reject) => {
-    const chunks = [];
-    const stream = printer.createPdfKitDocument(definition);
-
-    stream.on('data', (chunk) => chunks.push(chunk));
-    stream.on('end', () => resolve(Buffer.concat(chunks)));
-    stream.on('error', (error) => reject(error));
-    stream.end();
-  });
+  const partialPdf = await pdfmake.createPdf(definition).getBuffer();
 
   logger.debug('saved front page now appending extra pages', {
     length: Object.keys(extraPdfPages).length,
