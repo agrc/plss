@@ -10,7 +10,7 @@ import usePageView from '../../hooks/usePageView.jsx';
 import TieSheetList from '../TieSheetList.jsx';
 
 const client = ky.create({
-  prefixUrl: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
+  prefix: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
   timeout: 40000,
   retry: 3,
 });

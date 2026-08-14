@@ -1,7 +1,16 @@
 import { describe, expect, test } from 'vitest';
-import { splitImagesFromPdfs } from './pdfHelpers.js';
+import { createPdfDocument, splitImagesFromPdfs } from './pdfHelpers.js';
 
 describe('pdfHelpers', () => {
+  test('generates a PDF buffer', async () => {
+    const pdf = await createPdfDocument(
+      { content: 'pdfmake compatibility test' },
+      {},
+    );
+
+    expect(pdf.subarray(0, 4).toString()).toBe('%PDF');
+  });
+
   describe('splitImagesFromPdfs', () => {
     test('should remove all empty paths', () => {
       expect(

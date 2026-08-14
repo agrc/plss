@@ -6,8 +6,7 @@ import { safelyInitializeApp } from '../../firebase.js';
 safelyInitializeApp();
 
 const client = ky.extend({
-  prefixUrl:
-    'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services',
+  prefix: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services',
   timeout: 40000,
   retry: 3,
 });
