@@ -485,7 +485,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         return;
       }
 
-      let features = [];
+      let features;
 
       try {
         const pointLayer =
