@@ -1,5 +1,17 @@
 import { describe, expect, test } from 'vitest';
-import { updateContext } from './index.js';
+import { dmsToDecimalDegrees, updateContext } from './index.js';
+
+describe('dmsToDecimalDegrees', () => {
+  test('converts degrees, minutes, and seconds to decimal degrees', () => {
+    expect(
+      dmsToDecimalDegrees({
+        degrees: 40,
+        minutes: 42,
+        seconds: 30,
+      }),
+    ).toBeCloseTo(40.7083333333);
+  });
+});
 
 describe('updateContext', () => {
   test('it can add a simple property to a null object', () => {
