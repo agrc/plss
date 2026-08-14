@@ -1,19 +1,33 @@
 // @ts-check
 
-import DmsCoordinates, { parseDms } from 'dms-conversion';
+import DmsCoordinates from 'dms-conversion';
 import ky from 'ky';
 import { assign, fromPromise, setup } from 'xstate';
-import {
-  countiesInZone,
-  createProjectFormData,
-  formatDegrees,
-  roundAccurately,
-} from '../../../functions/shared/index.js';
+import { countiesInZone, createProjectFormData, roundAccurately } from '../../../functions/shared/index.js';
 
 const client = ky.extend({
   timeout: 40000,
   retry: 3,
 });
+
+const geometryServerUrl = 'https://tasks.arcgisonline.com/arcgis/rest/services/Geometry/GeometryServer';
+
+const logProjectionError = async (operation, request, error) => {
+  const response = error.response
+    ? {
+        status: error.response.status,
+        body: error.data,
+      }
+    : undefined;
+
+  console.error(`State Plane coordinate ${operation} failed`, {
+    request,
+    response,
+    error,
+  });
+
+  throw error;
+};
 
 export const updateContext = (context, field, value) => {
   if (!field) {
@@ -52,16 +66,20 @@ const project = (grid) => {
   return client
     .post('project', {
       body: formData,
-      prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+      prefix: geometryServerUrl,
     })
-    .json();
+    .json()
+    .catch((error) => logProjectionError('conversion', data, error));
+};
+
+export const dmsToDecimalDegrees = ({ degrees, minutes, seconds }) => {
+  return Number(degrees) + Number(minutes) / 60 + Number(seconds) / 3600;
 };
 
 const coordinateToDecimalDegrees = (geographic) => {
   return new Promise((resolve) => {
-    const dms = [`${formatDegrees(geographic.northing)} N`, `${formatDegrees(geographic.easting)} W`];
-
-    const [y, x] = dms.map(parseDms);
+    const y = dmsToDecimalDegrees(geographic.northing);
+    const x = -dmsToDecimalDegrees(geographic.easting);
 
     resolve({ x, y });
   });
@@ -80,38 +98,43 @@ const queryForCounty = (decimalDegrees) => {
   return client
     .post('query', {
       body: formData,
-      prefixUrl:
-        'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
+      prefix: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
     })
     .json();
 };
 
 const projectToStatePlane = (coordinates) => {
   const formData = new FormData();
+  const data = createProjectFormData({
+    type: 'geographic',
+    coordinates: {
+      zone: coordinates.zone,
+      x: coordinates.decimalDegrees.x,
+      y: coordinates.decimalDegrees.y,
+    },
+  });
 
-  Object.entries(
-    createProjectFormData({
-      type: 'geographic',
-      coordinates: {
-        zone: coordinates.zone,
-        x: coordinates.decimalDegrees.x,
-        y: coordinates.decimalDegrees.y,
-      },
-    }),
-  ).forEach(([key, value]) => {
+  Object.entries(data).forEach(([key, value]) => {
     formData.append(key, value);
   });
 
   return client
     .post('project', {
       body: formData,
-      prefixUrl: 'https://mapserv.utah.gov/arcgis/rest/services/Geometry/GeometryServer',
+      prefix: geometryServerUrl,
     })
-    .json();
+    .json()
+    .catch((error) => logProjectionError('conversion', data, error));
 };
 
 export const submissionMachine = setup({
   actions: {
+    logProjectionFailure: ({ event }) => {
+      console.error('State Plane coordinate calculation failed', {
+        actor: event.error?.actorId,
+        error: event.error,
+      });
+    },
     saveToContext: assign(({ context, event }) => {
       context = updateContext(context, event.meta, event.payload);
 
@@ -426,6 +449,7 @@ export const submissionMachine = setup({
             onError: [
               {
                 target: 'rejected',
+                actions: 'logProjectionFailure',
               },
             ],
           },
@@ -451,6 +475,7 @@ export const submissionMachine = setup({
             onError: [
               {
                 target: 'rejected',
+                actions: 'logProjectionFailure',
               },
             ],
           },
@@ -492,6 +517,7 @@ export const submissionMachine = setup({
             onError: [
               {
                 target: 'rejected',
+                actions: 'logProjectionFailure',
               },
             ],
           },
@@ -520,6 +546,7 @@ export const submissionMachine = setup({
             onError: [
               {
                 target: 'rejected',
+                actions: 'logProjectionFailure',
               },
             ],
           },
