@@ -1,7 +1,7 @@
 import Point from '@arcgis/core/geometry/Point';
 import { Transition } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
-import { useOpenClosed } from '@ugrc/utilities/hooks';
+import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import ky from 'ky';
 import { useEffect, useState } from 'react';
 import { Button } from '../../formElements/Buttons.jsx';

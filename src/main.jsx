@@ -1,14 +1,12 @@
 import '@arcgis/core/assets/esri/themes/light/main.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import {
-  FirebaseAnalyticsProvider,
-  FirebaseAppProvider,
-  FirebaseAuthProvider,
-  FirebaseFunctionsProvider,
-  FirebaseStorageProvider,
-  FirestoreProvider,
-} from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
+import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { FirebaseFunctionsProvider } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
+import { FirestoreProvider } from '@ugrc/utah-design-system/contexts/FirestoreProvider';
 import { OAuthProvider } from 'firebase/auth';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

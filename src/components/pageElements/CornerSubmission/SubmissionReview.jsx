@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useFirebaseFunctions, useFirebaseStorage } from '@ugrc/utah-design-system';
+import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useContext, useState } from 'react';

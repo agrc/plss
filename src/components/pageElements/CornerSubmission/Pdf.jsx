@@ -2,7 +2,7 @@ import { Field, Label as HeadlessLabel } from '@headlessui/react';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useFirebaseAuth } from '@ugrc/utah-design-system';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useContext } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { existingSheetSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';

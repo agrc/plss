@@ -9,25 +9,30 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer.js';
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol.js';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol.js';
 import Viewpoint from '@arcgis/core/Viewpoint';
-import MapView from '@arcgis/core/views/MapView';
+import '@arcgis/map-components/components/arcgis-map';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
-import { LayerSelector, useFirebaseAnalytics, useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
-import { getUrlParameter, setUrlParameter } from '@ugrc/utilities';
-import { useGraphicManager, useViewLoading, useViewPointZooming } from '@ugrc/utilities/hooks';
+import { LayerSelector } from '@ugrc/utah-design-system/components/LayerSelector';
+import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import useGraphicManager from '@ugrc/utilities/hooks/useGraphicManager';
+import useViewLoading from '@ugrc/utilities/hooks/useViewLoading';
+import useViewPointZooming from '@ugrc/utilities/hooks/useViewPointZooming';
+import { getUrlParameter, setUrlParameter } from '@ugrc/utilities/url';
 import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from './ErrorBoundary.jsx';
-import { normalizePointId } from './utils.js';
 import GroupButton from './mapElements/GroupButton.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
 import Township from './mapElements/Township.jsx';
+import { normalizePointId } from './utils.js';
 
 esriConfig.assetsPath = '/assets';
 
@@ -203,20 +208,20 @@ const plssPointsLayerId = 'PLSS Points';
  */
 export default function PlssMap({ color, dispatch, drawerOpen, state }) {
   const node = useRef(null);
-  const mapView = useRef();
   const pointFromUrlLoaded = useRef(false);
   const [selectorOptions, setSelectorOptions] = useState();
   const [mapState, setMapState] = useState('idle');
+  const [view, setView] = useState();
   const onlyWidth = useWindowWidth();
 
   const { currentUser } = useFirebaseAuth();
   const logEvent = useFirebaseAnalytics();
 
-  const isLoading = useViewLoading(mapView.current);
-  const { graphic, setGraphic } = useGraphicManager(mapView.current);
-  const { setGraphic: setUserGraphics } = useGraphicManager(mapView.current);
-  const { setGraphic: setGpsGraphic } = useGraphicManager(mapView.current);
-  const { setViewPoint } = useViewPointZooming(mapView.current);
+  const isLoading = useViewLoading(view);
+  const { graphic, setGraphic } = useGraphicManager(view);
+  const { setGraphic: setUserGraphics } = useGraphicManager(view);
+  const { setGraphic: setGpsGraphic } = useGraphicManager(view);
+  const { setViewPoint } = useViewPointZooming(view);
 
   const { functions } = useFirebaseFunctions();
   const myContent = httpsCallable(functions, 'getMyContent');
@@ -236,122 +241,119 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    const esriMap = new EsriMap();
-
-    mapView.current = new MapView({
-      container: node.current,
-      map: esriMap,
-      extent,
-      ui: {
-        components: ['zoom'],
-      },
+    const mapElement = node.current;
+    mapElement.map = new EsriMap();
+    mapElement.extent = extent;
+    setSelectorOptions({
+      quadWord: import.meta.env.VITE_DISCOVER_KEY,
+      basemaps: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR', 'High Contrast'],
+      operationalLayers: [
+        'Address Points',
+        {
+          label: 'Land Ownership',
+          function: () => {
+            return new VectorTileLayer({
+              url: urls.landownership,
+              opacity: 0.3,
+            });
+          },
+        },
+        {
+          label: 'Parcels',
+          function: () => {
+            return new FeatureLayer({
+              url: urls.parcels,
+              opacity: 0.5,
+              minScale: 55000,
+            });
+          },
+        },
+        {
+          label: 'PLSS',
+          defaultSelected: true,
+          function: () => {
+            return new VectorTileLayer({
+              url: urls.plss,
+              opacity: 0.5,
+              minScale: 2000000,
+            });
+          },
+        },
+        {
+          label: plssPointsLayerId,
+          defaultSelected: true,
+          function: () => {
+            return new FeatureLayer({
+              id: plssPointsLayerId,
+              url: urls.points,
+              outFields: [
+                'point_id',
+                'plss_id',
+                'label',
+                'control',
+                'longitude',
+                'latitude',
+                'county',
+                'elevation',
+                'steward',
+                'steward_second',
+                'managed_by',
+                'mrrc',
+                'monument',
+                'point_category',
+              ],
+              renderer,
+              labelingInfo: [
+                {
+                  labelPlacement: 'above-right',
+                  minScale: 20000,
+                  labelExpressionInfo: {
+                    expression: '$feature.point_id',
+                  },
+                  where: 'primary_corner=1 or mrrc=1 or monument=1',
+                  font: {
+                    family: 'Helvetica',
+                    size: 14,
+                    weight: 'bold',
+                  },
+                  symbol: {
+                    type: 'text',
+                    color: '#1e293b',
+                    haloColor: [255, 255, 255, 0.8],
+                    haloSize: 3,
+                  },
+                },
+              ],
+              minScale: level14 + 10000,
+            });
+          },
+        },
+      ],
     });
 
-    setSelectorOptions({
-      options: {
-        view: mapView.current,
-        quadWord: import.meta.env.VITE_DISCOVER_KEY,
-        basemaps: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR', 'High Contrast'],
-        operationalLayers: [
-          'Address Points',
-          {
-            label: 'Land Ownership',
-            function: () => {
-              return new VectorTileLayer({
-                url: urls.landownership,
-                opacity: 0.3,
-              });
-            },
-          },
-          {
-            label: 'Parcels',
-            function: () => {
-              return new FeatureLayer({
-                url: urls.parcels,
-                opacity: 0.5,
-                minScale: 55000,
-              });
-            },
-          },
-          {
-            label: 'PLSS',
-            defaultSelected: true,
-            function: () => {
-              return new VectorTileLayer({
-                url: urls.plss,
-                opacity: 0.5,
-                minScale: 2000000,
-              });
-            },
-          },
-          {
-            label: plssPointsLayerId,
-            defaultSelected: true,
-            function: () => {
-              return new FeatureLayer({
-                id: plssPointsLayerId,
-                url: urls.points,
-                outFields: [
-                  'point_id',
-                  'plss_id',
-                  'label',
-                  'control',
-                  'longitude',
-                  'latitude',
-                  'county',
-                  'elevation',
-                  'steward',
-                  'steward_second',
-                  'managed_by',
-                  'mrrc',
-                  'monument',
-                  'point_category',
-                ],
-                renderer,
-                labelingInfo: [
-                  {
-                    labelPlacement: 'above-right',
-                    minScale: 20000,
-                    labelExpressionInfo: {
-                      expression: '$feature.point_id',
-                    },
-                    where: 'primary_corner=1 or mrrc=1 or monument=1',
-                    font: {
-                      family: 'Helvetica',
-                      size: 14,
-                      weight: 'bold',
-                    },
-                    symbol: {
-                      type: 'text',
-                      color: '#1e293b',
-                      haloColor: [255, 255, 255, 0.8],
-                      haloSize: 3,
-                    },
-                  },
-                ],
-                minScale: level14 + 10000,
-              });
-            },
-          },
-        ],
-        position: 'top-right',
-      },
+    let cancelled = false;
+
+    void mapElement.viewOnReady().then(() => {
+      if (cancelled) {
+        return;
+      }
+
+      const mapView = mapElement.view;
+      mapView.ui.components = ['zoom'];
+      setView(mapView);
     });
 
     return () => {
-      mapView.current.destroy();
-      esriMap.destroy();
+      cancelled = true;
     };
   }, []);
 
   // move zoom widget to bottom right on larger screens
   useEffect(() => {
-    mapView.current.when(() => {
-      if (onlyWidth > 640) {
-        mapView.current.ui.move(['zoom'], 'bottom-right', 0);
-      }
-    });
-  }, [onlyWidth]);
+    if (view && onlyWidth > 640) {
+      view.ui.move(['zoom'], 'bottom-right', 0);
+    }
+  }, [onlyWidth, view]);
 
   // set view padding depending on screen size
   useEffect(() => {
@@ -359,22 +361,22 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    if (mapView.current) {
+    if (view) {
       if (onlyWidth > 640) {
-        mapView.current.padding = { left: drawerOpen ? 400 : 0, bottom: 0 };
+        view.padding = { left: drawerOpen ? 400 : 0, bottom: 0 };
       } else {
-        mapView.current.padding = { bottom: drawerOpen ? 580 : 70, left: 0 };
+        view.padding = { bottom: drawerOpen ? 580 : 70, left: 0 };
       }
     }
-  }, [onlyWidth, drawerOpen]);
+  }, [onlyWidth, drawerOpen, view]);
 
   // manage highlighted graphic
   useEffect(() => {
-    if (!mapView.current.ready) {
+    if (!view?.ready) {
       return;
     }
 
-    const plssPoints = mapView.current.map.findLayerById(plssPointsLayerId);
+    const plssPoints = view.map.findLayerById(plssPointsLayerId);
 
     if (!identifyGraphic) {
       if (plssPoints) {
@@ -384,7 +386,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       return;
     }
 
-    mapView.current.goTo(
+    view.goTo(
       new Viewpoint({
         targetGeometry: identifyGraphic.geometry,
         scale: 4500,
@@ -401,15 +403,15 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
         excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
       };
     }
-  }, [identifyGraphic]);
+  }, [identifyGraphic, view]);
 
   // handle clicks
   useEffect(() => {
-    if (!mapView.current) {
+    if (!view) {
       return;
     }
 
-    const clickHandler = mapView.current.on('click', async (event) => {
+    const clickHandler = view.on('click', async (event) => {
       switch (state.activeTool) {
         case 'add-point': {
           const point = { ...event.mapPoint.toJSON(), type: 'point' };
@@ -433,7 +435,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           break;
         }
         default: {
-          const response = await mapView.current.hitTest(event);
+          const response = await view.hitTest(event);
 
           const hits = response?.results?.filter((result) => result.layer?.id === plssPointsLayerId);
 
@@ -441,8 +443,8 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
           if (hits.length > 0) {
             payload = hits[0].graphic;
           } else {
-            if (mapView.current.scale > level14 + 1) {
-              mapView.current.goTo(
+            if (view.scale > level14 + 1) {
+              view.goTo(
                 new Viewpoint({
                   targetGeometry: event.mapPoint,
                   scale: level14,
@@ -454,7 +456,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
           logEvent('identify', {
             hits: hits.length,
-            scale: mapView.current.scale,
+            scale: view.scale,
           });
 
           setUrlParameter('POINT_ID', payload?.attributes?.point_id ?? null);
@@ -465,12 +467,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     });
 
     return () => clickHandler?.remove();
-  }, [state, dispatch, color, setGraphic, logEvent]);
+  }, [state, dispatch, color, setGraphic, logEvent, view]);
 
   useEffect(() => {
     const pointId = normalizePointId(getUrlParameter('POINT_ID', 'string'));
 
-    if (!mapView.current || pointFromUrlLoaded.current || pointId.length < 1) {
+    if (!view || pointFromUrlLoaded.current || pointId.length < 1) {
       return;
     }
 
@@ -479,7 +481,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     let cancelled = false;
 
     const identifyPointFromUrl = async () => {
-      await mapView.current.when();
+      await view.when();
 
       if (cancelled) {
         return;
@@ -489,7 +491,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       try {
         const pointLayer =
-          mapView.current?.map.findLayerById(plssPointsLayerId) ??
+          view.map.findLayerById(plssPointsLayerId) ??
           new FeatureLayer({
             url: urls.points,
           });
@@ -518,7 +520,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       logEvent('identify', {
         hits: features.length,
-        scale: mapView.current.scale,
+        scale: view.scale,
         source: 'url',
       });
 
@@ -535,7 +537,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
     return () => {
       cancelled = true;
     };
-  }, [dispatch, logEvent]);
+  }, [dispatch, logEvent, view]);
 
   // update graphic on color change
   useEffect(() => {
@@ -595,7 +597,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
       setUserGraphics();
       dispatch({ type: 'map/userPoints', payload: [] });
     }
-  }, [dispatch, setUserGraphics, content?.data?.points, status, currentUser]);
+  }, [dispatch, setUserGraphics, content?.data?.points, status, currentUser, view]);
 
   // add and zoom to gps location
   useEffect(() => {
@@ -605,18 +607,18 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
     logEvent('gps-on');
 
-    mapView.current.when(async () => {
-      await mapView.current.goTo(
+    view?.when(async () => {
+      await view.goTo(
         new Viewpoint({
           targetGeometry: gpsGraphic.graphic.geometry,
-          scale: gpsGraphic.scale ?? mapView.current.scale,
+          scale: gpsGraphic.scale ?? view.scale,
         }),
         { duration: 1000 },
       );
 
       setGpsGraphic(gpsGraphic.graphic);
     });
-  }, [gpsGraphic, setGpsGraphic, logEvent]);
+  }, [gpsGraphic, setGpsGraphic, logEvent, view]);
 
   // zoom to the center state object
   useEffect(() => {
@@ -649,51 +651,59 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }) {
 
       setViewPoint(vp);
     }
-  }, [state.center, setViewPoint, logEvent]);
+  }, [state.center, setViewPoint, logEvent, view]);
 
   return (
     <ErrorBoundary FallbackComponent={DefaultFallback}>
       <>
         <section className="ugrc__map">
           <div className={clsx(loadingCss, isLoading || mapState === 'loading' ? '' : 'opacity-0')}></div>
-          <div ref={node} className="h-screen w-full bg-white"></div>
+          <arcgis-map ref={node} className="h-screen w-full bg-white">
+            {selectorOptions ? <LayerSelector {...selectorOptions} slot="top-right" /> : null}
+            {view ? (
+              <div
+                slot={onlyWidth > 640 ? 'bottom-right' : 'top-left'}
+                className="mt-18 flex flex-col gap-1 sm:mt-0 sm:mr-10 sm:flex-row"
+              >
+                <GroupButton>
+                  <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
+                    <h2 className="mb-2 text-2xl font-bold">Quick finder tools</h2>
+                    <TabGroup>
+                      <TabList className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
+                        {tabs.map((item) => (
+                          <Tab
+                            key={item}
+                            className={({ selected }) =>
+                              clsx(
+                                'w-full rounded-lg py-2.5 leading-5 font-medium',
+                                'ring-white/60 ring-offset-2 ring-offset-sky-400 focus:ring-2 focus:outline-hidden',
+                                selected
+                                  ? 'border border-sky-600 bg-sky-500 text-white shadow-sm hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
+                                  : 'text-sky-700 hover:bg-sky-600/20',
+                              )
+                            }
+                          >
+                            {item}
+                          </Tab>
+                        ))}
+                      </TabList>
+                      <TabPanels className="mx-4">
+                        <TabPanel>
+                          <Township dispatch={dispatch} apiKey={import.meta.env.VITE_API_KEY} />
+                        </TabPanel>
+                        <TabPanel>
+                          <MonumentRecord dispatch={dispatch} />
+                        </TabPanel>
+                      </TabPanels>
+                    </TabGroup>
+                  </section>
+                </GroupButton>
+                <MyLocation dispatch={dispatch} />
+                <HomeButton view={view} extent={extent} />
+              </div>
+            ) : null}
+          </arcgis-map>
         </section>
-        {selectorOptions ? <LayerSelector {...selectorOptions}></LayerSelector> : null}
-        <HomeButton view={mapView.current} extent={extent} width={onlyWidth} />
-        <MyLocation view={mapView.current} dispatch={dispatch} width={onlyWidth} />
-        <GroupButton view={mapView.current} width={onlyWidth}>
-          <section className="mx-auto grid max-w-prose gap-2 text-sky-900">
-            <h2 className="mb-2 text-2xl font-bold">Quick finder tools</h2>
-            <TabGroup>
-              <TabList className="mb-3 flex space-x-1 rounded-xl bg-sky-500/20 p-1">
-                {tabs.map((item) => (
-                  <Tab
-                    key={item}
-                    className={({ selected }) =>
-                      clsx(
-                        'w-full rounded-lg py-2.5 leading-5 font-medium',
-                        'ring-white/60 ring-offset-2 ring-offset-sky-400 focus:ring-2 focus:outline-hidden',
-                        selected
-                          ? 'border border-sky-600 bg-sky-500 text-white shadow-sm hover:border-sky-700 hover:bg-sky-600 focus:border-sky-500 focus:ring-sky-600 active:bg-sky-700'
-                          : 'text-sky-700 hover:bg-sky-600/20',
-                      )
-                    }
-                  >
-                    {item}
-                  </Tab>
-                ))}
-              </TabList>
-              <TabPanels className="mx-4">
-                <TabPanel>
-                  <Township dispatch={dispatch} apiKey={import.meta.env.VITE_API_KEY} />
-                </TabPanel>
-                <TabPanel>
-                  <MonumentRecord dispatch={dispatch} />
-                </TabPanel>
-              </TabPanels>
-            </TabGroup>
-          </section>
-        </GroupButton>
       </>
     </ErrorBoundary>
   );

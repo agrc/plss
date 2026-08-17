@@ -1,4 +1,4 @@
-import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
+import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 
 import { Button } from '../formElements/Buttons.jsx';
 

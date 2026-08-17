@@ -1,4 +1,4 @@
-import { useFirebaseAnalytics } from '@ugrc/utah-design-system';
+import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { useEffect } from 'react';
 
 export default function usePageView(page, data) {

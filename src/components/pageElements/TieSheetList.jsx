@@ -1,6 +1,6 @@
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
-import { useFirebaseStorage } from '@ugrc/utah-design-system';
+import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
@@ -58,8 +58,7 @@ const TieSheetList = ({ blmPointId, children }) => {
           <div className="mt-2 mb-3">
             <Note>
               {accessibleDisclaimerPrefix}
-              <Link href="mailto:ugrc-plss-administrators@utah.gov">ugrc-plss-administrators@utah.gov</Link>
-              .
+              <Link href="mailto:ugrc-plss-administrators@utah.gov">ugrc-plss-administrators@utah.gov</Link>.
             </Note>
           </div>
         )}

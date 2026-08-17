@@ -1,9 +1,7 @@
-import {
-  FirebaseAnalyticsProvider,
-  FirebaseAppProvider,
-  FirebaseAuthProvider,
-  FirebaseStorageProvider,
-} from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
+import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import Images from './Images.jsx';
 

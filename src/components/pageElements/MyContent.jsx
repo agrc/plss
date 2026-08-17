@@ -1,7 +1,10 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useFirebaseAuth, useFirebaseFunctions, useFirebaseStorage, useFirestore } from '@ugrc/utah-design-system';
-import { useOpenClosed } from '@ugrc/utilities/hooks';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
+import { useFirestore } from '@ugrc/utah-design-system/contexts/FirestoreProvider';
+import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import { clsx } from 'clsx';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
