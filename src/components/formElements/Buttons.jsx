@@ -1,5 +1,5 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
-import { useFirebaseAuth } from '@ugrc/utah-design-system';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { clsx } from 'clsx';
 
 /**

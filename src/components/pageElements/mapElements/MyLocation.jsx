@@ -1,5 +1,4 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
-import { useMapReady } from '@ugrc/utilities/hooks';
 import { clsx } from 'clsx';
 import { forwardRef, useEffect, useRef } from 'react';
 import useGeolocation from './useGeoLocation.js';
@@ -7,17 +6,14 @@ import useGeolocation from './useGeoLocation.js';
 /**
  * @typedef {Object} MyLocationProps
  * @property {function} [dispatch]
- * @property {Object} [view]
- * @property {number} [width]
  */
 
 /**
  * @type {React.FC<MyLocationProps>}
  */
-export default function MyLocation({ view, dispatch, width }) {
+export default function MyLocation({ dispatch }) {
   const node = useRef();
   const count = useRef(1);
-  const ready = useMapReady(view);
   const [state, send] = useGeolocation();
   const { position } = state.context;
 
@@ -33,19 +29,6 @@ export default function MyLocation({ view, dispatch, width }) {
       count.current++;
     }
   }, [dispatch, position]);
-
-  useEffect(() => {
-    if (ready && node.current) {
-      view?.ui?.add(node.current, width > 640 ? 'bottom-right' : 'top-left', 2);
-    }
-    const handle = node.current;
-
-    return () => view?.ui?.remove(handle);
-  }, [view, ready, width]);
-
-  if (!ready) {
-    return null;
-  }
 
   return <GpsButton ref={node} state={state} send={send} />;
 }

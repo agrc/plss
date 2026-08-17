@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { FirebaseAnalyticsProvider, FirebaseAppProvider, FirebaseStorageProvider } from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
+import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import MonumentRecord from './MonumentRecord.jsx';
 
 let config = {

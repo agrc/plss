@@ -1,5 +1,5 @@
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useLocalStorage } from '@ugrc/utilities/hooks';
+import useLocalStorage from '@ugrc/utilities/hooks/useLocalStorage';
 import { clsx } from 'clsx';
 import { lazy, useContext, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

@@ -1,6 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useFirebaseAuth } from '@ugrc/utah-design-system';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { Fragment, useContext, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { imagesSchema as schema } from '../../../../functions/shared/cornerSubmission/Schema.js';

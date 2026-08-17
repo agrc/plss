@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useFirebaseAuth, useFirebaseFunctions } from '@ugrc/utah-design-system';
+import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { httpsCallable } from 'firebase/functions';
 import { useMemo } from 'react';
 import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';

@@ -1,11 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  FirebaseAnalyticsProvider,
-  FirebaseAppProvider,
-  FirebaseAuthProvider,
-  FirebaseFunctionsProvider,
-  FirebaseStorageProvider,
-} from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
+import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { FirebaseFunctionsProvider } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';

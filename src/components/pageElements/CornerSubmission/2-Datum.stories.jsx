@@ -1,4 +1,5 @@
-import { FirebaseAnalyticsProvider, FirebaseAppProvider } from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
 import CoordinatePicker from './Datum.jsx';
 

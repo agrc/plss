@@ -1,11 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  FirebaseAnalyticsProvider,
-  FirebaseAppProvider,
-  FirebaseAuthProvider,
-  FirebaseFunctionsProvider,
-  FirebaseStorageProvider,
-} from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
+import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
+import { FirebaseFunctionsProvider } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
+import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { useImmerReducer } from 'use-immer';
 import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';

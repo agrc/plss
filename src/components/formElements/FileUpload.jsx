@@ -1,4 +1,4 @@
-import { useFirebaseStorage } from '@ugrc/utah-design-system';
+import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { clsx } from 'clsx';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
