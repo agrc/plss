@@ -11,22 +11,22 @@ const SubmissionNotice = lazy(() => import('./SubmissionNotice.tsx'));
 const MonumentPdf = lazy(() => import('./Pdf.tsx'));
 const Metadata = lazy(() => import('./Metadata.tsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
-const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));
+const GridCoordinates = lazy(() => import('./GridCoordinates.tsx'));
 const Images = lazy(() => import('./Images.tsx'));
 const Review = lazy(() => import('./SubmissionReview.jsx'));
 const SubmissionSuccess = lazy(() => import('./SubmissionSuccess.tsx'));
 const GeographicHeight = lazy(() =>
-  import('./GeographicCoordinates.jsx').then((module) => ({
+  import('./GeographicCoordinates.tsx').then((module) => ({
     default: module.GeographicHeight,
   })),
 );
 const Latitude = lazy(() =>
-  import('./GeographicCoordinates.jsx').then((module) => ({
+  import('./GeographicCoordinates.tsx').then((module) => ({
     default: module.Latitude,
   })),
 );
 const Longitude = lazy(() =>
-  import('./GeographicCoordinates.jsx').then((module) => ({
+  import('./GeographicCoordinates.tsx').then((module) => ({
     default: module.Longitude,
   })),
 );

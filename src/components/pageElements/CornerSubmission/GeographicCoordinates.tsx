@@ -60,14 +60,14 @@ export const Latitude = () => {
   }, [setFocus]);
 
   useEffect(() => {
-    if (state.matches('form.entering alternate latitude')) {
+    if (state.matches({ form: 'entering alternate latitude' })) {
       send({ type: 'SET_COORDINATES' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (state.matches('form.entering alternate latitude') && state.matches('projecting.done')) {
+    if (state.matches({ form: 'entering alternate latitude' }) && state.matches({ projecting: 'done' })) {
       reset({ northing: state.context?.geographic?.northing });
     }
   }, [state, reset]);
@@ -86,7 +86,7 @@ export const Latitude = () => {
       <h2 className="text-2xl font-semibold">Location Information</h2>
       <p className="text-sm leading-none">Geographic Northing for {formatDatum(state.context.datum)}</p>
       <Spacer className="my-4" />
-      {state.matches('form.entering alternate latitude') && !state.matches('projecting.done') ? (
+      {state.matches({ form: 'entering alternate latitude' }) && !state.matches({ projecting: 'done' }) ? (
         <div>Projecting Grid Coordinates...</div>
       ) : (
         <NumberedForm onSubmit={typedHandleSubmit(onSubmit)}>
