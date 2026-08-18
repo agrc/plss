@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from '../pageElements/ErrorBoundary.tsx';
-import Logo from '../pageElements/Logo.jsx';
+import Logo from '../pageElements/Logo.tsx';
 
 const version = import.meta.env.PACKAGE_VERSION;
 
