@@ -3,7 +3,7 @@ import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseA
 import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
-import Pdf from './Pdf.jsx';
+import Pdf from './Pdf.tsx';
 
 export default {
   title: 'Corner/Submission/Parts',

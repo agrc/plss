@@ -6,7 +6,7 @@ import { Fragment, useContext, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.tsx';
-import FileUpload from '../../formElements/FileUpload.jsx';
+import FileUpload from '../../formElements/FileUpload.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
 import Spacer from '../../formElements/Spacer.tsx';
 import usePageView from '../../hooks/usePageView.ts';

@@ -13,7 +13,7 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { useState } from 'react';
 import { Button } from '../formElements/Buttons.tsx';
 import Card from '../formElements/Card.tsx';
-import { ObjectPreview } from '../formElements/FileUpload.jsx';
+import { ObjectPreview } from '../formElements/FileUpload.tsx';
 import { Select } from '../formElements/Select.tsx';
 import Spacer from '../formElements/Spacer.tsx';
 import usePageView from '../hooks/usePageView.ts';

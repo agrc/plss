@@ -8,7 +8,7 @@ import { Button } from '../../formElements/Buttons.tsx';
 import usePageView from '../../hooks/usePageView.ts';
 import DefaultFallback from '../ErrorBoundary.jsx';
 const SubmissionNotice = lazy(() => import('./SubmissionNotice.tsx'));
-const MonumentPdf = lazy(() => import('./Pdf.jsx'));
+const MonumentPdf = lazy(() => import('./Pdf.tsx'));
 const Metadata = lazy(() => import('./Metadata.tsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
 const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Button } from '../formElements/Buttons.tsx';
 import Card from '../formElements/Card.tsx';
-import FileUpload from '../formElements/FileUpload.jsx';
+import FileUpload from '../formElements/FileUpload.tsx';
 import { Input, Label } from '../formElements/Inputs.tsx';
 import Note from '../formElements/Note.tsx';
 import usePageView from '../hooks/usePageView.ts';

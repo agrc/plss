@@ -1,12 +1,6 @@
 import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { clsx } from 'clsx';
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  type StorageReference,
-  uploadBytesResumable,
-} from 'firebase/storage';
+import { deleteObject, getDownloadURL, ref, type StorageReference, uploadBytesResumable } from 'firebase/storage';
 import { type ChangeEvent, type MouseEventHandler, type ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from './Buttons.tsx';
 
@@ -25,7 +19,7 @@ type FileUploadProps = {
   value?: string;
 };
 
-const validateContentTypes = (contentType: string, contentTypes: readonly ContentType[] = []) => {
+const validateContentTypes = (contentType: string, contentTypes: readonly ContentType[] = []): [boolean, string] => {
   const found = contentTypes.find((meta) => contentType === meta.value.toLowerCase());
 
   if (found) {

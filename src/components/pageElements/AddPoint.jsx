@@ -12,7 +12,7 @@ import { CirclePicker } from 'react-color';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Button } from '../formElements/Buttons.tsx';
 import Card from '../formElements/Card.tsx';
-import FileUpload from '../formElements/FileUpload.jsx';
+import FileUpload from '../formElements/FileUpload.tsx';
 import { NumberedForm, NumberedFormSection } from '../formElements/Form.tsx';
 import { Input } from '../formElements/Inputs.tsx';
 import { LimitedTextarea } from '../formElements/LimitedTextarea.tsx';
