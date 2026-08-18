@@ -8,7 +8,7 @@ import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/Firebase
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { CirclePicker } from 'react-color';
+import { CirclePicker, type ColorResult } from 'react-color';
 import { Controller, type Resolver, type UseFormHandleSubmit, useForm, useWatch } from 'react-hook-form';
 import { Button } from '../formElements/Buttons.tsx';
 import Card from '../formElements/Card.tsx';
@@ -19,8 +19,8 @@ import { LimitedTextarea } from '../formElements/LimitedTextarea.tsx';
 import Spacer from '../formElements/Spacer.tsx';
 import { Switch } from '../formElements/Switch.tsx';
 import usePageView from '../hooks/usePageView.ts';
-import Wizard from './CornerSubmission/Wizard.tsx';
 import type { AppDispatch } from './contentTypes.ts';
+import Wizard from './CornerSubmission/Wizard.tsx';
 import ErrorMessageTag from './ErrorMessage.tsx';
 
 const numberFormatter = new Intl.NumberFormat('en-US');
@@ -132,6 +132,7 @@ export default function AddPoint({ active, color = '', geometry, dispatch, notes
       setTimeout(() => mutateReset(), 3000);
     },
   });
+  const wizardStatus = status === 'idle' ? undefined : status;
 
   const onReset = () => {
     reset(createDefaultValues(uniqueId.current));
@@ -175,7 +176,7 @@ export default function AddPoint({ active, color = '', geometry, dispatch, notes
               <LimitedTextarea
                 value={notes}
                 placeholder="these will help you remember why you are creating this point..."
-                rows="5"
+                rows={5}
                 maxLength={450}
                 field={field}
                 className="w-full text-xs"
@@ -189,7 +190,7 @@ export default function AddPoint({ active, color = '', geometry, dispatch, notes
           <label htmlFor="photos" className="sr-only">
             Add photos
           </label>
-          {new Array(imageCount).fill().map((_, i) => (
+          {Array.from({ length: imageCount }, (_, i) => (
             <Fragment key={`photo-${i + 1}-${uniqueId.current}`}>
               <Controller
                 name={`photo-${i + 1}-${uniqueId.current}` as PhotoField}
@@ -241,7 +242,7 @@ export default function AddPoint({ active, color = '', geometry, dispatch, notes
                   name="color"
                   render={({ field: { onChange } }) => (
                     <CirclePicker
-                      onChangeComplete={(event) => {
+                      onChangeComplete={(event: ColorResult) => {
                         onChange(event.hex);
                         dispatch?.({
                           type: 'add-point/color',
@@ -301,7 +302,7 @@ export default function AddPoint({ active, color = '', geometry, dispatch, notes
           </div>
         </NumberedFormSection>
         <NumberedFormSection number={0}>
-          <Wizard finish={() => mutate} clear={onReset} status={status} back={false} />
+          <Wizard finish={() => mutate} clear={onReset} status={wizardStatus} back={false} />
         </NumberedFormSection>
       </NumberedForm>
     </>

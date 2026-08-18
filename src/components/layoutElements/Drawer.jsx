@@ -15,7 +15,7 @@ const SubmissionProvider = lazy(() =>
 );
 const CornerSubmission = lazy(() => import('../pageElements/CornerSubmission/CornerSubmission.tsx'));
 const MyContent = lazy(() => import('../pageElements/MyContent.tsx'));
-const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
+const AddPoint = lazy(() => import('../pageElements/AddPoint.tsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.tsx'));
 const Profile = lazy(() => import('../pageElements/Profile.tsx'));

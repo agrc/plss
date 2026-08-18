@@ -7,7 +7,7 @@ import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/Fireb
 import { useImmerReducer } from 'use-immer';
 import reduce, { defaults } from '../reducers/AppReducer';
 import './../../index.css';
-import AddPoint from './AddPoint.jsx';
+import AddPoint from './AddPoint.tsx';
 
 let config = {
   apiKey: '',
