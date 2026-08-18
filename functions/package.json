@@ -17,6 +17,7 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^5.0.5",
     "@sendgrid/client": "^8.1.6",
+    "@ugrc/plss-shared": "file:shared",
     "base64-stream": "^1.0.0",
     "contrast-color": "^1.0.1",
     "dms-conversion": "^3.1.4",

@@ -1,5 +1,5 @@
 import { contrastColor } from 'contrast-color';
-import { getStatus } from './shared/index.js';
+import { getStatus } from '@ugrc/plss-shared';
 
 export const graphicConverter = {
   toFirestore(data) {

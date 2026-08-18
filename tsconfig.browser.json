@@ -1,0 +1,8 @@
+{
+  "extends": "@ugrc/tsconfigs/browser",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
+}

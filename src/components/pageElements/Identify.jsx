@@ -1,6 +1,6 @@
 import { ArrowDownCircleIcon } from '@heroicons/react/20/solid';
 import { CheckIcon, ExclamationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { getDefault } from '../../../functions/shared/index.js';
+import { getDefault } from '@ugrc/plss-shared';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import Spacer from '../formElements/Spacer.jsx';

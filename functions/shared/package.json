@@ -1,0 +1,21 @@
+{
+  "name": "@ugrc/plss-shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./corner-submission/options": "./dist/cornerSubmission/Options.js",
+    "./corner-submission/schema": "./dist/cornerSubmission/Schema.js",
+    "./corner-submission/blm-point-id": "./dist/cornerSubmission/blmPointId.js"
+  },
+  "dependencies": {
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}

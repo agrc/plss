@@ -1,15 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { formatDatum, keyMap } from '@ugrc/plss-shared';
+import { geographic as geographicOptions, grid as gridOptions } from '@ugrc/plss-shared/corner-submission/options';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useContext, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import {
-  geographic as geographicOptions,
-  grid as gridOptions,
-} from '../../../../functions/shared/cornerSubmission/Options.js';
-import { formatDatum, keyMap } from '../../../../functions/shared/index.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+import extractTownshipInformation from '@ugrc/plss-shared/corner-submission/blm-point-id';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { httpsCallable } from 'firebase/functions';
 import { useMemo } from 'react';
-import extractTownshipInformation from '../../../../functions/shared/cornerSubmission/blmPointId.js';
 import { Button } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
 import Note from '../../formElements/Note.jsx';

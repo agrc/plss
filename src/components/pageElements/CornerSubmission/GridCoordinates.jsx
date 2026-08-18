@@ -1,10 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { formatDatum } from '@ugrc/plss-shared';
+import { statePlaneZones, units, verticalDatums } from '@ugrc/plss-shared/corner-submission/options';
+import { gridCoordinatesSchema } from '@ugrc/plss-shared/corner-submission/schema';
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { statePlaneZones, units, verticalDatums } from '../../../../functions/shared/cornerSubmission/Options.js';
-import { gridCoordinatesSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
-import { formatDatum } from '../../../../functions/shared/index.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';

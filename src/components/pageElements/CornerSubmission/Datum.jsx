@@ -1,11 +1,11 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { geographic, grid } from '@ugrc/plss-shared/corner-submission/options';
+import { coordinatePickerSchema } from '@ugrc/plss-shared/corner-submission/schema';
 import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { geographic, grid } from '../../../../functions/shared/cornerSubmission/Options.js';
-import { coordinatePickerSchema } from '../../../../functions/shared/cornerSubmission/Schema.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';

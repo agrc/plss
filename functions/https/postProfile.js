@@ -1,6 +1,6 @@
 import { https, logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
-import { profileSchema } from '../shared/cornerSubmission/Schema.js';
+import { profileSchema } from '@ugrc/plss-shared/corner-submission/schema';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();

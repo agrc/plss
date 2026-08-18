@@ -1,16 +1,12 @@
 import { Label, Radio, RadioGroup } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { formatDatum } from '@ugrc/plss-shared';
+import { units } from '@ugrc/plss-shared/corner-submission/options';
+import { geographicHeightSchema, latitudeSchema, longitudeSchema } from '@ugrc/plss-shared/corner-submission/schema';
 import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { units } from '../../../../functions/shared/cornerSubmission/Options.js';
-import {
-  geographicHeightSchema,
-  latitudeSchema,
-  longitudeSchema,
-} from '../../../../functions/shared/cornerSubmission/Schema.js';
-import { formatDatum } from '../../../../functions/shared/index.js';
 import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';

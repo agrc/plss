@@ -1,12 +1,12 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { timeSince } from '@ugrc/plss-shared';
 import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useEffect, useState } from 'react';
-import { timeSince } from '../../../functions/shared/index.js';
 import { Button, Link } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import { dateFormatter, sortFunction } from './utils.js';

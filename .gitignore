@@ -3,6 +3,8 @@ lerna-debug.log*
 
 dist
 dist-ssr
+functions/lib
+functions/shared/dist
 *.local
 
 # Editor directories and files

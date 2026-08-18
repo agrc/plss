@@ -1,8 +1,8 @@
 import { https, logger } from 'firebase-functions/v2';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import { parseDms } from 'dms-conversion';
-import * as schemas from '../shared/cornerSubmission/Schema.js';
-import { formatDegrees } from '../shared/index.js';
+import * as schemas from '@ugrc/plss-shared/corner-submission/schema';
+import { formatDegrees } from '@ugrc/plss-shared';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();

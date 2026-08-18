@@ -1,12 +1,12 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { profileSchema as schema } from '@ugrc/plss-shared/corner-submission/schema';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { httpsCallable } from 'firebase/functions';
 import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { profileSchema as schema } from '../../../functions/shared/cornerSubmission/Schema.js';
 import { Button } from '../formElements/Buttons.jsx';
 import Card from '../formElements/Card.jsx';
 import FileUpload from '../formElements/FileUpload.jsx';
