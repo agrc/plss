@@ -1,4 +1,4 @@
-import { Input } from './Inputs.jsx';
+import { Input } from './Inputs.tsx';
 
 export default {
   title: 'Form Elements/Input',

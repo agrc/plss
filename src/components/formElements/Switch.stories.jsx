@@ -1,4 +1,4 @@
-import { Switch } from './Switch.jsx';
+import { Switch } from './Switch.tsx';
 
 export default {
   title: 'Form Elements/Switch',

@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { Select } from './Select.jsx';
+import { Select } from './Select.tsx';
 
 export default {
   title: 'Form Elements/Select',

@@ -1,4 +1,4 @@
-import { LimitedTextarea } from './LimitedTextarea.jsx';
+import { LimitedTextarea } from './LimitedTextarea.tsx';
 
 export default {
   title: 'Form Elements/LimitedTextarea',
