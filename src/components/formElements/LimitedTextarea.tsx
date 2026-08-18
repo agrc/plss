@@ -14,7 +14,7 @@ type LimitedTextareaProps<TFieldValues extends FieldValues> = {
   value?: string;
 };
 
-export const LimitedTextarea = <TFieldValues extends FieldValues,>({
+export const LimitedTextarea = <TFieldValues extends FieldValues>({
   rows = 3,
   placeholder,
   value = '',
@@ -23,7 +23,7 @@ export const LimitedTextarea = <TFieldValues extends FieldValues,>({
   errors,
   className,
   disabled = false,
-}) => {
+}: LimitedTextareaProps<TFieldValues>) => {
   const fieldValue = typeof field.value === 'string' ? field.value : value;
   const { limit, remaining } = useMaxLength({
     value: fieldValue,
@@ -36,7 +36,6 @@ export const LimitedTextarea = <TFieldValues extends FieldValues,>({
         disabled={disabled}
         id={field.name}
         rows={rows}
-        type="textarea"
         maxLength={limit}
         placeholder={placeholder}
         className={clsx(
@@ -47,7 +46,7 @@ export const LimitedTextarea = <TFieldValues extends FieldValues,>({
         value={fieldValue}
       ></textarea>
       <CharactersRemaining limit={limit} remaining={remaining} />
-      <ErrorMessage errors={errors} name={field.name} as={ErrorMessageTag} />
+      <ErrorMessage errors={errors} name={field.name as never} as={ErrorMessageTag} />
     </div>
   );
 };

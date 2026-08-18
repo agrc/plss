@@ -9,7 +9,7 @@ import usePageView from '../../hooks/usePageView.ts';
 import DefaultFallback from '../ErrorBoundary.jsx';
 const SubmissionNotice = lazy(() => import('./SubmissionNotice.tsx'));
 const MonumentPdf = lazy(() => import('./Pdf.jsx'));
-const Metadata = lazy(() => import('./Metadata.jsx'));
+const Metadata = lazy(() => import('./Metadata.tsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
 const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));
 const Images = lazy(() => import('./Images.jsx'));

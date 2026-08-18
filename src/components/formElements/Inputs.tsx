@@ -47,9 +47,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           name={name}
           id={name}
           type={type}
-          step={type === 'number' ? step : null}
-          min={type === 'number' ? min : null}
-          max={type === 'number' ? max : null}
+          step={type === 'number' ? step : undefined}
+          min={type === 'number' ? min : undefined}
+          max={type === 'number' ? max : undefined}
           defaultValue={value}
           placeholder={placeholder}
           onChange={onChange}
@@ -57,7 +57,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           className={classes}
           aria-required={required}
-          aria-labelledby={label ? `label.${name}` : null}
+          aria-labelledby={label ? `label.${name}` : undefined}
         />
       </div>
     );
@@ -68,7 +68,7 @@ Input.displayName = 'Input';
 type LabelProps = {
   children: ReactNode;
   className?: string;
-  htmlFor: string;
+  htmlFor?: string;
   required?: boolean;
 };
 

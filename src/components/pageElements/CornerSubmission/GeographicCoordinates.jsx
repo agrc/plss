@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
-import { Input } from '../../formElements/Inputs.jsx';
+import { Input } from '../../formElements/Inputs.tsx';
 import Spacer from '../../formElements/Spacer.tsx';
 import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../ErrorMessage.jsx';

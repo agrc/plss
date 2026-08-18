@@ -7,7 +7,6 @@ import { type Metadata as MetadataValues, metadataSchema as schema } from '@ugrc
 import { useEffect } from 'react';
 import { Controller, type Resolver, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import type { AppAction } from '../../reducers/AppReducer.ts';
 import { Link } from '../../formElements/Buttons.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
 import { Input, Label } from '../../formElements/Inputs.tsx';
@@ -17,9 +16,13 @@ import Spacer from '../../formElements/Spacer.tsx';
 import { Switch } from '../../formElements/Switch.tsx';
 import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.tsx';
+import type { AppAction } from '../../reducers/AppReducer.ts';
 import Wizard from './Wizard.tsx';
 
-type MetadataFormValues = Omit<MetadataValues, 'accuracy' | 'collected' | 'corner' | 'description' | 'notes' | 'section' | 'status'> & {
+type MetadataFormValues = Omit<
+  MetadataValues,
+  'accuracy' | 'collected' | 'corner' | 'description' | 'notes' | 'section' | 'status'
+> & {
   accuracy: MetadataValues['accuracy'] | '';
   collected: MetadataValues['collected'] | '';
   corner: MetadataValues['corner'] | '';
@@ -209,7 +212,7 @@ const Metadata = ({ dispatch }: MetadataProps) => {
                 <LimitedTextarea
                   value={defaultValues[field.name]}
                   placeholder="Describe the monument"
-                  rows="5"
+                  rows={5}
                   maxLength={1000}
                   field={field}
                   errors={formState.errors}
@@ -229,7 +232,7 @@ const Metadata = ({ dispatch }: MetadataProps) => {
                 <LimitedTextarea
                   value={defaultValues[field.name]}
                   placeholder="Information about the method used to locate the monument (GPS, traditional survey instrument); type of GPS receiver; if TURN GPS network was used; if two hour OPUS solution was taken; weather conditions; etc."
-                  rows="5"
+                  rows={5}
                   maxLength={1000}
                   field={field}
                   errors={formState.errors}

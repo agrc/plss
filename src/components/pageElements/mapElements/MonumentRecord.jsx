@@ -5,7 +5,7 @@ import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import ky from 'ky';
 import { useEffect, useState } from 'react';
 import { Button } from '../../formElements/Buttons.tsx';
-import { Input } from '../../formElements/Inputs.jsx';
+import { Input } from '../../formElements/Inputs.tsx';
 import usePageView from '../../hooks/usePageView.ts';
 import TieSheetList from '../TieSheetList.jsx';
 
