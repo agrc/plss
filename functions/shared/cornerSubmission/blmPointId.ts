@@ -1,5 +1,17 @@
-const extractTownshipInformation = (pointId) => {
-  const meridian = parseInt(pointId.slice(2, 4));
+type Meridian = {
+  number: number;
+  name: 'Salt Lake' | 'Uintah Special';
+  abbr: 'SL' | 'US';
+};
+
+export type TownshipInformation = {
+  meridian: Meridian;
+  township: string;
+  range: string;
+};
+
+const extractTownshipInformation = (pointId: string): TownshipInformation => {
+  const meridian = Number.parseInt(pointId.slice(2, 4));
   const township = extractNumberAndDirection(pointId.slice(5, 9)).label;
   const range = extractNumberAndDirection(pointId.slice(10, 14)).label;
 
@@ -14,11 +26,11 @@ const extractTownshipInformation = (pointId) => {
   };
 };
 
-const extractNumberAndDirection = (part) => {
+const extractNumberAndDirection = (part: string) => {
   const number = part.slice(0, 2);
   const fractionIdentifier = part[2];
   const direction = part[3];
-  let fraction;
+  let fraction: string;
 
   // 1 for 1/4 township, 2 for 1/2 township, 3 for 3/4 township)
   switch (fractionIdentifier) {

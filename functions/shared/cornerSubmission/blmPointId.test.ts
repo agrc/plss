@@ -1,5 +1,5 @@
-import parseTownshipInformation from './blmPointId';
 import { expect, test } from 'vitest';
+import parseTownshipInformation from './blmPointId.js';
 
 const id = 'UT260060S0020E0_240400';
 
