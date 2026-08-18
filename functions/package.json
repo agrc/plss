@@ -5,15 +5,15 @@
   "type": "module",
   "main": "lib/index.js",
   "scripts": {
-    "build": "pnpm run clean && pnpm --filter @ugrc/plss-shared build && tsc -p tsconfig.build.json && cp -R fonts lib/fonts",
+    "build": "pnpm clean && pnpm --filter @ugrc/plss-shared build && tsc -p tsconfig.build.json && cp -R fonts lib/fonts",
     "clean": "rm -rf lib",
     "deploy": "firebase deploy --only functions",
     "lint": "eslint ./ --ext .js --ignore-path ../.eslintignore",
     "logs": "firebase functions:log",
-    "serve": "pnpm run build && firebase emulators:start --only functions",
-    "shell": "pnpm run build && firebase functions:shell",
+    "serve": "pnpm build && firebase emulators:start --only functions",
+    "shell": "pnpm build && firebase functions:shell",
     "format": "prettier \"src/**/*.{js,jsx,ts,json,mjs,md,mdx}\" --write",
-    "start": "pnpm run shell",
+    "start": "pnpm shell",
     "test": "vitest --silent --coverage --ui --open"
   },
   "dependencies": {
