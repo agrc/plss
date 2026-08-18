@@ -337,11 +337,6 @@ export const submissionMachine = setup({
                 guard: 'is existing submission',
               },
             ],
-            SKIP: {
-              target: 'reviewing',
-              guard: 'is existing submission',
-              actions: ['clearDatum', 'clearGridCoordinates', 'clearGeographicCoordinates'],
-            },
             RESET: {},
             UPDATE_CONTEXT: {
               target: 'choosing datum',
