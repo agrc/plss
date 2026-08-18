@@ -2,7 +2,10 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formatDatum } from '@ugrc/plss-shared';
 import { statePlaneZones, units, verticalDatums } from '@ugrc/plss-shared/corner-submission/options';
-import { type GridCoordinates as GridCoordinateValues, gridCoordinatesSchema } from '@ugrc/plss-shared/corner-submission/schema';
+import {
+  type GridCoordinates as GridCoordinateValues,
+  gridCoordinatesSchema,
+} from '@ugrc/plss-shared/corner-submission/schema';
 import { useEffect } from 'react';
 import { Controller, type Resolver, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
@@ -15,7 +18,10 @@ import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.tsx';
 import Wizard from './Wizard.tsx';
 
-type GridFormValues = Omit<GridCoordinateValues, 'easting' | 'elevation' | 'northing' | 'unit' | 'verticalDatum' | 'zone'> & {
+type GridFormValues = Omit<
+  GridCoordinateValues,
+  'easting' | 'elevation' | 'northing' | 'unit' | 'verticalDatum' | 'zone'
+> & {
   easting: GridCoordinateValues['easting'] | '';
   elevation: GridCoordinateValues['elevation'] | '';
   northing: GridCoordinateValues['northing'] | '';

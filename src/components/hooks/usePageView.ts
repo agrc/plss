@@ -12,11 +12,8 @@ export default function usePageView(page: string, data?: EventData) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // we only want this to run on load
 
-  const logEvent = (
-    _analytics: AnalyticsCompatibilityToken,
-    event: string,
-    eventData?: EventData,
-  ) => firebaseLogEvent(event, eventData);
+  const logEvent = (_analytics: AnalyticsCompatibilityToken, event: string, eventData?: EventData) =>
+    firebaseLogEvent(event, eventData);
 
   return { analytics: null, logEvent } as const;
 }

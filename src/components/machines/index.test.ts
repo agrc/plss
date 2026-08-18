@@ -27,9 +27,7 @@ describe('updateContext', () => {
   });
 
   test('it can update an existing property on an existing object', () => {
-    expect(
-      updateContext({ property: 'value' }, 'property', 'new value'),
-    ).toEqual({
+    expect(updateContext({ property: 'value' }, 'property', 'new value')).toEqual({
       property: 'new value',
     });
   });
