@@ -7,8 +7,8 @@ import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/Firebase
 import { FirebaseFunctionsProvider } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { FirestoreProvider } from '@ugrc/utah-design-system/contexts/FirestoreProvider';
-import { OAuthProvider } from 'firebase/auth';
 import type { FirebaseOptions } from 'firebase/app';
+import { OAuthProvider } from 'firebase/auth';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './components/app/App.tsx';
