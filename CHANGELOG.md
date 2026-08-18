@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.6.17-rc.2](https://github.com/agrc/plss/compare/v3.6.17-rc.1...v3.6.17-rc.2) (2026-08-18)
+
+
+### Features
+
+* add better busy indicator to map ([44f2ff8](https://github.com/agrc/plss/commit/44f2ff822317c09aeb62c4994a92773230528021)), refs [#551](https://github.com/agrc/plss/issues/551)
+
+
+### Bug Fixes
+
+* better layout for quick finder tools dialog ([795a79e](https://github.com/agrc/plss/commit/795a79ea4e426a83939198953e0bbeefa6f4fb56))
+* default MMRC project toggle to yes ([b982ee2](https://github.com/agrc/plss/commit/b982ee2c8fb6f2327f35714a8cb088e7bba49f24)), refs [#549](https://github.com/agrc/plss/issues/549)
+* make menu ribbon more visible and functional on mobile ([553b138](https://github.com/agrc/plss/commit/553b138a73af6a2498277805f8597ac1a4114824)), refs [#160](https://github.com/agrc/plss/issues/160)
+* more natural sorting of TRS ranges with decimals ([ac72af0](https://github.com/agrc/plss/commit/ac72af046a7e3cee59bda5eaf804766e9f27ab5e)), refs [#203](https://github.com/agrc/plss/issues/203)
+* remove skip button on "Location Information" screen ([9f8250e](https://github.com/agrc/plss/commit/9f8250ee96915f704a2882cc81199b04b638d409)), refs [#550](https://github.com/agrc/plss/issues/550)
+
 ## [3.6.17-rc.1](https://github.com/agrc/plss/compare/v3.6.16...v3.6.17-rc.1) (2026-08-18)
 
 
