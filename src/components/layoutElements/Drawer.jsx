@@ -20,7 +20,7 @@ const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
 const Profile = lazy(() => import('../pageElements/Profile.jsx'));
 const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
-const Legend = lazy(() => import('../pageElements/Legend.jsx'));
+const Legend = lazy(() => import('../pageElements/Legend.tsx'));
 
 /**
  * @typedef {Object} DrawerProps
