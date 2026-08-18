@@ -3,7 +3,7 @@ import { CheckIcon, ExclamationCircleIcon, XMarkIcon } from '@heroicons/react/24
 import { getDefault } from '@ugrc/plss-shared';
 import { Button, Link } from '../formElements/Buttons.tsx';
 import Card from '../formElements/Card.tsx';
-import Spacer from '../formElements/Spacer.jsx';
+import Spacer from '../formElements/Spacer.tsx';
 import TieSheetList from './TieSheetList.jsx';
 
 const managed_counties = {

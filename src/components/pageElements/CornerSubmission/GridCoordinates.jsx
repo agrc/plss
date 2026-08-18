@@ -7,12 +7,12 @@ import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.tsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
 import { Input } from '../../formElements/Inputs.jsx';
-import { Select } from '../../formElements/Select.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
+import { Select } from '../../formElements/Select.tsx';
+import Spacer from '../../formElements/Spacer.tsx';
 import usePageView from '../../hooks/usePageView.ts';
-import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.tsx';
 import Wizard from './Wizard.tsx';
 
 const defaults = {

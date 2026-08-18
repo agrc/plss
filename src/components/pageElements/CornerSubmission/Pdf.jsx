@@ -9,11 +9,11 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Link } from '../../formElements/Buttons.tsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
+import Spacer from '../../formElements/Spacer.tsx';
 import { Switch } from '../../formElements/Switch.jsx';
 import usePageView from '../../hooks/usePageView.ts';
-import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
+import ErrorMessageTag from '../../pageElements/ErrorMessage.tsx';
 import Wizard from './Wizard.tsx';
 
 const defaults = {

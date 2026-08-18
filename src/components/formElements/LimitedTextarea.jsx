@@ -1,6 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { clsx } from 'clsx';
-import ErrorMessageTag from '../pageElements/ErrorMessage.jsx';
+import ErrorMessageTag from '../pageElements/ErrorMessage.tsx';
 
 /**
  * @typedef {Object} LimitedTextareaProps

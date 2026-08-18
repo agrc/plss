@@ -2,23 +2,26 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { geographic, grid } from '@ugrc/plss-shared/corner-submission/options';
-import { coordinatePickerSchema } from '@ugrc/plss-shared/corner-submission/schema';
+import {
+  type CoordinatePicker as CoordinatePickerValues,
+  coordinatePickerSchema,
+} from '@ugrc/plss-shared/corner-submission/schema';
 import { clsx } from 'clsx';
-import { useContext, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { type CoordinatePicker as CoordinatePickerValues } from '@ugrc/plss-shared/corner-submission/schema';
+import { useEffect, useState } from 'react';
+import { Controller, type Resolver, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.tsx';
-import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
-import { Select } from '../../formElements/Select.jsx';
-import Spacer from '../../formElements/Spacer.jsx';
+import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
+import { Select } from '../../formElements/Select.tsx';
+import Spacer from '../../formElements/Spacer.tsx';
 import usePageView from '../../hooks/usePageView.ts';
-import ErrorMessageTag from '../ErrorMessage.jsx';
+import ErrorMessageTag from '../ErrorMessage.tsx';
 import Wizard from './Wizard.tsx';
 
 const formats = { Geographic: geographic, Grid: grid };
 
 const defaultTabIndex = 0;
+type DatumFormValues = { datum: CoordinatePickerValues['datum'] | '' };
 
 const getOpenTabIndex = (datum: string) => {
   if (!datum) {
@@ -29,9 +32,9 @@ const getOpenTabIndex = (datum: string) => {
     return defaultTabIndex;
   }
 
-  datum = datum.split('-')[0];
+  const datumType = datum.split('-')[0] ?? '';
 
-  const index = datum === 'grid' ? 1 : 0;
+  const index = datumType === 'grid' ? 1 : 0;
 
   return index;
 };
@@ -46,18 +49,23 @@ const CoordinatePicker = () => {
     datum = '';
   }
 
-  const { control, formState, handleSubmit, reset, setFocus } = useForm<CoordinatePickerValues>({
-    resolver: yupResolver(coordinatePickerSchema),
-    defaultValues: { datum },
+  const { control, formState, handleSubmit, reset, setFocus } = useForm<DatumFormValues>({
+    resolver: yupResolver(coordinatePickerSchema) as Resolver<DatumFormValues>,
+    defaultValues: { datum: datum as DatumFormValues['datum'] },
   });
+  const typedHandleSubmit = handleSubmit as UseFormHandleSubmit<DatumFormValues>;
   const [selectedTab, setSelectedTab] = useState(defaultTabIndex);
 
   useEffect(() => {
     setSelectedTab(getOpenTabIndex(datum));
   }, [datum]);
 
-  const onSubmit = (payload: CoordinatePickerValues) => {
+  const onSubmit = (payload: DatumFormValues) => {
     // requires two send invocations to update context so the NEXT guards have data to work with
+    if (!payload.datum) {
+      return;
+    }
+
     send({ type: 'UPDATE_CONTEXT', meta, payload: payload.datum });
     send({ type: 'NEXT', meta, payload: payload.datum });
   };
@@ -86,7 +94,7 @@ const CoordinatePicker = () => {
           <Spacer className="my-10" />
         </>
       )}
-      <NumberedForm onSubmit={handleSubmit(onSubmit)}>
+      <NumberedForm onSubmit={typedHandleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Coordinate system">
           <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
             <TabList className="flex space-x-1 rounded-xl bg-sky-500/20 p-1">
@@ -117,7 +125,7 @@ const CoordinatePicker = () => {
                       <Select
                         label={false}
                         placeholder="Coordinate System"
-                        options={options}
+                        options={[...options]}
                         required={true}
                         {...field}
                       />
@@ -129,7 +137,7 @@ const CoordinatePicker = () => {
             </TabPanels>
           </TabGroup>
         </NumberedFormSection>
-        <NumberedFormSection number={0}>
+        <NumberedFormSection number={0} title={undefined}>
           <Wizard back={() => send({ type: 'BACK' })} next={true} clear={onReset} />
         </NumberedFormSection>
       </NumberedForm>

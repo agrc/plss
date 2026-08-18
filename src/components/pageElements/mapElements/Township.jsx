@@ -5,7 +5,7 @@ import ky from 'ky';
 import naturalCompare from 'natural-compare-lite';
 import { useState } from 'react';
 import { Button } from '../../formElements/Buttons.tsx';
-import { Select } from '../../formElements/Select.jsx';
+import { Select } from '../../formElements/Select.tsx';
 import usePageView from '../../hooks/usePageView.ts';
 import { sl, ub } from './townships.js';
 

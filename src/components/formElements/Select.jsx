@@ -1,10 +1,27 @@
 import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { clsx } from 'clsx';
-import { forwardRef, Fragment } from 'react';
+import { forwardRef, Fragment, type ReactNode } from 'react';
 
-const getDefaultValue = (value, placeholder, options) => {
-  if ((value?.length ?? 0) < 1) {
+type SelectOption = string | { disabled?: boolean; label?: ReactNode; value?: string };
+type SelectProps = {
+  disabled?: boolean;
+  label?: ReactNode | false;
+  name?: string;
+  onChange?: (value: string) => void;
+  options?: readonly SelectOption[];
+  placeholder?: string;
+  required?: boolean;
+  value?: SelectOption;
+};
+
+const isOptionObject = (option: SelectOption): option is Exclude<SelectOption, string> =>
+  typeof option === 'object';
+
+const getOptionValue = (option: SelectOption) => (isOptionObject(option) ? option.value : option);
+
+const getDefaultValue = (value: SelectOption | undefined, placeholder: string | undefined, options: readonly SelectOption[] | undefined) => {
+  if (!value) {
     return placeholder;
   }
 
@@ -12,14 +29,14 @@ const getDefaultValue = (value, placeholder, options) => {
     return placeholder;
   }
 
-  if (Object.keys(options[0]).includes('value')) {
-    const label = options.find((option) => option.value === (value?.value ?? value))?.label;
+  if (isOptionObject(options[0])) {
+    const label = options.find((option) => getOptionValue(option) === getOptionValue(value));
 
-    if (!label) {
+    if (!label || !isOptionObject(label)) {
       return placeholder;
     }
 
-    return label;
+    return label.label;
   }
 
   const option = options.find((option) => option === value);
@@ -31,22 +48,7 @@ const getDefaultValue = (value, placeholder, options) => {
   return option;
 };
 
-/**
- * @typedef {Object} SelectProps
- * @property {string} [name] - The property name used by react hook form
- * @property {string|boolean} [label] - The text of the accompanied label otherwise it will be the name of the input
- * @property {boolean} [required] - If the input is required in the form
- * @property {string} [placeholder] - The help text to display
- * @property {boolean} [disabled] - If the input is disabled
- * @property {Array<string|Object>} [options] - The options to place inside the select
- * @property {string|Object} [value]
- * @property {function} [onChange]
- */
-
-/**
- * @type {React.ForwardRefExoticComponent<SelectProps>}
- */
-export const Select = forwardRef(({ disabled, label, name, required, options, value, onChange, placeholder }, ref) => {
+export const Select = forwardRef<HTMLButtonElement, SelectProps>(({ disabled, label, name, required, options, value, onChange, placeholder }, ref) => {
   return (
     <Listbox
       value={value}
@@ -56,9 +58,9 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
         'opacity-25': disabled,
       })}
       as="div"
-      onChange={(newValue) => {
+      onChange={(newValue: SelectOption) => {
         if (onChange) {
-          onChange(newValue?.value ?? newValue);
+          onChange(getOptionValue(newValue));
         }
       }}
     >
@@ -88,12 +90,12 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
                   className={({ focus }) =>
                     clsx('relative cursor-default py-2 pr-4 pl-10 select-none', {
                       'bg-sky-100 text-sky-900': focus,
-                      'text-sky-900': !focus && !option?.disabled,
-                      'cursor-not-allowed text-slate-400': option?.disabled ?? false,
+                      'text-sky-900': !focus && !(isOptionObject(option) && option.disabled),
+                      'cursor-not-allowed text-slate-400': isOptionObject(option) && (option.disabled ?? false),
                     })
                   }
                   value={option}
-                  disabled={option?.disabled ?? false}
+                  disabled={isOptionObject(option) && (option.disabled ?? false)}
                 >
                   {({ selected }) => (
                     <>
@@ -103,7 +105,7 @@ export const Select = forwardRef(({ disabled, label, name, required, options, va
                           'font-normal': !selected,
                         })}
                       >
-                        {option?.label ?? option}
+                        {isOptionObject(option) ? option.label : option}
                       </span>
                       {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
