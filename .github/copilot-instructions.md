@@ -22,17 +22,17 @@ This is the CI bootstrap and succeeds with the committed lockfile. `pnpm-workspa
 Run validation in this order after relevant changes:
 
 ```sh
-CI=1 pnpm run test:ci
-pnpm run lint
-pnpm run build
+CI=1 pnpm test:ci
+pnpm lint
+pnpm build
 ```
 
 - `test:ci` starts a temporary Firebase Storage emulator on port 9199 and runs all Vitest suites, including Functions, shared schemas, state machines, UI utilities, and `storage.rules.test.mjs`. It passed locally with 9 files / 323 tests in about 17 seconds after emulator startup. `CI=1` is essential locally because `pnpm test` includes `--ui --open`; without CI it opens the Vitest UI and remains interactive. Firebase may report a nonfatal Java `Unsafe` deprecation warning or use logging port 4501 if 4500 is occupied.
-- `lint` is the PR gate: root ESLint uses `@ugrc/eslint-config` and fails on any warning. The Functions package has a legacy local lint script, but root `pnpm run lint` covers repository CI.
+- `lint` is the PR gate: root ESLint uses `@ugrc/eslint-config` and fails on any warning. The Functions package has a legacy local lint script, but root `pnpm lint` covers repository CI.
 - `build` runs Vite and writes the deployable Firebase Hosting bundle to `dist/`, including copied ArcGIS assets. The production build passed locally. A generated-CSS pseudo-class warning can appear and is currently nonfatal.
-- `pnpm run format` modifies files. Use `pnpm exec prettier --check <changed-files>` when a formatting-only validation is needed; Prettier organizes imports and Tailwind classes.
+- `pnpm format` modifies files. Use `pnpm exec prettier --check <changed-files>` when a formatting-only validation is needed; Prettier organizes imports and Tailwind classes.
 
-For interactive development, first authenticate with Firebase, copy `.env` to `.env.local`, and copy `functions/.secret` to `functions/.secret.local`; populate the existing placeholders with authorized development values. Never commit either local file or secrets. Then run `pnpm start` and use `http://localhost:5173/`. It starts Vite and Auth/Functions/Firestore/Storage emulators; it waits for the Firebase emulator UI at port 4000. It is a long-running command, not a PR validation. `pnpm run dev:firebase-state` imports and exports `.emulator-data`; use it only when persistent emulator data is wanted. Deploy commands require repository/cloud credentials and should not be run by a cloud agent.
+For interactive development, first authenticate with Firebase, copy `.env` to `.env.local`, and copy `functions/.secret` to `functions/.secret.local`; populate the existing placeholders with authorized development values. Never commit either local file or secrets. Then run `pnpm start` and use `http://localhost:5173/`. It starts Vite and Auth/Functions/Firestore/Storage emulators; it waits for the Firebase emulator UI at port 4000. It is a long-running command, not a PR validation. `pnpm dev:firebase-state` imports and exports `.emulator-data`; use it only when persistent emulator data is wanted. Deploy commands require repository/cloud credentials and should not be run by a cloud agent.
 
 ## Architecture and change locations
 
@@ -45,6 +45,6 @@ For interactive development, first authenticate with Firebase, copy `.env` to `.
 
 ## CI and delivery
 
-`.github/workflows/pull_request.yml` is the required PR pipeline: pnpm 11, Node from `package.json`, frozen install, Java 21, `pnpm run test:ci`, then `pnpm run lint`. Preview deployment occurs only after those pass and only for eligible non-`dev` PR authors; it builds with `pnpm run build --mode dev` and protected Firebase credentials. Do not depend on previews to validate a change.
+`.github/workflows/pull_request.yml` is the required PR pipeline: pnpm 11, Node from `package.json`, frozen install, Java 21, `pnpm test:ci`, then `pnpm lint`. Preview deployment occurs only after those pass and only for eligible non-`dev` PR authors; it builds with `pnpm build --mode dev` and protected Firebase credentials. Do not depend on previews to validate a change.
 
-Pushes to `main` and `dev` use the release automation. Published prereleases deploy to staging and releases deploy to production through protected credentials; both build with `pnpm run build`. Repository root also contains `README.md` (local setup and domain context), `firebase.json`, rules/index configuration, `vite.config.js`, `eslint.config.js`, `pnpm-lock.yaml`, `CHANGELOG.md`, and `AI_ATTESTATION.md`.
+Pushes to `main` and `dev` use the release automation. Published prereleases deploy to staging and releases deploy to production through protected credentials; both build with `pnpm build`. Repository root also contains `README.md` (local setup and domain context), `firebase.json`, rules/index configuration, `vite.config.js`, `eslint.config.js`, `pnpm-lock.yaml`, `CHANGELOG.md`, and `AI_ATTESTATION.md`.

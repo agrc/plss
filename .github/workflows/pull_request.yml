@@ -45,14 +45,17 @@ jobs:
       - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
-
-      - name: 🧪 Run tests
-        run: pnpm run test:ci
+          distribution: "temurin"
+          java-version: "21"
 
       - name: 🔍 Lint
-        run: pnpm run lint
+        run: pnpm lint
+
+      - name: ✅ Type Check
+        run: pnpm check
+
+      - name: 🧪 Run tests
+        run: pnpm test:ci
 
   deploy-preview:
     name: Create preview
@@ -72,7 +75,7 @@ jobs:
         uses: agrc/firebase-website-deploy-composite-action@v2
         with:
           preview: yes
-          build-command: pnpm run build --mode dev
+          build-command: pnpm build --mode dev
           project-id: ${{ secrets.PROJECT_ID }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
