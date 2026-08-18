@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatDatum, keyMap } from '@ugrc/plss-shared';
 import { geographic as geographicOptions, grid as gridOptions } from '@ugrc/plss-shared/corner-submission/options';
-import type { ExistingSheet, Images as SubmissionImages, Metadata } from '@ugrc/plss-shared/corner-submission/schema';
+import type { ExistingSheet, Metadata, Images as SubmissionImages } from '@ugrc/plss-shared/corner-submission/schema';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { httpsCallable } from 'firebase/functions';
@@ -9,11 +9,11 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { type ReactNode, useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import type { GeographicCoordinates, GridCoordinates, SubmissionMachineContext } from '../../machines/index.ts';
 import { Link } from '../../formElements/Buttons.tsx';
 import Card from '../../formElements/Card.tsx';
 import { ObjectPreview } from '../../formElements/FileUpload.tsx';
 import usePageView from '../../hooks/usePageView.ts';
+import type { GeographicCoordinates, GridCoordinates, SubmissionMachineContext } from '../../machines/index.ts';
 import Wizard from './Wizard.tsx';
 
 type ReviewContext = SubmissionMachineContext & {
@@ -81,12 +81,16 @@ const Review = () => {
         )}
         {context.type === 'new' && (
           <MonumentPreview status={status}>
-            <PdfPreview path={data?.data} />
+            <PdfPreview path={typeof data?.data === 'string' ? data.data : undefined} />
           </MonumentPreview>
         )}
       </div>
       <div className="mt-8 flex justify-center">
-        <Wizard back={() => send({ type: 'BACK' })} status={mutationStatus === 'idle' ? undefined : mutationStatus} finish={() => mutate(context)} />
+        <Wizard
+          back={() => send({ type: 'BACK' })}
+          status={mutationStatus === 'idle' ? undefined : mutationStatus}
+          finish={() => mutate(context)}
+        />
       </div>
     </>
   );
@@ -109,7 +113,7 @@ const MetadataReview = ({ accuracy, collected, corner, description, mrrc, notes,
       </div>
       <div className="flex justify-between">
         <span className="font-semibold">Collected on</span>
-        <span className="ml-4">{collected}</span>
+        <span className="ml-4">{String(collected)}</span>
       </div>
       <div className="flex justify-between">
         <span className="font-semibold">Accuracy</span>
@@ -159,7 +163,7 @@ const CoordinateReview = ({ datum, grid, geographic }: CoordinateReviewProps) =>
     );
   }
 
-  let calculated = geographicOptions[0].label;
+  let calculated: string = geographicOptions[0].label;
   const [type] = datum.split('-');
 
   if (type === 'geographic') {
@@ -221,11 +225,11 @@ const GridCoordinateReview = ({ grid }: Pick<CoordinateReviewProps, 'grid'>) => 
   <>
     <div className="flex justify-between">
       <span className="font-semibold">Zone</span>
-      <span>{keyMap.zone(grid?.zone)}</span>
+      <span>{keyMap.zone(grid?.zone ?? '')}</span>
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Unit</span>
-      <span>{keyMap.unit(grid?.unit)}</span>
+      <span>{keyMap.unit(grid?.unit ?? '')}</span>
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Coordinates</span>
@@ -262,7 +266,7 @@ const GeographicCoordinateReview = ({ geographic }: Pick<CoordinateReviewProps, 
     </div>
     <div className="flex justify-between">
       <span className="font-semibold">Ellipsoid Height</span>
-      <span>{`${geographic?.elevation} ${keyMap.unit(geographic?.unit)}`}</span>
+      <span>{`${geographic?.elevation} ${keyMap.unit(geographic?.unit ?? '')}`}</span>
     </div>
   </>
 );
@@ -316,7 +320,9 @@ const useStorageUrl = (path?: string): string | undefined => {
       return;
     }
 
-    getDownloadURL(ref(storage, path)).then(setUrl).catch(() => setUrl(undefined));
+    getDownloadURL(ref(storage, path))
+      .then(setUrl)
+      .catch(() => setUrl(undefined));
   }, [path, storage]);
 
   return url;
@@ -343,7 +349,7 @@ const AttachmentReview = ({ path }: { path?: string }) => {
   return (
     <Card>
       <h4 className="-mt-2 text-lg font-bold">Existing Monument Record Sheet</h4>
-      <div className="contents h-[400px] max-w-[300px] justify-self-center">
+      <div className="contents h-100 max-w-75 justify-self-center">
         <Link href={data} target="_blank" rel="noopener noreferrer">
           Uploaded Tiesheet
         </Link>
@@ -369,7 +375,7 @@ const MonumentPreview = ({ status, children }: MonumentPreviewProps) => {
       <h4 className="-mt-2 text-lg font-bold">Monument Record Sheet Preview</h4>
       {status === 'pending' && 'generating preview...'}
       {status === 'success' && (
-        <div className="contents h-[400px] max-w-[300px] justify-self-center border">
+        <div className="contents h-100 max-w-75 justify-self-center border">
           <ErrorBoundary fallback={<div>The preview could not be accessed.</div>}>{children}</ErrorBoundary>
         </div>
       )}

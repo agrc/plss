@@ -13,7 +13,7 @@ const Metadata = lazy(() => import('./Metadata.tsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
 const GridCoordinates = lazy(() => import('./GridCoordinates.tsx'));
 const Images = lazy(() => import('./Images.tsx'));
-const Review = lazy(() => import('./SubmissionReview.jsx'));
+const Review = lazy(() => import('./SubmissionReview.tsx'));
 const SubmissionSuccess = lazy(() => import('./SubmissionSuccess.tsx'));
 const GeographicHeight = lazy(() =>
   import('./GeographicCoordinates.tsx').then((module) => ({

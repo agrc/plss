@@ -4,7 +4,7 @@ import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseA
 import { FirebaseFunctionsProvider } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
-import Review from './SubmissionReview.jsx';
+import Review from './SubmissionReview.tsx';
 
 let config = {
   apiKey: '',
