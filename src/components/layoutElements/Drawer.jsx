@@ -19,7 +19,7 @@ const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));
 const Login = lazy(() => import('../pageElements/Login.jsx'));
 const Profile = lazy(() => import('../pageElements/Profile.jsx'));
-const Welcome = lazy(() => import('../pageElements/Welcome.jsx'));
+const Welcome = lazy(() => import('../pageElements/Welcome.tsx'));
 const Legend = lazy(() => import('../pageElements/Legend.tsx'));
 
 /**

@@ -32,7 +32,7 @@ export default function Welcome({ dispatch }: WelcomeProps) {
         You can use this website to view the location of the monuments and the information about them. Navigate around
         the map and click on the PLSS points to see more information or to submit a monument record for that location.
         You will need to{' '}
-        <Button onClick={() => dispatch({ type: 'menu/toggle', payload: 'login' })} style="link">
+        <Button onClick={() => dispatch?.({ type: 'menu/toggle', payload: 'login' })} style="link">
           log in
         </Button>{' '}
         to submit a monument record.
