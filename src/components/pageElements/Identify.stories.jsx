@@ -5,7 +5,7 @@ import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/Fireb
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
-import Identify from './Identify.jsx';
+import Identify from './Identify.tsx';
 
 let config = {
   apiKey: '',

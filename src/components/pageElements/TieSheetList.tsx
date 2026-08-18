@@ -26,7 +26,7 @@ const TieSheetList = ({ blmPointId, children }: TieSheetListProps) => {
   const path = `tiesheets/${blmPointId}`;
   const fileRef = ref(storage, path);
 
-  const { data, status } = useQuery({
+  const { data, status } = useQuery<TieSheet[]>({
     enabled: blmPointId != null,
     queryKey: ['identify', blmPointId, fileRef],
     queryFn: async () => {

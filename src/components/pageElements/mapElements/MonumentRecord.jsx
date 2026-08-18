@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../formElements/Buttons.tsx';
 import { Input } from '../../formElements/Inputs.tsx';
 import usePageView from '../../hooks/usePageView.ts';
-import TieSheetList from '../TieSheetList.jsx';
+import TieSheetList from '../TieSheetList.tsx';
 
 const client = ky.create({
   prefix: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
