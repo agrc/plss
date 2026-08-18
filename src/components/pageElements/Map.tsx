@@ -15,6 +15,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useWindowWidth } from '@react-hook/window-size';
 import { useQuery } from '@tanstack/react-query';
 import { LayerSelector } from '@ugrc/utah-design-system/components/LayerSelector';
+import { BusyBar } from '@ugrc/utah-design-system/components/Spinner';
 import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
@@ -46,9 +47,6 @@ const urls = {
   plss: 'https://tiles.arcgis.com/tiles/99lidPhWCzftIe9K/arcgis/rest/services/UtahPLSS/VectorTileServer',
   points: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/PLSS_Monuments/FeatureServer/0',
 };
-
-const loadingCss =
-  'z-1 transition-all duration-700 ease-in-out absolute top-0 h-2 w-screen animate-gradient-x bg-linear-to-r from-cyan-700/90 via-teal-100/90 to-purple-600/90';
 
 const white = [0, 0, 0, 255];
 const outline = {
@@ -700,7 +698,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
     <ErrorBoundary FallbackComponent={DefaultFallback}>
       <>
         <section className="ugrc__map">
-          <div className={clsx(loadingCss, isLoading || mapState === 'loading' ? '' : 'opacity-0')}></div>
+          <BusyBar busy={isLoading || mapState === 'loading'} />
           <arcgis-map ref={node} className="h-screen w-full bg-white">
             {selectorOptions ? (
               <LayerSelector {...(selectorOptions as Parameters<typeof LayerSelector>[0])} slot="top-right" />
