@@ -2,7 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import ky from 'ky';
-import naturalCompare from 'natural-compare-lite';
+import { compare } from 'natural-orderby';
 import { useState } from 'react';
 import { Button } from '../../formElements/Buttons.tsx';
 import { Select } from '../../formElements/Select.tsx';
@@ -115,7 +115,7 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
       const data = result.attributes.pairswith
         .split('|')
         .map((value) => value.slice(1))
-        .sort(naturalCompare);
+        .sort(compare());
 
       return data;
     },
@@ -167,7 +167,7 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
         throw new Error('A township section response was returned without data.');
       }
 
-      const data = result.attributes.pairswith.split('|').sort(naturalCompare);
+      const data = result.attributes.pairswith.split('|').sort(compare());
 
       return data;
     },
