@@ -1,5 +1,5 @@
 import { useImmerReducer } from 'use-immer';
-import Drawer from '../layoutElements/Drawer.jsx';
+import Drawer from '../layoutElements/Drawer.tsx';
 import Menu from '../layoutElements/Menu.jsx';
 import Map from '../pageElements/Map.jsx';
 import reduce, { defaults } from '../reducers/AppReducer.js';
