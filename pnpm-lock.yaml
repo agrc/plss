@@ -138,6 +138,9 @@ importers:
       '@types/contrast-color':
         specifier: 1.0.3
         version: 1.0.3
+      '@types/md5':
+        specifier: ^2.3.6
+        version: 2.3.6
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
@@ -2716,6 +2719,9 @@ packages:
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
+
+  '@types/md5@2.3.6':
+    resolution: {integrity: sha512-WD69gNXtRBnpknfZcb4TRQ0XJQbUPZcai/Qdhmka3sxUR3Et8NrXoeAoknG/LghYHTf4ve795rInVYHBTQdNVA==}
 
   '@types/mdx@2.0.14':
     resolution: {integrity: sha512-T48PeuJtvLosNTPVhfnIp3i/n3a4g4Bad7YCq5k64D4u7NwDrAotikQ+5+sjtUvBmxCMlbo3dVL+C2dP0rWHzg==}
@@ -10760,6 +10766,8 @@ snapshots:
 
   '@types/long@4.0.2':
     optional: true
+
+  '@types/md5@2.3.6': {}
 
   '@types/mdx@2.0.14': {}
 

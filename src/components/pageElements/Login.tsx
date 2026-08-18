@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type { Profile as SubmissionProfile } from '@ugrc/plss-shared/corner-submission/schema';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { httpsCallable } from 'firebase/functions';
@@ -11,6 +12,11 @@ import type { AppAction } from '../reducers/AppReducer.ts';
 
 const size = 160;
 const fallback = 'mp';
+const blankProfile: Partial<SubmissionProfile> = {
+  displayName: '',
+  email: '',
+  license: '',
+};
 
 type LoginProps = {
   dispatch?: Dispatch<AppAction | undefined>;
@@ -63,12 +69,12 @@ const SignIn = () => {
 
 const Profile = ({ dispatch }: LoginProps) => {
   const { functions } = useFirebaseFunctions();
-  const getProfile = httpsCallable(functions, 'getProfile');
+  const getProfile = httpsCallable<unknown, Partial<SubmissionProfile>>(functions, 'getProfile');
   const { currentUser } = useFirebaseAuth();
   usePageView('screen-main-profile');
 
   const { data: response, status } = useQuery({
-    queryKey: ['profile', currentUser.uid],
+    queryKey: ['profile', currentUser?.uid],
     enabled: currentUser !== undefined,
     queryFn: getProfile,
     placeholderData: {
@@ -80,13 +86,14 @@ const Profile = ({ dispatch }: LoginProps) => {
     },
     staleTime: Infinity,
   });
+  const profile = response?.data ?? blankProfile;
 
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      <h2 className="text-3xl font-semibold lg:text-2xl">Welcome back, {response.data.displayName}</h2>
+      <h2 className="text-3xl font-semibold lg:text-2xl">Welcome back, {profile.displayName}</h2>
       <span className="relative">
         <span className="mr-2 inline-block h-40 w-40 overflow-hidden rounded-full border-2 border-sky-500 bg-slate-100 shadow-lg">
-          {status === 'success' && <Gravatar email={response.data.email} />}
+          {status === 'success' && <Gravatar email={profile.email ?? ''} />}
         </span>
         <svg
           className="absolute right-3 bottom-1 h-6 w-6 fill-current text-slate-800/20"
