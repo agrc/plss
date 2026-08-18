@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { normalizePointId } from './utils.js';
+import { normalizePointId } from './utils.ts';
 
 describe('normalizePointId', () => {
   test('returns an empty string when the point id is empty', () => {

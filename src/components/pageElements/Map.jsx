@@ -32,7 +32,7 @@ import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
 import MyLocation from './mapElements/MyLocation.jsx';
 import Township from './mapElements/Township.jsx';
-import { normalizePointId } from './utils.js';
+import { normalizePointId } from './utils.ts';
 
 esriConfig.assetsPath = '/assets';
 

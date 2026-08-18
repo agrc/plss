@@ -9,7 +9,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import { Submissions } from './Submissions.jsx';
+import { Submissions } from './Submissions.tsx';
 
 let config = {
   apiKey: '',

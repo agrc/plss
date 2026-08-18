@@ -15,7 +15,7 @@ type SortValues = {
 };
 
 export const sortFunction = <Item>(sortOrder: SortOrder, transform: (one: Item, two: Item) => SortValues) => {
-  return (one, two) => {
+  return (one: Item, two: Item): number => {
     const { a, b } = transform(one, two);
     switch (sortOrder) {
       case 'New to Old':

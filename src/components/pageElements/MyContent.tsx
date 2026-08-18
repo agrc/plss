@@ -19,7 +19,7 @@ import Spacer from '../formElements/Spacer.tsx';
 import usePageView from '../hooks/usePageView.ts';
 import type { AppDispatch, MyContentData, ReferencePointItem } from './contentTypes.ts';
 import { Submissions } from './Submissions.tsx';
-import { dateFormatter, type SortOrder, sortFunction } from './utils.ts';
+import { dateFormatter, sortFunction, type SortOrder } from './utils.ts';
 const tabs = ['Submissions', 'Reference Points'];
 const sortOrders: SortOrder[] = ['New to Old', 'Old to New', 'Ascending (0-9 A-Z)', 'Descending (Z-A 0-9)'];
 
@@ -152,10 +152,15 @@ const ReferencePoints = ({ items, dispatch }: ReferencePointsProps) => {
   return (
     <section className="inline-grid w-full gap-2">
       <Card>
-        <Select label="Sort order" options={sortOrders} value={sortOrder} onChange={setSortOrder}></Select>
+        <Select
+          label="Sort order"
+          options={sortOrders}
+          value={sortOrder}
+          onChange={(value) => value && setSortOrder(value as SortOrder)}
+        />
       </Card>
       <Card>
-        <ItemList dispatch={dispatch} items={items} sortOrder={sortOrder}></ItemList>
+        <ItemList dispatch={dispatch} items={items ?? []} sortOrder={sortOrder} />
       </Card>
     </section>
   );
@@ -268,7 +273,7 @@ const Item = ({ item, dispatch }: ItemProps) => {
             }
 
             try {
-              setStatus('loading');
+              setStatus('pending');
               await deleteDoc(doc(firestore, 'submitters', currentUser.uid, 'points', item.attributes.id));
               queryClient.invalidateQueries({ queryKey: ['my content'] });
               setStatus('success');

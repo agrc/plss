@@ -9,7 +9,7 @@ import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
 import './../../index.css';
-import MyContent from './MyContent.jsx';
+import MyContent from './MyContent.tsx';
 
 let config = {
   apiKey: '',

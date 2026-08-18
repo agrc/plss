@@ -61,7 +61,7 @@ export default function Profile({ dispatch }: ProfileProps) {
   const { data: response, status: profileStatus } = useQuery({
     queryKey: ['profile', uid],
     enabled: currentUser !== undefined,
-    queryFn: getProfile,
+    queryFn: () => getProfile(),
     placeholderData: {
       data: {
         displayName: currentUser?.displayName ?? '',
@@ -110,12 +110,12 @@ export default function Profile({ dispatch }: ProfileProps) {
       <form onSubmit={typedHandleSubmit(onSubmit)}>
         <Card>
           <h2 className="mb-4 text-2xl font-bold">Personal Information</h2>
-          {profileStatus === 'loading' ? (
+          {profileStatus === 'pending' ? (
             <p>Loading...</p>
           ) : (
             <>
               <Input label="Name" required={true} {...register('displayName')} />
-              <ErrorMessage errors={formState.errors} name="name" as={ErrorMessageTag} />
+              <ErrorMessage errors={formState.errors} name="displayName" as={ErrorMessageTag} />
               <Input label="Email" required={true} {...register('email')} />
               <ErrorMessage errors={formState.errors} name="email" as={ErrorMessageTag} />
               <Input label="Surveyor License" required={false} {...register('license')} />

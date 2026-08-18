@@ -96,10 +96,10 @@ const Submission = ({ item, dispatch }: SubmissionProps) => {
     getDownloadURL(ref(storage, storagePath))
       .then(setUrl)
       .catch((error) => {
-          console.error('error getting download URL for', error, storagePath);
-          logEvent('download-submission-error', {
-            document: item.key,
-          });
+        console.error('error getting download URL for', error, storagePath);
+        logEvent('download-submission-error', {
+          document: item.key,
+        });
       });
   }, [item.key, logEvent, storage, storagePath]);
 
@@ -107,7 +107,7 @@ const Submission = ({ item, dispatch }: SubmissionProps) => {
     <div className="relative flex flex-col text-base">
       <span className="font-semibold">{id}</span>
       <div className="absolute top-0 right-0">
-        <span className="flex flex-col text-xs text-slate-500 select-none" alt={dateFormatter.format(submission)}>
+        <span className="flex flex-col text-xs text-slate-500 select-none" title={dateFormatter.format(submission)}>
           <span>submitted</span>
           <span>{timeSince(submission)}</span>
         </span>
