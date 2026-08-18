@@ -27,7 +27,6 @@ const extraFields = [
   'extra10',
 ] as const;
 
-type ExtraField = (typeof extraFields)[number];
 type ImagesFormValues = {
   [Key in keyof ImagesValues]: ImagesValues[Key] | '';
 };

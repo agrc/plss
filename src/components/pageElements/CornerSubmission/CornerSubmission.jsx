@@ -12,7 +12,7 @@ const MonumentPdf = lazy(() => import('./Pdf.tsx'));
 const Metadata = lazy(() => import('./Metadata.tsx'));
 const CoordinatePicker = lazy(() => import('./Datum.jsx'));
 const GridCoordinates = lazy(() => import('./GridCoordinates.jsx'));
-const Images = lazy(() => import('./Images.jsx'));
+const Images = lazy(() => import('./Images.tsx'));
 const Review = lazy(() => import('./SubmissionReview.jsx'));
 const SubmissionSuccess = lazy(() => import('./SubmissionSuccess.tsx'));
 const GeographicHeight = lazy(() =>

@@ -3,7 +3,7 @@ import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseA
 import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
-import Images from './Images.jsx';
+import Images from './Images.tsx';
 
 let config = {
   apiKey: '',
