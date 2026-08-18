@@ -7,16 +7,16 @@ import { metadataSchema as schema } from '@ugrc/plss-shared/corner-submission/sc
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Link } from '../../formElements/Buttons.jsx';
+import { Link } from '../../formElements/Buttons.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';
 import { LimitedTextarea } from '../../formElements/LimitedTextarea.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
 import { Switch } from '../../formElements/Switch.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 const defaults = {
   section: '',

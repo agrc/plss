@@ -1,6 +1,7 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { clsx } from 'clsx';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, MouseEventHandler, ReactNode, Ref } from 'react';
 
 /**
  * @typedef {Object} LogInButtonProps
@@ -117,7 +118,16 @@ const buttonGroupLeft = 'border-r-0 rounded-l-full';
 const buttonGroupRight = 'border-l-0 rounded-r-full';
 const buttonGroupMiddle = 'border-x-0';
 
-const buttonClasses = (style, buttonGroup) => {
+export type ButtonStyle = 'primary' | 'secondary' | 'alternate' | 'link';
+export type ButtonState = 'idle' | 'disabled' | 'pending' | 'success' | 'error';
+
+type ButtonGroup = {
+  left?: boolean;
+  middle?: boolean;
+  right?: boolean;
+};
+
+const buttonClasses = (style: ButtonStyle, buttonGroup?: ButtonGroup): string => {
   return clsx(
     style !== 'link' &&
       'flex min-h-8 w-fit cursor-pointer items-center justify-center border-2 px-7 py-1 transition-all duration-200 ease-in-out focus:ring-2 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
@@ -132,22 +142,15 @@ const buttonClasses = (style, buttonGroup) => {
   );
 };
 
-/**
- * @typedef {Object} ButtonProps
- * @property {string} [name] - The property name used by react hook form
- * @property {React.ReactNode} children - The children to display on the button
- * @property {'primary'|'secondary'|'alternate'|'link'} [style] - The style of button
- * @property {'idle'|'disabled'|'pending'|'success'|'error'} [state] - The state of button
- * @property {'button'|'submit'|'reset'} [type] - The property name used by react hook form
- * @property {function} [inputRef] - The ref property for use with registering with react hook form
- * @property {function} [onClick] - The function to execute when the button is clicked
- * @property {boolean} [dark]
- * @property {Object} [buttonGroup]
- */
+type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'style' | 'ref'> & {
+  children: ReactNode;
+  style?: ButtonStyle;
+  state?: ButtonState;
+  inputRef?: Ref<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  buttonGroup?: ButtonGroup;
+};
 
-/**
- * @type {React.FC<ButtonProps>}
- */
 export const Button = ({
   children,
   name,
@@ -157,13 +160,13 @@ export const Button = ({
   inputRef,
   onClick,
   buttonGroup,
-}) => {
+}: ButtonProps) => {
   return (
     <button
       type={type}
       name={name}
       ref={inputRef}
-      disabled={['disabled', 'pending', 'error'].includes(state)}
+      disabled={state ? ['disabled', 'pending', 'error'].includes(state) : false}
       onClick={onClick}
       className={buttonClasses(style, buttonGroup)}
     >
@@ -188,20 +191,13 @@ export const Button = ({
   );
 };
 
-/**
- * @typedef {Object} LinkProps
- * @property {React.ReactNode} children
- * @property {string} [href]
- * @property {string} [target]
- * @property {string} [rel]
- * @property {'primary'|'secondary'|'alternate'|'link'} [style] - The style of button
- * @property {Object} [buttonGroup]
- */
+type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children' | 'style'> & {
+  children: ReactNode;
+  style?: ButtonStyle;
+  buttonGroup?: ButtonGroup;
+};
 
-/**
- * @type {React.FC<LinkProps>}
- */
-export const Link = ({ href, children, target, rel, buttonGroup, style = 'link' }) => {
+export const Link = ({ href, children, target, rel, buttonGroup, style = 'link' }: LinkProps) => {
   const attributes = {
     target,
     rel,

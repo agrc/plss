@@ -2,7 +2,7 @@ import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseSt
 import { clsx } from 'clsx';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
-import { Button } from './Buttons.jsx';
+import { Button } from './Buttons.tsx';
 
 const validateContentTypes = (contentType, contentTypes) => {
   const found = contentTypes.find((meta) => contentType === meta.value.toLowerCase());

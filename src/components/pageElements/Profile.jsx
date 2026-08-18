@@ -7,12 +7,12 @@ import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/Firebase
 import { httpsCallable } from 'firebase/functions';
 import { useEffect } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { Button } from '../formElements/Buttons.jsx';
-import Card from '../formElements/Card.jsx';
+import { Button } from '../formElements/Buttons.tsx';
+import Card from '../formElements/Card.tsx';
 import FileUpload from '../formElements/FileUpload.jsx';
 import { Input, Label } from '../formElements/Inputs.jsx';
-import Note from '../formElements/Note.jsx';
-import usePageView from '../hooks/usePageView.jsx';
+import Note from '../formElements/Note.tsx';
+import usePageView from '../hooks/usePageView.ts';
 import ErrorMessageTag from './ErrorMessage.jsx';
 
 const defaultValues = {

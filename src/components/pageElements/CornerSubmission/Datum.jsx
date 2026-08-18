@@ -7,13 +7,13 @@ import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../ErrorMessage.jsx';
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 const formats = { Geographic: geographic, Grid: grid };
 

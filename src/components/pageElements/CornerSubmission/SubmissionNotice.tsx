@@ -1,47 +1,46 @@
 import { useQuery } from '@tanstack/react-query';
 import extractTownshipInformation from '@ugrc/plss-shared/corner-submission/blm-point-id';
+import type { Profile } from '@ugrc/plss-shared/corner-submission/schema';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/FirebaseFunctionsProvider';
 import { httpsCallable } from 'firebase/functions';
 import { useMemo } from 'react';
-import { Button } from '../../formElements/Buttons.jsx';
-import Card from '../../formElements/Card.jsx';
-import Note from '../../formElements/Note.jsx';
+import { Button } from '../../formElements/Buttons.js';
+import Card from '../../formElements/Card.js';
+import Note from '../../formElements/Note.js';
 
-/**
- * @typedef {Object} SubmissionNoticeProps
- * @property {string} pointId
- * @property {string} county
- * @property {function} toggle
- */
+type SubmissionNoticeProps = {
+  pointId: string;
+  county?: string;
+  toggle: () => void;
+};
 
-/**
- * @type {React.FC<SubmissionNoticeProps>}
- */
-export default function SubmissionNotice({ pointId, county, toggle }) {
+export default function SubmissionNotice({ pointId, county, toggle }: SubmissionNoticeProps) {
   const { currentUser } = useFirebaseAuth();
 
   const townshipInformation = useMemo(() => extractTownshipInformation(pointId), [pointId]);
 
   const { functions } = useFirebaseFunctions();
-  const getProfile = httpsCallable(functions, 'getProfile');
+  const getProfile = httpsCallable<undefined, Partial<Profile>>(functions, 'getProfile');
+  const fallbackProfile: Partial<Profile> = {
+    displayName: currentUser?.displayName ?? '',
+    email: currentUser?.email ?? '',
+    license: '',
+  };
 
   const { data } = useQuery({
-    queryKey: ['profile', currentUser.uid],
-    enabled: currentUser !== undefined,
-    queryFn: getProfile,
+    queryKey: ['profile', currentUser?.uid],
+    enabled: Boolean(currentUser),
+    queryFn: () => getProfile(),
     placeholderData: {
-      data: {
-        displayName: currentUser?.displayName ?? '',
-        email: currentUser?.email ?? '',
-        license: '',
-      },
+      data: fallbackProfile,
     },
     staleTime: Infinity,
   });
+  const profile = data?.data ?? fallbackProfile;
 
   const location = {
-    county: county,
+    county: county ?? 'Unknown',
     meridian: townshipInformation.meridian.abbr,
     township: townshipInformation.township,
     range: townshipInformation.range,
@@ -56,11 +55,11 @@ export default function SubmissionNotice({ pointId, county, toggle }) {
         </Note>
         <div className="flex justify-between">
           <span className="font-semibold">Submitted By</span>
-          <span>{data.data.displayName}</span>
+          <span>{profile.displayName}</span>
         </div>
         <div className="flex justify-between">
           <span className="font-semibold">Surveyor License</span>
-          <span>{data.data.license}</span>
+          <span>{profile.license}</span>
         </div>
         <div className="flex justify-between">
           <span className="font-semibold">BLM Point #</span>

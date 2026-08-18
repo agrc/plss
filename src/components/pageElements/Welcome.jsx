@@ -1,5 +1,5 @@
-import { Button, Link } from '../formElements/Buttons.jsx';
-import usePageView from '../hooks/usePageView.jsx';
+import { Button, Link } from '../formElements/Buttons.tsx';
+import usePageView from '../hooks/usePageView.ts';
 
 /**
  * @typedef {Object} WelcomeProps

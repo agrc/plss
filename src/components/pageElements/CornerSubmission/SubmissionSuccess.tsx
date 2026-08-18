@@ -1,15 +1,13 @@
-import { Button } from '../../formElements/Buttons.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import type { Dispatch } from 'react';
+import { Button } from '../../formElements/Buttons.js';
+import usePageView from '../../hooks/usePageView.js';
+import type { AppAction } from '../../reducers/AppReducer.js';
 
-/**
- * @typedef {Object} SubmissionSuccessProps
- * @property {function} [dispatch]
- */
+type SubmissionSuccessProps = {
+  dispatch: Dispatch<AppAction | undefined>;
+};
 
-/**
- * @type {React.FC<SubmissionSuccessProps>}
- */
-export default function SubmissionSuccess({ dispatch }) {
+export default function SubmissionSuccess({ dispatch }: SubmissionSuccessProps) {
   usePageView('screen-submission-success');
 
   return (

@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import ky from 'ky';
 import { useEffect, useState } from 'react';
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.tsx';
 import { Input } from '../../formElements/Inputs.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import TieSheetList from '../TieSheetList.jsx';
 
 const client = ky.create({

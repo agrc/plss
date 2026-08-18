@@ -11,9 +11,9 @@ import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../ErrorMessage.jsx';
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 const defaults = {
   seconds: '',

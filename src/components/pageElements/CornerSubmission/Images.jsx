@@ -5,13 +5,13 @@ import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthP
 import { Fragment, useContext, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.tsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 const limit = 10;
 const defaults = {

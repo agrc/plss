@@ -62,11 +62,7 @@ const client = ky.extend({
 
 const geometryServerUrl = 'https://tasks.arcgisonline.com/arcgis/rest/services/Geometry/GeometryServer';
 
-const logProjectionError = async (
-  operation: string,
-  request: unknown,
-  error: unknown,
-): Promise<never> => {
+const logProjectionError = async (operation: string, request: unknown, error: unknown): Promise<never> => {
   const httpError = error as {
     response?: Response;
     data?: unknown;
@@ -117,9 +113,7 @@ export const updateContext = <T extends Record<string, unknown>>(
   return target;
 };
 
-const project = async (
-  grid: GridCoordinates | undefined,
-): Promise<ProjectionResponse> => {
+const project = async (grid: GridCoordinates | undefined): Promise<ProjectionResponse> => {
   if (!grid) {
     throw new Error('Grid coordinates are required for projection');
   }
@@ -148,17 +142,11 @@ const project = async (
     .catch((error) => logProjectionError('conversion', data, error));
 };
 
-export const dmsToDecimalDegrees = ({
-  degrees,
-  minutes,
-  seconds,
-}: Dms): number => {
+export const dmsToDecimalDegrees = ({ degrees, minutes, seconds }: Dms): number => {
   return Number(degrees) + Number(minutes) / 60 + Number(seconds) / 3600;
 };
 
-const coordinateToDecimalDegrees = (
-  geographic: GeographicCoordinates | undefined,
-): Promise<Point> => {
+const coordinateToDecimalDegrees = (geographic: GeographicCoordinates | undefined): Promise<Point> => {
   if (!geographic) {
     throw new Error('Geographic coordinates are required');
   }
@@ -171,9 +159,7 @@ const coordinateToDecimalDegrees = (
   });
 };
 
-const queryForCounty = async (
-  decimalDegrees: Point | undefined,
-): Promise<CountyResponse> => {
+const queryForCounty = async (decimalDegrees: Point | undefined): Promise<CountyResponse> => {
   if (!decimalDegrees) {
     throw new Error('Decimal degree coordinates are required');
   }
@@ -239,9 +225,7 @@ export const submissionMachine = setup({
   actions: {
     logProjectionFailure: ({ event }) => {
       const actor =
-        typeof event.error === 'object' &&
-        event.error !== null &&
-        'actorId' in event.error
+        typeof event.error === 'object' && event.error !== null && 'actorId' in event.error
           ? event.error.actorId
           : undefined;
       console.error('State Plane coordinate calculation failed', {
@@ -277,35 +261,23 @@ export const submissionMachine = setup({
     'is geographic datum': ({ context }) => context.datum?.split('-')[0] === 'geographic',
   },
   actors: {
-    project: fromPromise<ProjectionResponse, GridCoordinates | undefined>(
-      ({ input }) => project(input),
+    project: fromPromise<ProjectionResponse, GridCoordinates | undefined>(({ input }) => project(input)),
+    coordinateToDecimalDegrees: fromPromise<Point, GeographicCoordinates | undefined>(({ input }) =>
+      coordinateToDecimalDegrees(input),
     ),
-    coordinateToDecimalDegrees: fromPromise<
-      Point,
-      GeographicCoordinates | undefined
-    >(({ input }) => coordinateToDecimalDegrees(input)),
-    queryForCounty: fromPromise<CountyResponse, Point | undefined>(({ input }) =>
-      queryForCounty(input),
+    queryForCounty: fromPromise<CountyResponse, Point | undefined>(({ input }) => queryForCounty(input)),
+    projectToStatePlane: fromPromise<ProjectionResponse, { decimalDegrees?: Point; zone?: StatePlaneZone | '' }>(
+      ({ input }) =>
+        projectToStatePlane({
+          decimalDegrees: input.decimalDegrees,
+          zone: input.zone,
+        }),
     ),
-    projectToStatePlane: fromPromise<
-      ProjectionResponse,
-      { decimalDegrees?: Point; zone?: StatePlaneZone | '' }
-    >(({ input }) =>
-      projectToStatePlane({
-        decimalDegrees: input.decimalDegrees,
-        zone: input.zone,
-      }),
-    ),
-    formatResults: fromPromise<DmsArrays, { decimalDegrees: Point }>(
-      ({ input: { decimalDegrees } }) => {
-        const dmsCoords = new DmsCoordinates(
-          decimalDegrees.y,
-          decimalDegrees.x,
-        );
+    formatResults: fromPromise<DmsArrays, { decimalDegrees: Point }>(({ input: { decimalDegrees } }) => {
+      const dmsCoords = new DmsCoordinates(decimalDegrees.y, decimalDegrees.x);
 
-        return Promise.resolve(dmsCoords.dmsArrays);
-      },
-    ),
+      return Promise.resolve(dmsCoords.dmsArrays);
+    }),
   },
 }).createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5SwK4CMC2BLWssHsA7AOgDN8AnDYrCAGzAGJYAXAQwpYAJVMc8iAbQAMAXUSgADvjwsChCSAAeiAKwAOVcQCMqgGwAmPeoOrtu-QBoQAT0TrhAFmIB2RwE5P+9wGYD7-wBfQOtebFx5MkpqWgZmdk4edHCBQkFtcSQQaVl5RRUEDS1dQ2NTc1UrW3tK4lNhYW0XVUd1Nsdg0OT+SPIqYjYICCxCKC4MMHYINnZGADkAUQANABURTKkZLDkifPsTHT1HYT09YQC9dzbrOwQj92J3Dy9HbQN1Rx8XTpAwnqIov1BsNRuNJoMZmxGAAlBYAZQWazEihy2zyWQK2mEqh8xD0fhMLhcnncwneN0Q+OcDRpel0Pj0Lh8Pz+EQBfWoAGMABb4Lag6YsFAYebLJEbbJbHYKDFqTQ6fRGExmCx6CkIbRfbR4s7qbRHJyvDQs7pskgc4g8vl4AUzYWi1bpCWo6V7QrykpK8qq9UGFzatyeJlfMnqI4mvhmwFc3n8saC+0AIQAggBhADS6xRUvRoAKRQVpWVFSqtxcDWIjlUDSaSs+jm+IV+ptS0ctsZt8btIpTGad2dyu1l7uKirKKsqauqhU1dWe7lUBlM6iJqgjKV60Xb1pGXaFIrh6YAkgAFLNZF255Ry0dF72T9XuXSPRxHHxvdTuJnvdf-c1bq04y4BMRVhBFxQHNEhzzRAlz0PFWk+OlNB8T4DB8dU3n0R5dWxbFVCeU5fyjC1AM7YDu0YABVE8ABFkxWBYAH1UwAeTmRjHWRC8c2g68NQcPEFz8FpHAMMTy3UTCDBOSszhcdQ-AaHxKjXJtWVbC0wEIFgwAoXcuDYOhdIoQgZjALgoH0iAuE5PkKBBczYAdCCeMHGUYJHQsvQnUtYIMJoEM+MxGnaNxiM0rdtJMgyjJMszdMs6zbPsxzdOcxZHQySDXWHAtPXHEsp1ucxjErV8WmxRljHUCLN36aK9Ni4y9ISiyrNoFLKDSuBGF7TNuM2dy3Xysdix9adxO0ZwfCeV5hBXU5GWZdSW3q6hGv00E4ta8yks6uzupGJy+rTTNsrcqCPP40a7184rEF0dDDgWvUv3MNpGy6SNIoanSmu2lrTL2jqbMOhzjvSmF4URc8hqut0mng5TSU0T9xJcAxfR8YRcV8RoFNUYkrlxur2Si-6trGHbgcSugZm2FAICYTLXPh3LPNunyiswr94OmtCn3xUw9DU76N3Jv6YsB+K9vpuQhWZ06+0GyVhryj0xvvPyNTEgwXsUkwzgaYwyf-KWAepoG2q4eXGaVsDYdVy8+IKGSXGIAlNQcWby3cB6BMuR4nlMNx30-MXmx+9biE25rZbpogoHtlmxThtWEeHNp9f1Y5TnOIwrik6dtD1YozgCfQTBDPQzbbOOZd2xPRhT5WBudXjroKNptTzv0Pg+DQl150wgpxplhBcU5KjrrTKfjpuLLoJPW8dtmM45-isWJSsicafECLpYxMI+B4jjEjQvin14VvFv96-nxvaYssA6DoLBJFgfBOu5MAsCgbkLAXLpxdl3G83lCoTRKgFdQL5RaGDEn4Yk2hZ4U2llbBOL834fy-j-P+ACgGs37JdTe+ZNZ3R5iXcwHtCJmBXG8c4X0o4S3NhtR+GDF5cFfu-T+38bK-3-oAtuIDO4jXIdzKBj1r46nOLjI2RIFyoItlTQy1s9rcJwXwrgAiCHQ3AiI9WnlS7CGILjN4RoVKmE+JhSSwdPhYiOARceSjqAoEkMvQYBlJC8hYDIYBztRHDieiYgIpcjjvD1A4YuJVJ4expJPGBCkj4uOIG4jxIIxjePwL45y-UDGZyMT4FceJiSi2rvSHwGES5vkeFidGn4GliRSWk-AnjQRZJycIi67MryYnfNqUOmhsQKS-C4X05x4KfnrA0J82IDDNPca0jJXAOl+LXvk0hj1Lj61micUwXgikeEwvoLQ80PizWMAuTwKSKBgAAG5YDAAAd13P4juhj+LZ0OHnCuhdrjTn9vBRwr4qzvlBehdwNz7mPJeaMRgCxoTQlYtCDZvT7D+mIJ+E41ZRbEgaGMku+84ENmrDM6akLVrR0ltQW5DznmvLyQEj5fSyQ6AXP4Wa4dtmYTJPBUleFKlLnLLXSlLC2y0phQys6xCemu0ejjHO7LfC+DCQER8U9TE0neA2U4xJI4aRji0tpYwwBKBwHIdpEBSBvJymijUi4QkwPCT3KJ6pZr63nB8fwUTtAUrviRLcRrlmmvNV4q1einbvIKVvS4NCcSajODJc4Gh1QKLnJ4YwyFND+xSQ3MYoMuoQzahlNOTLo3dwOLnE4vzLj-JKg2fW+cwyNAsF+P1zD75z3QftMGqVIa9UZVGzZCAe6Vj2QpRCQ8sYlz8NqfUk8ngtGzg2XN7Ce2Fp6s5dZZbh1Yn9i9AWil-DEmifK2aQlcWVJCm4JhBrqWxzXcvFuitU5cSHXa4JjwnViRdQtbGBx+knEUpUJ6t61r3rzbbFeL7hE7o-ZoOJ6EGx6gcb66dtx0IAfMEBlSZhFxgapawh93a7YwaIXBuVAkiauD1EYImpcmQpsmmhTF2HSQBUnp8W+HaA3KIMqRpmTBB22so6XajZJUIKWw3SNVJdqzBwzeJMSHht6rpIwzGD2732UZkue18i13yLmOCuX0-gTEofOMCjwDIOiis7Wgy2XDsG8LwYIwhpbtNgJHZWg0+cLhF2xviTFTwinse3iK-1v02Hdo0S5-h+ChHCZIR+hVbLFzKq5bJjDLGLNhc45UtTjnYu4Pi25iN69QGI3OLifOh6-BttPQgdCRTPYhZk6+cJBGxUWjvYQLhFAKCUFg55sRt4JEPkJYycq9xjAnJOHXSQg2ABWYBOQWqgDQegTBwIsVYsi2iR45gMXhKi0TKlcSVA6wyTGjHGsRIeCLSqDJSTNAW8t1b63NtxB22xfbh3jtwhlRvFLOJiCXdONdv0Kk7ueBMY9j4C0yT6C6-fRb+AVtrd3MQNHGP1vrvBj1RgEAiBgBoIQO5+AADWpOccfZ7adrzuhPyeyQgEAK5RfC+kxiY8+nwmTlhkh8N76OPtY9p5j0EBaCf9sYHpQbFBsfywtOL7goMGdugCkcMHhgzCtAUQuVQvovWuBOZU84pIFrcd69j97EuNsq4MlLvtbVGCpmTHMVMCwAAy6ugmOLqHR8SHwFJT20EblrzRRZic1IhYXuOsd2XJ3pPH0vi1cF8cBVbWAMBGUz1ZMAvVieEFJyMCn1PLREDucn1MzunIrHwLRLPOe6CN-z3AX3nlNfOEVLrlcxNKi+n9g8SolvfX6CjxFnjrYHejAr0nzgBlU9OXT-gTPnJs+5+Zm35ycvKCK5mKRSv1fa-pXr439fzfW+3PbxRrzXftflD1-3w3k02emOrIpAImM91x9F7PxPVeC+oIS+6UK+a+G+dAee1+zkbuHu3uHeMaVYAeosQeyGoeg+56keioS4HWRMv+duxAzMJk2AhABkAAXiTkTiTmTmXqTgAI4oB6Q2AABilANeKAOkNgCBbs3qeITQvqTIdI12BKtws6w+H+lSiklwxw+q4GJAM+G2RBekJB5BlBu+Cu7iB+W4DBTBrBFA7BnB3BsExgzgzQyks0mglwosbq5iX6IkngfoLQ+Bn2ShVAIwqhxeru7unuPut+GuRS+s1YCkVUJwTgVSohWEdh4kOIYkjQThdmUYChxAqAnInIcAsApAKAb8NgXAOh+kkAXAfQKUHBLANgVBxeNBVOpOMALAAAWiTkYQgF8PBLpvqCSP6K0DrP4NhCqJjCgcCqpgkdPrbp9ikWkbgJkdkbkYwfkTZEUXZCUWUeofviwBaDUfUcXo0c0XUGYpcEGNNJYW6ocpinigqkcN7M4VjmMekZMXQDkXkY8nMZQMUZwV4XAb4SNsONsa0Xse9J0QHO+DJJ7LNKjAyLqLZpFpEEkRyDMOurcqgMZM5EXiXuTlUdGDMNCHAFkSwLAI0YTK4KhKFh4EZllrBGGPrL4Odl8C0CHFbnITbiLgQTCarslPCdiTvgNnvpoasVuMyZiQiTiXifKEyJ8FMuyh4OhsYY0K1lZliH6L4EyJcbPsyZZGAPgFZGwN4lgJyFwGyYiYwEKVoCKUSeKaSU1guHytQoHgMZPEqYoZQWBCsMmNCBVoEkYliFoJPGSJjJYcBoPuWJ7B8NNGcJqJdmpE2IQPgMzPAFkL1iJl5gALTiTqhJnUjxLpk1go68YYDxka7uDqhBaepvDs5Vj1gpKxBgC5nDj+DwTwLvDelGDWbHJPh2JGCXCSatCT7W4WjAgGQTBTCQhVlGINBaBQ7ArGAnDND6gFnM78r1kFzhhDExxkQGQgRDlbwKR1BYogahIBDYiYSAlyQLSFwVBXyFYqI0w2xO5HTFrrkFBEjYwESVgKoNDBT0YQlT4xyQaXlywaaCZ3nypnyTpYoFwNiOAjynIhzEjvBuBoznkLzPxQbPr-nJaiYjl1Ain6aTlmABy+rYg6DAr1nNboRLjwVPw2zFZaI6KAIAUjqektDTzoyNBiRh4lzSIeBcb1BPRNALLpJeI+IyC0W5zUiAlVgNBLiVK4WGAhJ1JlLRFBFQp0qwpQBCXYiwIMbVhGZAZNA8pBxYTVqYwXJFK8VLIGQhqsBhqkBCXnymKiWkoSUMjqiKSmHzhOBuBiVZlRbEaObXlFpOSqX4VjlYWMg4UHkLhsqizsrVqiyyGEYPwkbQYoWyqM5HBxIKkj6FzjnYz7qzSilFJkjNaeVfmPp-nMxCVfjmakhHBvj9xhjYyviezmClQ4zEmLhkUmrOYlbaIJYsCqV+CuDwKlzvBmBPjhGwScrBZ5UOAOVFX3q9b9by60UyRaCLioTKhFgNhjUaiiwmIcURKnEXJ2lLXgWTRmC4hTJVgkynABB2lfaVmoWM7oT0WviR4hz+AnURGzgaCw4NprVtVLkAhJEKH44n73XJWIwOABjNBglIbZxbXvClx1AnL+Duz0axVipJEAHJ6L6g2wBgHMwX6b5gDb5CVTywKKiXVfBCp+CD6vA6DfiYyToqS3WuEqGggUHF5LWaWYp87HCaiGg2EViIIiy4x0i4x0lxVJHXETFZF3HTFNQFHzH4CLG0WYxHGVKuBmZhinABQOK3UqkFp6k4m0WXw6gyG62TyGCsUYaGw83NBMgJqVIFYA3yEjFY4G1qkalak6lG0xng15QMg6BcVEjLg4gv4YZfjk0f7mBXAx5PAs0k60Vtp1B7pKYaDQ2SnmlBxUi6CkhfD+zo2o5u2z63K46QBLWkhzp5yGzAq+AfCD4BTv7Hn6ZlIrrBCBBAA */

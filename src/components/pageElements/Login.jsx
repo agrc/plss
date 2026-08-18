@@ -4,9 +4,9 @@ import { useFirebaseFunctions } from '@ugrc/utah-design-system/contexts/Firebase
 import { httpsCallable } from 'firebase/functions';
 import md5 from 'md5';
 import { useEffect } from 'react';
-import { Button, LogInButton, LogOutButton } from '../formElements/Buttons.jsx';
-import Card from '../formElements/Card.jsx';
-import usePageView from '../hooks/usePageView.jsx';
+import { Button, LogInButton, LogOutButton } from '../formElements/Buttons.tsx';
+import Card from '../formElements/Card.tsx';
+import usePageView from '../hooks/usePageView.ts';
 
 const size = 160;
 const fallback = 'mp';

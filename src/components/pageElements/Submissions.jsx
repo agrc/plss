@@ -7,8 +7,8 @@ import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseSt
 import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useEffect, useState } from 'react';
-import { Button, Link } from '../formElements/Buttons.jsx';
-import Card from '../formElements/Card.jsx';
+import { Button, Link } from '../formElements/Buttons.tsx';
+import Card from '../formElements/Card.tsx';
 import { dateFormatter, sortFunction } from './utils.js';
 
 /**

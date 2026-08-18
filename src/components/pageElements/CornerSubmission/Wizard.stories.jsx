@@ -1,4 +1,4 @@
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 export default {
   title: 'Form Items/Wizard',

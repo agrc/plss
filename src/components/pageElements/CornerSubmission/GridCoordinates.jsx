@@ -6,14 +6,14 @@ import { gridCoordinatesSchema } from '@ugrc/plss-shared/corner-submission/schem
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';
 import { Select } from '../../formElements/Select.jsx';
 import Spacer from '../../formElements/Spacer.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
+import usePageView from '../../hooks/usePageView.ts';
 import ErrorMessageTag from '../../pageElements/ErrorMessage.jsx';
-import Wizard from './Wizard.jsx';
+import Wizard from './Wizard.tsx';
 
 const defaults = {
   zone: '',

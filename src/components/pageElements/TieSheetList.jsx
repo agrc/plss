@@ -2,9 +2,9 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { useQuery } from '@tanstack/react-query';
 import { useFirebaseStorage } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
-import { Link } from '../formElements/Buttons.jsx';
-import Card from '../formElements/Card.jsx';
-import Note from '../formElements/Note.jsx';
+import { Link } from '../formElements/Buttons.tsx';
+import Card from '../formElements/Card.tsx';
+import Note from '../formElements/Note.tsx';
 
 const accessibleDisclaimerPrefix =
   'This site serves as a repository for County Monument Record Sheets. While copies are available here for reference, the County remains the official steward and custodian of the monument records. An accessible version of the Monument Record Sheet may be obtained directly from the County or by sending a request to ';

@@ -2,9 +2,9 @@ import { Popover, PopoverButton, PopoverGroup, PopoverPanel, Transition } from '
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { contrastColor } from 'contrast-color';
 import { Fragment } from 'react';
-import Card from '../formElements/Card.jsx';
+import Card from '../formElements/Card.tsx';
 import Spacer from '../formElements/Spacer.jsx';
-import usePageView from '../hooks/usePageView.jsx';
+import usePageView from '../hooks/usePageView.ts';
 
 export default function Legend() {
   const { analytics, logEvent } = usePageView('screen-legend');

@@ -60,8 +60,7 @@ export const machine = setup({
       },
     }),
     updateError: assign({
-      error: ({ event }) =>
-        event.type === 'ERROR' ? event.error : null,
+      error: ({ event }) => (event.type === 'ERROR' ? event.error : null),
       errorCount: ({ context }) => context.errorCount + 1,
     }),
     clearError: assign({ error: () => null }),

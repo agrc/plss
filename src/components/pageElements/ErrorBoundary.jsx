@@ -1,6 +1,6 @@
 import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 
-import { Button } from '../formElements/Buttons.jsx';
+import { Button } from '../formElements/Buttons.tsx';
 
 /**
  * @typedef {Object} DefaultFallbackProps

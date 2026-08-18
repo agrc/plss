@@ -2,7 +2,7 @@ import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/re
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import { Fragment } from 'react';
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.tsx';
 
 /**
  * @typedef {Object} GroupButtonProps

@@ -8,11 +8,11 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { useContext, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Link } from '../../formElements/Buttons.jsx';
-import Card from '../../formElements/Card.jsx';
+import { Link } from '../../formElements/Buttons.tsx';
+import Card from '../../formElements/Card.tsx';
 import { ObjectPreview } from '../../formElements/FileUpload.jsx';
-import usePageView from '../../hooks/usePageView.jsx';
-import Wizard from './Wizard.jsx';
+import usePageView from '../../hooks/usePageView.ts';
+import Wizard from './Wizard.tsx';
 
 const Review = () => {
   const [state, send] = useContext(SubmissionContext);

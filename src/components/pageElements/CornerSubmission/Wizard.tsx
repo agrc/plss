@@ -1,18 +1,16 @@
-import { Button } from '../../formElements/Buttons.jsx';
+import { Button } from '../../formElements/Buttons.js';
 
-/**
- * @typedef {Object} WizardProps
- * @property {function|boolean} [back]
- * @property {boolean} [next]
- * @property {function} [finish]
- * @property {function} [clear]
- * @property {string} [status]
- */
+type SubmissionStatus = 'pending' | 'success' | 'error';
 
-/**
- * @type {React.FC<WizardProps>}
- */
-export default function Wizard({ back = false, next = false, finish, clear, status }) {
+type WizardProps = {
+  back?: (() => void) | false;
+  next?: boolean;
+  finish?: () => void;
+  clear?: () => void;
+  status?: SubmissionStatus;
+};
+
+export default function Wizard({ back = false, next = false, finish, clear, status }: WizardProps) {
   return (
     <div className="flex justify-center">
       {back && (
@@ -24,7 +22,7 @@ export default function Wizard({ back = false, next = false, finish, clear, stat
         <Button
           style="alternate"
           buttonGroup={{
-            middle: back && (next || finish),
+            middle: Boolean(back && (next || finish)),
             left: !back,
           }}
           onClick={clear}
@@ -46,7 +44,7 @@ export default function Wizard({ back = false, next = false, finish, clear, stat
   );
 }
 
-const getButtonText = (status) => {
+const getButtonText = (status?: SubmissionStatus): string => {
   switch (status) {
     case 'pending':
       return 'Submitting...';
