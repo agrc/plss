@@ -10,7 +10,6 @@ import { clsx } from 'clsx';
 import { useEffect, useState } from 'react';
 import { Controller, type Resolver, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
-import { Button } from '../../formElements/Buttons.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.tsx';
 import { Select } from '../../formElements/Select.tsx';
 import Spacer from '../../formElements/Spacer.tsx';
@@ -83,17 +82,6 @@ const CoordinatePicker = () => {
     <>
       <h2 className="text-2xl font-semibold">Location Information</h2>
       <Spacer className="my-4" />
-      {state.context.type === 'existing' && (
-        <>
-          <div className="flex justify-between">
-            <p className="italic">Coordinates are optional for existing monument uploads</p>
-            <Button style="secondary" onClick={() => send({ type: 'SKIP' })}>
-              Skip
-            </Button>
-          </div>
-          <Spacer className="my-10" />
-        </>
-      )}
       <NumberedForm onSubmit={typedHandleSubmit(onSubmit)}>
         <NumberedFormSection number={1} title="Coordinate system">
           <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
