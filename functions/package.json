@@ -3,13 +3,15 @@
   "private": true,
   "description": "Cloud Functions for Firebase",
   "type": "module",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "build": "pnpm run clean && pnpm --filter @ugrc/plss-shared build && tsc -p tsconfig.build.json && cp -R fonts lib/fonts",
+    "clean": "rm -rf lib",
     "deploy": "firebase deploy --only functions",
     "lint": "eslint ./ --ext .js --ignore-path ../.eslintignore",
     "logs": "firebase functions:log",
-    "serve": "firebase emulators:start --only functions",
-    "shell": "firebase functions:shell",
+    "serve": "pnpm run build && firebase emulators:start --only functions",
+    "shell": "pnpm run build && firebase functions:shell",
     "format": "prettier \"src/**/*.{js,jsx,ts,json,mjs,md,mdx}\" --write",
     "start": "pnpm run shell",
     "test": "vitest --silent --coverage --ui --open"
@@ -31,6 +33,10 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@types/base64-stream": "1.0.5",
+    "@types/contrast-color": "1.0.3",
+    "@types/node": "^24.13.3",
+    "@types/pdfmake": "^0.3.3",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/ui": "^4.1.10",
     "vitest": "^4.1.10"

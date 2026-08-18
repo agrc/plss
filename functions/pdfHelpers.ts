@@ -1,5 +1,7 @@
 import { Base64Encode } from 'base64-stream';
 import { Buffer } from 'buffer';
+import type { DocumentData } from 'firebase-admin/firestore';
+import type { Storage } from 'firebase-admin/storage';
 import { logger } from 'firebase-functions/v2';
 import path from 'path';
 import { PDFDocument } from 'pdf-lib';
@@ -11,7 +13,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const empty = {};
-const span = (int) => Array(int).fill(empty);
+const span = (int: number): object[] => Array(int).fill(empty);
+
+type Bucket = ReturnType<Storage['bucket']>;
+type StorageReadStream = ReturnType<
+  ReturnType<Bucket['file']>['createReadStream']
+>;
+type PathMap = Record<string, string>;
+type ImageMap = Record<string, string>;
+type PdfMap = Record<string, Buffer>;
+type PdfDocumentDefinition = Parameters<typeof pdfmake.createPdf>[0];
 
 pdfmake.addFonts({
   Roboto: {
@@ -22,12 +33,18 @@ pdfmake.addFonts({
   },
 });
 
-export const getPdfAssets = async (bucket, metadata, seal) => {
+export const getPdfAssets = async (
+  bucket: Bucket,
+  metadata: PathMap,
+  seal?: string,
+): Promise<{ images: ImageMap; pdfs: PdfMap }> => {
   const { imagePaths, pdfPaths } = splitImagesFromPdfs(metadata);
-  imagePaths.seal = seal;
+  if (seal) {
+    imagePaths.seal = seal;
+  }
 
-  let images = {};
-  let pdfs = {};
+  let images: ImageMap = {};
+  let pdfs: PdfMap = {};
 
   try {
     images = await getBase64Images(bucket, imagePaths);
@@ -43,12 +60,14 @@ export const getPdfAssets = async (bucket, metadata, seal) => {
   return { images, pdfs };
 };
 
-export const splitImagesFromPdfs = (paths) => {
+export const splitImagesFromPdfs = (
+  paths: PathMap,
+): { imagePaths: PathMap; pdfPaths: PathMap } => {
   const image = /.(jpg|jpeg|png)$/i;
   const pdf = /.(pdf)$/i;
 
-  const imagePaths = {};
-  const pdfPaths = {};
+  const imagePaths: PathMap = {};
+  const pdfPaths: PathMap = {};
 
   for (const [key, value] of Object.entries(paths)) {
     if ((value?.length ?? 0) === 0) {
@@ -71,8 +90,11 @@ export const splitImagesFromPdfs = (paths) => {
   return { imagePaths, pdfPaths };
 };
 
-const getBase64Images = async (bucket, metadata) => {
-  const promises = [];
+const getBase64Images = async (
+  bucket: Bucket,
+  metadata: PathMap,
+): Promise<ImageMap> => {
+  const promises: Array<Promise<ImageMap>> = [];
 
   Object.entries(metadata).forEach(([key, fileName]) => {
     logger.debug('creating stream for', { key });
@@ -90,15 +112,18 @@ const getBase64Images = async (bucket, metadata) => {
 
   const results = await Promise.all(promises);
 
-  return results.reduce((obj, item) => {
+  return results.reduce<ImageMap>((obj, item) => {
     const [key, value] = Object.entries(item)[0];
 
     return Object.assign(obj, { [key]: value });
   }, {});
 };
 
-export const getBinaryPdfs = async (bucket, metadata) => {
-  const promises = [];
+export const getBinaryPdfs = async (
+  bucket: Bucket,
+  metadata: PathMap,
+): Promise<PdfMap> => {
+  const promises: Array<Promise<PdfMap>> = [];
 
   Object.entries(metadata).forEach(([key, fileName]) => {
     logger.debug('creating stream for', { key });
@@ -112,29 +137,30 @@ export const getBinaryPdfs = async (bucket, metadata) => {
 
   const results = await Promise.all(promises);
 
-  return results.reduce((obj, item) => {
+  return results.reduce<PdfMap>((obj, item) => {
     const [key, value] = Object.entries(item)[0];
 
     return Object.assign(obj, { [key]: value });
   }, {});
 };
 
-const getImageData = (stream) => {
+const getImageData = (stream: StorageReadStream): Promise<string> => {
   const chunks = new Base64Encode();
   let contentType = '';
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     stream.on('error', (err) => {
       logger.error('getImageData error', err);
 
       return reject(err);
     });
-    stream.on('response', (response) => {
-      contentType = response.headers['content-type'];
+    stream.on('response', (response: { headers: Record<string, string | string[] | undefined> }) => {
+      const header = response.headers['content-type'];
+      contentType = Array.isArray(header) ? (header[0] ?? '') : (header ?? '');
 
       return;
     });
-    stream.on('data', (chunk) => chunks.write(chunk));
+    stream.on('data', (chunk: Buffer) => chunks.write(chunk));
     stream.on('end', () => {
       chunks.end();
 
@@ -143,11 +169,11 @@ const getImageData = (stream) => {
   });
 };
 
-const getPdfData = (stream) => {
-  const chunks = [];
+const getPdfData = (stream: StorageReadStream): Promise<Buffer> => {
+  const chunks: Buffer[] = [];
 
-  return new Promise((resolve, reject) => {
-    stream.on('data', (chunk) => chunks.push(chunk));
+  return new Promise<Buffer>((resolve, reject) => {
+    stream.on('data', (chunk: Buffer) => chunks.push(chunk));
     stream.on('end', () => resolve(Buffer.concat(chunks)));
     stream.on('error', (error) => {
       logger.error('getPdfData error', { error });
@@ -157,15 +183,20 @@ const getPdfData = (stream) => {
   });
 };
 
-export const generatePdfDefinition = (data, surveyor, images, watermark) => {
+export const generatePdfDefinition = (
+  data: DocumentData,
+  surveyor: DocumentData,
+  images: ImageMap,
+  watermark: boolean,
+): PdfDocumentDefinition => {
   const {
     township,
     range,
     meridian: { name: meridian },
   } = extractTownshipInformation(data.blmPointId ?? data.blm_point_id);
 
-  const addExtraImages = (images) => {
-    const extras = Object.keys(images ?? {}).filter((key) =>
+  const addExtraImages = (extraImages: ImageMap): object[] => {
+    const extras = Object.keys(extraImages ?? {}).filter((key) =>
       key.startsWith('extra'),
     );
 
@@ -173,7 +204,14 @@ export const generatePdfDefinition = (data, surveyor, images, watermark) => {
       return [];
     }
 
-    const extraPages = {
+    const extraPages: {
+      layout: string;
+      table: {
+        pageBreak: string;
+        widths: string[];
+        body: Array<Array<{ image?: string; fit?: number[] }>>;
+      };
+    } = {
       layout: 'noBorders',
       table: {
         pageBreak: 'before',
@@ -183,12 +221,12 @@ export const generatePdfDefinition = (data, surveyor, images, watermark) => {
     };
 
     for (let i = 0; i < extras.length; i += 2) {
-      const row = [];
+      const row: Array<{ image?: string; fit?: number[] }> = [];
 
-      row.push({ image: images[extras[i]], fit: [230, 230] });
+      row.push({ image: extraImages[extras[i]], fit: [230, 230] });
 
       if (extras[i + 1]) {
-        row.push({ image: images[extras[i + 1]], fit: [230, 230] });
+        row.push({ image: extraImages[extras[i + 1]], fit: [230, 230] });
       } else {
         row.push({});
       }
@@ -643,7 +681,7 @@ ${data.metadata.description} `,
         alignment: 'center',
       },
     },
-  };
+  } as unknown as PdfDocumentDefinition;
 
   if (watermark) {
     definition.watermark = {
@@ -657,7 +695,10 @@ ${data.metadata.description} `,
   return definition;
 };
 
-export const createPdfDocument = async (definition, extraPdfPages) => {
+export const createPdfDocument = async (
+  definition: PdfDocumentDefinition,
+  extraPdfPages: PdfMap,
+): Promise<Buffer> => {
   const partialPdf = await pdfmake.createPdf(definition).getBuffer();
 
   logger.debug('saved front page now appending extra pages', {
@@ -669,11 +710,14 @@ export const createPdfDocument = async (definition, extraPdfPages) => {
   return pdf;
 };
 
-export const appendPdfPages = async (original, metadata) => {
+export const appendPdfPages = async (
+  original: Uint8Array,
+  metadata: PdfMap,
+): Promise<Buffer> => {
   const pdfs = Object.values(metadata ?? {});
 
   if (pdfs.length === 0) {
-    return original;
+    return Buffer.from(original);
   }
 
   const source = await PDFDocument.load(original);

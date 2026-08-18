@@ -12,7 +12,19 @@ const drive = google.drive({
   auth,
 });
 
-const createFolder = async (name, parentId, root) => {
+const requireId = (id: string | null | undefined, name: string): string => {
+  if (!id) {
+    throw new Error(`Google Drive did not return an ID for ${name}.`);
+  }
+
+  return id;
+};
+
+const createFolder = async (
+  name: string,
+  parentId: string,
+  root: boolean,
+): Promise<string> => {
   const fileMetadata = {
     name,
     mimeType: folderMimeType,
@@ -25,26 +37,29 @@ const createFolder = async (name, parentId, root) => {
     supportsAllDrives: true,
   });
 
-  const folder = folders.data.files.find(
-    (folder) =>
-      folder.name.toLowerCase() === name.toLowerCase() &&
-      (root || (folder.parents && folder.parents[0] === parentId)),
+  const folder = folders.data.files?.find(
+    (candidate) =>
+      candidate.name?.toLowerCase() === name.toLowerCase() &&
+      (root || candidate.parents?.[0] === parentId),
   );
 
   if (folder) {
-    return folder.id;
+    return requireId(folder.id, name);
   }
 
   const newFolder = await drive.files.create({
-    resource: fileMetadata,
+    requestBody: fileMetadata,
     fields: 'id',
     supportsAllDrives: true,
   });
 
-  return newFolder.data.id;
+  return requireId(newFolder.data.id, name);
 };
 
-const getParentFolderId = async (sharedDriveId, path) => {
+const getParentFolderId = async (
+  sharedDriveId: string,
+  path: string,
+): Promise<string> => {
   const parts = path.split('/');
   let id = sharedDriveId;
   let first = true;
@@ -58,12 +73,12 @@ const getParentFolderId = async (sharedDriveId, path) => {
 };
 
 export const uploadFile = async (
-  sharedDriveId,
-  pdf,
-  blmPointId,
-  county,
-  year,
-) => {
+  sharedDriveId: string,
+  pdf: Uint8Array,
+  blmPointId: string,
+  county: string,
+  year: number | string,
+): Promise<string> => {
   const mainFolder =
     process.env.NODE_ENV === 'production' ? 'MRRC' : 'MRRC-test';
   const parentId = await getParentFolderId(
@@ -81,11 +96,11 @@ export const uploadFile = async (
   };
 
   const response = await drive.files.create({
-    resource: fileMetadata,
-    media: media,
+    requestBody: fileMetadata,
+    media,
     fields: 'id',
     supportsAllDrives: true,
   });
 
-  return response.data.id;
+  return requireId(response.data.id, fileMetadata.name);
 };

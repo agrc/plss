@@ -1,21 +1,22 @@
-import { logger } from 'firebase-functions/v2';
+import type { DocumentData } from 'firebase-admin/firestore';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
+import { logger } from 'firebase-functions/v2';
+import { uploadFile } from '../../drive.js';
+import { safelyInitializeApp } from '../../firebase.js';
 import {
   createPdfDocument,
   generatePdfDefinition,
   getBinaryPdfs,
   getPdfAssets,
 } from '../../pdfHelpers.js';
-import { safelyInitializeApp } from '../../firebase.js';
-import { uploadFile } from '../../drive.js';
 
 const config = safelyInitializeApp();
 const db = getFirestore();
 const bucket = getStorage().bucket(config.storageBucket);
 
-const getFiscalYear = (now) => {
-  const july = 6; // July is month 6 (0-indexed)
+const getFiscalYear = (now: Date): string => {
+  const july = 6;
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
 
@@ -29,18 +30,27 @@ const getFiscalYear = (now) => {
 
 const fiscalYear = getFiscalYear(new Date());
 
-export const createMonumentRecord = async (record, id, sharedDriveId) => {
+export const createMonumentRecord = async (
+  record: DocumentData,
+  id: string,
+  sharedDriveId: string,
+): Promise<true> => {
   logger.debug('trigger: new submission for', { id, type: record.type });
 
   if (record.type === 'existing') {
-    let data;
+    let data: Record<string, Buffer> | undefined;
     try {
       const fileName = `under-review/${record.blm_point_id}/${record.submitted_by.id}/${id}.pdf`;
       const file = bucket.file(fileName);
 
-      data = await getBinaryPdfs(bucket, { pdf: record.pdf });
+      const loadedPdfs = await getBinaryPdfs(bucket, { pdf: record.pdf });
+      const existingPdf = loadedPdfs?.pdf;
+      if (!existingPdf) {
+        throw new Error('Existing monument PDF could not be loaded');
+      }
+      data = loadedPdfs;
 
-      await file.save(data.pdf);
+      await file.save(existingPdf);
       await file.setMetadata({
         contentType: 'application/pdf',
         contentDisposition: 'inline',
@@ -75,7 +85,7 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
     return true;
   }
 
-  let surveyor = {};
+  const surveyor: DocumentData = {};
 
   try {
     const snapshot = await db
@@ -85,9 +95,9 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
 
     const surveyorDoc = snapshot.data();
 
-    surveyor.name = surveyorDoc.displayName;
-    surveyor.license = surveyorDoc.license;
-    surveyor.seal = surveyorDoc.seal;
+    surveyor.name = surveyorDoc?.displayName;
+    surveyor.license = surveyorDoc?.license;
+    surveyor.seal = surveyorDoc?.seal;
   } catch (error) {
     logger.error('error fetching surveyor license. using empty string', {
       error,
@@ -106,11 +116,12 @@ export const createMonumentRecord = async (record, id, sharedDriveId) => {
   const fileName = `under-review/${record.blm_point_id}/${record.submitted_by.id}/${id}.pdf`;
   const file = bucket.file(fileName);
 
-  let pdf = null;
+  let pdf: Buffer | null = null;
   try {
-    pdf = await createPdfDocument(definition, pdfs);
+    const createdPdf = (await createPdfDocument(definition, pdfs)) as Buffer;
+    pdf = createdPdf;
 
-    await file.save(pdf);
+    await file.save(createdPdf);
     await file.setMetadata({
       contentType: 'application/pdf',
       contentDisposition: 'inline',

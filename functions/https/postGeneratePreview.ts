@@ -1,20 +1,30 @@
+import type { DocumentData } from 'firebase-admin/firestore';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import { https, logger } from 'firebase-functions/v2';
+import type { AuthData } from 'firebase-functions/tasks';
 import {
   createPdfDocument,
   generatePdfDefinition,
   getPdfAssets,
 } from '../pdfHelpers.js';
-import { validateNewSubmission } from './postCorner.js';
 import { safelyInitializeApp } from '../firebase.js';
+import { validateNewSubmission } from './postCorner.js';
 
 const config = safelyInitializeApp();
 const bucket = getStorage().bucket(config.storageBucket);
 const db = getFirestore();
 const oneDay = 1000 * 60 * 60 * 24;
 
-export const generatePreview = async (data, auth) => {
+type PreviewSubmission = DocumentData & {
+  blmPointId: string;
+  images: Record<string, string>;
+};
+
+export const generatePreview = async (
+  data: unknown,
+  auth: AuthData,
+): Promise<string> => {
   try {
     const result = await validateNewSubmission(data);
     logger.debug('validation result', { result });
@@ -28,7 +38,9 @@ export const generatePreview = async (data, auth) => {
     );
   }
 
-  let surveyor = {
+  const submission = data as PreviewSubmission;
+
+  const surveyor = {
     name: auth.token.name,
     license: '',
     seal: '',
@@ -38,11 +50,10 @@ export const generatePreview = async (data, auth) => {
     logger.debug('getting surveyor data', { uid: auth.uid });
 
     const snapshot = await db.collection('submitters').doc(auth.uid).get();
+    const profile = snapshot.data();
 
-    const { license, seal } = snapshot.data();
-
-    surveyor.seal = seal;
-    surveyor.license = license;
+    surveyor.seal = profile?.seal ?? '';
+    surveyor.license = profile?.license ?? '';
   } catch (error) {
     logger.error('error fetching surveyor license. using empty string', {
       uid: auth.uid,
@@ -52,17 +63,17 @@ export const generatePreview = async (data, auth) => {
 
   const { images, pdfs } = await getPdfAssets(
     bucket,
-    data.images,
+    submission.images,
     surveyor.seal,
   );
 
-  const definition = generatePdfDefinition(data, surveyor, images, true);
+  const definition = generatePdfDefinition(submission, surveyor, images, true);
 
-  const fileName = `submitters/${auth.uid}/new/${data.blmPointId}/preview.pdf`;
+  const fileName = `submitters/${auth.uid}/new/${submission.blmPointId}/preview.pdf`;
   const file = bucket.file(fileName);
 
   try {
-    let pdf = await createPdfDocument(definition, pdfs);
+    const pdf = await createPdfDocument(definition, pdfs);
 
     await file.save(pdf);
     await file.setMetadata({
@@ -70,7 +81,7 @@ export const generatePreview = async (data, auth) => {
       contentDisposition: 'inline',
     });
   } catch (error) {
-    logger.error('error generating preview', { error, data });
+    logger.error('error generating preview', { error, data: submission });
 
     throw new https.HttpsError(
       'internal',
@@ -80,7 +91,7 @@ export const generatePreview = async (data, auth) => {
 
   const record = {
     created_at: new Date(),
-    id: data.blmPointId,
+    id: submission.blmPointId,
     preview: fileName,
     ttl: new Date(Date.now() + oneDay),
   };

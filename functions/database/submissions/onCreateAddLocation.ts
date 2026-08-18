@@ -1,5 +1,5 @@
+import { GeoPoint, getFirestore } from 'firebase-admin/firestore';
 import { logger } from 'firebase-functions/v2';
-import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
 import ky from 'ky';
 import { safelyInitializeApp } from '../../firebase.js';
 
@@ -11,8 +11,16 @@ const client = ky.extend({
   retry: 3,
 });
 
-const getLocationFromId = async (id) => {
-  // query points for shape
+type FeatureSet = {
+  features: Array<{
+    geometry: {
+      x: number;
+      y: number;
+    };
+  }>;
+};
+
+const getLocationFromId = async (id: string): Promise<GeoPoint | null> => {
   const featureSet = await client
     .get('UtahPLSSGCDBPoints/FeatureServer/0/query', {
       searchParams: {
@@ -22,21 +30,22 @@ const getLocationFromId = async (id) => {
         f: 'json',
       },
     })
-    .json();
+    .json<FeatureSet>();
 
   logger.debug('featureSet', { featureSet });
 
-  if (featureSet.features.length === 0) {
-    return {};
+  const feature = featureSet.features[0];
+  if (!feature) {
+    return null;
   }
 
-  return new GeoPoint(
-    featureSet.features[0].geometry.y,
-    featureSet.features[0].geometry.x,
-  );
+  return new GeoPoint(feature.geometry.y, feature.geometry.x);
 };
 
-export const createAddLocation = async (id, blmPointId) => {
+export const createAddLocation = async (
+  id: string,
+  blmPointId: string,
+): Promise<void> => {
   const db = getFirestore();
   const doc = db.collection('submissions').doc(id);
 
@@ -44,12 +53,8 @@ export const createAddLocation = async (id, blmPointId) => {
 
   logger.debug(
     '[database::submissions::onCreateAddLocation] setting location',
-    {
-      location,
-    },
+    { location },
   );
 
-  const result = await doc.update({ location });
-
-  return result;
+  await doc.update({ location });
 };

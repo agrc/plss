@@ -1,9 +1,10 @@
-import { logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
+import { logger } from 'firebase-functions/v2';
+import type { AuthUserRecord } from 'firebase-functions/v2/identity';
 
 const db = getFirestore();
 
-export const createUser = async (user) => {
+export const createUser = async (user: AuthUserRecord): Promise<true> => {
   logger.info('[auth::user::onCreate] creating user', { user });
 
   const data = {

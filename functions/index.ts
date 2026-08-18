@@ -1,4 +1,5 @@
 import { logger, https } from 'firebase-functions/v2';
+import type { AuthData } from 'firebase-functions/tasks';
 import {
   onDocumentUpdated,
   onDocumentCreated,
@@ -18,20 +19,41 @@ const cors = [
   /plss\.(?:dev\.)?utah\.gov/,
 ];
 
-const throwIfAnonymous = (auth) => {
+function throwIfAnonymous(
+  auth: AuthData | undefined,
+): asserts auth is AuthData {
   if (!auth) {
     logger.debug('No auth context');
 
     throw new https.HttpsError('unauthenticated', 'You must log in');
   }
-};
+}
 
-const throwIfNoFormData = (data) => {
+function throwIfNoFormData(data: unknown): asserts data is object {
   if (!data) {
     logger.debug('No data provided');
 
     throw new https.HttpsError('invalid-argument', 'No data provided');
   }
+}
+
+const requireEventData = <T>(data: T | undefined): T => {
+  if (!data) {
+    throw new Error('Firebase event data is missing');
+  }
+
+  return data;
+};
+
+const requireGroups = <const Key extends string>(
+  groups: Record<string, string> | undefined,
+  ...keys: Key[]
+): Record<Key, string> => {
+  if (!groups || keys.some((key) => !groups[key])) {
+    throw new Error('Expected named path groups');
+  }
+
+  return groups as Record<Key, string>;
 };
 
 const config = safelyInitializeApp();
@@ -40,14 +62,16 @@ const sharedDriveId = defineSecret('SHARED_DRIVE_ID');
 
 // Firebase authentication
 export const onCreateUser = beforeUserCreated(async (event) => {
+  if (!event.data) {
+    throw new Error('Firebase Auth user data is missing');
+  }
+
   logger.debug('[auth::user::onCreate] importing createUser');
   const createUser = (await import('./auth/onCreate.js')).createUser;
 
   const result = await createUser(event.data);
 
   logger.debug('[auth::user::onCreate]', result);
-
-  return result;
 });
 
 // Firestore triggers
@@ -57,9 +81,10 @@ export const onCancelSubmission = onDocumentUpdated(
     secrets: [sendGridApiKey],
   },
   async (event) => {
-    const after = event.data.after.data();
+    const eventData = requireEventData(event.data);
+    const after = eventData.after.data();
     const current = after.status.user.cancelled;
-    const before = event.data.before.data();
+    const before = eventData.before.data();
     const previous = before.status.user.cancelled;
 
     logger.debug(
@@ -99,7 +124,7 @@ export const onCancelSubmission = onDocumentUpdated(
 
     logger.debug('runWith', { apiSnippet });
 
-    const result = await cancelSubmission(event.data.before);
+    const result = await cancelSubmission(eventData.before);
 
     logger.debug('[database::submissions::onCancel]', result);
 
@@ -110,7 +135,7 @@ export const onCancelSubmission = onDocumentUpdated(
 export const onCreateAddLocation = onDocumentCreated(
   '/submissions/{docId}',
   async (event) => {
-    const record = event.data.data();
+    const record = requireEventData(event.data).data();
 
     if (record.type === 'new') {
       logger.debug(
@@ -158,7 +183,7 @@ export const onCreateMonumentRecord = onDocumentCreated(
     secrets: [sharedDriveId],
   },
   async (event) => {
-    const record = event.data.data();
+    const record = requireEventData(event.data).data();
 
     logger.debug(
       '[database::submissions::onCreateMonumentRecord] trigger: new submission for',
@@ -187,7 +212,7 @@ export const onCreateMonumentRecord = onDocumentCreated(
 export const onCleanUpPointAttachments = onDocumentDeleted(
   '/submitters/{userId}/points/{docId}',
   async (event) => {
-    const record = event.data.data();
+    const record = requireEventData(event.data).data();
 
     logger.debug(
       '[database::submitters::onCleanUpPointAttachments] trigger: point deleted',
@@ -230,7 +255,7 @@ export const onCleanUpPointAttachments = onDocumentDeleted(
 export const getMyContent = https.onCall({ cors }, async (request) => {
   logger.debug('[https::getMyContent] starting');
 
-  throwIfAnonymous(request);
+  throwIfAnonymous(request.auth);
 
   logger.debug('[https::getMyContent] importing body');
   const myContent = (await import('./https/getMyContent.js')).myContent;
@@ -248,7 +273,7 @@ export const getMyContent = https.onCall({ cors }, async (request) => {
 export const getProfile = https.onCall({ cors }, async (request) => {
   logger.debug('[https::getMyProfile] starting');
 
-  throwIfAnonymous(request);
+  throwIfAnonymous(request.auth);
 
   logger.debug('[https::getMyProfile] importing body');
   const myProfile = (await import('./https/getMyProfile.js')).myProfile;
@@ -375,9 +400,9 @@ export const onCreateNotify = onObjectFinalized(
 
     const result = await createNotify(
       name,
-      match.groups,
+      requireGroups(match.groups, 'documentId', 'pointId'),
       fileBucket,
-      contentType,
+      contentType ?? 'application/pdf',
     );
 
     logger.debug('[storage::finalize::onCreateNotify]', result);
@@ -416,7 +441,7 @@ export const syncProfileImage = onObjectDeleted(
     const syncProfileImage = (await import('./storage/onDelete.js'))
       .syncProfileImage;
 
-    const result = await syncProfileImage(match.groups.uid);
+    const result = await syncProfileImage(requireGroups(match.groups, 'uid').uid);
 
     logger.debug('[storage::onDelete::syncProfileImage]', result);
 

@@ -1,12 +1,15 @@
 import * as yup from 'yup';
 import * as options from './Options.js';
 
-export const scaleAndPrecision = (number, { precision }) => {
+export const scaleAndPrecision = (
+  number: unknown,
+  { precision }: { precision: number },
+): boolean => {
   if (!number) {
     return false;
   }
 
-  let [, right] = number.toString().split('.');
+  let [, right] = String(number).split('.');
 
   right = right ?? 0;
 
@@ -157,10 +160,10 @@ export const coordinatePickerSchema = yup.object().shape({
     .typeError(datumMessage)
     .required(datumMessage)
     .oneOf(
-      [].concat(
-        options.geographic.map((x) => x.value),
-        options.grid.map((x) => x.value),
-      ),
+      [
+        ...options.geographic.map((x) => x.value),
+        ...options.grid.map((x) => x.value),
+      ],
       datumMessage,
     ),
 });
@@ -180,11 +183,11 @@ const seconds = yup
   .min(0, dmsMessages.seconds)
   .lessThan(60, dmsMessages.seconds)
   .test('fiveDecimalPlaces', dmsMessages.seconds, (number) =>
-    /^\d+(\.\d{0,5})?$/.test(number),
+    /^\d+(\.\d{0,5})?$/.test(String(number)),
   )
   .label('Seconds');
 
-const degrees = (min, max) =>
+const degrees = (min: number, max: number) =>
   yup
     .number()
     .typeError(`Degrees must be a whole number from ${min} to ${max}.`)
@@ -270,7 +273,8 @@ export const gridCoordinatesSchema = yup.object().shape({
   northing: yup
     .number()
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'north',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'north',
       then: () =>
         yup
           .number()
@@ -284,7 +288,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Northing value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'central',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'central',
       then: () =>
         yup
           .number()
@@ -298,7 +303,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Northing value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'south',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'south',
       then: () =>
         yup
           .number()
@@ -312,7 +318,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Northing value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'north',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'north',
       then: () =>
         yup
           .number()
@@ -326,7 +333,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Northing value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'central',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'central',
       then: () =>
         yup
           .number()
@@ -340,7 +348,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Northing value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'south',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'south',
       then: () =>
         yup
           .number()
@@ -364,7 +373,8 @@ export const gridCoordinatesSchema = yup.object().shape({
   easting: yup
     .number()
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'north',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'north',
       then: () =>
         yup
           .number()
@@ -378,7 +388,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Easting value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'central',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'central',
       then: () =>
         yup
           .number()
@@ -392,7 +403,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Easting value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'ft' && zone === 'south',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'ft' && zone === 'south',
       then: () =>
         yup
           .number()
@@ -406,7 +418,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Easting value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'north',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'north',
       then: () =>
         yup
           .number()
@@ -420,7 +433,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Easting value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'central',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'central',
       then: () =>
         yup
           .number()
@@ -434,7 +448,8 @@ export const gridCoordinatesSchema = yup.object().shape({
           .label('Easting value'),
     })
     .when(['unit', 'zone'], {
-      is: (unit, zone) => unit === 'm' && zone === 'south',
+      is: (unit: unknown, zone: unknown) =>
+        unit === 'm' && zone === 'south',
       then: () =>
         yup
           .number()
@@ -634,3 +649,15 @@ export const profileSchema = yup.object().shape({
     .nullable()
     .optional(),
 });
+
+  export type AddPoint = yup.InferType<typeof addPointSchema>;
+  export type CornerData = yup.InferType<typeof cornerData>;
+  export type Metadata = yup.InferType<typeof metadataSchema>;
+  export type CoordinatePicker = yup.InferType<typeof coordinatePickerSchema>;
+  export type Longitude = yup.InferType<typeof longitudeSchema>;
+  export type Latitude = yup.InferType<typeof latitudeSchema>;
+  export type GeographicHeight = yup.InferType<typeof geographicHeightSchema>;
+  export type GridCoordinates = yup.InferType<typeof gridCoordinatesSchema>;
+  export type ExistingSheet = yup.InferType<typeof existingSheetSchema>;
+  export type Images = yup.InferType<typeof imagesSchema>;
+  export type Profile = yup.InferType<typeof profileSchema>;

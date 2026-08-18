@@ -1,5 +1,7 @@
 import { https, logger } from 'firebase-functions/v2';
 import { getFirestore, GeoPoint } from 'firebase-admin/firestore';
+import type { DocumentData } from 'firebase-admin/firestore';
+import type { AuthData } from 'firebase-functions/tasks';
 import { parseDms } from 'dms-conversion';
 import * as schemas from '@ugrc/plss-shared/corner-submission/schema';
 import { formatDegrees } from '@ugrc/plss-shared';
@@ -12,7 +14,51 @@ const options = {
   abortEarly: false,
 };
 
-export const saveCorner = async (data, auth) => {
+type Dms = {
+  degrees: number;
+  minutes: number;
+  seconds: number;
+};
+
+type GeographicInput = {
+  northing: Dms;
+  easting: Dms;
+  unit: string;
+  elevation: number;
+};
+
+type GridInput = {
+  northing: number;
+  easting: number;
+  zone: string;
+  unit: string;
+  elevation?: number;
+  verticalDatum?: string;
+};
+
+type CornerSubmissionInput = {
+  type: 'new' | 'existing';
+  blmPointId: string;
+  county: string;
+  datum?: string;
+  metadata: DocumentData;
+  geographic: GeographicInput;
+  grid: GridInput;
+  images: DocumentData;
+  existing: {
+    pdf: string;
+    mrrc: boolean;
+  };
+};
+
+type SubmissionAuth = AuthData & {
+  displayName?: string;
+};
+
+export const saveCorner = async (
+  data: unknown,
+  auth: SubmissionAuth,
+): Promise<1> => {
   logger.info('validating corner submission', { data, uid: auth.uid });
 
   try {
@@ -28,9 +74,10 @@ export const saveCorner = async (data, auth) => {
     );
   }
 
-  logger.debug('formatting corner document', { type: data.type });
+  const submission = data as CornerSubmissionInput;
+  logger.debug('formatting corner document', { type: submission.type });
 
-  const doc = formatDataForFirestore(data, auth);
+  const doc = formatDataForFirestore(submission, auth);
 
   logger.info('saving corner submission', { doc, auth });
 
@@ -45,8 +92,12 @@ export const saveCorner = async (data, auth) => {
   return 1;
 };
 
-export const validateSubmission = async (data) => {
+export const validateSubmission = async (data: unknown): Promise<true> => {
   await schemas.cornerData.validate(data, options);
+
+  if (!data || typeof data !== 'object' || !('type' in data)) {
+    throw new Error('Invalid submission type');
+  }
 
   if (data.type === 'new') {
     return await validateNewSubmission(data);
@@ -57,34 +108,39 @@ export const validateSubmission = async (data) => {
   throw Error('Invalid submission type');
 };
 
-export const validateNewSubmission = async (data) => {
-  await schemas.metadataSchema.validate(data?.metadata, options);
-  await schemas.coordinatePickerSchema.validate(data, options);
-  await schemas.geographicHeightSchema.validate(data?.geographic, options);
-  await schemas.longitudeSchema.validate(data?.geographic, options);
-  await schemas.latitudeSchema.validate(data?.geographic, options);
-  await schemas.gridCoordinatesSchema.validate(data?.grid, options);
-  await schemas.imagesSchema.validate(data?.images, options);
+export const validateNewSubmission = async (data: unknown): Promise<true> => {
+  const submission = data as Partial<CornerSubmissionInput> | undefined;
+  await schemas.metadataSchema.validate(submission?.metadata, options);
+  await schemas.coordinatePickerSchema.validate(submission, options);
+  await schemas.geographicHeightSchema.validate(submission?.geographic, options);
+  await schemas.longitudeSchema.validate(submission?.geographic, options);
+  await schemas.latitudeSchema.validate(submission?.geographic, options);
+  await schemas.gridCoordinatesSchema.validate(submission?.grid, options);
+  await schemas.imagesSchema.validate(submission?.images, options);
 
   return true;
 };
 
-export const validateExistingSubmission = async (data) => {
-  await schemas.existingSheetSchema.validate(data?.existing, options);
+export const validateExistingSubmission = async (data: unknown): Promise<true> => {
+  const submission = data as Partial<CornerSubmissionInput> | undefined;
+  await schemas.existingSheetSchema.validate(submission?.existing, options);
 
   // coordinates are not required for existing corners
-  if (data.datum) {
-    await schemas.coordinatePickerSchema.validate(data, options);
-    await schemas.geographicHeightSchema.validate(data?.geographic, options);
-    await schemas.longitudeSchema.validate(data?.geographic, options);
-    await schemas.latitudeSchema.validate(data?.geographic, options);
-    await schemas.gridCoordinatesSchema.validate(data?.grid, options);
+  if (submission?.datum) {
+    await schemas.coordinatePickerSchema.validate(submission, options);
+    await schemas.geographicHeightSchema.validate(submission.geographic, options);
+    await schemas.longitudeSchema.validate(submission.geographic, options);
+    await schemas.latitudeSchema.validate(submission.geographic, options);
+    await schemas.gridCoordinatesSchema.validate(submission.grid, options);
   }
 
   return true;
 };
 
-export const formatDataForFirestore = (data, user) => {
+export const formatDataForFirestore = (
+  data: CornerSubmissionInput,
+  user: SubmissionAuth,
+): DocumentData => {
   const defaults = {
     created_at: new Date(),
     blm_point_id: data.blmPointId,
@@ -126,10 +182,17 @@ export const formatDataForFirestore = (data, user) => {
   throw Error('Invalid submission type');
 };
 
-export const formatNewCorner = (data, defaults) => {
-  const [y, x] = getLatLon(data.geographic);
+export const formatNewCorner = (
+  data: CornerSubmissionInput,
+  defaults: DocumentData,
+): DocumentData => {
+  const coordinates = getLatLon(data.geographic);
+  if (!coordinates) {
+    throw new Error('Geographic coordinates are required');
+  }
+  const [y, x] = coordinates;
 
-  let record = {
+  const record = {
     type: 'new',
     ...defaults,
     location: new GeoPoint(y, x),
@@ -186,7 +249,7 @@ export const formatNewCorner = (data, defaults) => {
   return record;
 };
 
-export const convertUndefinedToNull = (obj) => {
+export const convertUndefinedToNull = (obj: unknown): unknown => {
   if (obj === null || typeof obj !== 'object') {
     return obj === undefined ? null : obj;
   }
@@ -200,20 +263,28 @@ export const convertUndefinedToNull = (obj) => {
   }
 
   // Handle objects
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      if (obj[key] === undefined) {
-        obj[key] = null;
+  const record = obj as Record<string, unknown>;
+  for (const key in record) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      if (record[key] === undefined) {
+        record[key] = null;
       } else {
-        obj[key] = convertUndefinedToNull(obj[key]);
+        record[key] = convertUndefinedToNull(record[key]);
       }
     }
   }
-  return obj;
+  return record;
 };
 
-export const formatExistingCorner = (data, defaults) => {
-  let record = { ...defaults, pdf: data.existing.pdf, type: 'existing' };
+export const formatExistingCorner = (
+  data: CornerSubmissionInput,
+  defaults: DocumentData,
+): DocumentData => {
+  let record: DocumentData = {
+    ...defaults,
+    pdf: data.existing.pdf,
+    type: 'existing',
+  };
 
   if (!record.metadata) {
     record.metadata = {};
@@ -221,7 +292,11 @@ export const formatExistingCorner = (data, defaults) => {
   record.metadata.mrrc = data.existing.mrrc;
 
   if (data.datum) {
-    const [y, x] = getLatLon(data.geographic);
+    const coordinates = getLatLon(data.geographic);
+    if (!coordinates) {
+      throw new Error('Geographic coordinates are required');
+    }
+    const [y, x] = coordinates;
 
     record = Object.assign(record, {
       datum: data.datum,
@@ -254,7 +329,9 @@ export const formatExistingCorner = (data, defaults) => {
   return record;
 };
 
-export const getLatLon = (data) => {
+export const getLatLon = (
+  data?: Partial<GeographicInput>,
+): [number, number] | null => {
   if (!data || !data.northing || !data.easting) {
     return null;
   }
@@ -264,5 +341,5 @@ export const getLatLon = (data) => {
     `${formatDegrees(data.easting)} W`,
   ];
 
-  return dms.map(parseDms);
+  return [parseDms(dms[0]), parseDms(dms[1])];
 };

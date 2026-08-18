@@ -1,11 +1,11 @@
-import { https, logger } from 'firebase-functions/v2';
 import { getFirestore } from 'firebase-admin/firestore';
+import { https, logger } from 'firebase-functions/v2';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();
 const db = getFirestore();
 
-export const syncProfileImage = async (uid) => {
+export const syncProfileImage = async (uid: string): Promise<true> => {
   try {
     const docRef = db.collection('submitters').doc(uid);
     await docRef.update({ seal: '' });

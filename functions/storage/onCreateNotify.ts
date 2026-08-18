@@ -1,25 +1,38 @@
-import { logger } from 'firebase-functions/v2';
-import { getStorage } from 'firebase-admin/storage';
+import type { ClientRequest } from '@sendgrid/client/src/request.js';
 import { getFirestore } from 'firebase-admin/firestore';
-import { safelyInitializeApp } from '../firebase.js';
+import { getStorage } from 'firebase-admin/storage';
+import { logger } from 'firebase-functions/v2';
 import {
-  getContactsToNotify,
   getBase64EncodedAttachment,
+  getContactsToNotify,
   notify,
 } from '../emailHelpers.js';
+import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();
 const db = getFirestore();
 
-const getDocument = async (documentId) => {
+type SubmissionSummary = {
+  type: string;
+  submitted_by: { name: string };
+  blm_point_id: string;
+  county: string;
+};
+
+const getDocument = async (documentId: string): Promise<SubmissionSummary> => {
   try {
     const reference = db.collection('submissions').doc(documentId);
-
     const snapshot = await reference.get();
+    const data = snapshot.data();
 
-    const { type, submitted_by, blm_point_id, county } = snapshot.data();
-
-    return { type, submitted_by, blm_point_id, county };
+    if (data) {
+      return {
+        type: data.type,
+        submitted_by: data.submitted_by,
+        blm_point_id: data.blm_point_id,
+        county: data.county,
+      };
+    }
   } catch (error) {
     logger.error('error querying for submission', { error, documentId });
   }
@@ -33,11 +46,11 @@ const getDocument = async (documentId) => {
 };
 
 export const createNotify = async (
-  name,
-  { documentId, pointId },
-  fileBucket,
-  contentType,
-) => {
+  name: string,
+  { documentId, pointId }: { documentId: string; pointId: string },
+  fileBucket: string,
+  contentType: string,
+): Promise<unknown> => {
   const bucket = getStorage().bucket(fileBucket);
 
   const record = await getDocument(documentId);
@@ -47,13 +60,13 @@ export const createNotify = async (
 
   const to = await getContactsToNotify(db, null);
 
-  if (!to || to.length === 0) {
+  if (to.length === 0) {
     logger.error('no contacts to notify');
 
     return;
   }
 
-  const template = {
+  const template: ClientRequest = {
     method: 'post',
     url: '/v3/mail/send',
     body: {
@@ -69,13 +82,13 @@ export const createNotify = async (
             type: record.type,
             surveyor: record.submitted_by.name,
             blmPointId: record.blm_point_id,
-            county: record?.county ?? 'unknown',
+            county: record.county ?? 'unknown',
           },
         },
       ],
       attachments: [
         {
-          content,
+          content: content.toString(),
           filename: `${pointId}.pdf`,
           type: contentType,
           disposition: 'attachment',
@@ -84,12 +97,15 @@ export const createNotify = async (
     },
   };
 
-  const templateData = template.body.personalizations[0].dynamic_template_data;
+  const templateData = template.body?.personalizations?.[0]?.dynamic_template_data;
 
   logger.debug('sending notification email to', { to, templateData });
 
   try {
-    const result = await notify(process.env.SENDGRID_API_KEY, template);
+    const result = await notify(
+      process.env.SENDGRID_API_KEY ?? 'null',
+      template,
+    );
 
     logger.debug('mail sent with status', { statusCode: result[0].statusCode });
 

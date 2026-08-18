@@ -1,14 +1,20 @@
-import { https, logger } from 'firebase-functions/v2';
+import type { Profile } from '@ugrc/plss-shared/corner-submission/schema';
 import { getFirestore } from 'firebase-admin/firestore';
+import { https, logger } from 'firebase-functions/v2';
+import type { CallableRequest } from 'firebase-functions/v2/https';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();
 const db = getFirestore();
 
-export const myProfile = async (auth) => {
-  let profile = {
-    displayName: auth.token.displayName,
-    email: auth.token.email,
+type CallableAuth = NonNullable<CallableRequest['auth']>;
+
+export const myProfile = async (
+  auth: CallableAuth,
+): Promise<Partial<Profile>> => {
+  let profile: Partial<Profile> | undefined = {
+    displayName: auth.token.displayName as string | undefined,
+    email: auth.token.email as string | undefined,
     license: '',
     seal: '',
   };
@@ -16,7 +22,7 @@ export const myProfile = async (auth) => {
   try {
     const snapshot = await db.collection('submitters').doc(auth.uid).get();
 
-    profile = snapshot.data();
+    profile = snapshot.data() as Partial<Profile> | undefined;
   } catch (error) {
     logger.error('error querying profile', { error, auth });
   }

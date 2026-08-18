@@ -1,6 +1,9 @@
-import { https, logger } from 'firebase-functions/v2';
+import {
+  profileSchema,
+  type Profile,
+} from '@ugrc/plss-shared/corner-submission/schema';
 import { getFirestore } from 'firebase-admin/firestore';
-import { profileSchema } from '@ugrc/plss-shared/corner-submission/schema';
+import { https, logger } from 'firebase-functions/v2';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();
@@ -10,12 +13,23 @@ const options = {
   abortEarly: false,
 };
 
-export const updateProfile = async (data, uid) => {
+type ProfileDocument = {
+  displayName: string;
+  email: string;
+  license: string | null;
+  seal: string | null;
+};
+
+export const updateProfile = async (
+  data: unknown,
+  uid: string,
+): Promise<ProfileDocument> => {
   logger.info('validating profile data', { data, uid });
 
+  let profile: Profile;
   try {
-    const result = await validate(data);
-    logger.debug('validation result', { result });
+    profile = await profileSchema.validate(data, options);
+    logger.debug('validation result', { result: profile });
   } catch (error) {
     logger.error('validation error', { error });
 
@@ -26,7 +40,7 @@ export const updateProfile = async (data, uid) => {
     );
   }
 
-  const doc = formatDataForFirestore(data);
+  const doc = formatDataForFirestore(profile);
 
   logger.info('saving profile', { doc, uid });
 
@@ -42,15 +56,13 @@ export const updateProfile = async (data, uid) => {
   return doc;
 };
 
-export const validate = async (data) => {
+export const validate = async (data: unknown): Promise<void> => {
   await profileSchema.validate(data, options);
 };
 
-const formatDataForFirestore = (data) => {
-  return {
-    displayName: data.displayName,
-    email: data.email,
-    license: data?.license ?? null,
-    seal: data?.seal ?? null,
-  };
-};
+const formatDataForFirestore = (data: Profile): ProfileDocument => ({
+  displayName: data.displayName,
+  email: data.email,
+  license: data.license ?? null,
+  seal: data.seal ?? null,
+});

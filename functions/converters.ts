@@ -1,12 +1,18 @@
-import { contrastColor } from 'contrast-color';
 import { getStatus } from '@ugrc/plss-shared';
+import { contrastColor } from 'contrast-color';
+import type {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  WithFieldValue,
+} from 'firebase-admin/firestore';
 
-export const graphicConverter = {
-  toFirestore(data) {
-    return data;
-  },
-  fromFirestore(snapshot, options) {
-    const data = snapshot.data(options);
+const passthrough = (data: WithFieldValue<DocumentData>): DocumentData => data;
+
+export const graphicConverter: FirestoreDataConverter<DocumentData> = {
+  toFirestore: passthrough,
+  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>) {
+    const data = snapshot.data();
 
     return {
       photos: data.photos,
@@ -47,19 +53,17 @@ const colors = {
   'UGRC rejected submission.': '#f43f5e',
   'Pending PLSS geometry corrections': '#10b981',
   'Sheet and geometry corrections are live': '#f0fdfa',
-};
+} as const;
 
-export const myContentConverter = {
-  toFirestore(data) {
-    return data;
-  },
-  fromFirestore(snapshot, options) {
-    const data = snapshot.data(options);
+export const myContentConverter: FirestoreDataConverter<DocumentData> = {
+  toFirestore: passthrough,
+  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>) {
+    const data = snapshot.data();
 
     const status = getStatus(data.status);
 
     if (status.label in colors) {
-      data.color = colors[status.label];
+      data.color = colors[status.label as keyof typeof colors];
     } else {
       for (const [title, color] of Object.entries(colors)) {
         if (status.label === title || status.label.includes(title)) {
@@ -72,7 +76,7 @@ export const myContentConverter = {
       data.color = colors.Unknown;
     }
 
-    const result = {
+    const result: DocumentData = {
       id: data.blm_point_id,
       key: snapshot.id,
       submitted: data.created_at.toDate().toISOString(),

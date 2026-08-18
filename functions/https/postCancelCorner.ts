@@ -1,12 +1,20 @@
-import { https, logger } from 'firebase-functions/v2';
+import type { DocumentData } from 'firebase-admin/firestore';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
+import { https, logger } from 'firebase-functions/v2';
 import { safelyInitializeApp } from '../firebase.js';
 
 const config = safelyInitializeApp();
 const db = getFirestore();
 
-export const cancelCorner = async (data, uid) => {
+type CancelCornerRequest = {
+  key?: string;
+};
+
+export const cancelCorner = async (
+  data: CancelCornerRequest,
+  uid: string,
+): Promise<0 | 1> => {
   logger.info('validating corner cancellation', { data, uid });
 
   if (!data.key) {
@@ -25,6 +33,10 @@ export const cancelCorner = async (data, uid) => {
     }
 
     const record = snapshot.data();
+    if (!record) {
+      throw new https.HttpsError('not-found', 'corner submission not found');
+    }
+
     if (
       record.status?.ugrc?.reviewedAt ||
       record.status?.county?.reviewedAt ||
@@ -36,7 +48,7 @@ export const cancelCorner = async (data, uid) => {
         published: record.published,
       });
 
-      return 0; // Already reviewed, cannot cancel
+      return 0;
     }
 
     logger.debug('cancelling submission', { key: data.key });
@@ -45,7 +57,7 @@ export const cancelCorner = async (data, uid) => {
       { status: { user: { cancelled: new Date() } } },
       { merge: true },
     );
-    await removeStorage(uid, snapshot.data());
+    await removeStorage(uid, record);
   } catch (error) {
     logger.error('error finding submission', { error });
 
@@ -55,19 +67,18 @@ export const cancelCorner = async (data, uid) => {
   return 1;
 };
 
-export const removeStorage = async (user, submission) => {
+export const removeStorage = async (
+  user: string,
+  submission: DocumentData,
+): Promise<void> => {
   const bucket = getStorage().bucket(config.storageBucket);
   const prefix = `submitters/${user}/${submission.type}/${submission.blm_point_id}/`;
 
   logger.debug('deleting submission files', { prefix });
 
-  await bucket.deleteFiles(
-    {
-      force: true,
-      prefix,
-    },
-    (error) => {
-      logger.warn('had trouble deleting file', { error });
-    },
-  );
+  try {
+    await bucket.deleteFiles({ force: true, prefix });
+  } catch (error) {
+    logger.warn('had trouble deleting file', { error });
+  }
 };

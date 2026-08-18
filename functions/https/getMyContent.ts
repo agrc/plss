@@ -1,14 +1,17 @@
-import { logger } from 'firebase-functions/v2';
+import type { DocumentData } from 'firebase-admin/firestore';
 import { getFirestore } from 'firebase-admin/firestore';
+import { logger } from 'firebase-functions/v2';
 import { graphicConverter, myContentConverter } from '../converters.js';
 import { safelyInitializeApp } from '../firebase.js';
 
 safelyInitializeApp();
 const db = getFirestore();
 
-export const myContent = async (uid) => {
-  const points = [];
-  const submissions = [];
+export const myContent = async (
+  uid: string,
+): Promise<{ submissions: DocumentData[]; points: DocumentData[] }> => {
+  const points: DocumentData[] = [];
+  const submissions: DocumentData[] = [];
 
   try {
     const snapshot = await db
@@ -22,8 +25,7 @@ export const myContent = async (uid) => {
       logger.debug('user points are empty', { uid });
     } else {
       snapshot.forEach((doc) => {
-        const item = doc.data();
-        points.push(item);
+        points.push(doc.data());
       });
     }
   } catch (error) {
@@ -31,7 +33,7 @@ export const myContent = async (uid) => {
   }
 
   try {
-    let filter = db
+    const filter = db
       .collectionGroup('submissions')
       .where('submitted_by.id', '==', uid)
       .where('status.user.cancelled', '==', null);

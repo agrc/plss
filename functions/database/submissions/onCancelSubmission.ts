@@ -1,22 +1,25 @@
-import { logger } from 'firebase-functions/v2';
+import type { ClientRequest } from '@sendgrid/client/src/request.js';
+import type { DocumentSnapshot } from 'firebase-admin/firestore';
 import { getFirestore } from 'firebase-admin/firestore';
-import { safelyInitializeApp } from '../../firebase.js';
+import { logger } from 'firebase-functions/v2';
 import { getContactsToNotify, notify } from '../../emailHelpers.js';
+import { safelyInitializeApp } from '../../firebase.js';
 
 safelyInitializeApp();
 const db = getFirestore();
 
-export const cancelSubmission = async (before) => {
-  // only email ugrc with empty county
+export const cancelSubmission = async (
+  before: DocumentSnapshot,
+): Promise<unknown> => {
   const to = await getContactsToNotify(db, null);
 
-  if (!to || to.length === 0) {
+  if (to.length === 0) {
     logger.error('no contacts to notify');
 
     return;
   }
 
-  const template = {
+  const template: ClientRequest = {
     method: 'post',
     url: '/v3/mail/send',
     body: {
@@ -38,7 +41,7 @@ export const cancelSubmission = async (before) => {
     },
   };
 
-  const templateData = template.body.personalizations[0].dynamic_template_data;
+  const templateData = template.body?.personalizations?.[0]?.dynamic_template_data;
 
   logger.debug('sending notification email to', { to, templateData });
 
