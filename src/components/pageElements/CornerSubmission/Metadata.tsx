@@ -40,7 +40,7 @@ const defaults: MetadataFormValues = {
   status: '',
   collected: '',
   accuracy: '',
-  mrrc: false,
+  mrrc: true,
 };
 
 const dateFormatter = new Intl.DateTimeFormat('sv-SE');
@@ -58,7 +58,7 @@ const Metadata = ({ dispatch }: MetadataProps) => {
   const defaultValues: MetadataFormValues = {
     ...defaults,
     ...savedMetadata,
-    mrrc: typeof savedMetadata?.mrrc === 'boolean' ? savedMetadata.mrrc : false,
+    mrrc: typeof savedMetadata?.mrrc === 'boolean' ? savedMetadata.mrrc : true,
   };
 
   const { control, formState, handleSubmit, register, reset, setFocus } = useForm<MetadataFormValues>({
