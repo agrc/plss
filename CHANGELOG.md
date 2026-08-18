@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.6.17-rc.1](https://github.com/agrc/plss/compare/v3.6.16...v3.6.17-rc.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* repoint to AGOL geometry service and better error logging ([8a9e2d1](https://github.com/agrc/plss/commit/8a9e2d1001f1c496f30353fc77502333ce5eb6e9))
+
+
+### Dependencies
+
+* @arcgis/core v4 -&gt; v5 ([59c2cec](https://github.com/agrc/plss/commit/59c2cec60f35942815079a16509c83e1ce8d9b88))
+* bump NPM dependencies 🌲 ([1ee9c97](https://github.com/agrc/plss/commit/1ee9c97d07a05dd6dd869bab5c8794a966048348))
+* bump utah design system ([68ddcda](https://github.com/agrc/plss/commit/68ddcda0301ae32426f2f368ce99cc21a920e731))
+
 ## [3.6.16](https://github.com/agrc/plss/compare/v3.6.15...v3.6.16) (2026-04-08)
 
 
