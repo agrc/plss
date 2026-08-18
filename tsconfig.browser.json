@@ -1,5 +1,6 @@
 {
   "extends": "@ugrc/tsconfigs/browser",
+  "references": [{ "path": "./functions/shared" }],
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "exclude": ["src/**/*.stories.tsx"]
 }
