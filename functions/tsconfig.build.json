@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "noEmit": false,
+    "outDir": "lib",
+    "rootDir": ".",
+    "tsBuildInfoFile": "../node_modules/.tmp/tsconfig.functions-build.tsbuildinfo"
+  },
+  "include": ["**/*.js", "**/*.ts", "**/*.d.ts"],
+  "exclude": ["**/*.test.js", "**/*.test.ts", "lib", "node_modules", "shared"]
+}

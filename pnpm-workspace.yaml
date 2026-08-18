@@ -1,5 +1,6 @@
 packages:
   - functions
+  - functions/shared
 
 minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
