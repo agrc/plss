@@ -27,10 +27,10 @@ import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import DefaultFallback from './ErrorBoundary.tsx';
-import GroupButton from './mapElements/GroupButton.jsx';
-import HomeButton from './mapElements/HomeButton.jsx';
+import GroupButton from './mapElements/GroupButton.tsx';
+import HomeButton from './mapElements/HomeButton.tsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';
-import MyLocation from './mapElements/MyLocation.jsx';
+import MyLocation from './mapElements/MyLocation.tsx';
 import Township from './mapElements/Township.jsx';
 import { normalizePointId } from './utils.ts';
 

@@ -1,4 +1,4 @@
-import GroupButton from './GroupButton.jsx';
+import GroupButton from './GroupButton.tsx';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

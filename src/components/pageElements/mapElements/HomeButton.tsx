@@ -6,11 +6,9 @@ import { useFirebaseAnalytics } from '@ugrc/utah-design-system/contexts/Firebase
 type HomeExtent = ConstructorParameters<typeof Extent>[0] | Extent;
 
 const goHome = async (view: MapView, extent: HomeExtent): Promise<void> => {
-  if (!(extent instanceof Extent)) {
-    extent = new Extent(extent);
-  }
+  const target = extent instanceof Extent ? extent : new Extent(extent);
 
-  await view.goTo(extent);
+  await view.goTo(target);
 };
 
 type HomeButtonProps = {

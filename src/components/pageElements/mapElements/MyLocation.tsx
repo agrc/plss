@@ -1,10 +1,10 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import { clsx } from 'clsx';
-import { forwardRef, useEffect, useRef } from 'react';
 import type { ComponentRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import type { ActorRefFrom, SnapshotFrom } from 'xstate';
-import type { AppDispatch } from '../contentTypes.ts';
 import { machine as geolocationMachine } from '../../machines/geolocation.ts';
+import type { AppDispatch } from '../contentTypes.ts';
 import useGeolocation from './useGeoLocation.ts';
 
 type MyLocationProps = {
@@ -66,11 +66,11 @@ export const GpsButton = forwardRef<ComponentRef<'div'>, GpsButtonProps>(({ stat
         className={clsx('flex flex-1 items-center justify-center rounded-full', {
           'cursor-pointer bg-white': state.matches('idle'),
           'cursor-not-allowed bg-slate-300': state.matches('notSupported'),
-          'cursor-progress bg-sky-400': state.matches('tracking.requesting'),
+          'cursor-progress bg-sky-400': state.matches({ tracking: 'requesting' }),
           'cursor-pointer bg-red-700': state.matches('error'),
         })}
       >
-        {state.matches('tracking.active') && (
+        {state.matches({ tracking: 'active' }) && (
           <span className="absolute flex h-6 w-6 justify-center">
             <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-sky-200/75"></span>
             <span className="inline-flex h-1 w-1 self-center rounded-full bg-sky-400"></span>
@@ -78,9 +78,9 @@ export const GpsButton = forwardRef<ComponentRef<'div'>, GpsButtonProps>(({ stat
         )}
         <ViewfinderCircleIcon
           className={clsx('h-6 w-6', {
-            'text-slate-700': state.matches('idle') || state.matches('tracking.active'),
-            'text-white motion-safe:animate-spin': state.matches('tracking.requesting'),
-            'text-white': state.matches('rejected') || state.matches('notSupported'),
+            'text-slate-700': state.matches('idle') || state.matches({ tracking: 'active' }),
+            'text-white motion-safe:animate-spin': state.matches({ tracking: 'requesting' }),
+            'text-white': state.matches('error') || state.matches('notSupported'),
           })}
         />
       </button>

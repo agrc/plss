@@ -1,4 +1,4 @@
-import { GpsButton } from './MyLocation.jsx';
+import { GpsButton } from './MyLocation.tsx';
 
 export default {
   component: GpsButton,
