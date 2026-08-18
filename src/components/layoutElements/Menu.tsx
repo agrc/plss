@@ -14,7 +14,7 @@ export default function Menu({ dispatch, drawerOpen }: MenuProps) {
   const { currentUser } = useFirebaseAuth();
 
   const classes = clsx(
-    ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800/95', 'shadow-sm', 'menu', 'md:justify-between', 'justify-evenly'],
+    ['menu', 'z-20', 'flex', 'py-4', 'bg-slate-800', 'shadow-sm', 'menu', 'md:justify-between', 'justify-evenly'],
     {
       'menu--open': drawerOpen,
     },
