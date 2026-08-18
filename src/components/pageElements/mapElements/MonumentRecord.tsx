@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import useOpenClosed from '@ugrc/utilities/hooks/useOpenClosed';
 import ky from 'ky';
 import { useEffect, useState } from 'react';
-import type { AppDispatch } from '../contentTypes.ts';
 import { Button } from '../../formElements/Buttons.tsx';
 import { Input } from '../../formElements/Inputs.tsx';
 import usePageView from '../../hooks/usePageView.ts';
+import type { AppDispatch } from '../contentTypes.ts';
 import TieSheetList from '../TieSheetList.tsx';
 
 const client = ky.create({
@@ -63,11 +63,15 @@ export default function MonumentRecord({ dispatch }: MonumentRecordProps) {
         throw new Error(`An incorrect response count was received: ${count}`);
       }
 
+      const feature = response.features?.[0];
+      if (!feature) {
+        throw new Error('A monument record was returned without geometry.');
+      }
+
       return new Point({
-        type: 'point',
-        x: response.features[0].geometry.x,
-        y: response.features[0].geometry.y,
-        spatialReference: 3857,
+        x: feature.geometry.x,
+        y: feature.geometry.y,
+        spatialReference: { wkid: 3857 },
       });
     },
     enabled: pointId.length > 5 && isOpen === true,
