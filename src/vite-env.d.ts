@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="node" />
 
 interface ImportMetaEnv {
   readonly VITE_SERVICE_NAME: string;

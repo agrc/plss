@@ -26,16 +26,15 @@ import { clsx } from 'clsx';
 import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
-import type { ComponentProps } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import type { AppState } from '../reducers/AppReducer.ts';
+import type { AppDispatch } from './contentTypes.ts';
 import DefaultFallback from './ErrorBoundary.tsx';
 import GroupButton from './mapElements/GroupButton.tsx';
 import HomeButton from './mapElements/HomeButton.tsx';
 import MonumentRecord from './mapElements/MonumentRecord.tsx';
 import MyLocation from './mapElements/MyLocation.tsx';
 import Township from './mapElements/Township.tsx';
-import type { AppDispatch } from './contentTypes.ts';
-import type { AppState } from '../reducers/AppReducer.ts';
 import { normalizePointId } from './utils.ts';
 
 esriConfig.assetsPath = '/assets';
@@ -192,23 +191,36 @@ const extent = {
   xmin: -13074391.513731329,
   ymax: 5225035.106177688,
   ymin: 4373832.359194187,
-  spatialReference: 3857,
-};
+  spatialReference: { wkid: 3857 },
+} as const;
 
 const tabs = ['Section Finder', 'Monument Finder'];
 const level14 = 72223;
 const plssPointsLayerId = 'PLSS Points';
 
-type ArcgisMapElement = HTMLElement & {
-  extent: typeof extent;
-  map: EsriMap;
-  view: MapView;
-  viewOnReady: () => Promise<void>;
+type MapContent = {
+  points: Array<NonNullable<ConstructorParameters<typeof Graphic>[0]>>;
 };
 
-type MapContent = {
-  points: Array<ConstructorParameters<typeof Graphic>[0]>;
+type LayerSelectorOptions = {
+  basemaps: string[];
+  operationalLayers: Array<
+    | string
+    | {
+        defaultSelected?: boolean;
+        function: () => FeatureLayer | VectorTileLayer;
+        label: string;
+      }
+  >;
+  quadWord: string;
 };
+
+type CenterTarget = NonNullable<NonNullable<ConstructorParameters<typeof Viewpoint>[0]>['targetGeometry']>;
+
+const isGraphic = (value: unknown): value is Graphic => value instanceof Graphic;
+
+const isCenterTarget = (value: unknown): value is CenterTarget =>
+  typeof value === 'object' && value !== null && 'type' in value;
 
 type PlssMapProps = {
   color: string;
@@ -220,7 +232,7 @@ type PlssMapProps = {
 export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapProps) {
   const node = useRef<ArcgisMapElement>(null);
   const pointFromUrlLoaded = useRef(false);
-  const [selectorOptions, setSelectorOptions] = useState<ComponentProps<typeof LayerSelector>>();
+  const [selectorOptions, setSelectorOptions] = useState<LayerSelectorOptions>();
   const [mapState, setMapState] = useState('idle');
   const [view, setView] = useState<MapView>();
   const onlyWidth = useWindowWidth();
@@ -229,10 +241,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
   const logEvent = useFirebaseAnalytics();
 
   const isLoading = useViewLoading(view);
-  const { graphic, setGraphic } = useGraphicManager(view);
-  const { setGraphic: setUserGraphics } = useGraphicManager(view);
-  const { setGraphic: setGpsGraphic } = useGraphicManager(view);
-  const { setViewPoint } = useViewPointZooming(view);
+  const { graphic, setGraphic } = useGraphicManager(view ?? null);
+  const { setGraphic: setUserGraphics } = useGraphicManager(view ?? null);
+  const { setGraphic: setGpsGraphic } = useGraphicManager(view ?? null);
+  const { setViewPoint } = useViewPointZooming(view as MapView);
 
   const { functions } = useFirebaseFunctions();
   const myContent = httpsCallable<undefined, MapContent>(functions, 'getMyContent');
@@ -322,16 +334,16 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
                     expression: '$feature.point_id',
                   },
                   where: 'primary_corner=1 or mrrc=1 or monument=1',
-                  font: {
-                    family: 'Helvetica',
-                    size: 14,
-                    weight: 'bold',
-                  },
                   symbol: {
                     type: 'text',
                     color: '#1e293b',
                     haloColor: [255, 255, 255, 0.8],
                     haloSize: 3,
+                    font: {
+                      family: 'Helvetica',
+                      size: 14,
+                      weight: 'bold',
+                    },
                   },
                 },
               ],
@@ -362,7 +374,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
   // move zoom widget to bottom right on larger screens
   useEffect(() => {
     if (view && onlyWidth > 640) {
-      view.ui.move(['zoom'], 'bottom-right', 0);
+      view.ui.move(['zoom'], 'bottom-right');
     }
   }, [onlyWidth, view]);
 
@@ -374,9 +386,9 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
 
     if (view) {
       if (onlyWidth > 640) {
-        view.padding = { left: drawerOpen ? 400 : 0, bottom: 0 };
+        view.padding = { left: drawerOpen ? 400 : 0, bottom: 0, right: 0, top: 0 };
       } else {
-        view.padding = { bottom: drawerOpen ? 580 : 70, left: 0 };
+        view.padding = { bottom: drawerOpen ? 580 : 70, left: 0, right: 0, top: 0 };
       }
     }
   }, [onlyWidth, drawerOpen, view]);
@@ -387,11 +399,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
       return;
     }
 
-    const plssPoints = view.map.findLayerById(plssPointsLayerId);
+    const plssPoints = view.map?.findLayerById(plssPointsLayerId);
+    const pointLayer = plssPoints instanceof FeatureLayer ? plssPoints : undefined;
 
-    if (!identifyGraphic) {
-      if (plssPoints) {
-        plssPoints.featureEffect = null;
+    if (!isGraphic(identifyGraphic)) {
+      if (pointLayer) {
+        pointLayer.featureEffect = null;
       }
 
       return;
@@ -405,10 +418,10 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
       { duration: 1000 },
     );
 
-    if (plssPoints) {
-      plssPoints.featureEffect = {
+    if (pointLayer) {
+      pointLayer.featureEffect = {
         filter: {
-          objectIds: [identifyGraphic.attributes.OBJECTID],
+          objectIds: [identifyGraphic.attributes.OBJECTID as number],
         },
         includedEffect: 'drop-shadow(0px 0px 10px white) saturate(200%) brightness(400%) opacity(100%)',
         excludedEffect: 'grayscale(70%) opacity(70%) invert(10%)',
@@ -447,12 +460,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
         }
         default: {
           const response = await view.hitTest(event);
+          const hits = response.results.filter((result) => result.layer?.id === plssPointsLayerId);
 
-          const hits = response?.results?.filter((result) => result.layer?.id === plssPointsLayerId);
-
-          let payload = null;
-          if (hits.length > 0) {
-            payload = hits[0].graphic;
+          let payload: Graphic | null = null;
+          const firstHit = hits[0];
+          if (firstHit && 'graphic' in firstHit) {
+            payload = firstHit.graphic;
           } else {
             if (view.scale > level14 + 1) {
               view.goTo(
@@ -470,7 +483,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
             scale: view.scale,
           });
 
-          setUrlParameter('POINT_ID', payload?.attributes?.point_id ?? null);
+          setUrlParameter('POINT_ID' as never, (payload?.attributes?.point_id as string | undefined) ?? null);
           dispatch({ type: 'map/identify', payload });
           dispatch({ type: 'menu/toggle', payload: 'identify' });
         }
@@ -481,7 +494,7 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
   }, [state, dispatch, color, setGraphic, logEvent, view]);
 
   useEffect(() => {
-    const pointId = normalizePointId(getUrlParameter('POINT_ID', 'string'));
+    const pointId = normalizePointId(getUrlParameter('POINT_ID' as never, 'string') ?? undefined);
 
     if (!view || pointFromUrlLoaded.current || pointId.length < 1) {
       return;
@@ -498,11 +511,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
         return;
       }
 
-      let features;
+      let features: Graphic[];
 
       try {
+        const existingLayer = view.map?.findLayerById(plssPointsLayerId);
         const pointLayer =
-          view.map.findLayerById(plssPointsLayerId) ??
+          (existingLayer instanceof FeatureLayer ? existingLayer : undefined) ??
           new FeatureLayer({
             url: urls.points,
           });
@@ -562,8 +576,12 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
 
     if (color === '') {
       // hex reset on completion, remove the graphic
-      setGraphic();
+      setGraphic(undefined as never);
     } else {
+      if (Array.isArray(graphic)) {
+        return;
+      }
+
       setGraphic(
         new Graphic({
           geometry: graphic.geometry,
@@ -586,10 +604,14 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
   // add and remove points on login and logout
   useEffect(() => {
     setMapState(status);
-    const points = [];
+    const points: Graphic[] = [];
 
     if (currentUser !== undefined && status === 'success') {
       for (const point of content?.data?.points ?? []) {
+        if (!point) {
+          continue;
+        }
+
         points.push(
           new Graphic({
             geometry: point.geometry,
@@ -605,14 +627,15 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
     }
 
     if (currentUser === undefined) {
-      setUserGraphics();
+      setUserGraphics(undefined as never);
       dispatch({ type: 'map/userPoints', payload: [] });
     }
   }, [dispatch, setUserGraphics, content?.data?.points, status, currentUser, view]);
 
   // add and zoom to gps location
   useEffect(() => {
-    if (!gpsGraphic) {
+    const gpsLocation = gpsGraphic?.graphic;
+    if (!gpsGraphic || !isGraphic(gpsLocation)) {
       return;
     }
 
@@ -621,32 +644,41 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
     view?.when(async () => {
       await view.goTo(
         new Viewpoint({
-          targetGeometry: gpsGraphic.graphic.geometry,
+          targetGeometry: gpsLocation.geometry,
           scale: gpsGraphic.scale ?? view.scale,
         }),
         { duration: 1000 },
       );
 
-      setGpsGraphic(gpsGraphic.graphic);
+      setGpsGraphic(gpsLocation);
     });
   }, [gpsGraphic, setGpsGraphic, logEvent, view]);
 
   // zoom to the center state object
   useEffect(() => {
-    if (state.center) {
-      let targetGeometry = state.center.geometry;
+    if (state.center && isCenterTarget(state.center.geometry)) {
+      const centerGeometry = state.center.geometry;
+      let targetGeometry = centerGeometry;
 
       logEvent('zooming', {
-        type: state.center.geometry?.type,
+        type: centerGeometry.type,
       });
 
-      switch (state.center.geometry?.type) {
-        case 'polygon':
-          targetGeometry = new Polygon(state.center.geometry).extent.center;
+      switch (centerGeometry.type) {
+        case 'polygon': {
+          const polygonExtent = new Polygon(centerGeometry as ConstructorParameters<typeof Polygon>[0]).extent;
+          if (polygonExtent) {
+            targetGeometry = polygonExtent.center;
+          }
           break;
-        case 'polyline':
-          targetGeometry = new Polyline(state.center.geometry).extent.center;
+        }
+        case 'polyline': {
+          const polylineExtent = new Polyline(centerGeometry as ConstructorParameters<typeof Polyline>[0]).extent;
+          if (polylineExtent) {
+            targetGeometry = polylineExtent.center;
+          }
           break;
+        }
         default:
           break;
       }
@@ -670,7 +702,9 @@ export default function PlssMap({ color, dispatch, drawerOpen, state }: PlssMapP
         <section className="ugrc__map">
           <div className={clsx(loadingCss, isLoading || mapState === 'loading' ? '' : 'opacity-0')}></div>
           <arcgis-map ref={node} className="h-screen w-full bg-white">
-            {selectorOptions ? <LayerSelector {...selectorOptions} slot="top-right" /> : null}
+            {selectorOptions ? (
+              <LayerSelector {...(selectorOptions as Parameters<typeof LayerSelector>[0])} slot="top-right" />
+            ) : null}
             {view ? (
               <div
                 slot={onlyWidth > 640 ? 'bottom-right' : 'top-left'}

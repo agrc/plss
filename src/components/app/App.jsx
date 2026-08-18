@@ -1,7 +1,7 @@
 import { useImmerReducer } from 'use-immer';
 import Drawer from '../layoutElements/Drawer.tsx';
 import Menu from '../layoutElements/Menu.jsx';
-import Map from '../pageElements/Map.jsx';
+import Map from '../pageElements/Map.tsx';
 import reduce, { defaults } from '../reducers/AppReducer.js';
 
 export default function App() {

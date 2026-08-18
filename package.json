@@ -99,6 +99,7 @@
     "@types/contrast-color": "1.0.3",
     "@types/md5": "^2.3.6",
     "@types/natural-compare-lite": "^1.4.2",
+    "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-color": "^3.0.13",
     "@types/react-dom": "^19.2.4",
