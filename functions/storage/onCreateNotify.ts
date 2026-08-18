@@ -97,7 +97,8 @@ export const createNotify = async (
     },
   };
 
-  const templateData = template.body?.personalizations?.[0]?.dynamic_template_data;
+  const templateData =
+    template.body?.personalizations?.[0]?.dynamic_template_data;
 
   logger.debug('sending notification email to', { to, templateData });
 

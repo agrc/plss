@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/react';
-import { machine as geolocationMachine } from '../../machines/geolocation.ts';
 import type { ActorRefFrom, SnapshotFrom } from 'xstate';
+import { machine as geolocationMachine } from '../../machines/geolocation.ts';
 
 type GeolocationMachine = typeof geolocationMachine;
 
