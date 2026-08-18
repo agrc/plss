@@ -62,15 +62,16 @@ const composePredicate = (meridian: number, township: string, range: string, sec
 export default function Township({ apiKey, dispatch }: TownshipProps) {
   // TODO: move this to a reducer or an object
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const selectedTab = tabs[selectedTabIndex] ?? tabs[0]!;
   const [selectedTownship, setSelectedTownship] = useState('');
   const [selectedRange, setSelectedRange] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const { analytics, logEvent } = usePageView('screen-township-finder');
 
   const { data: ranges } = useQuery({
-    queryKey: ['ranges', tabs[selectedTabIndex].value, selectedTownship, analytics, apiKey],
+    queryKey: ['ranges', selectedTab.value, selectedTownship, analytics, apiKey],
     queryFn: async () => {
-      const predicate = `torrname='${tabs[selectedTabIndex].value}T${selectedTownship}'`;
+      const predicate = `torrname='${selectedTab.value}T${selectedTownship}'`;
 
       logEvent(analytics, 'township-finder', {
         type: 'range',
@@ -123,9 +124,9 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
   });
 
   const { data: sections } = useQuery({
-    queryKey: ['sections', tabs[selectedTabIndex].value, selectedTownship, selectedRange, analytics, apiKey],
+    queryKey: ['sections', selectedTab.value, selectedTownship, selectedRange, analytics, apiKey],
     queryFn: async () => {
-      const predicate = `trname='${tabs[selectedTabIndex].value}T${selectedTownship}R${selectedRange}'`;
+      const predicate = `trname='${selectedTab.value}T${selectedTownship}R${selectedRange}'`;
 
       logEvent(analytics, 'township-finder', {
         type: 'section',
@@ -177,7 +178,8 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
   const { data: location, status } = useQuery({
     queryKey: [
       'location',
-      tabs[selectedTabIndex].value,
+      selectedTab.value,
+      selectedTab.number,
       selectedTownship,
       selectedRange,
       selectedSection,
@@ -185,12 +187,7 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
       apiKey,
     ],
     queryFn: async () => {
-      const predicate = composePredicate(
-        tabs[selectedTabIndex].number,
-        selectedTownship,
-        selectedRange,
-        selectedSection,
-      );
+      const predicate = composePredicate(selectedTab.number, selectedTownship, selectedRange, selectedSection);
 
       logEvent(analytics, 'township-finder', {
         type: 'shape',
@@ -317,7 +314,7 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
       </TabGroup>
       <div className="mt-4 flex justify-center">
         <Button
-          state={selectedSection.length < 1 ? 'disabled' : status === 'idle' ? undefined : status}
+          state={selectedSection.length < 1 ? 'disabled' : status}
           onClick={() => {
             if (!location) {
               return;
@@ -328,7 +325,7 @@ export default function Township({ apiKey, dispatch }: TownshipProps) {
               payload: location,
               meta: {
                 scale: 10000,
-                label: getLabel(tabs[selectedTabIndex].value, selectedTownship, selectedRange, selectedSection),
+                label: getLabel(selectedTab.value, selectedTownship, selectedRange, selectedSection),
               },
             });
           }}

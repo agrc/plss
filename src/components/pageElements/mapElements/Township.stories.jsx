@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
-import Township from './Township.jsx';
+import Township from './Township.tsx';
 
 let config = {
   apiKey: '',

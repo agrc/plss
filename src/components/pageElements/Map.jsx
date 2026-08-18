@@ -31,7 +31,7 @@ import GroupButton from './mapElements/GroupButton.tsx';
 import HomeButton from './mapElements/HomeButton.tsx';
 import MonumentRecord from './mapElements/MonumentRecord.tsx';
 import MyLocation from './mapElements/MyLocation.tsx';
-import Township from './mapElements/Township.jsx';
+import Township from './mapElements/Township.tsx';
 import { normalizePointId } from './utils.ts';
 
 esriConfig.assetsPath = '/assets';

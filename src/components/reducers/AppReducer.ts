@@ -27,22 +27,16 @@ export type AppAction =
   | { type: 'map/identify'; payload: unknown }
   | { type: 'map/set-gps-location'; payload: unknown }
   | { type: 'map/update-gps-location'; payload: unknown }
-  | { type: 'map/center-and-zoom'; payload: unknown; meta?: { scale?: number } }
+  | { type: 'map/center-and-zoom'; payload: unknown; meta?: { label?: string; scale?: number } }
   | { type: 'menu/toggle'; payload: string; meta?: unknown };
 
 type MenuToggleAction = Extract<AppAction, { type: 'menu/toggle' }>;
 
-const toggleDrawer = (
-  draft: Draft<AppState>,
-  action: MenuToggleAction,
-): void => {
+const toggleDrawer = (draft: Draft<AppState>, action: MenuToggleAction): void => {
   if (action.payload === '') {
     draft.drawerOpen = false;
     draft.activeComponent = action.payload;
-  } else if (
-    draft.activeComponent === action.payload &&
-    action.payload !== 'identify'
-  ) {
+  } else if (draft.activeComponent === action.payload && action.payload !== 'identify') {
     draft.drawerOpen = !draft.drawerOpen;
     draft.activeComponent = null;
   } else {
@@ -69,10 +63,7 @@ export const defaults: AppState = {
   submission: {},
 };
 
-const reduce = (
-  draft: Draft<AppState>,
-  action: AppAction | undefined,
-): void => {
+const reduce = (draft: Draft<AppState>, action: AppAction | undefined): void => {
   if (!action) {
     console.error(
       `dispatch event is empty
@@ -94,8 +85,7 @@ expected
       break;
     }
     case 'add-point/activate': {
-      draft.map.activeTool =
-        draft.map.activeTool !== 'add-point' ? 'add-point' : null;
+      draft.map.activeTool = draft.map.activeTool !== 'add-point' ? 'add-point' : null;
       if (draft.map.activeTool === null) {
         draft.addPoint.geometry = null;
       }

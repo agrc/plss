@@ -141,6 +141,9 @@ importers:
       '@types/md5':
         specifier: ^2.3.6
         version: 2.3.6
+      '@types/natural-compare-lite':
+        specifier: ^1.4.2
+        version: 1.4.2
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
@@ -2731,6 +2734,9 @@ packages:
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
+
+  '@types/natural-compare-lite@1.4.2':
+    resolution: {integrity: sha512-kk1ie31cI6AUm17qOi72lEOBfpRhcknJPsJQoKBulaZC9y00MHUWqxGTk/luWEnenLB+lHoNThrKAKdYVydlew==}
 
   '@types/node@24.13.3':
     resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
@@ -10785,6 +10791,8 @@ snapshots:
   '@types/mdx@2.0.14': {}
 
   '@types/ms@2.1.0': {}
+
+  '@types/natural-compare-lite@1.4.2': {}
 
   '@types/node@24.13.3':
     dependencies:
