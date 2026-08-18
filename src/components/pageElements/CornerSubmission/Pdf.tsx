@@ -23,7 +23,7 @@ type ExistingSheetFormValues = {
 
 const defaults: ExistingSheetFormValues = {
   pdf: '',
-  mrrc: false,
+  mrrc: true,
 };
 
 type MonumentPdfProps = {
@@ -39,7 +39,7 @@ export default function MonumentPdf({ dispatch }: MonumentPdfProps) {
   const defaultValues: ExistingSheetFormValues = {
     ...defaults,
     ...savedSheet,
-    mrrc: typeof savedSheet?.mrrc === 'boolean' ? savedSheet.mrrc : false,
+    mrrc: typeof savedSheet?.mrrc === 'boolean' ? savedSheet.mrrc : true,
   };
 
   const { handleSubmit, control, formState } = useForm<ExistingSheetFormValues>({
