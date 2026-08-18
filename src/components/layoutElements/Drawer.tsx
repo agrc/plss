@@ -1,7 +1,7 @@
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { clsx } from 'clsx';
-import { lazy, type ComponentProps, type Dispatch, type ReactNode, Suspense, useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, type ComponentProps, type Dispatch, type ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { SubmissionMachineContext } from '../machines/index.ts';
 import DefaultFallback from '../pageElements/ErrorBoundary.tsx';
@@ -52,10 +52,7 @@ const isCornerSubmission = (value: unknown): value is CornerSubmissionInput => {
 
   const submission = value as { blmPointId?: unknown; type?: unknown };
 
-  return (
-    typeof submission.blmPointId === 'string' &&
-    (submission.type === 'existing' || submission.type === 'new')
-  );
+  return typeof submission.blmPointId === 'string' && (submission.type === 'existing' || submission.type === 'new');
 };
 
 export default function Drawer({ dispatch, map, addPoint, activeComponent, drawerOpen, submission }: DrawerProps) {
@@ -112,11 +109,7 @@ export default function Drawer({ dispatch, map, addPoint, activeComponent, drawe
         );
       }
       case 'content': {
-        return currentUser !== undefined ? (
-          <MyContent dispatch={dispatch} />
-        ) : (
-          <Login dispatch={dispatch} />
-        );
+        return currentUser !== undefined ? <MyContent dispatch={dispatch} /> : <Login dispatch={dispatch} />;
       }
       case 'welcome': {
         return <Welcome dispatch={dispatch} />;
