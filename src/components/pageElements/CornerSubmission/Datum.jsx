@@ -6,7 +6,7 @@ import { coordinatePickerSchema } from '@ugrc/plss-shared/corner-submission/sche
 import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Select } from '../../formElements/Select.jsx';

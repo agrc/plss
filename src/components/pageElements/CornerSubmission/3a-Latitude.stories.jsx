@@ -1,6 +1,6 @@
 import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
 import { Latitude } from './GeographicCoordinates.jsx';
 
 let config = {

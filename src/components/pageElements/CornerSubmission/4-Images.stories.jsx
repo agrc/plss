@@ -2,7 +2,7 @@ import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/Fir
 import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
 import { FirebaseAuthProvider } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { FirebaseStorageProvider } from '@ugrc/utah-design-system/contexts/FirebaseStorageProvider';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
 import Images from './Images.jsx';
 
 let config = {

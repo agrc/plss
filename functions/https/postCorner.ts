@@ -112,7 +112,10 @@ export const validateNewSubmission = async (data: unknown): Promise<true> => {
   const submission = data as Partial<CornerSubmissionInput> | undefined;
   await schemas.metadataSchema.validate(submission?.metadata, options);
   await schemas.coordinatePickerSchema.validate(submission, options);
-  await schemas.geographicHeightSchema.validate(submission?.geographic, options);
+  await schemas.geographicHeightSchema.validate(
+    submission?.geographic,
+    options,
+  );
   await schemas.longitudeSchema.validate(submission?.geographic, options);
   await schemas.latitudeSchema.validate(submission?.geographic, options);
   await schemas.gridCoordinatesSchema.validate(submission?.grid, options);
@@ -121,14 +124,19 @@ export const validateNewSubmission = async (data: unknown): Promise<true> => {
   return true;
 };
 
-export const validateExistingSubmission = async (data: unknown): Promise<true> => {
+export const validateExistingSubmission = async (
+  data: unknown,
+): Promise<true> => {
   const submission = data as Partial<CornerSubmissionInput> | undefined;
   await schemas.existingSheetSchema.validate(submission?.existing, options);
 
   // coordinates are not required for existing corners
   if (submission?.datum) {
     await schemas.coordinatePickerSchema.validate(submission, options);
-    await schemas.geographicHeightSchema.validate(submission.geographic, options);
+    await schemas.geographicHeightSchema.validate(
+      submission.geographic,
+      options,
+    );
     await schemas.longitudeSchema.validate(submission.geographic, options);
     await schemas.latitudeSchema.validate(submission.geographic, options);
     await schemas.gridCoordinatesSchema.validate(submission.grid, options);

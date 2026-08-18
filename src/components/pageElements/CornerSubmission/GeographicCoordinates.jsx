@@ -7,7 +7,7 @@ import { geographicHeightSchema, latitudeSchema, longitudeSchema } from '@ugrc/p
 import { clsx } from 'clsx';
 import { useContext, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';
 import Spacer from '../../formElements/Spacer.jsx';

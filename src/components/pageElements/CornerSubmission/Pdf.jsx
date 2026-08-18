@@ -6,7 +6,7 @@ import { existingSheetSchema } from '@ugrc/plss-shared/corner-submission/schema'
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { useContext } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';

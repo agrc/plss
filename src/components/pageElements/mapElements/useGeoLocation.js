@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react';
-import { machine as geolocationMachine } from '../../machines/geolocation';
+import { machine as geolocationMachine } from '../../machines/geolocation.ts';
 
 export default function useGeolocation() {
   const [state, send] = useMachine(geolocationMachine);

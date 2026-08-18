@@ -9,7 +9,7 @@ import Logo from '../pageElements/Logo.jsx';
 const version = import.meta.env.PACKAGE_VERSION;
 
 const SubmissionProvider = lazy(() =>
-  import('../contexts/SubmissionContext.jsx').then((module) => ({
+  import('../contexts/SubmissionContext.tsx').then((module) => ({
     default: module.SubmissionProvider,
   })),
 );

@@ -154,12 +154,19 @@ const getImageData = (stream: StorageReadStream): Promise<string> => {
 
       return reject(err);
     });
-    stream.on('response', (response: { headers: Record<string, string | string[] | undefined> }) => {
-      const header = response.headers['content-type'];
-      contentType = Array.isArray(header) ? (header[0] ?? '') : (header ?? '');
+    stream.on(
+      'response',
+      (response: {
+        headers: Record<string, string | string[] | undefined>;
+      }) => {
+        const header = response.headers['content-type'];
+        contentType = Array.isArray(header)
+          ? (header[0] ?? '')
+          : (header ?? '');
 
-      return;
-    });
+        return;
+      },
+    );
     stream.on('data', (chunk: Buffer) => chunks.write(chunk));
     stream.on('end', () => {
       chunks.end();

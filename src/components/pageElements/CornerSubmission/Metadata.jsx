@@ -6,7 +6,7 @@ import { accuracy, corner, status } from '@ugrc/plss-shared/corner-submission/op
 import { metadataSchema as schema } from '@ugrc/plss-shared/corner-submission/schema';
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input, Label } from '../../formElements/Inputs.jsx';

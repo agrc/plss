@@ -8,7 +8,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
-import { SubmissionProvider } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
 import Metadata from './Metadata.jsx';
 
 let config = {

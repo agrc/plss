@@ -441,7 +441,9 @@ export const syncProfileImage = onObjectDeleted(
     const syncProfileImage = (await import('./storage/onDelete.js'))
       .syncProfileImage;
 
-    const result = await syncProfileImage(requireGroups(match.groups, 'uid').uid);
+    const result = await syncProfileImage(
+      requireGroups(match.groups, 'uid').uid,
+    );
 
     logger.debug('[storage::onDelete::syncProfileImage]', result);
 

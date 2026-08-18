@@ -7,7 +7,7 @@ import { httpsCallable } from 'firebase/functions';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useContext, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Link } from '../../formElements/Buttons.jsx';
 import Card from '../../formElements/Card.jsx';
 import { ObjectPreview } from '../../formElements/FileUpload.jsx';

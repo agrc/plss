@@ -5,7 +5,7 @@ import { statePlaneZones, units, verticalDatums } from '@ugrc/plss-shared/corner
 import { gridCoordinatesSchema } from '@ugrc/plss-shared/corner-submission/schema';
 import { useContext, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';
 import { Input } from '../../formElements/Inputs.jsx';

@@ -27,7 +27,9 @@ describe('updateContext', () => {
   });
 
   test('it can update an existing property on an existing object', () => {
-    expect(updateContext({ property: 'value' }, 'property', 'new value')).toEqual({
+    expect(
+      updateContext({ property: 'value' }, 'property', 'new value'),
+    ).toEqual({
       property: 'new value',
     });
   });
@@ -40,9 +42,17 @@ describe('updateContext', () => {
 
   test('it can merge a property within an object', () => {
     expect(
-      updateContext({ geography: { northing: { degrees: 1, minutes: 1, seconds: 1 } } }, 'geography', {
-        elevation: 100,
-      }),
+      updateContext(
+        {
+          geography: {
+            northing: { degrees: 1, minutes: 1, seconds: 1 },
+          },
+        },
+        'geography',
+        {
+          elevation: 100,
+        },
+      ),
     ).toEqual({
       geography: {
         northing: {

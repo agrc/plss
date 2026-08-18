@@ -4,7 +4,7 @@ import { imagesSchema as schema } from '@ugrc/plss-shared/corner-submission/sche
 import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthProvider';
 import { Fragment, useContext, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import FileUpload from '../../formElements/FileUpload.jsx';
 import { NumberedForm, NumberedFormSection } from '../../formElements/Form.jsx';

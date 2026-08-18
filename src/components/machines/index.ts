@@ -1,9 +1,59 @@
-// @ts-check
-
 import { countiesInZone, createProjectFormData, roundAccurately } from '@ugrc/plss-shared';
 import DmsCoordinates from 'dms-conversion';
 import ky from 'ky';
 import { assign, fromPromise, setup } from 'xstate';
+
+type StatePlaneZone = keyof typeof countiesInZone;
+
+export type Dms = {
+  degrees: number;
+  minutes: number;
+  seconds: number;
+};
+
+export type GeographicCoordinates = {
+  northing: Dms;
+  easting: Dms;
+  unit?: string;
+  elevation?: number;
+};
+
+export type GridCoordinates = {
+  zone: StatePlaneZone;
+  unit: 'ft' | 'm';
+  easting: number;
+  northing: number;
+  elevation?: number;
+  verticalDatum?: string;
+};
+
+type Point = { x: number; y: number };
+type ProjectionResponse = { geometries: Point[] };
+type CountyResponse = {
+  features: Array<{ attributes: { NAME?: string } }>;
+};
+type DmsArray = readonly [number, number, number, ...unknown[]];
+type DmsArrays = {
+  longitude: DmsArray;
+  latitude: DmsArray;
+};
+
+export type SubmissionMachineContext = Record<string, unknown> & {
+  type?: 'new' | 'existing';
+  datum?: string;
+  geographic?: GeographicCoordinates;
+  grid?: GridCoordinates;
+  decimalDegrees?: Point;
+  statePlane?: Point;
+  zone?: StatePlaneZone | '';
+};
+
+type SubmissionEvent = {
+  type: string;
+  meta?: string;
+  payload?: unknown;
+  error?: unknown;
+};
 
 const client = ky.extend({
   timeout: 40000,
@@ -12,11 +62,19 @@ const client = ky.extend({
 
 const geometryServerUrl = 'https://tasks.arcgisonline.com/arcgis/rest/services/Geometry/GeometryServer';
 
-const logProjectionError = async (operation, request, error) => {
-  const response = error.response
+const logProjectionError = async (
+  operation: string,
+  request: unknown,
+  error: unknown,
+): Promise<never> => {
+  const httpError = error as {
+    response?: Response;
+    data?: unknown;
+  };
+  const response = httpError.response
     ? {
-        status: error.response.status,
-        body: error.data,
+        status: httpError.response.status,
+        body: httpError.data,
       }
     : undefined;
 
@@ -29,29 +87,43 @@ const logProjectionError = async (operation, request, error) => {
   throw error;
 };
 
-export const updateContext = (context, field, value) => {
+export const updateContext = <T extends Record<string, unknown>>(
+  context: T | null,
+  field: string | undefined,
+  value: unknown,
+): T & Record<string, unknown> => {
   if (!field) {
-    return context;
+    return (context ?? {}) as T & Record<string, unknown>;
   }
 
-  if (!context) {
-    return { [field]: value };
-  }
+  const target = (context ?? {}) as T & Record<string, unknown>;
+  const mutableTarget = target as Record<string, unknown>;
 
-  if (context[field]) {
-    if (typeof context[field] === 'object') {
-      context[field] = Object.assign(context[field], value);
+  if (mutableTarget[field]) {
+    if (
+      typeof mutableTarget[field] === 'object' &&
+      mutableTarget[field] !== null &&
+      typeof value === 'object' &&
+      value !== null
+    ) {
+      mutableTarget[field] = Object.assign(mutableTarget[field], value);
     } else {
-      context[field] = value;
+      mutableTarget[field] = value;
     }
   } else {
-    context[field] = value;
+    mutableTarget[field] = value;
   }
 
-  return context;
+  return target;
 };
 
-const project = (grid) => {
+const project = async (
+  grid: GridCoordinates | undefined,
+): Promise<ProjectionResponse> => {
+  if (!grid) {
+    throw new Error('Grid coordinates are required for projection');
+  }
+
   const formData = new FormData();
 
   const data = createProjectFormData({
@@ -59,25 +131,39 @@ const project = (grid) => {
     coordinates: grid,
   });
 
+  if (!data) {
+    throw new Error('Grid projection data could not be created');
+  }
+
   Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value);
+    formData.append(key, String(value));
   });
 
-  return client
+  return await client
     .post('project', {
       body: formData,
       prefix: geometryServerUrl,
     })
-    .json()
+    .json<ProjectionResponse>()
     .catch((error) => logProjectionError('conversion', data, error));
 };
 
-export const dmsToDecimalDegrees = ({ degrees, minutes, seconds }) => {
+export const dmsToDecimalDegrees = ({
+  degrees,
+  minutes,
+  seconds,
+}: Dms): number => {
   return Number(degrees) + Number(minutes) / 60 + Number(seconds) / 3600;
 };
 
-const coordinateToDecimalDegrees = (geographic) => {
-  return new Promise((resolve) => {
+const coordinateToDecimalDegrees = (
+  geographic: GeographicCoordinates | undefined,
+): Promise<Point> => {
+  if (!geographic) {
+    throw new Error('Geographic coordinates are required');
+  }
+
+  return new Promise<Point>((resolve) => {
     const y = dmsToDecimalDegrees(geographic.northing);
     const x = -dmsToDecimalDegrees(geographic.easting);
 
@@ -85,7 +171,13 @@ const coordinateToDecimalDegrees = (geographic) => {
   });
 };
 
-const queryForCounty = (decimalDegrees) => {
+const queryForCounty = async (
+  decimalDegrees: Point | undefined,
+): Promise<CountyResponse> => {
+  if (!decimalDegrees) {
+    throw new Error('Decimal degree coordinates are required');
+  }
+
   const formData = new FormData();
   formData.append('geometry', `${decimalDegrees.x}, ${decimalDegrees.y}`);
   formData.append('geometryType', 'esriGeometryPoint');
@@ -95,15 +187,22 @@ const queryForCounty = (decimalDegrees) => {
   formData.append('inSR', '6318');
   formData.append('f', 'json');
 
-  return client
+  return await client
     .post('query', {
       body: formData,
       prefix: 'https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahCountyBoundaries/FeatureServer/0',
     })
-    .json();
+    .json<CountyResponse>();
 };
 
-const projectToStatePlane = (coordinates) => {
+const projectToStatePlane = async (coordinates: {
+  decimalDegrees?: Point;
+  zone?: StatePlaneZone | '';
+}): Promise<ProjectionResponse> => {
+  if (!coordinates.decimalDegrees || !coordinates.zone) {
+    throw new Error('Coordinates and State Plane zone are required');
+  }
+
   const formData = new FormData();
   const data = createProjectFormData({
     type: 'geographic',
@@ -114,24 +213,39 @@ const projectToStatePlane = (coordinates) => {
     },
   });
 
+  if (!data) {
+    throw new Error('State Plane projection data could not be created');
+  }
+
   Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value);
+    formData.append(key, String(value));
   });
 
-  return client
+  return await client
     .post('project', {
       body: formData,
       prefix: geometryServerUrl,
     })
-    .json()
+    .json<ProjectionResponse>()
     .catch((error) => logProjectionError('conversion', data, error));
 };
 
 export const submissionMachine = setup({
+  types: {
+    context: {} as SubmissionMachineContext,
+    input: {} as SubmissionMachineContext,
+    events: {} as SubmissionEvent,
+  },
   actions: {
     logProjectionFailure: ({ event }) => {
+      const actor =
+        typeof event.error === 'object' &&
+        event.error !== null &&
+        'actorId' in event.error
+          ? event.error.actorId
+          : undefined;
       console.error('State Plane coordinate calculation failed', {
-        actor: event.error?.actorId,
+        actor,
         error: event.error,
       });
     },
@@ -159,18 +273,38 @@ export const submissionMachine = setup({
   guards: {
     'is new submission': ({ context }) => context.type === 'new',
     'is existing submission': ({ context }) => context.type === 'existing',
-    'is grid datum': ({ context }) => context.datum.split('-')[0] === 'grid',
-    'is geographic datum': ({ context }) => context.datum.split('-')[0] === 'geographic',
+    'is grid datum': ({ context }) => context.datum?.split('-')[0] === 'grid',
+    'is geographic datum': ({ context }) => context.datum?.split('-')[0] === 'geographic',
   },
   actors: {
-    project: fromPromise(({ input }) => project(input)),
-    coordinateToDecimalDegrees: fromPromise(({ input }) => coordinateToDecimalDegrees(input)),
-    queryForCounty: fromPromise(({ input }) => queryForCounty(input)),
-    projectToStatePlane: fromPromise(({ input }) =>
+    project: fromPromise<ProjectionResponse, GridCoordinates | undefined>(
+      ({ input }) => project(input),
+    ),
+    coordinateToDecimalDegrees: fromPromise<
+      Point,
+      GeographicCoordinates | undefined
+    >(({ input }) => coordinateToDecimalDegrees(input)),
+    queryForCounty: fromPromise<CountyResponse, Point | undefined>(({ input }) =>
+      queryForCounty(input),
+    ),
+    projectToStatePlane: fromPromise<
+      ProjectionResponse,
+      { decimalDegrees?: Point; zone?: StatePlaneZone | '' }
+    >(({ input }) =>
       projectToStatePlane({
         decimalDegrees: input.decimalDegrees,
         zone: input.zone,
       }),
+    ),
+    formatResults: fromPromise<DmsArrays, { decimalDegrees: Point }>(
+      ({ input: { decimalDegrees } }) => {
+        const dmsCoords = new DmsCoordinates(
+          decimalDegrees.y,
+          decimalDegrees.x,
+        );
+
+        return Promise.resolve(dmsCoords.dmsArrays);
+      },
     ),
   },
 }).createMachine({
@@ -499,11 +633,14 @@ export const submissionMachine = setup({
                       return '';
                     }
 
-                    const county = event.output.features[0].attributes['NAME']?.toLowerCase();
+                    const county = event.output.features[0]?.attributes.NAME?.toLowerCase();
+                    if (!county) {
+                      return '';
+                    }
 
-                    let zone;
+                    let zone: StatePlaneZone | undefined;
 
-                    Object.keys(countiesInZone).forEach((key) => {
+                    (Object.keys(countiesInZone) as StatePlaneZone[]).forEach((key) => {
                       if (countiesInZone[key].includes(county)) {
                         zone = key;
                       }
@@ -558,34 +695,34 @@ export const submissionMachine = setup({
         },
         'format grid results': {
           invoke: {
-            src: fromPromise(
-              ({ input: { decimalDegrees } }) =>
-                new Promise((resolve) => {
-                  const dmsCoords = new DmsCoordinates(decimalDegrees.y, decimalDegrees.x);
-
-                  resolve(dmsCoords.dmsArrays);
-                }),
-            ),
+            src: 'formatResults',
             id: 'formatResults',
-            input: ({ context: decimalDegrees }) => decimalDegrees,
+            input: ({ context }) => {
+              if (!context.decimalDegrees) {
+                throw new Error('Projected decimal degrees are required');
+              }
+
+              return { decimalDegrees: context.decimalDegrees };
+            },
             onDone: [
               {
                 target: 'done',
                 actions: assign(({ context, event }) => {
-                  context.geographic = { northing: {}, easting: {} };
                   const { longitude, latitude } = event.output;
 
                   delete context.decimalDegrees;
 
-                  context.geographic.northing = {
-                    degrees: latitude[0],
-                    minutes: latitude[1],
-                    seconds: roundAccurately(latitude[2], 5),
-                  };
-                  context.geographic.easting = {
-                    degrees: longitude[0],
-                    minutes: longitude[1],
-                    seconds: roundAccurately(longitude[2], 5),
+                  context.geographic = {
+                    northing: {
+                      degrees: latitude[0],
+                      minutes: latitude[1],
+                      seconds: roundAccurately(latitude[2], 5),
+                    },
+                    easting: {
+                      degrees: longitude[0],
+                      minutes: longitude[1],
+                      seconds: roundAccurately(longitude[2], 5),
+                    },
                   };
 
                   return context;
@@ -603,6 +740,10 @@ export const submissionMachine = setup({
           always: {
             target: 'done',
             actions: assign(({ context }) => {
+              if (!context.statePlane || !context.zone) {
+                throw new Error('Projected State Plane coordinates are required');
+              }
+
               const { x, y } = context.statePlane;
               context.grid = {
                 zone: context.zone,

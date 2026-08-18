@@ -3,7 +3,7 @@ import useLocalStorage from '@ugrc/utilities/hooks/useLocalStorage';
 import { clsx } from 'clsx';
 import { lazy, useContext, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { SubmissionContext } from '../../contexts/SubmissionContext.jsx';
+import { SubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.jsx';
 import usePageView from '../../hooks/usePageView.jsx';
 import DefaultFallback from '../ErrorBoundary.jsx';
