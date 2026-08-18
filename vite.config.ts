@@ -16,6 +16,8 @@ export default defineConfig({
       'firebase/firestore',
       'firebase/functions',
       'firebase/storage',
+      'react-aria',
+      'react-dom',
     ],
   },
   plugins: [react(), eslintPlugin(), loadVersion(), tailwindcss()],
