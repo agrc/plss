@@ -1,0 +1,16 @@
+import { describe, expect, test } from 'vitest';
+import { normalizePointId } from './utils.ts';
+
+describe('normalizePointId', () => {
+  test('returns an empty string when the point id is empty', () => {
+    expect(normalizePointId('')).toBe('');
+  });
+
+  test('returns an empty string when the point id is nullish', () => {
+    expect(normalizePointId()).toBe('');
+  });
+
+  test('returns a trimmed point id value', () => {
+    expect(normalizePointId(' UT260020S0010E0_500640 ')).toBe('UT260020S0010E0_500640');
+  });
+});

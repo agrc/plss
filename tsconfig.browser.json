@@ -1,0 +1,5 @@
+{
+  "extends": "@ugrc/tsconfigs/browser",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "exclude": ["src/**/*.stories.tsx"]
+}

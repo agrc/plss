@@ -3,6 +3,9 @@ lerna-debug.log*
 
 dist
 dist-ssr
+storybook-static
+functions/lib
+functions/shared/dist
 *.local
 
 # Editor directories and files
