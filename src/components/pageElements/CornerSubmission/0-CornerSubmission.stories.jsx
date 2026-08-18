@@ -10,7 +10,7 @@ import { getAuth } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
 import { getStorage } from 'firebase/storage';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
-import CornerSubmission from './CornerSubmission.jsx';
+import CornerSubmission from './CornerSubmission.tsx';
 
 let config = {
   apiKey: '',

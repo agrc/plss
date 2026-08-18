@@ -3,7 +3,7 @@ import { useFirebaseAuth } from '@ugrc/utah-design-system/contexts/FirebaseAuthP
 import { clsx } from 'clsx';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import DefaultFallback from '../pageElements/ErrorBoundary.jsx';
+import DefaultFallback from '../pageElements/ErrorBoundary.tsx';
 import Logo from '../pageElements/Logo.jsx';
 
 const version = import.meta.env.PACKAGE_VERSION;
@@ -13,7 +13,7 @@ const SubmissionProvider = lazy(() =>
     default: module.SubmissionProvider,
   })),
 );
-const CornerSubmission = lazy(() => import('../pageElements/CornerSubmission/CornerSubmission.jsx'));
+const CornerSubmission = lazy(() => import('../pageElements/CornerSubmission/CornerSubmission.tsx'));
 const MyContent = lazy(() => import('../pageElements/MyContent.jsx'));
 const AddPoint = lazy(() => import('../pageElements/AddPoint.jsx'));
 const Identify = lazy(() => import('../pageElements/Identify.jsx'));

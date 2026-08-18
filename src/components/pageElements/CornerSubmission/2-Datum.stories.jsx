@@ -1,7 +1,7 @@
 import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/contexts/FirebaseAnalyticsProvider';
 import { FirebaseAppProvider } from '@ugrc/utah-design-system/contexts/FirebaseAppProvider';
 import { SubmissionProvider } from '../../contexts/SubmissionContext.tsx';
-import CoordinatePicker from './Datum.jsx';
+import CoordinatePicker from './Datum.tsx';
 
 let config = {
   apiKey: '',

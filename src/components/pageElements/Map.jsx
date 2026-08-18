@@ -26,7 +26,7 @@ import { contrastColor } from 'contrast-color';
 import { httpsCallable } from 'firebase/functions';
 import { useEffect, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import DefaultFallback from './ErrorBoundary.jsx';
+import DefaultFallback from './ErrorBoundary.tsx';
 import GroupButton from './mapElements/GroupButton.jsx';
 import HomeButton from './mapElements/HomeButton.jsx';
 import MonumentRecord from './mapElements/MonumentRecord.jsx';

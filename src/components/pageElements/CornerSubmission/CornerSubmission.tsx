@@ -1,12 +1,11 @@
 import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import useLocalStorage from '@ugrc/utilities/hooks/useLocalStorage';
 import { clsx } from 'clsx';
-import { lazy, useEffect, useRef } from 'react';
+import { lazy, useEffect, useRef, type Dispatch } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSubmissionContext } from '../../contexts/SubmissionContext.tsx';
 import { Button } from '../../formElements/Buttons.tsx';
 import usePageView from '../../hooks/usePageView.ts';
-import type { SubmissionMachineContext } from '../../machines/index.ts';
 import type { AppAction } from '../../reducers/AppReducer.ts';
 import DefaultFallback from '../ErrorBoundary.tsx';
 const SubmissionNotice = lazy(() => import('./SubmissionNotice.tsx'));
@@ -34,7 +33,7 @@ const Longitude = lazy(() =>
 );
 
 type CornerSubmissionProps = {
-  dispatch: (action: AppAction) => void;
+  dispatch: Dispatch<AppAction | undefined>;
   submission: {
     blmPointId: string;
     county?: string;
@@ -51,7 +50,7 @@ export default function CornerSubmission({ submission, dispatch }: CornerSubmiss
   const pointId = submission.blmPointId;
 
   useEffect(() => {
-    send({ type: 'start submission', submission: submission.type });
+    send({ type: 'start submission', submission: submission.type } as never);
     logEvent(analytics, 'submission-start', { type: submission.type });
   }, [submission.type, send, analytics, logEvent]);
 
