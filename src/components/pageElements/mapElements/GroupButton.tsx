@@ -42,7 +42,7 @@ export default function GroupButton({ children }: GroupButtonProps) {
             <div className="fixed inset-0 bg-black/25" />
           </TransitionChild>
 
-          <div className="fixed top-2 right-0 left-0 overflow-y-auto">
+          <div className="fixed top-2 right-0 bottom-0 left-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <TransitionChild
                 as={Fragment}
@@ -53,10 +53,10 @@ export default function GroupButton({ children }: GroupButtonProps) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-2xl transform rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
-                  <div>{children}</div>
+                <DialogPanel className="flex min-h-[30rem] w-full max-w-2xl transform flex-col rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all">
+                  <div className="flex-1">{children}</div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 shrink-0">
                     <Button type="button" style="secondary" onClick={toggle}>
                       Close
                     </Button>
