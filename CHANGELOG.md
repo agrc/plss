@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.17-rc.3](https://github.com/agrc/plss/compare/v3.6.17-rc.2...v3.6.17-rc.3) (2026-08-20)
+
+
+### Bug Fixes
+
+* test artifact registry policy ([79e14cb](https://github.com/agrc/plss/commit/79e14cb7e8f2e1ac06a2478e6afe622528597674))
+
 ## [3.6.17-rc.2](https://github.com/agrc/plss/compare/v3.6.17-rc.1...v3.6.17-rc.2) (2026-08-18)
 
 
