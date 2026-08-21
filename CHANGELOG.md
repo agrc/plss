@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.17-rc.4](https://github.com/agrc/plss/compare/v3.6.17-rc.3...v3.6.17-rc.4) (2026-08-21)
+
+
+### Bug Fixes
+
+* allow tasks.arcgisonline.com in content security policy ([29ade78](https://github.com/agrc/plss/commit/29ade78d13b2bc479367535d69704ee236db7429))
+
 ## [3.6.17-rc.3](https://github.com/agrc/plss/compare/v3.6.17-rc.2...v3.6.17-rc.3) (2026-08-20)
 
 
