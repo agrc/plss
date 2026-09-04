@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.17-rc.5](https://github.com/agrc/plss/compare/v3.6.17-rc.4...v3.6.17-rc.5) (2026-09-04)
+
+
+### Bug Fixes
+
+* prevent form from going back to step 1 after a successful submission ([976360d](https://github.com/agrc/plss/commit/976360d1b2cea66f427e452d8f417706cfe1f7a2))
+
 ## [3.6.17-rc.4](https://github.com/agrc/plss/compare/v3.6.17-rc.3...v3.6.17-rc.4) (2026-08-21)
 
 
