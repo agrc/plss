@@ -24,6 +24,7 @@ Run validation in this order after relevant changes:
 ```sh
 CI=1 pnpm test:ci
 pnpm lint
+pnpm check
 pnpm build
 ```
 
