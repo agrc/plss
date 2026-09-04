@@ -7,7 +7,7 @@ const startFromForm = (form: string, context: { type: 'new' | 'existing' }) => {
     value: { form, projecting: 'idle' },
     context,
   });
-  const actor = createActor(submissionMachine, { snapshot });
+  const actor = createActor(submissionMachine, { input: context, snapshot });
   actor.start();
 
   return actor;
