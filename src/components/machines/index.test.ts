@@ -1,5 +1,17 @@
 import { describe, expect, test } from 'vitest';
-import { dmsToDecimalDegrees, updateContext } from './index.js';
+import { createActor } from 'xstate';
+import { dmsToDecimalDegrees, submissionMachine, updateContext } from './index.js';
+
+const startFromForm = (form: string, context: { type: 'new' | 'existing' }) => {
+  const snapshot = submissionMachine.resolveState({
+    value: { form, projecting: 'idle' },
+    context,
+  });
+  const actor = createActor(submissionMachine, { snapshot });
+  actor.start();
+
+  return actor;
+};
 
 describe('dmsToDecimalDegrees', () => {
   test('converts degrees, minutes, and seconds to decimal degrees', () => {
@@ -61,5 +73,33 @@ describe('updateContext', () => {
         elevation: 100,
       },
     });
+  });
+});
+
+describe('submissionMachine form flow', () => {
+  test('starts a new submission from idle', () => {
+    const actor = startFromForm('idle', { type: 'new' });
+
+    actor.send({ type: 'start submission' });
+
+    expect(actor.getSnapshot().matches({ form: 'adding metadata' })).toBe(true);
+  });
+
+  test('stays on the success screen after a completed submission', () => {
+    const actor = startFromForm('reviewing', { type: 'new' });
+
+    actor.send({ type: 'NEXT' });
+    actor.send({ type: 'start submission' });
+
+    expect(actor.getSnapshot().matches({ form: 'submitted' })).toBe(true);
+    expect(actor.getSnapshot().matches({ form: 'adding metadata' })).toBe(false);
+  });
+
+  test('moves to the submission error screen when review fails', () => {
+    const actor = startFromForm('reviewing', { type: 'existing' });
+
+    actor.send({ type: 'ERROR' });
+
+    expect(actor.getSnapshot().matches({ form: 'submission error' })).toBe(true);
   });
 });
