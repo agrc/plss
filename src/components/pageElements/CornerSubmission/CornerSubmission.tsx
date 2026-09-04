@@ -52,7 +52,10 @@ export default function CornerSubmission({ submission, dispatch }: CornerSubmiss
   useEffect(() => {
     send({ type: 'start submission', submission: submission.type } as never);
     logEvent(analytics, 'submission-start', { type: submission.type });
-  }, [submission.type, send, analytics, logEvent]);
+    // Only start the wizard when the submission type is first selected.
+    // logEvent is recreated every render and must not restart a completed submission.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submission.type, send]);
 
   useEffect(() => {
     scrollContainer.current?.scrollTo(0, 0);
@@ -84,8 +87,10 @@ export default function CornerSubmission({ submission, dispatch }: CornerSubmiss
         return <Images />;
       case snapshot.matches({ form: 'reviewing' }):
         return <Review />;
-      case snapshot.matches({ form: 'idle' }):
+      case snapshot.matches({ form: 'submitted' }):
         return <SubmissionSuccess dispatch={dispatch} />;
+      case snapshot.matches({ form: 'idle' }):
+        return null;
       default:
         logEvent(analytics, 'submission-error', { state: snapshot.value });
         return (

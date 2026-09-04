@@ -54,7 +54,7 @@ const Review = () => {
     },
     onError: (error) => {
       console.warn('error', error);
-      send({ type: 'NEXT' });
+      send({ type: 'ERROR' });
     },
   });
 

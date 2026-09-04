@@ -435,7 +435,7 @@ export const submissionMachine = setup({
         reviewing: {
           on: {
             NEXT: {
-              target: 'idle',
+              target: 'submitted',
             },
             ERROR: {
               target: 'submission error',
@@ -508,6 +508,7 @@ export const submissionMachine = setup({
             RESET: {},
           },
         },
+        submitted: {},
         'submission error': {
           on: {
             BACK: {
