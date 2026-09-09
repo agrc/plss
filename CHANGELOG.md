@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.17-rc.6](https://github.com/agrc/plss/compare/v3.6.17-rc.5...v3.6.17-rc.6) (2026-09-09)
+
+
+### Bug Fixes
+
+* **functions:** create the monument firestore prop for new sheets ([facaafb](https://github.com/agrc/plss/commit/facaafbe979c05e524a05835daf9ab3470530002)), refs [#563](https://github.com/agrc/plss/issues/563)
+
 ## [3.6.17-rc.5](https://github.com/agrc/plss/compare/v3.6.17-rc.4...v3.6.17-rc.5) (2026-09-04)
 
 
