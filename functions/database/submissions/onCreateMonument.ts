@@ -55,6 +55,9 @@ export const createMonumentRecord = async (
         contentType: 'application/pdf',
         contentDisposition: 'inline',
       });
+
+      const doc = db.collection('submissions').doc(id);
+      await doc.update({ monument: fileName });
     } catch (error) {
       logger.error('error generating monument', { error, record, id });
     }
