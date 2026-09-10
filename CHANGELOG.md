@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.6.17-rc.8](https://github.com/agrc/plss/compare/v3.6.16...v3.6.17-rc.8) (2026-09-10)
+
+
+### Features
+
+* add better busy indicator to map ([b573e84](https://github.com/agrc/plss/commit/b573e84d48f1b15f40e33c2de2771a678f797751)), refs [#551](https://github.com/agrc/plss/issues/551)
+
+
+### Bug Fixes
+
+* allow tasks.arcgisonline.com in content security policy ([80f8d79](https://github.com/agrc/plss/commit/80f8d79570750137f74fbe6e15570db639c1646a))
+* better layout for quick finder tools dialog ([9d82808](https://github.com/agrc/plss/commit/9d828087c7302cd5484562379f59d0b22fa1b9c6))
+* default MMRC project toggle to yes ([baaa2d3](https://github.com/agrc/plss/commit/baaa2d3bf6e0189704361c7a777aa0901cd79a9e)), refs [#549](https://github.com/agrc/plss/issues/549)
+* **functions:** better error handling for submissions ([60af4f9](https://github.com/agrc/plss/commit/60af4f905e96476916d265da9576c271002caf37))
+* **functions:** create the monument firestore prop for new sheets ([e6a75cb](https://github.com/agrc/plss/commit/e6a75cba610f4b4b46ef13eb3f49fa4d3b2a51ec)), refs [#563](https://github.com/agrc/plss/issues/563)
+* make menu ribbon more visible and functional on mobile ([f1e91a1](https://github.com/agrc/plss/commit/f1e91a1681c9438214064f39478de872148a497f)), refs [#160](https://github.com/agrc/plss/issues/160)
+* more natural sorting of TRS ranges with decimals ([06b726c](https://github.com/agrc/plss/commit/06b726c36e7533761a9920b888fcff44be549b89)), refs [#203](https://github.com/agrc/plss/issues/203)
+* prevent form from going back to step 1 after a successful submission ([8cb3972](https://github.com/agrc/plss/commit/8cb3972c6e23d8363f768bd93c76edaeb6ff2c9a))
+* remove skip button on "Location Information" screen ([341da26](https://github.com/agrc/plss/commit/341da26956fbac40e1bf78c4204c9a742130718d)), refs [#550](https://github.com/agrc/plss/issues/550)
+* repoint to AGOL geometry service and better error logging ([8a9e2d1](https://github.com/agrc/plss/commit/8a9e2d1001f1c496f30353fc77502333ce5eb6e9))
+* test artifact registry policy ([a13005e](https://github.com/agrc/plss/commit/a13005e286764ffc7690e51f9e2a18c7ce5101a4))
+
+
+### Dependencies
+
+* @arcgis/core v4 -&gt; v5 ([59c2cec](https://github.com/agrc/plss/commit/59c2cec60f35942815079a16509c83e1ce8d9b88))
+* bump NPM dependencies 🌲 ([1ee9c97](https://github.com/agrc/plss/commit/1ee9c97d07a05dd6dd869bab5c8794a966048348))
+* bump utah design system ([68ddcda](https://github.com/agrc/plss/commit/68ddcda0301ae32426f2f368ce99cc21a920e731))
+
 ## [3.6.17-rc.6](https://github.com/agrc/plss/compare/v3.6.17-rc.5...v3.6.17-rc.6) (2026-09-09)
 
 
