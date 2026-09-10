@@ -119,49 +119,36 @@ export const createMonumentRecord = async (
   const fileName = `under-review/${record.blm_point_id}/${record.submitted_by.id}/${id}.pdf`;
   const file = bucket.file(fileName);
 
-  let pdf: Buffer | null = null;
   try {
     const createdPdf = (await createPdfDocument(definition, pdfs)) as Buffer;
-    pdf = createdPdf;
 
     await file.save(createdPdf);
     await file.setMetadata({
       contentType: 'application/pdf',
       contentDisposition: 'inline',
     });
-  } catch (error) {
-    logger.error('error generating monument', { error, record, id });
-  }
 
-  try {
     const doc = db.collection('submissions').doc(id);
-
     await doc.update({ monument: fileName });
-  } catch (error) {
-    logger.error('error updating monument record sheet', { fileName, error });
-  }
 
-  if (!record.metadata.mrrc) {
-    return true;
-  }
+    if (!record.metadata.mrrc) {
+      return true;
+    }
 
-  try {
-    if (pdf) {
+    try {
       await uploadFile(
         sharedDriveId,
-        pdf,
+        createdPdf,
         record.blm_point_id,
         record.county,
         fiscalYear,
       );
-    } else {
-      logger.error('error placing file in drive: pdf not created', {
-        record,
-        id,
-      });
+    } catch (error) {
+      logger.error('error placing file in drive', { error, record, id });
     }
   } catch (error) {
-    logger.error('error placing file in drive', { error, record, id });
+    logger.error('error generating monument', { error, record, id });
+    throw error;
   }
 
   return true;
