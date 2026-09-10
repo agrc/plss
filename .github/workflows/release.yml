@@ -93,3 +93,18 @@ jobs:
         uses: agrc/release-issue-notifications-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💬 Post production release to Google Chat
+        env:
+          GOOGLE_CHAT_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          RELEASE_NAME: ${{ github.event.release.name || github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          payload=$(jq -n \
+            --arg release_name "$RELEASE_NAME" \
+            --arg release_url "$RELEASE_URL" \
+            '{text: ("Production release deployed: " + $release_name + "\n" + $release_url)}')
+          curl --fail-with-body --silent --show-error \
+            --header 'Content-Type: application/json' \
+            --data "$payload" \
+            "$GOOGLE_CHAT_WEBHOOK_URL"
