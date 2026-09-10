@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.17-rc.7](https://github.com/agrc/plss/compare/v3.6.17-rc.6...v3.6.17-rc.7) (2026-09-10)
+
+
+### Bug Fixes
+
+* **functions:** better error handling for submissions ([753fc64](https://github.com/agrc/plss/commit/753fc64be68235fe4f9c556faba21564493a1673))
+
 ## [3.6.17-rc.6](https://github.com/agrc/plss/compare/v3.6.17-rc.5...v3.6.17-rc.6) (2026-09-09)
 
 
