@@ -13,6 +13,7 @@ minimumReleaseAgeExclude:
 
 allowBuilds:
   '@firebase/util': true
+  '@parcel/watcher': true
   '@swc/core': true
   '@vaadin/vaadin-usage-statistics': true
   core-js: true
@@ -20,7 +21,3 @@ allowBuilds:
   protobufjs: true
   re2: true
   unrs-resolver: true
-onlyBuiltDependencies:
-  - '@firebase/util'
-  - esbuild
-  - protobufjs
