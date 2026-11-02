@@ -28,7 +28,7 @@ importers:
         version: 2.0.1(react-dom@19.2.8(react@19.2.8))(react-hook-form@7.87.0(react@19.2.8))(react@19.2.8)
       '@hookform/resolvers':
         specifier: ^5.9.1
-        version: 5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.9)(react-hook-form@7.87.0(react@19.2.8))(yup@1.7.1)(zod@4.5.4)
+        version: 5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.9)(react-hook-form@7.87.0(react@19.2.8))(yup@1.7.1)(zod@4.6.7)
       '@react-hook/window-size':
         specifier: ^3.1.1
         version: 3.1.1(react@19.2.8)
@@ -8310,8 +8310,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@4.5.4:
-    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
 snapshots:
 
@@ -9510,7 +9510,7 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       react-hook-form: 7.87.0(react@19.2.8)
 
-  '@hookform/resolvers@5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.9)(react-hook-form@7.87.0(react@19.2.8))(yup@1.7.1)(zod@4.5.4)':
+  '@hookform/resolvers@5.9.1(@sinclair/typebox@0.34.52)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(joi@18.2.9)(react-hook-form@7.87.0(react@19.2.8))(yup@1.7.1)(zod@4.6.7)':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.87.0(react@19.2.8)
@@ -9521,7 +9521,7 @@ snapshots:
       ajv-formats: 2.1.1(ajv@8.20.0)
       joi: 18.2.9
       yup: 1.7.1
-      zod: 4.5.4
+      zod: 4.6.7
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -9931,7 +9931,7 @@ snapshots:
       '@types/react': 19.2.18
       react: 19.2.8
 
-  '@modelcontextprotocol/sdk@1.32.2(supports-color@10.2.2)(zod@4.5.4)':
+  '@modelcontextprotocol/sdk@1.32.2(supports-color@10.2.2)(zod@4.6.7)':
     dependencies:
       '@hono/node-server': 2.1.1(hono@4.13.13)
       ajv: 8.20.0
@@ -9948,8 +9948,8 @@ snapshots:
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 4.5.4
-      zod-to-json-schema: 3.25.2(zod@4.5.4)
+      zod: 4.6.7
+      zod-to-json-schema: 3.25.2(zod@4.6.7)
     transitivePeerDependencies:
       - supports-color
 
@@ -12924,8 +12924,8 @@ snapshots:
       '@babel/parser': 7.29.8
       eslint: 9.39.5(jiti@2.7.0)(supports-color@10.2.2)
       hermes-parser: 0.25.1
-      zod: 4.5.4
-      zod-validation-error: 4.0.2(zod@4.5.4)
+      zod: 4.6.7
+      zod-validation-error: 4.0.2(zod@4.6.7)
     transitivePeerDependencies:
       - supports-color
 
@@ -13416,7 +13416,7 @@ snapshots:
       '@google-cloud/cloud-sql-connector': 1.12.0(supports-color@10.2.2)
       '@google-cloud/pubsub': 5.3.1(supports-color@10.2.2)
       '@inquirer/prompts': 7.10.1(@types/node@24.13.3)
-      '@modelcontextprotocol/sdk': 1.32.2(supports-color@10.2.2)(zod@4.5.4)
+      '@modelcontextprotocol/sdk': 1.32.2(supports-color@10.2.2)(zod@4.6.7)
       abort-controller: 3.0.0
       ajv: 8.20.0
       ajv-formats: 3.0.1
@@ -13479,7 +13479,7 @@ snapshots:
       winston-transport: 4.9.0
       ws: 8.21.3
       yaml: 2.9.0
-      zod: 4.5.4
+      zod: 4.6.7
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - '@types/node'
@@ -17428,12 +17428,12 @@ snapshots:
       compress-commons: 6.0.2
       readable-stream: 4.7.0
 
-  zod-to-json-schema@3.25.2(zod@4.5.4):
+  zod-to-json-schema@3.25.2(zod@4.6.7):
     dependencies:
-      zod: 4.5.4
+      zod: 4.6.7
 
-  zod-validation-error@4.0.2(zod@4.5.4):
+  zod-validation-error@4.0.2(zod@4.6.7):
     dependencies:
-      zod: 4.5.4
+      zod: 4.6.7
 
-  zod@4.5.4: {}
+  zod@4.6.7: {}
