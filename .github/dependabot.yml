@@ -4,6 +4,11 @@ updates:
     directory: /
     schedule:
       interval: quarterly
+    ignore:
+      # typescript-eslint does not yet support the TypeScript 7 API.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
     groups:
       safe-app-dependencies:
         update-types:

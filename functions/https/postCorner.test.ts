@@ -13,9 +13,30 @@ import {
 } from './postCorner.js';
 import { postCorner } from '../index.js';
 
-const addMock = vi.fn();
-const docMock = vi.fn(() => 'ref');
-// addMock.mockReturnValue(Promise.resolve(true));
+const { addMock, docMock } = vi.hoisted(() => ({
+  addMock: vi.fn(),
+  docMock: vi.fn(() => 'ref'),
+}));
+
+vi.mock('firebase-admin/firestore', async () => {
+  const { GeoPoint } = await vi.importActual<
+    typeof import('firebase-admin/firestore')
+  >('firebase-admin/firestore');
+
+  return {
+    GeoPoint,
+    getFirestore: vi.fn(() => {
+      return {
+        collection: vi.fn(() => {
+          return {
+            doc: docMock,
+            add: addMock,
+          };
+        }),
+      };
+    }),
+  };
+});
 
 describe('postCorner', () => {
   const date = new Date('2021-01-01T00:00:00.000Z');
@@ -56,23 +77,6 @@ describe('postCorner', () => {
   };
 
   beforeAll(() => {
-    vi.mock('firebase-admin/firestore', async () => {
-      const { GeoPoint } = await vi.importActual('firebase-admin/firestore');
-
-      return {
-        GeoPoint,
-        getFirestore: vi.fn(() => {
-          return {
-            collection: vi.fn(() => {
-              return {
-                doc: docMock,
-                add: addMock,
-              };
-            }),
-          };
-        }),
-      };
-    });
     vi.useFakeTimers();
     vi.setSystemTime(date);
   });
