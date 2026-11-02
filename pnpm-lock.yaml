@@ -42,8 +42,8 @@ importers:
         specifier: workspace:*
         version: link:functions/shared
       '@ugrc/utah-design-system':
-        specifier: ^4.3.2
-        version: 4.3.2(@arcgis/core@5.1.27)(@arcgis/map-components@5.1.27(@arcgis/core@5.1.27)(@esri/calcite-components@5.1.2))(@esri/calcite-components@5.1.2)(firebase@12.18.0)(react-aria-components@1.22.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-aria@3.53.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.51.0(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.3)
+        specifier: ^4.1.0
+        version: 4.1.0(@arcgis/core@5.1.27)(@arcgis/map-components@5.1.27(@arcgis/core@5.1.27)(@esri/calcite-components@5.1.2))(@esri/calcite-components@5.1.2)(firebase@12.18.0)(react-aria-components@1.22.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-aria@3.53.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.51.0(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.3)
       '@ugrc/utilities':
         specifier: ^5.0.1
         version: 5.0.1(@arcgis/core@5.1.27)(react@19.3.1)
@@ -3086,8 +3086,8 @@ packages:
   '@ugrc/tsconfigs@1.0.4':
     resolution: {integrity: sha512-8ddPHD3C4OgIm/rbMQQreByOgrXBiWA7rOPDBeH3kW+tC2KcrLynCagweTXdP7RZlo8qEG7CHP3fn9dJeUgCTQ==}
 
-  '@ugrc/utah-design-system@4.3.2':
-    resolution: {integrity: sha512-C5ju02ANBnkyAQ/iaye42ctdsFfYAnkpExv5qApLOkJAJrKAxa5CuUBNecRgTKEJ0AEUvKERfJLBouSgz3P5LA==}
+  '@ugrc/utah-design-system@4.1.0':
+    resolution: {integrity: sha512-GxRodbMoDvQEtNEnw2pttSGYK3fFtlQEiffWTYhWkhx02XrrQVNCVwSvJXOaG4ZM1kXXies9c4fZXHyYIR9/mA==}
     peerDependencies:
       '@arcgis/core': ^5.0.0
       '@arcgis/map-components': ^5.0.0
@@ -4957,8 +4957,8 @@ packages:
   focus-trap@8.2.2:
     resolution: {integrity: sha512-qV0g8hRYBqgACcFOH3f9wXc4zPKhr/0z9RI2a6ZijZ72EeBi4g8oBy8zAWuUR1TsMpOzwpUMFvjdasrC41Joug==}
 
-  follow-redirects@1.16.1:
-    resolution: {integrity: sha512-FNvFGzoMLWmE6Yj9spb/zjd7yiNCHiAW9/Tg9CXrQ8wuu32HtlJOwWO11OJafl5FfY3DxTdQ0vj42zU1kvv5jg==}
+  follow-redirects@1.16.2:
+    resolution: {integrity: sha512-/kVP2U8z596Ia0gwFrwyIeo74ta5aVmSeU1FfAUMAmcEP5EP7zydmag3SLiN64NaRKef3lxsq7i/g7ltJQDGow==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -11410,7 +11410,7 @@ snapshots:
     dependencies:
       '@total-typescript/tsconfig': 1.0.4
 
-  '@ugrc/utah-design-system@4.3.2(@arcgis/core@5.1.27)(@arcgis/map-components@5.1.27(@arcgis/core@5.1.27)(@esri/calcite-components@5.1.2))(@esri/calcite-components@5.1.2)(firebase@12.18.0)(react-aria-components@1.22.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-aria@3.53.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.51.0(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.3)':
+  '@ugrc/utah-design-system@4.1.0(@arcgis/core@5.1.27)(@arcgis/map-components@5.1.27(@arcgis/core@5.1.27)(@esri/calcite-components@5.1.2))(@esri/calcite-components@5.1.2)(firebase@12.18.0)(react-aria-components@1.22.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-aria@3.53.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react-stately@3.51.0(react@19.3.1))(react@19.3.1)(tailwindcss@4.3.3)':
     dependencies:
       '@arcgis/core': 5.1.27
       '@arcgis/map-components': 5.1.27(@arcgis/core@5.1.27)(@esri/calcite-components@5.1.2)
@@ -11938,7 +11938,7 @@ snapshots:
 
   axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
-      follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
+      follow-redirects: 1.16.2(debug@4.4.3(supports-color@10.2.2))
       form-data: 4.0.6
       https-proxy-agent: 5.0.1(supports-color@10.2.2)
       proxy-from-env: 2.1.0
@@ -13811,7 +13811,7 @@ snapshots:
     dependencies:
       tabbable: 6.5.0
 
-  follow-redirects@1.16.1(debug@4.4.3(supports-color@10.2.2)):
+  follow-redirects@1.16.2(debug@4.4.3(supports-color@10.2.2)):
     optionalDependencies:
       debug: 4.4.3(supports-color@10.2.2)
 
