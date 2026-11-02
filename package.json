@@ -111,7 +111,7 @@
     "cpy-cli": "^7.0.0",
     "cross-env": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^9.39.5",
+    "eslint": "^10.9.1",
     "firebase-functions-test": "^3.5.0",
     "firebase-tools": "^15.34.0",
     "prettier": "^3.9.10",
