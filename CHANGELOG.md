@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.6.18](https://github.com/agrc/plss/compare/v3.6.17...v3.6.18) (2026-11-03)
+
+
+### Bug Fixes
+
+* update land ownership vector tile service ([#598](https://github.com/agrc/plss/issues/598)) ([132b80c](https://github.com/agrc/plss/commit/132b80cb394d516441bcd3f18661b2ea29848cbb))
+
+
+### Dependencies
+
+* bump @modelcontextprotocol/sdk from 1.30.0 to 1.32.2 ([#588](https://github.com/agrc/plss/issues/588)) ([6fdf088](https://github.com/agrc/plss/commit/6fdf0881deaa07f193b3f540fcac3e3686fab33d))
+* bump compression from 1.8.1 to 1.8.2 ([#577](https://github.com/agrc/plss/issues/577)) ([d27e924](https://github.com/agrc/plss/commit/d27e924d71cc70bb9a333391bd8eaf8508711f25))
+* bump fast-uri from 3.1.7 to 3.1.9 ([#587](https://github.com/agrc/plss/issues/587)) ([5560412](https://github.com/agrc/plss/commit/5560412a10271634d9299e94988df11a8e965b71))
+* bump follow-redirects from 1.16.0 to 1.16.2 ([#589](https://github.com/agrc/plss/issues/589)) ([3b9b9f8](https://github.com/agrc/plss/commit/3b9b9f8f3aa9a5a60d635064dca7257ca3d5c447))
+* bump hono from 4.13.5 to 4.13.13 ([#579](https://github.com/agrc/plss/issues/579)) ([7f1e0e0](https://github.com/agrc/plss/commit/7f1e0e01d1cb121369699fd10886a9cb1990c8f8))
+* bump ip-address from 10.7.0 to 10.7.5 ([#590](https://github.com/agrc/plss/issues/590)) ([0592c44](https://github.com/agrc/plss/commit/0592c44c7f19db06d5175a917ffd0e84266a959e))
+* bump joi from 18.2.8 to 18.2.9 ([#576](https://github.com/agrc/plss/issues/576)) ([255bd5d](https://github.com/agrc/plss/commit/255bd5daaf26464c44500bbe0a30f580921283d4))
+* bump morgan from 1.12.0 to 1.12.1 ([#571](https://github.com/agrc/plss/issues/571)) ([920c7b6](https://github.com/agrc/plss/commit/920c7b6a097abe5e6f037dd25edf5202170dce3c))
+* bump proxy-addr from 2.0.7 to 2.0.8 ([#575](https://github.com/agrc/plss/issues/575)) ([65109f5](https://github.com/agrc/plss/commit/65109f5c3229434f5c0ebe255005aa671236d02f))
+* bump source-map-js from 1.2.1 to 1.2.2 ([#580](https://github.com/agrc/plss/issues/580)) ([39824ec](https://github.com/agrc/plss/commit/39824ec7bd278f4435f2c2407fd911ad7e01e6d9))
+* bump uuid from 14.0.2 to 14.0.3 ([#578](https://github.com/agrc/plss/issues/578)) ([dae6f31](https://github.com/agrc/plss/commit/dae6f31a4571c2bef33ac30039e18654085f2758))
+* bump zod from 4.5.4 to 4.6.7 ([#592](https://github.com/agrc/plss/issues/592)) ([4a46f66](https://github.com/agrc/plss/commit/4a46f66bd242cf4abd6e45cf7f492f713d8838a1))
+* **dev:** bump storybook from 10.6.0 to 10.6.2 ([#586](https://github.com/agrc/plss/issues/586)) ([6b90fb4](https://github.com/agrc/plss/commit/6b90fb428fd01eda5f85b0dd8f4cf00fe9c6bfda))
+* **dev:** bump the safe-app-dependencies group with 2 updates ([#596](https://github.com/agrc/plss/issues/596)) ([9e25573](https://github.com/agrc/plss/commit/9e255730352a45fe9cf6bcc90bb17502383f8317))
+* **dev:** bump vite from 8.2.2 to 8.2.4 ([#585](https://github.com/agrc/plss/issues/585)) ([ef74b85](https://github.com/agrc/plss/commit/ef74b857ab902f9e4ec9d98c9f4f6801b0ff6714))
+* update compatible app dependencies ([#595](https://github.com/agrc/plss/issues/595)) ([6974062](https://github.com/agrc/plss/commit/69740627b12791a4685d36e3b6fa0d1f79dcc3fa))
+* update UGRC design system to 4.3.2 ([#593](https://github.com/agrc/plss/issues/593)) ([85ff997](https://github.com/agrc/plss/commit/85ff997423100c34e4f8f94198146fe8fad7cb08))
+
 ## [3.6.17](https://github.com/agrc/plss/compare/v3.6.16...v3.6.17) (2026-09-10)
 
 
