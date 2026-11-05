@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.6.19](https://github.com/agrc/plss/compare/v3.6.18...v3.6.19) (2026-11-05)
+
+
+### Bug Fixes
+
+* remove 3rd party notices ([8fb1272](https://github.com/agrc/plss/commit/8fb1272e15b6edde6dfe5308079ad480709dd6d8))
+
+
+### Dependencies
+
+* bump re2js from 2.8.6 to 2.9.1 ([41e701f](https://github.com/agrc/plss/commit/41e701fc1cf00d8d6db5e425b88ef5fca24a9f50))
+* bump shell-quote from 1.10.0 to 1.12.0 ([f3ae622](https://github.com/agrc/plss/commit/f3ae622e718723d0f5c882f954987092839e9e1a))
+
 ## [3.6.18](https://github.com/agrc/plss/compare/v3.6.17...v3.6.18) (2026-11-03)
 
 
